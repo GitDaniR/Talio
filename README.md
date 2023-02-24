@@ -18,6 +18,7 @@ Hello, I was here :)
 | ![](https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/6190/avatar.png?width=96) | Alexandru Fazakas | A.Fazakas@student.tudelft.nl |
 | ![](https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/6114/avatar.png?width=400) | Rūta Giedrytė | R.Giedryte@student.tudelft.nl |
 | ![](https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/6201/avatar.png?width=400) | Antonio Florin Lupu | A.F.Lupu@student.tudelft.nl |
+| ![](https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/6149/avatar.png?width=400) | Konstantin Kamenov | K.Kamenov@student.tudelft.nl |
 
 
 <!-- Instructions (remove once assignment has been completed -->
