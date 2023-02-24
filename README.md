@@ -6,6 +6,8 @@ Add your own name (do not add the names for others!) to the section below.
 
 Konstantin was also here
 
+Hello, I was here :)
+
 ## Description of project
 
 ## Group members
@@ -15,6 +17,8 @@ Konstantin was also here
 | ![](https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/6158/avatar.png?width=400) | Una Jacimovic | U.Jacimovic-1@student.tudelft.nl |
 | ![](https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/6190/avatar.png?width=96) | Alexandru Fazakas | A.Fazakas@student.tudelft.nl |
 | ![](https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/6114/avatar.png?width=400) | Rūta Giedrytė | R.Giedryte@student.tudelft.nl |
+| ![](https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/6201/avatar.png?width=400) | Antonio Florin Lupu | A.F.Lupu@student.tudelft.nl |
+
 
 <!-- Instructions (remove once assignment has been completed -->
 <!-- - Add (only!) your own name to the table above (use Markdown formatting) -->
