@@ -11,10 +11,11 @@ Add your own name (do not add the names for others!) to the section below.
 | Profile Picture | Name | Email |
 |---|---|---|
 | ![](https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/6158/avatar.png?width=400) | Una Jacimovic | U.Jacimovic-1@student.tudelft.nl |
-| ![](https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/6190/avatar.png?width=96) | Alexandru Fazakas | A.Fazakas@student.tudelft.nl |
+| ![](https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/6190/avatar.png?width=400) | Alexandru Fazakas | A.Fazakas@student.tudelft.nl |
 | ![](https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/6114/avatar.png?width=400) | Rūta Giedrytė | R.Giedryte@student.tudelft.nl |
 | ![](https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/6201/avatar.png?width=400) | Antonio Florin Lupu | A.F.Lupu@student.tudelft.nl |
 | ![](https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/6149/avatar.png?width=400) | Konstantin Kamenov | K.Kamenov@student.tudelft.nl |
+| ![](https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/6095/avatar.png?width=400) | Daniel Rachev | d.n.rachev@student.tudelft.nl |
 
 
 <!-- Instructions (remove once assignment has been completed -->
