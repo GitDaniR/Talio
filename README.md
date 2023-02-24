@@ -12,7 +12,7 @@ Konstantin was also here
 
 | Profile Picture | Name | Email |
 |---|---|---|
-| ![](https://eu.ui-avatars.com/api/?name=OOPP&length=4&size=50&color=DDD&background=777&font-size=0.325) | Your Name Here | Y.NameHere@student.tudelft.nl |
+| ![](https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/6158/avatar.png?width=400) | Una Jacimovic | U.Jacimovic-1@student.tudelft.nl |
 | ![](https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/6190/avatar.png?width=96) | Alexandru Fazakas | A.Fazakas@student.tudelft.nl |
 | ![](https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/6114/avatar.png?width=400) | Rūta Giedrytė | R.Giedryte@student.tudelft.nl |
 
