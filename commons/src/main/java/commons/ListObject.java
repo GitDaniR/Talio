@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
@@ -27,7 +28,7 @@ public class ListObject {
             orphanRemoval = true
 
     )
-    public List<Card> cards;
+    public List<Card> cards = new ArrayList<>();
 
     private ListObject(){}
 
@@ -36,8 +37,12 @@ public class ListObject {
         this.board = board;
     }
 
-    public void setCard(List<Card> card) {
-        this.cards = card;
+    public void setCards(List<Card> cards) {
+        this.cards = cards;
+    }
+
+    public void addCard(Card card){
+        this.cards.add(card);
     }
 
 
