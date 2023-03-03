@@ -22,12 +22,12 @@ public class ListObject {
 
     public int index;
     @OneToMany(
-            mappedBy = "",
+            mappedBy = "list",
             cascade = CascadeType.ALL,
             orphanRemoval = true
 
     )
-    public List<Card> card;
+    public List<Card> cards;
 
     private ListObject(){}
 
@@ -37,7 +37,7 @@ public class ListObject {
     }
 
     public void setCard(List<Card> card) {
-        this.card = card;
+        this.cards = card;
     }
 
 
