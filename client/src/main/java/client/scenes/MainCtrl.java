@@ -26,12 +26,20 @@ public class MainCtrl {
 
     private QuoteOverviewCtrl overviewCtrl;
     private Scene overview;
-
     private AddQuoteCtrl addCtrl;
     private Scene add;
 
+
+    private Scene addCard;
+    private AddCardCtrl addCardCtrl;
+    private CardOverviewCtrl cardOverviewCtrl;
+    private Scene cardOverview;
+
+
+
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-            Pair<AddQuoteCtrl, Parent> add) {
+            Pair<AddQuoteCtrl, Parent> add, Pair<AddCardCtrl, Parent> addCard,
+                           Pair<CardOverviewCtrl, Parent> cardOverview) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -39,7 +47,13 @@ public class MainCtrl {
         this.addCtrl = add.getKey();
         this.add = new Scene(add.getValue());
 
-        showOverview();
+        this.addCardCtrl = addCard.getKey();
+        this.addCard = new Scene(addCard.getValue());
+        this.cardOverviewCtrl = cardOverview.getKey();
+        this.cardOverview = new Scene(cardOverview.getValue());
+
+        //showOverview();
+        showCardOverview();
         primaryStage.show();
     }
 
@@ -49,9 +63,21 @@ public class MainCtrl {
         overviewCtrl.refresh();
     }
 
+    public void showCardOverview() {
+        primaryStage.setTitle("Cards: Overview");
+        primaryStage.setScene(cardOverview);
+        cardOverviewCtrl.refresh();
+    }
+
+    // not needed, for reference reasons
     public void showAdd() {
         primaryStage.setTitle("Quotes: Adding Quote");
         primaryStage.setScene(add);
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
+    }
+
+    public void showCard() {
+        primaryStage.setTitle("A new card");
+        primaryStage.setScene(addCard);
     }
 }

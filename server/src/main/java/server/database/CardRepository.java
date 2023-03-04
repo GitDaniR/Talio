@@ -13,20 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package server;
+package server.database;
 
-import java.util.Random;
+import commons.Card;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
-
-@Configuration
-public class Config {
-
-    @Bean
-    public Random getRandom() {
-        return new Random();
-    }
+public interface CardRepository extends JpaRepository<Card, Long> {
 
 }

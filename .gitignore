@@ -39,3 +39,4 @@ out/
 
 ### VS Code ###
 .vscode/
+/server/src/main/java/server/myService.java
