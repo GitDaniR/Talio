@@ -1,53 +1,34 @@
 package commons;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 @Entity
-public class Card {
+public class Subtask {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-
     public Integer id;
 
-    public String title;
-    public String description;
-   @ManyToMany(
-           mappedBy = "cards",
-           cascade = CascadeType.PERSIST
-   )
-    public List<Tag> tags = new ArrayList<>();
+    public boolean done;
 
-    @OneToMany(
-            mappedBy = "card",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    public List<Subtask> subtasks;
+    public String title;
     public int index;
     @ManyToOne
-    public BoardList list;
+    public Card card;
 
-    private Card(){}
-
-    public Card(String title, String description, int index, BoardList list) {
+    public Subtask(String title, boolean done, int index, Card card) {
+        this.done = done;
         this.title = title;
-        this.description = description;
         this.index = index;
-        this.list = list;
+        this.card = card;
     }
-
-    public void addTag(Tag tag){
-        tags.add(tag);
+    public void setDone(boolean done) {
+        this.done = done;
     }
 
     @Override

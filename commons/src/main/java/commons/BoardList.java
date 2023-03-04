@@ -8,47 +8,42 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
-
 @Entity
-public class Card {
+public class BoardList {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-
     public Integer id;
 
     public String title;
-    public String description;
-   @ManyToMany(
-           mappedBy = "cards",
-           cascade = CascadeType.PERSIST
-   )
-    public List<Tag> tags = new ArrayList<>();
+    @ManyToOne
+    public Board board;
 
+    public int index;
     @OneToMany(
-            mappedBy = "card",
+            mappedBy = "list",
             cascade = CascadeType.ALL,
             orphanRemoval = true
+
     )
-    public List<Subtask> subtasks;
-    public int index;
-    @ManyToOne
-    public BoardList list;
+    public List<Card> cards = new ArrayList<>();
 
-    private Card(){}
+    private BoardList(){}
 
-    public Card(String title, String description, int index, BoardList list) {
+    public BoardList(String title, Board board) {
         this.title = title;
-        this.description = description;
-        this.index = index;
-        this.list = list;
+        this.board = board;
     }
 
-    public void addTag(Tag tag){
-        tags.add(tag);
+    public void setCards(List<Card> cards) {
+        this.cards = cards;
     }
+
+    public void addCard(Card card){
+        this.cards.add(card);
+    }
+
 
     @Override
     public boolean equals(Object obj) {
@@ -64,4 +59,6 @@ public class Card {
     public String toString() {
         return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
     }
+
+
 }

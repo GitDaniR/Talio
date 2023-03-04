@@ -5,49 +5,33 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
-
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 @Entity
-public class Card {
-
+public class Board {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-
     public Integer id;
-
     public String title;
-    public String description;
-   @ManyToMany(
-           mappedBy = "cards",
-           cascade = CascadeType.PERSIST
-   )
-    public List<Tag> tags = new ArrayList<>();
-
+    public String password;
     @OneToMany(
-            mappedBy = "card",
+            mappedBy = "board",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    public List<Subtask> subtasks;
-    public int index;
-    @ManyToOne
-    public BoardList list;
+    public List<BoardList> lists;
 
-    private Card(){}
+    private Board(){}
 
-    public Card(String title, String description, int index, BoardList list) {
+    public Board(String title, String password) {
         this.title = title;
-        this.description = description;
-        this.index = index;
-        this.list = list;
+        this.password = password;
     }
 
-    public void addTag(Tag tag){
-        tags.add(tag);
+    public void setLists(List<BoardList> lists) {
+        this.lists = lists;
     }
 
     @Override

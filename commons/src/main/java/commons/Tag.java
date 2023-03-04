@@ -8,46 +8,30 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 @Entity
-public class Card {
-
+public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-
     public Integer id;
-
     public String title;
-    public String description;
-   @ManyToMany(
-           mappedBy = "cards",
-           cascade = CascadeType.PERSIST
-   )
-    public List<Tag> tags = new ArrayList<>();
-
-    @OneToMany(
-            mappedBy = "card",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
+    public String color;
+    @ManyToMany
+    @JoinTable(
+            name = "cards",
+            joinColumns = @JoinColumn(name = "tag_id"),
+            inverseJoinColumns = @JoinColumn(name = "card_id")
     )
-    public List<Subtask> subtasks;
-    public int index;
-    @ManyToOne
-    public BoardList list;
+    public List<Card> cards = new ArrayList<>();
 
-    private Card(){}
-
-    public Card(String title, String description, int index, BoardList list) {
+    public Tag(String title, String color) {
         this.title = title;
-        this.description = description;
-        this.index = index;
-        this.list = list;
+        this.color = color;
     }
 
-    public void addTag(Tag tag){
-        tags.add(tag);
+    public void addToCard(Card card){
+        cards.add(card);
     }
 
     @Override

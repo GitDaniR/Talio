@@ -1,3 +1,4 @@
+
 /*
  * Copyright 2021 Delft University of Technology
  *
@@ -13,11 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package server.database;
 
 import commons.Card;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CardRepository extends JpaRepository<Card, Long> {
-
+public interface CardRepository extends JpaRepository<Card, Integer> {
 }
+
