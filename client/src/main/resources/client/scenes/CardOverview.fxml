@@ -7,8 +7,8 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../../client.scenes.styles/Card_style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CardOverviewCtrl">
 <children>
-    <Button layoutX="509.0" layoutY="360.0" mnemonicParsing="false" onAction="#addCard" text="Add card" />
-    <Button layoutX="445.0" layoutY="360.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
+    <Button layoutX="496.0" layoutY="360.0" mnemonicParsing="false" onAction="#addCard" text="Add card" />
+    <Button layoutX="424.0" layoutY="360.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
       <VBox layoutX="64.0" layoutY="52.0" prefHeight="287.0" prefWidth="179.0">
          <children>
             <FlowPane fx:id="flowPane" prefHeight="190.0" prefWidth="179.0" />
