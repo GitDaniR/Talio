@@ -23,7 +23,6 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.List;
 
-import commons.Card;
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.Quote;
