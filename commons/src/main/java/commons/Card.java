@@ -20,7 +20,8 @@ public class Card {
     public String title;
     public String description;
    @ManyToMany(
-           mappedBy = "cards"
+           mappedBy = "cards",
+           cascade = CascadeType.PERSIST
    )
     public List<Tag> tags = new ArrayList<>();
 
@@ -32,11 +33,11 @@ public class Card {
     public List<Subtask> subtasks;
     public int index;
     @ManyToOne
-    public ListObject list;
+    public BoardList list;
 
     private Card(){}
 
-    public Card(String title, String description, int index, ListObject list) {
+    public Card(String title, String description, int index, BoardList list) {
         this.title = title;
         this.description = description;
         this.index = index;

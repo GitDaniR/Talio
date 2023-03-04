@@ -9,9 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
-
 @Entity
-public class ListObject {
+public class BoardList {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,9 +29,9 @@ public class ListObject {
     )
     public List<Card> cards = new ArrayList<>();
 
-    private ListObject(){}
+    private BoardList(){}
 
-    public ListObject(String title, Board board) {
+    public BoardList(String title, Board board) {
         this.title = title;
         this.board = board;
     }

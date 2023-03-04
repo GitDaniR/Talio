@@ -21,7 +21,7 @@ public class Board {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    public List<ListObject> lists;
+    public List<BoardList> lists;
 
     private Board(){}
 
@@ -30,7 +30,7 @@ public class Board {
         this.password = password;
     }
 
-    public void setLists(List<ListObject> lists) {
+    public void setLists(List<BoardList> lists) {
         this.lists = lists;
     }
 
