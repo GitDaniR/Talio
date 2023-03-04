@@ -9,7 +9,9 @@ import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 
 import java.net.URL;
@@ -19,9 +21,10 @@ public class AddCardCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
-
     @FXML
     private TextField title;
+    @FXML
+    private TextArea description;
 
 
     @Inject
@@ -31,9 +34,7 @@ public class AddCardCtrl implements Initializable {
     }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-    }
+    public void initialize(URL location, ResourceBundle resources) {}
 
     public void save(){
         ok();
@@ -44,11 +45,12 @@ public class AddCardCtrl implements Initializable {
         mainCtrl.showCardOverview();
     }
 
-    // may be useful later, when cards will have more fields
     private void clearFields() {
         title.clear();
+        description.clear();
     }
 
+    // The method uses the getCardFake() instead of getCard() for now
     public void ok() {
         try {
             server.addQuote(getCardFake());
@@ -65,19 +67,25 @@ public class AddCardCtrl implements Initializable {
         mainCtrl.showCardOverview();
     }
 
+    // This method is currently not used, as getCardFake is used instead
+    // This method also lacks communication with lists (for now)
     private Card getCard() {
         var t = title.getText();
-        return new Card(t);
+        var d = description.getText();
+        return new Card(t, d, getCard().id, null);
     }
 
+    // For now, while the server is not ready, cards are secretly saved as quotes
+    // This will be discarded when the server code is up
     private Quote getCardFake() {
         var t = title.getText();
-        var fakePerson = new Person("fakeName", "fakeSurname");
+        var d = description.getText();
+        var fakePerson = new Person("fakeName", d);
 
         return new Quote(fakePerson, t);
     }
 
-    /*public void keyPressed(KeyEvent e) {
+    public void keyPressed(KeyEvent e) {
         switch (e.getCode()) {
             case ENTER:
                 ok();
@@ -88,5 +96,5 @@ public class AddCardCtrl implements Initializable {
             default:
                 break;
         }
-    }*/
+    }
 }
