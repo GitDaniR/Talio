@@ -23,6 +23,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.List;
 
+import commons.BoardList;
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.Quote;
@@ -44,19 +45,19 @@ public class ServerUtils {
         }
     }
 
-    public List<Quote> getQuotes() {
+    public List<BoardList> getBoardLists() {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/quotes") //
+                .target(SERVER).path("api/lists") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .get(new GenericType<List<Quote>>() {});
+                .get(new GenericType<List<BoardList>>() {});
     }
 
-    public Quote addQuote(Quote quote) {
+    public BoardList addBoardList(BoardList list) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/quotes") //
+                .target(SERVER).path("api/lists") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
+                .post(Entity.entity(list, APPLICATION_JSON), BoardList.class);
     }
 }

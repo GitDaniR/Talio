@@ -15,6 +15,7 @@
  */
 package client.scenes;
 
+import commons.Board;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -24,34 +25,33 @@ public class MainCtrl {
 
     private Stage primaryStage;
 
-    private QuoteOverviewCtrl overviewCtrl;
-    private Scene overview;
+    private BoardOverviewCtrl boardOverviewCtrl;
+    private Scene board;
 
-    private AddQuoteCtrl addCtrl;
+    private AddListCtrl addCtrl;
     private Scene add;
 
-    public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-            Pair<AddQuoteCtrl, Parent> add) {
+    public void initialize(Stage primaryStage, Pair<AddListCtrl, Parent> add,
+                           Pair<BoardOverviewCtrl, Parent> board) {
         this.primaryStage = primaryStage;
-        this.overviewCtrl = overview.getKey();
-        this.overview = new Scene(overview.getValue());
+
+        this.boardOverviewCtrl = board.getKey();
+        this.board = new Scene(board.getValue());
 
         this.addCtrl = add.getKey();
         this.add = new Scene(add.getValue());
 
-        showOverview();
+        showBoard();
         primaryStage.show();
     }
 
-    public void showOverview() {
-        primaryStage.setTitle("Quotes: Overview");
-        primaryStage.setScene(overview);
-        overviewCtrl.refresh();
+    public void showBoard() {
+        primaryStage.setTitle("Board Overview");
+        primaryStage.setScene(board);
     }
 
     public void showAdd() {
-        primaryStage.setTitle("Quotes: Adding Quote");
+        primaryStage.setTitle("Adding List");
         primaryStage.setScene(add);
-        add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
     }
 }
