@@ -21,33 +21,27 @@ import java.util.ResourceBundle;
 import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
-import commons.Card;
 import commons.Quote;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+
+// I use this overview instead of QuoteOverview now while developing
+// This will probably be changed when lists and board become available
 
 public class CardOverviewCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private ObservableList<Quote> data;
-
     @FXML
     private FlowPane flowPane;
-    //DraggableMaker draggableMaker = new DraggableMaker();
-
 
     @Inject
     public CardOverviewCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -57,54 +51,36 @@ public class CardOverviewCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //draggableMaker.makeDraggable(rectangle);
         flowPane.setHgap(30);
         flowPane.setVgap(10);
-
     }
 
+    // Heavily inspired by Una's experiments with adding lists
+    // Probably will also be changed once lists become available
+    // This is a quick "work-in-progress" version
     public void refresh() {
         flowPane.getChildren().clear();
         var cards = server.getCards();
         data = FXCollections.observableList(cards);
 
         for (Quote item : cards) {
-            Pane vbox = new Pane();
+            Pane pane = new Pane();
 
             Rectangle card = new Rectangle();
             card.setHeight(30);
-            card.setWidth(100);
-            card.setFill(Color.rgb(150, 0, 255));
+            card.setWidth(150);
+            card.setFill(Color.rgb(250, 150, 250));
 
             Label titleCard = new Label(item.getTitle());
             titleCard.setLabelFor(card);
 
-            vbox.getChildren().addAll(card, titleCard);
-            //draggableMaker.makeDraggable(list);
-            flowPane.getChildren().add(vbox);
-
+            pane.getChildren().addAll(card, titleCard);
+            flowPane.getChildren().add(pane);
         }
     }
-
-
-    /*@Override
-    public void initialize(URL location, ResourceBundle resources) {
-        colQuote.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().quote));
-    }*/
-
-    public void addQuote() {
-        mainCtrl.showAdd();
-    }
-
-    /*public void refreshRutos() {
-        var quotes = server.getQuotes();
-        data = FXCollections.observableList(quotes);
-        table.setItems(data);
-    }*/
 
     public void addCard(){
         mainCtrl.showCard();
     }
-
 
 }
