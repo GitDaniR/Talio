@@ -1,7 +1,6 @@
 package client.scenes;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import com.google.inject.Inject;
@@ -14,7 +13,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
 
+import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
 
 
 public class BoardOverviewCtrl implements Initializable {
@@ -35,22 +36,22 @@ public class BoardOverviewCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-    }
-
-    public void addList() {
-        mainCtrl.showBoard();
         refresh();
     }
 
+    public void addList() {
+        mainCtrl.showAdd();
+    }
+
     public void refresh() {
-        //var lists = server.getLists(); This method will be in antono's code
-        var lists = new ArrayList<BoardList>();
-        lists.add(new BoardList("Blabla",null));
+        mainBoard.getChildren().clear();
+        var lists = server.getBoardLists();
         data = FXCollections.observableList(lists);
-        for(int i=0;i<data.size();i++){
-            CustomListCtrl listObject = new CustomListCtrl();
-            //listObject.getChildren().add(new Label(data.get(i).title));
+        for(BoardList currentList : data ){
+            CustomListCtrl listObject = new CustomListCtrl(); ///Instantiating a new list to be shown
+            Label listTitle = ((Label)((VBox) listObject.getChildren().get(0)).getChildren().get(0)); ///the title of the list
+            listTitle.setText(currentList.title);
+            //listObject.getChildren().add(new Label(currentList.title));
             mainBoard.getChildren().add(listObject);
         }
     }

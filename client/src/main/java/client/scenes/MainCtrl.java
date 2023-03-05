@@ -47,6 +47,7 @@ public class MainCtrl {
     public void showBoard() {
         primaryStage.setTitle("Board Overview");
         primaryStage.setScene(board);
+        boardOverviewCtrl.refresh();
     }
 
     public void showAdd() {
