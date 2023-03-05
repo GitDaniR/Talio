@@ -36,6 +36,10 @@ public class BoardList {
         this.board = board;
     }
 
+    public BoardList(String text) {
+        this.title = text;
+    }
+
     public void setCards(List<Card> cards) {
         this.cards = cards;
     }

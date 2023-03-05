@@ -18,44 +18,30 @@ package client.scenes;
 import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
-import commons.Person;
-import commons.Quote;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
+import commons.BoardList;
 
-public class AddQuoteCtrl {
+public class AddListCtrl {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
     @FXML
-    private TextField firstName;
-
-    @FXML
-    private TextField lastName;
-
-    @FXML
-    private TextField quote;
+    private TextField title;
 
     @Inject
-    public AddQuoteCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public AddListCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
-
     }
 
-    public void cancel() {
-        clearFields();
-        mainCtrl.showOverview();
-    }
-
-    public void ok() {
+    public void add() {
         try {
-            server.addQuote(getQuote());
+            server.addBoardList(getBoardList());
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -66,31 +52,19 @@ public class AddQuoteCtrl {
         }
 
         clearFields();
-        mainCtrl.showOverview();
+        mainCtrl.showBoard();
     }
 
-    private Quote getQuote() {
-        var p = new Person(firstName.getText(), lastName.getText());
-        var q = quote.getText();
-        return new Quote(p, q);
+    private BoardList getBoardList() {
+        return new BoardList(title.getText());
     }
 
     private void clearFields() {
-        firstName.clear();
-        lastName.clear();
-        quote.clear();
+        title.clear();
     }
 
-    public void keyPressed(KeyEvent e) {
-        switch (e.getCode()) {
-        case ENTER:
-            ok();
-            break;
-        case ESCAPE:
-            cancel();
-            break;
-        default:
-            break;
-        }
+    public void cancel() {
+        clearFields();
+        mainCtrl.showBoard();
     }
 }

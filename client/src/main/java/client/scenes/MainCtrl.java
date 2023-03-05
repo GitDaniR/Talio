@@ -24,39 +24,33 @@ public class MainCtrl {
 
     private Stage primaryStage;
 
-    private BoardOverviewCtrl overviewCtrl;
-    private Scene overview;
+    private BoardOverviewCtrl boardOverviewCtrl;
+    private Scene board;
 
-    private AddQuoteCtrl addCtrl;
+    private AddListCtrl addCtrl;
     private Scene add;
 
-    public void initialize(Stage primaryStage, Pair<BoardOverviewCtrl, Parent> overview,
-            Pair<AddQuoteCtrl, Parent> add) {
+    public void initialize(Stage primaryStage, Pair<AddListCtrl, Parent> add,
+                           Pair<BoardOverviewCtrl, Parent> board) {
         this.primaryStage = primaryStage;
-        this.overviewCtrl = overview.getKey();
-        this.overview = new Scene(overview.getValue());
+
+        this.boardOverviewCtrl = board.getKey();
+        this.board = new Scene(board.getValue());
 
         this.addCtrl = add.getKey();
         this.add = new Scene(add.getValue());
 
-        showOverview();
+        showBoard();
         primaryStage.show();
     }
 
-    public void showOverview() {
-        primaryStage.setTitle("Boards: Overview");
-        primaryStage.setScene(overview);
-        //overviewCtrl.refresh();
+    public void showBoard() {
+        primaryStage.setTitle("Board Overview");
+        primaryStage.setScene(board);
     }
 
     public void showAdd() {
-        primaryStage.setTitle("Quotes: Adding Quote");
+        primaryStage.setTitle("Adding List");
         primaryStage.setScene(add);
-        add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
-    }
-
-    public void showAddList(){
-        //Antonio's code will go here
-        System.out.println("Switched to list add scene");
     }
 }

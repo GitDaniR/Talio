@@ -12,6 +12,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+
+
 import javafx.scene.layout.FlowPane;
 
 
@@ -37,7 +39,7 @@ public class BoardOverviewCtrl implements Initializable {
     }
 
     public void addList() {
-        mainCtrl.showAddList();
+        mainCtrl.showBoard();
         refresh();
     }
 
