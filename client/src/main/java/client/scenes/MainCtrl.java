@@ -30,16 +30,32 @@ public class MainCtrl {
     private CardOverviewCtrl cardOverviewCtrl;
     private Scene cardOverview;
 
+    private BoardOverviewCtrl boardOverviewCtrl;
+    private Scene board;
+
+    private AddListCtrl addCtrl;
+    private Scene add;
+
+
     public void initialize(Stage primaryStage,
-            Pair<AddCardCtrl, Parent> addCard, Pair<CardOverviewCtrl, Parent> cardOverview) {
+            Pair<AddCardCtrl, Parent> addCard,
+                           Pair<CardOverviewCtrl, Parent> cardOverview,
+                           Pair<AddListCtrl, Parent> add,
+                           Pair<BoardOverviewCtrl, Parent> board) {
         this.primaryStage = primaryStage;
+
+        this.boardOverviewCtrl = board.getKey();
+        this.board = new Scene(board.getValue());
+
+        this.addCtrl = add.getKey();
+        this.add = new Scene(add.getValue());
 
         this.addCardCtrl = addCard.getKey();
         this.addCard = new Scene(addCard.getValue());
         this.cardOverviewCtrl = cardOverview.getKey();
         this.cardOverview = new Scene(cardOverview.getValue());
 
-        showCardOverview();
+        showBoard();
         primaryStage.show();
     }
 
@@ -53,5 +69,15 @@ public class MainCtrl {
         primaryStage.setTitle("A new card");
         primaryStage.setScene(addCard);
         addCard.setOnKeyPressed(e -> addCardCtrl.keyPressed(e));
+    }
+
+    public void showBoard() {
+        primaryStage.setTitle("Board Overview");
+        primaryStage.setScene(board);
+    }
+
+    public void showAdd() {
+        primaryStage.setTitle("Adding List");
+        primaryStage.setScene(add);
     }
 }
