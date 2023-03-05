@@ -12,10 +12,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.VBox;
-import org.checkerframework.checker.units.qual.C;
+
 
 public class BoardOverviewCtrl implements Initializable {
 
