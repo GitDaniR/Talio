@@ -1,18 +1,22 @@
 package client.scenes;
 
-import client.utils.ServerUtils;
+import java.net.URL;
+import java.util.ResourceBundle;
+
 import com.google.inject.Inject;
+
+import client.utils.ServerUtils;
 import commons.BoardList;
-import commons.Quote;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 
-import java.net.URL;
-import java.util.ResourceBundle;
+
+import javafx.scene.control.Label;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
+
 
 public class BoardOverviewCtrl implements Initializable {
 
@@ -22,13 +26,7 @@ public class BoardOverviewCtrl implements Initializable {
     private ObservableList<BoardList> data;
 
     @FXML
-    private TableView<BoardList> table;
-    @FXML
-    private TableColumn<Quote, String> colFirstName;
-    @FXML
-    private TableColumn<Quote, String> colLastName;
-    @FXML
-    private TableColumn<Quote, String> colQuote;
+    private FlowPane mainBoard;
 
     @Inject
     public BoardOverviewCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -37,16 +35,24 @@ public class BoardOverviewCtrl implements Initializable {
     }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {}
+    public void initialize(URL location, ResourceBundle resources) {
+        refresh();
+    }
 
     public void addList() {
         mainCtrl.showAdd();
     }
 
     public void refresh() {
+        mainBoard.getChildren().clear();
         var lists = server.getBoardLists();
         data = FXCollections.observableList(lists);
-        table.setItems(data);
+        for(BoardList currentList : data ){
+            CustomListCtrl listObject = new CustomListCtrl(); ///Instantiating a new list to be shown
+            Label listTitle = ((Label)((VBox) listObject.getChildren().get(0)).getChildren().get(0)); ///the title of the list
+            listTitle.setText(currentList.title);
+            //listObject.getChildren().add(new Label(currentList.title));
+            mainBoard.getChildren().add(listObject);
+        }
     }
-
 }
