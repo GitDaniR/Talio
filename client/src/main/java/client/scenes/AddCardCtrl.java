@@ -53,7 +53,7 @@ public class AddCardCtrl implements Initializable {
     // The method uses the getCardFake() instead of getCard() for now
     public void ok() {
         try {
-            server.addQuote(getCardFake());
+            server.addCardFake(getCardFake());
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
