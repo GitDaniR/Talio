@@ -1,19 +1,10 @@
 package client.utils;
 
-import commons.Board;
 import commons.BoardList;
 import commons.Card;
-import jakarta.ws.rs.client.ClientBuilder;
-import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.core.GenericType;
-import org.checkerframework.checker.units.qual.C;
-import org.glassfish.jersey.client.ClientConfig;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
-
 public class FakeServerUtils {
 
     public List<BoardList> getBoardLists() {
@@ -33,7 +24,7 @@ public class FakeServerUtils {
 
     }
 
-    public List<Card> getCards(BoardList){
+    public List<Card> getCards(BoardList list){
 
         List<Card> cards = new ArrayList<>();
 
