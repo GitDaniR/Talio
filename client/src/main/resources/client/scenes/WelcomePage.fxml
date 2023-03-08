@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.WelcomePageCtrl">
+   <children>
+      <Button layoutX="414.0" layoutY="323.0" mnemonicParsing="false" onAction="#connectToChosenServer" text="Connect" />
+      <TextField fx:id="chosenServer" layoutX="233.0" layoutY="323.0" prefHeight="26.0" prefWidth="170.0" />
+      <Text layoutX="127.0" layoutY="341.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Server Address:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+      <Text layoutX="252.0" layoutY="149.0" strokeType="OUTSIDE" strokeWidth="0.0" text="TALIO" textAlignment="CENTER">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Text>
+      <Text layoutX="109.0" layoutY="306.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To get started, please input the desired Server Address below:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+      <Text layoutX="166.0" layoutY="179.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Make your tasks tremble with fear.">
+         <font>
+            <Font name="System Italic" size="18.0" />
+         </font>
+      </Text>
+   </children>
+</AnchorPane>

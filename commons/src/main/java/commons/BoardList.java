@@ -26,9 +26,8 @@ public class BoardList {
     public int index;
     @OneToMany(
             mappedBy = "list",
-            cascade = CascadeType.ALL,
+            cascade = CascadeType.PERSIST,
             orphanRemoval = true
-
     )
     @JsonIgnore
     public List<Card> cards = new ArrayList<>();
