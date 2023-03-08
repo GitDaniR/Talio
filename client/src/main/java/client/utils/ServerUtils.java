@@ -16,9 +16,11 @@
 package client.utils;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+
 import java.util.List;
 
 import commons.BoardList;
+import commons.Card;
 import org.glassfish.jersey.client.ClientConfig;
 
 import jakarta.ws.rs.client.ClientBuilder;
@@ -43,5 +45,15 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(list, APPLICATION_JSON), BoardList.class);
+    }
+
+
+    // Dummy placeholder methods for getting and posting cards
+    public List<Card> getCards() {
+        return null;
+    }
+
+    public Card addCard(Card card) {
+        return null;
     }
 }

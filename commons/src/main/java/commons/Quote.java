@@ -38,6 +38,7 @@ public class Quote {
     @OneToOne(cascade = CascadeType.PERSIST)
     public Person person;
     public String quote;
+    public String title;
 
     @SuppressWarnings("unused")
     private Quote() {
@@ -47,6 +48,11 @@ public class Quote {
     public Quote(Person person, String quote) {
         this.person = person;
         this.quote = quote;
+        this.title = quote;
+    }
+
+    public String getTitle(){
+        return title;
     }
 
     @Override
