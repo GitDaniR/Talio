@@ -39,7 +39,8 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws IOException {
         var addCard = FXML.load(AddCardCtrl.class, "client", "scenes", "AddCard.fxml");
         var addList = FXML.load(AddListCtrl.class, "client", "scenes", "AddList.fxml");
-        var currentBoard = FXML.load(BoardOverviewCtrl.class, "client", "scenes", "BoardOverview.fxml");
+        var currentBoard = 
+            FXML.load(BoardOverviewCtrl.class, "client", "scenes", "BoardOverview.fxml");
         var welcomePage = FXML.load(WelcomePageCtrl.class, "client", "scenes", "WelcomePage.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);

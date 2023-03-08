@@ -1,5 +1,6 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -23,6 +24,7 @@ public class Tag {
             joinColumns = @JoinColumn(name = "tag_id"),
             inverseJoinColumns = @JoinColumn(name = "card_id")
     )
+    @JsonIgnore
     public List<Card> cards = new ArrayList<>();
 
     public Tag(String title, String color) {

@@ -48,23 +48,29 @@ public class BoardOverviewCtrl implements Initializable {
         var lists = fakeServer.getBoardLists();
         data = FXCollections.observableList(lists);
 
-        for(BoardList currentList : data ){
+        for (BoardList currentList : data) {
             ListCtrl listObject = new ListCtrl(); ///Instantiating a new list to be shown
-            Label listTitle = ((Label)((VBox) listObject.getChildren().get(0)).getChildren().get(0)); ///the title of the list
+            Label listTitle =
+                ((Label) ((VBox) listObject.getChildren().get(0))
+                    .getChildren().get(0)); ///the title of the list
             listTitle.setText(currentList.title);
 
-            ObservableList<Card> cardsInList = FXCollections.observableList(fakeServer.getCards(currentList));
-            for(Card currentCard : cardsInList ) {
+            ObservableList<Card> cardsInList =
+                FXCollections.observableList(fakeServer.getCards(currentList));
+            for (Card currentCard : cardsInList) {
                 CardCtrl cardObject = new CardCtrl(); ///Instantiating a new card to be shown
-                Label cardTitle = ((Label) ((HBox) cardObject.getChildren().get(0)).getChildren().get(0)); ///the title of the card
+                Label cardTitle = ((Label) ((HBox) cardObject.getChildren().get(0))
+                    .getChildren().get(0)); ///the title of the card
                 cardTitle.setText(currentCard.title);
 
-                ((VBox)((VBox) listObject.getChildren().get(0)).getChildren().get(1)).getChildren().add(cardObject);
+                ((VBox) ((VBox) listObject.getChildren().get(0))
+                    .getChildren().get(1)).getChildren().add(cardObject);
             }
 
-            ((Button)((VBox) listObject.getChildren().get(0)).getChildren().get(2)).setOnAction(event -> {
-                mainCtrl.showAddCard(currentList);
-            });
+            ((Button) ((VBox) listObject.getChildren().get(0))
+                .getChildren().get(2)).setOnAction(event -> {
+                    mainCtrl.showAddCard(currentList);
+                });
 
             //listObject.getChildren().add(new Label(currentList.title));
             mainBoard.getChildren().add(listObject);
