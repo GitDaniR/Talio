@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import server.database.BoardListRepository;
 import server.database.BoardRepository;
 
@@ -40,5 +41,17 @@ public class BoardListService {
         ResponseEntity<BoardList> deletedRecord = ResponseEntity.ok(this.boardListRepository.findById(id).get());
         this.boardListRepository.deleteById(id);
         return deletedRecord;
+    }
+
+    @Transactional
+    public String updateTitleById(Integer id, String title) throws Exception{
+        if (id < 0 || !this.boardListRepository.existsById(id)) {
+            throw new Exception("Invalid id");
+        }
+        if (title == null) {
+            throw new Exception("Invalid title");
+        }
+        this.boardListRepository.updateListById(id, title);
+        return "List title has been updated successfully.";
     }
 }

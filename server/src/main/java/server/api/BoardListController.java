@@ -16,13 +16,11 @@
 package server.api;
 
 import java.util.List;
-import java.util.Random;
 import commons.BoardList;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import server.database.BoardListRepository;
 import server.services.BoardListService;
 
 @RestController
@@ -60,4 +58,14 @@ public class BoardListController {
         return deletedRecord;
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateTitleById(@PathVariable("id") Integer id, @RequestBody String title) {
+        String response;
+        try {
+            response = this.boardListService.updateTitleById(id, title);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(response);
+    }
 }
