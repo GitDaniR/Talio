@@ -27,22 +27,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import server.database.BoardListRepository;
+import server.services.BoardListService;
 
 @RestController
 @RequestMapping("/api/lists")
 public class BoardListController {
+    private final BoardListService boardListService;
 
-    private final Random random;
-    private final BoardListRepository repo;
-
-    public BoardListController(Random random, BoardListRepository repo) {
-        this.random = random;
-        this.repo = repo;
+    public BoardListController(BoardListService boardListService) {
+        this.boardListService = boardListService;
     }
-
     @GetMapping(path = { "", "/" })
     public List<BoardList> getAll() {
-        return repo.findAll();
+        return boardListService.findAll();
     }
 
     @PostMapping(path = { "", "/" })

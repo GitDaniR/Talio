@@ -34,6 +34,10 @@ public class Board {
         this.lists = lists;
     }
 
+    public void addList(BoardList boardList) {
+        this.lists.add(boardList);
+    }
+
     @Override
     public boolean equals(Object obj) {
         return EqualsBuilder.reflectionEquals(this, obj);
