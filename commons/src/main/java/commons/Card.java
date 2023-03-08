@@ -1,5 +1,6 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -33,6 +34,8 @@ public class Card {
     public List<Subtask> subtasks;
     public int index;
     @ManyToOne
+    @JoinColumn(name = "list_id")
+    @JsonBackReference
     public BoardList list;
 
     private Card(){}
