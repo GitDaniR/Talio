@@ -22,13 +22,16 @@ import org.springframework.web.bind.annotation.*;
 
 import commons.Board;
 import server.database.BoardRepository;
+import server.services.BoardService;
 
 @RestController
 @RequestMapping("/api/boards")
 public class BoardController {
+    private final BoardService boardService;
     private final BoardRepository repo;
 
-    public BoardController(BoardRepository repo) {
+    public BoardController(BoardService boardService, BoardRepository repo) {
+        this.boardService = boardService;
         this.repo = repo;
     }
 
@@ -39,28 +42,34 @@ public class BoardController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Board> getById(@PathVariable("id") Integer id) {
-        if (id < 0 || !repo.existsById(id)) {
+        ResponseEntity<Board> found;
+        try {
+            found = this.boardService.getById(id, repo);
+        } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(repo.findById(id).get());
+        return found;
     }
 
     @PostMapping("/")
     public ResponseEntity<Board> add(@RequestBody Board board) {
-        if (board.title == null) {
+        ResponseEntity<Board> saved;
+        try {
+            saved = this.boardService.add(board, repo);
+        } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
-        Board saved = repo.save(board);
-        return ResponseEntity.ok(saved);
+        return saved;
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Board> deleteById(@PathVariable("id") Integer id) {
-        if (id < 0 || !repo.existsById(id)) {
+        ResponseEntity<Board> deletedRecord;
+        try {
+            deletedRecord = this.boardService.deleteById(id, repo);
+        } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
-        ResponseEntity<Board> deletedRecord = ResponseEntity.ok(repo.findById(id).get());
-        repo.deleteById(id);
         return deletedRecord;
     }
 }
