@@ -15,9 +15,9 @@
  */
 package client.scenes;
 
+import client.utils.FakeServerUtils;
 import com.google.inject.Inject;
 
-import client.utils.ServerUtils;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -27,21 +27,21 @@ import commons.BoardList;
 
 public class AddListCtrl {
 
-    private final ServerUtils server;
+    private final FakeServerUtils fakeServer;
     private final MainCtrl mainCtrl;
 
     @FXML
     private TextField title;
 
     @Inject
-    public AddListCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public AddListCtrl(FakeServerUtils fakeServer, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
-        this.server = server;
+        this.fakeServer = fakeServer;
     }
 
     public void add() {
         try {
-            server.addBoardList(getBoardList());
+            fakeServer.addBoardList(getBoardList());
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
