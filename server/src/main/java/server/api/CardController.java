@@ -35,7 +35,7 @@ public class CardController {
     }
 
     //Post mapping to add a card
-    @PostMapping("/add")
+    @PostMapping(path = { "", "/" })
     public ResponseEntity<Card> addCard(@RequestBody Card card){
         try {
             return ResponseEntity.ok(cardService.addCard(card));
@@ -45,7 +45,7 @@ public class CardController {
         return ResponseEntity.badRequest().build();
     }
 
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Card> removeCard(@PathVariable int id){
         try {
             Card res = cardService.removeCardById(id);
