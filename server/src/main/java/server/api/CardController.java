@@ -45,10 +45,23 @@ public class CardController {
         return ResponseEntity.badRequest().build();
     }
 
+    //Delete mapping to delete a card
     @DeleteMapping("/{id}")
     public ResponseEntity<Card> removeCard(@PathVariable int id){
         try {
             Card res = cardService.removeCardById(id);
+            return ResponseEntity.ok(res);
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    //Put mapping to update a card
+    @PutMapping("/{id}")
+    public ResponseEntity<Card> editCard(@PathVariable int id, @RequestBody Card card){
+        try {
+            Card res = cardService.editCardById(id, card);
             return ResponseEntity.ok(res);
         }catch(Exception e){
             System.out.println(e.getMessage());

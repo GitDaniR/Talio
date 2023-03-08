@@ -48,4 +48,14 @@ public class CardService {
         cardRepo.deleteById(id);
         return res;
     }
+
+    //Method to edit a card
+    public Card editCardById(int id, Card card)throws Exception{
+        card.id = id;
+        if(!listRepo.existsById(card.listId))
+            throw new Exception("List does not exist");
+        if(!cardRepo.existsById(id))
+            throw new Exception("Card with id: " + card.id +" does not exist");
+        return cardRepo.save(card);
+    }
 }
