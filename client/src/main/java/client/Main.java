@@ -38,12 +38,11 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         var addCard = FXML.load(AddCardCtrl.class, "client", "scenes", "AddCard.fxml");
-        var cardOverview = FXML.load(CardOverviewCtrl.class, "client", "scenes", "CardOverview.fxml");
         var addList = FXML.load(AddListCtrl.class, "client", "scenes", "AddList.fxml");
         var currentBoard = FXML.load(BoardOverviewCtrl.class, "client", "scenes", "BoardOverview.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, addCard, cardOverview, addList, currentBoard);
+        mainCtrl.initialize(primaryStage, addCard, addList, currentBoard);
 
     }
 }

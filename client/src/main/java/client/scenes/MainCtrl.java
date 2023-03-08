@@ -15,60 +15,48 @@
  */
 package client.scenes;
 
+import commons.BoardList;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
-// This MainCtrl is modified to use the CardOverview and AddCard that I created
-// Thus it will change once lists and board become available
 public class MainCtrl {
 
     private Stage primaryStage;
     private Scene addCard;
     private AddCardCtrl addCardCtrl;
-    private CardOverviewCtrl cardOverviewCtrl;
-    private Scene cardOverview;
 
     private BoardOverviewCtrl boardOverviewCtrl;
     private Scene board;
 
-    private AddListCtrl addCtrl;
-    private Scene add;
+    private AddListCtrl addListCtrl;
+    private Scene addList;
 
 
     public void initialize(Stage primaryStage,
             Pair<AddCardCtrl, Parent> addCard,
-                           Pair<CardOverviewCtrl, Parent> cardOverview,
-                           Pair<AddListCtrl, Parent> add,
+                           Pair<AddListCtrl, Parent> addList,
                            Pair<BoardOverviewCtrl, Parent> board) {
         this.primaryStage = primaryStage;
 
         this.boardOverviewCtrl = board.getKey();
         this.board = new Scene(board.getValue());
 
-        this.addCtrl = add.getKey();
-        this.add = new Scene(add.getValue());
+        this.addListCtrl = addList.getKey();
+        this.addList = new Scene(addList.getValue());
 
         this.addCardCtrl = addCard.getKey();
         this.addCard = new Scene(addCard.getValue());
-        this.cardOverviewCtrl = cardOverview.getKey();
-        this.cardOverview = new Scene(cardOverview.getValue());
 
         showBoard();
         primaryStage.show();
     }
 
-    public void showCardOverview() {
-        primaryStage.setTitle("Cards: Overview");
-        primaryStage.setScene(cardOverview);
-        cardOverviewCtrl.refresh();
-    }
-
-    public void showCard() {
+    public void showAddCard(BoardList list) {
         primaryStage.setTitle("A new card");
         primaryStage.setScene(addCard);
-        addCard.setOnKeyPressed(e -> addCardCtrl.keyPressed(e));
+        addCardCtrl.setList(list);
     }
 
     public void showBoard() {
@@ -77,8 +65,8 @@ public class MainCtrl {
         boardOverviewCtrl.refresh();
     }
 
-    public void showAdd() {
+    public void showAddList() {
         primaryStage.setTitle("Adding List");
-        primaryStage.setScene(add);
+        primaryStage.setScene(addList);
     }
 }
