@@ -39,7 +39,8 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws IOException {
 
         var addList = FXML.load(AddListCtrl.class, "client", "scenes", "AddList.fxml");
-        var currentBoard = FXML.load(BoardOverviewCtrl.class, "client", "scenes", "BoardOverview.fxml");
+        var currentBoard =
+            FXML.load(BoardOverviewCtrl.class, "client", "scenes", "BoardOverview.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, addList, currentBoard);

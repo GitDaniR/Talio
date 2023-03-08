@@ -49,7 +49,9 @@ public class BoardOverviewCtrl implements Initializable {
         data = FXCollections.observableList(lists);
         for(BoardList currentList : data ){
             ListCtrl listObject = new ListCtrl(); ///Instantiating a new list to be shown
-            Label listTitle = ((Label)((VBox) listObject.getChildren().get(0)).getChildren().get(0)); ///the title of the list
+            Label listTitle =
+                ((Label)((VBox) listObject.getChildren().get(0))
+                    .getChildren().get(0)); ///the title of the list
             listTitle.setText(currentList.title);
             //listObject.getChildren().add(new Label(currentList.title));
             mainBoard.getChildren().add(listObject);
