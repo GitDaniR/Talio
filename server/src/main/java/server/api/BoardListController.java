@@ -28,14 +28,28 @@ import server.services.BoardListService;
 public class BoardListController {
     private final BoardListService boardListService;
 
+    /**
+     * Constructor for BoardListController which uses boardListService.
+     * @param boardListService
+     */
     public BoardListController(BoardListService boardListService) {
         this.boardListService = boardListService;
     }
+
+    /**
+     * Method which returns all lists.
+     * @return
+     */
     @GetMapping("/")
     public List<BoardList> getAll() {
         return boardListService.findAll();
     }
 
+    /**
+     * Method which adds a new list to repo.
+     * @param boardList
+     * @return
+     */
     @PostMapping("/")
     public ResponseEntity<BoardList> add(@RequestBody BoardList boardList) {
         ResponseEntity<BoardList> saved;
@@ -47,6 +61,11 @@ public class BoardListController {
         return saved;
     }
 
+    /**
+     * Method which deletes a board by id from repo.
+     * @param id
+     * @return
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<BoardList> deleteById(@PathVariable("id") Integer id) {
         ResponseEntity<BoardList> deletedRecord;
@@ -58,6 +77,12 @@ public class BoardListController {
         return deletedRecord;
     }
 
+    /**
+     * Method which updates a list title by id.
+     * @param id
+     * @param title
+     * @return
+     */
     @PutMapping("/{id}")
     public ResponseEntity<String> updateTitleById(@PathVariable("id") Integer id, @RequestBody String title) {
         String response;
