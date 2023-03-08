@@ -5,9 +5,31 @@ import commons.Card;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 public class FakeServerUtils {
 
+    // I have changed the fakeServer setup a bit to make it easier to see if adding cards works
+    private List<BoardList> lists = new ArrayList<>();
+
+    public void setup(){
+        lists = getBoardLists();
+
+        Card card1 = new Card("Card1", "Description", 0 , null);
+        Card card2 = new Card("Card2", "Description", 0, null);
+        Card card3 = new Card("Card3", "Description", 0 , null);
+
+        lists.get(0).addCard(card1);
+        lists.get(0).addCard(card2);
+        lists.get(1).addCard(card3);
+
+
+
+    }
+
     public List<BoardList> getBoardLists() {
+        if(!lists.isEmpty()) return lists;
+
         List<BoardList> lists = new ArrayList<>();
 
         BoardList list1 = new BoardList("TODO");
@@ -26,17 +48,14 @@ public class FakeServerUtils {
 
     public List<Card> getCards(BoardList list){
 
-        List<Card> cards = new ArrayList<>();
+        for(BoardList l: lists){
+            if(Objects.equals(list, l)){
+                return l.cards;
+            }
+        }
 
-        Card card1 = new Card("Card1", "Description", 0 , null);
-        Card card2 = new Card("Card2", "Description", 0, null);
-        Card card3 = new Card("Card3", "Description", 0 , null);
+        return getCards(0);
 
-        cards.add(card1);
-        cards.add(card2);
-        cards.add(card3);
-
-        return cards;
 
 
     }
@@ -54,15 +73,31 @@ public class FakeServerUtils {
 
         return cards;
 
+
+
     }
     public void addBoardList(BoardList list) {
-        System.out.println("Successfully added the list");
+        lists.add(list);
         return;
+
+
 
     }
 
-    public void addCard(Card card){
-        System.out.println("Successfully added the card");
+    public void addCard(Card card, BoardList list){
+
+        for(BoardList l: lists){
+            if(Objects.equals(list, l)){
+                l.cards.add(card);
+                return;
+            }
+        }
         return;
+
+
+
     }
+
+
+
 }

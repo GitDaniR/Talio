@@ -15,6 +15,7 @@
  */
 package client.scenes;
 
+import commons.BoardList;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -23,25 +24,39 @@ import javafx.util.Pair;
 public class MainCtrl {
 
     private Stage primaryStage;
+    private Scene addCard;
+    private AddCardCtrl addCardCtrl;
 
     private BoardOverviewCtrl boardOverviewCtrl;
     private Scene board;
 
-    private AddListCtrl addCtrl;
-    private Scene add;
+    private AddListCtrl addListCtrl;
+    private Scene addList;
 
-    public void initialize(Stage primaryStage, Pair<AddListCtrl, Parent> add,
+
+    public void initialize(Stage primaryStage,
+            Pair<AddCardCtrl, Parent> addCard,
+                           Pair<AddListCtrl, Parent> addList,
                            Pair<BoardOverviewCtrl, Parent> board) {
         this.primaryStage = primaryStage;
 
         this.boardOverviewCtrl = board.getKey();
         this.board = new Scene(board.getValue());
 
-        this.addCtrl = add.getKey();
-        this.add = new Scene(add.getValue());
+        this.addListCtrl = addList.getKey();
+        this.addList = new Scene(addList.getValue());
+
+        this.addCardCtrl = addCard.getKey();
+        this.addCard = new Scene(addCard.getValue());
 
         showBoard();
         primaryStage.show();
+    }
+
+    public void showAddCard(BoardList list) {
+        primaryStage.setTitle("A new card");
+        primaryStage.setScene(addCard);
+        addCardCtrl.setList(list);
     }
 
     public void showBoard() {
@@ -50,8 +65,8 @@ public class MainCtrl {
         boardOverviewCtrl.refresh();
     }
 
-    public void showAdd() {
+    public void showAddList() {
         primaryStage.setTitle("Adding List");
-        primaryStage.setScene(add);
+        primaryStage.setScene(addList);
     }
 }
