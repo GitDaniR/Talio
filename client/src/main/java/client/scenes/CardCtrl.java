@@ -14,9 +14,9 @@ import java.util.ResourceBundle;
 
 public class CardCtrl extends AnchorPane implements Initializable{
     @FXML
-    private Label CardTitle;
+    private Label cardTitle;
     @FXML
-    private Button CardDelete;
+    private Button cardDelete;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {}
