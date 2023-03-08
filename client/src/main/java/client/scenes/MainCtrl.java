@@ -56,7 +56,7 @@ public class MainCtrl {
         this.welcomePageCtrl = welcomePage.getKey();
         this.welcomePage = new Scene(welcomePage.getValue());
 
-        showBoard();
+        showWelcomePage();
         primaryStage.show();
     }
 
