@@ -76,4 +76,8 @@ public class BoardOverviewCtrl implements Initializable {
             mainBoard.getChildren().add(listObject);
         }
     }
+
+    public void disconnectFromServer() {
+        mainCtrl.showWelcomePage();
+    }
 }
