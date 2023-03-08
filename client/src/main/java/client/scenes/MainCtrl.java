@@ -78,7 +78,7 @@ public class MainCtrl {
     }
 
     public void showWelcomePage() {
-        primaryStage.setTitle("WelcomePage");
+        primaryStage.setTitle("Welcome Page");
         primaryStage.setScene(welcomePage);
     }
 }
