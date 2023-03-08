@@ -28,8 +28,7 @@ public class Card {
 
     @OneToMany(
             mappedBy = "card",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
+            cascade = CascadeType.PERSIST
     )
     public List<Subtask> subtasks;
     public int index;

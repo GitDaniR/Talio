@@ -2,10 +2,7 @@ package server.api;
 
 import commons.Card;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import server.services.CardService;
 
 import java.util.List;
@@ -32,6 +29,17 @@ public class CardController {
             Card res = cardService.getCardById(id);
             return ResponseEntity.ok(res);
         }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    //Post mapping to add a card
+    @PostMapping("/add")
+    public ResponseEntity<Card> addCard(@RequestBody Card card){
+        try {
+            return ResponseEntity.ok(cardService.addCard(card));
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
         return ResponseEntity.badRequest().build();
