@@ -16,11 +16,11 @@
 package client.utils;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+
 import java.util.List;
 
 import commons.BoardList;
 import commons.Card;
-import commons.Quote;
 import org.glassfish.jersey.client.ClientConfig;
 
 import jakarta.ws.rs.client.ClientBuilder;
@@ -47,27 +47,13 @@ public class ServerUtils {
                 .post(Entity.entity(list, APPLICATION_JSON), BoardList.class);
     }
 
-    public List<Quote> getCards() {
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/quotes") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .get(new GenericType<List<Quote>>() {});
+
+    // Dummy placeholder methods for getting and posting cards
+    public List<Card> getCards() {
+        return null;
     }
 
     public Card addCard(Card card) {
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/quotes") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .post(Entity.entity(card, APPLICATION_JSON), Card.class);
-    }
-
-    public Quote addCardFake(Quote card) {
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/quotes") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .post(Entity.entity(card, APPLICATION_JSON), Quote.class);
+        return null;
     }
 }
