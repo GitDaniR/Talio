@@ -37,19 +37,19 @@ public class BoardListController {
     public BoardListController(BoardListService boardListService) {
         this.boardListService = boardListService;
     }
-    @GetMapping(path = { "", "/" })
+    @GetMapping("/")
     public List<BoardList> getAll() {
         return boardListService.findAll();
     }
 
-    @PostMapping(path = { "", "/" })
-    public ResponseEntity<BoardList> add(@RequestBody BoardList list) {
-
-        if (list.title == null) {
+    @PostMapping("/")
+    public ResponseEntity<BoardList> add(@RequestBody BoardList boardList) {
+        ResponseEntity<BoardList> saved;
+        try {
+            saved = this.boardListService.add(boardList);
+        } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
-
-        BoardList saved = repo.save(list);
-        return ResponseEntity.ok(saved);
+        return saved;
     }
 }
