@@ -30,16 +30,30 @@ public class BoardController {
     private final BoardService boardService;
     private final BoardRepository repo;
 
+    /**
+     * Constructor for BoardController which uses BoardService and BoardRepository.
+     * @param boardService
+     * @param repo
+     */
     public BoardController(BoardService boardService, BoardRepository repo) {
         this.boardService = boardService;
         this.repo = repo;
     }
 
+    /**
+     * Method which returns all boards in repo.
+     * @return all boards
+     */
     @GetMapping("/")
     public List<Board> getAll(){
         return repo.findAll();
     }
 
+    /**
+     * Method which returns a board by an id from repo.
+     * @param id
+     * @return a board
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Board> getById(@PathVariable("id") Integer id) {
         ResponseEntity<Board> found;
@@ -51,6 +65,11 @@ public class BoardController {
         return found;
     }
 
+    /**
+     * Method which adds a new board to repo.
+     * @param board
+     * @return the saved board or BAD_REQUEST
+     */
     @PostMapping("/")
     public ResponseEntity<Board> add(@RequestBody Board board) {
         ResponseEntity<Board> saved;
@@ -62,6 +81,11 @@ public class BoardController {
         return saved;
     }
 
+    /**
+     * Method which deletes a board by id from repo.
+     * @param id
+     * @return the deleted board or BAD_REQUEST
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Board> deleteById(@PathVariable("id") Integer id) {
         ResponseEntity<Board> deletedRecord;
