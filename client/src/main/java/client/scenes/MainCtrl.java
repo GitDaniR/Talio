@@ -33,11 +33,15 @@ public class MainCtrl {
     private AddListCtrl addListCtrl;
     private Scene addList;
 
+    private WelcomePageCtrl welcomePageCtrl;
+    private Scene welcomePage;
+
 
     public void initialize(Stage primaryStage,
             Pair<AddCardCtrl, Parent> addCard,
                            Pair<AddListCtrl, Parent> addList,
-                           Pair<BoardOverviewCtrl, Parent> board) {
+                           Pair<BoardOverviewCtrl, Parent> board,
+                           Pair<WelcomePageCtrl, Parent> welcomePage) {
         this.primaryStage = primaryStage;
 
         this.boardOverviewCtrl = board.getKey();
@@ -49,7 +53,10 @@ public class MainCtrl {
         this.addCardCtrl = addCard.getKey();
         this.addCard = new Scene(addCard.getValue());
 
-        showBoard();
+        this.welcomePageCtrl = welcomePage.getKey();
+        this.welcomePage = new Scene(welcomePage.getValue());
+
+        showWelcomePage();
         primaryStage.show();
     }
 
@@ -68,5 +75,10 @@ public class MainCtrl {
     public void showAddList() {
         primaryStage.setTitle("Adding List");
         primaryStage.setScene(addList);
+    }
+
+    public void showWelcomePage() {
+        primaryStage.setTitle("Welcome Page");
+        primaryStage.setScene(welcomePage);
     }
 }

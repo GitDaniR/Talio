@@ -1,4 +1,5 @@
 package commons;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -19,6 +20,7 @@ public class Subtask {
     public String title;
     public int index;
     @ManyToOne
+    @JsonIgnore
     public Card card;
 
     public Subtask(String title, boolean done, int index, Card card) {
