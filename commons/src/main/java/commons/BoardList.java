@@ -1,5 +1,6 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -23,10 +24,10 @@ public class BoardList {
     public int index;
     @OneToMany(
             mappedBy = "list",
-            cascade = CascadeType.ALL,
+            cascade = CascadeType.PERSIST,
             orphanRemoval = true
-
     )
+    @JsonIgnore
     public List<Card> cards = new ArrayList<>();
 
     private BoardList(){}
