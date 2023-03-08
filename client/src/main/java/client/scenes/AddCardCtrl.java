@@ -1,14 +1,14 @@
 package client.scenes;
 
-import client.utils.ServerUtils;
+import client.utils.FakeServerUtils;
 import com.google.inject.Inject;
+import commons.BoardList;
 import commons.Card;
-import commons.Person;
-import commons.Quote;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
@@ -17,32 +17,35 @@ import javafx.stage.Modality;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static javafx.scene.input.KeyCode.ENTER;
+
 public class AddCardCtrl implements Initializable {
 
-    private final ServerUtils server;
+    private final FakeServerUtils fakeServer;
     private final MainCtrl mainCtrl;
     @FXML
     private TextField title;
     @FXML
     private TextArea description;
 
+    @FXML
+    private Button save;
+    @FXML
+    private Button cancel;
+    private BoardList list = null;
 
     @Inject
-    public AddCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
-        this.server = server;
+    public AddCardCtrl(FakeServerUtils fakeServer, MainCtrl mainCtrl) {
+        this.fakeServer = fakeServer;
         this.mainCtrl = mainCtrl;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {}
 
-    public void save(){
-        ok();
-    }
-
     public void cancel(){
         clearFields();
-        mainCtrl.showCardOverview();
+        mainCtrl.showBoard();
     }
 
     private void clearFields() {
@@ -50,10 +53,10 @@ public class AddCardCtrl implements Initializable {
         description.clear();
     }
 
-    // The method uses the getCardFake() instead of getCard() for now
     public void ok() {
         try {
-            server.addCardFake(getCardFake());
+            fakeServer.addCard(getCard(), list);
+
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -64,37 +67,17 @@ public class AddCardCtrl implements Initializable {
         }
 
         clearFields();
-        mainCtrl.showCardOverview();
+        mainCtrl.showBoard();
     }
 
-    // This method is currently not used, as getCardFake is used instead
-    // This method also lacks communication with lists (for now)
+    // Getting the correct index should be done
     private Card getCard() {
         var t = title.getText();
         var d = description.getText();
-        return new Card(t, d, getCard().id, null);
+        return new Card(t, d, 0, list);
     }
 
-    // For now, while the server is not ready, cards are secretly saved as quotes
-    // This will be discarded when the server code is up
-    private Quote getCardFake() {
-        var t = title.getText();
-        var d = description.getText();
-        var fakePerson = new Person("fakeName", d);
-
-        return new Quote(fakePerson, t);
-    }
-
-    public void keyPressed(KeyEvent e) {
-        switch (e.getCode()) {
-            case ENTER:
-                ok();
-                break;
-            case ESCAPE:
-                cancel();
-                break;
-            default:
-                break;
-        }
+    public void setList(BoardList list){
+        this.list = list;
     }
 }
