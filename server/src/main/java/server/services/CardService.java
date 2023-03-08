@@ -35,7 +35,7 @@ public class CardService {
 
     //Method to add card to repo
     public Card addCard(Card card) throws Exception{
-        if(card.list == null || !listRepo.existsById(card.list.id))
+        if(!listRepo.existsById(card.listId))
             throw new Exception("List does not exist");
         if(card.id != null && cardRepo.existsById(card.id))
             throw new Exception("Card with id: " + card.id +" already exists");

@@ -33,9 +33,11 @@ public class Card {
     public List<Subtask> subtasks;
     public int index;
     @ManyToOne
-    @JoinColumn(name = "list_id")
+    @JoinColumn(name = "listId", insertable = false, updatable = false)
     @JsonBackReference
     public BoardList list;
+
+    public int listId;
 
     private Card(){}
 
