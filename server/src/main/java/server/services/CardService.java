@@ -6,6 +6,7 @@ import server.database.BoardListRepository;
 import server.database.CardRepository;
 
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -33,20 +34,24 @@ public class CardService {
         return res;
     }
 
+    @Transactional
     //Method to add card to repo
     public Card addCard(Card card) throws Exception{
         if(!listRepo.existsById(card.listId))
             throw new Exception("List does not exist");
         if(card.id != null && cardRepo.existsById(card.id))
             throw new Exception("Card with id: " + card.id +" already exists");
+        cardRepo.shiftCardsRight(card.index, card.listId);
         return cardRepo.save(card);
     }
 
+    @Transactional
     //Method to remove card from repo
     public Card removeCardById(int id) throws Exception{
         Card res = cardRepo.findById(id).orElseThrow(
             ()->new Exception("Card with id: " + id +" not found")
         );
+        cardRepo.shiftCardsLeft(res.index, res.listId);
         cardRepo.deleteById(id);
         return res;
     }
@@ -56,8 +61,10 @@ public class CardService {
         card.id = id;
         if(!listRepo.existsById(card.listId))
             throw new Exception("List does not exist");
-        if(!cardRepo.existsById(id))
-            throw new Exception("Card with id: " + card.id +" does not exist");
+        Card res = cardRepo.findById(id).orElseThrow(
+            ()->new Exception("Card with id: " + id +" not found")
+        );
+        card.index = res.index;
         return cardRepo.save(card);
     }
 }
