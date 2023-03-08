@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import server.database.CardRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CardService {
@@ -18,5 +19,12 @@ public class CardService {
     //Method to get all saved cards (mainly intended for testing purposes)
     public List<Card> getAllCards(){
         return cardRepo.findAll();
+    }
+
+    //Method to get card by id from repo
+    //Throws exception if card is not found
+    public Card getCardById(int id) throws Exception{
+        Optional<Card> res = cardRepo.findById(id);
+        return res.orElseThrow(()->new Exception("Card with id: " + id +" not found"));
     }
 }
