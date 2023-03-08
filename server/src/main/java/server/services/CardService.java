@@ -29,8 +29,8 @@ public class CardService {
     //Method to get card by id from repo
     //Throws exception if card is not found
     public Card getCardById(int id) throws Exception{
-        Optional<Card> res = cardRepo.findById(id);
-        return res.orElseThrow(()->new Exception("Card with id: " + id +" not found"));
+        Card res = cardRepo.findById(id).orElseThrow(()->new Exception("Card with id: " + id +" not found"));
+        return res;
     }
 
     //Method to add card to repo
@@ -40,5 +40,12 @@ public class CardService {
         if(card.id != null && cardRepo.existsById(card.id))
             throw new Exception("Card with id: " + card.id +" already exists");
         return cardRepo.save(card);
+    }
+
+    //Method to remove card from repo
+    public Card removeCardById(int id) throws Exception{
+        Card res = cardRepo.findById(id).orElseThrow(()->new Exception("Card with id: " + id +" not found"));
+        cardRepo.deleteById(id);
+        return res;
     }
 }

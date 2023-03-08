@@ -1,5 +1,6 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -27,7 +28,7 @@ public class BoardList {
             cascade = CascadeType.PERSIST,
             orphanRemoval = true
     )
-    @JsonManagedReference
+    @JsonIgnore
     public List<Card> cards = new ArrayList<>();
 
     private BoardList(){}

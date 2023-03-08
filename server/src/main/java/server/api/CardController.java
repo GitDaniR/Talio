@@ -44,4 +44,15 @@ public class CardController {
         }
         return ResponseEntity.badRequest().build();
     }
+
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity<Card> removeCard(@PathVariable int id){
+        try {
+            Card res = cardService.removeCardById(id);
+            return ResponseEntity.ok(res);
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return ResponseEntity.notFound().build();
+    }
 }

@@ -1,6 +1,8 @@
 package commons;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -24,17 +26,19 @@ public class Card {
            mappedBy = "cards",
            cascade = CascadeType.PERSIST
    )
+   @JsonIgnore
     public List<Tag> tags = new ArrayList<>();
 
     @OneToMany(
             mappedBy = "card",
             cascade = CascadeType.PERSIST
     )
+    @JsonIgnore
     public List<Subtask> subtasks;
     public int index;
     @ManyToOne
     @JoinColumn(name = "listId", insertable = false, updatable = false)
-    @JsonBackReference
+    @JsonIgnore
     public BoardList list;
 
     public int listId;
