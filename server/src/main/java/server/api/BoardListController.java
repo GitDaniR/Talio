@@ -20,11 +20,7 @@ import java.util.Random;
 import commons.BoardList;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import server.database.BoardListRepository;
 import server.services.BoardListService;
@@ -52,4 +48,16 @@ public class BoardListController {
         }
         return saved;
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<BoardList> deleteById(@PathVariable("id") Integer id) {
+        ResponseEntity<BoardList> deletedRecord;
+        try {
+            deletedRecord = this.boardListService.deleteById(id);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+        return deletedRecord;
+    }
+
 }

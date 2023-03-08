@@ -1,5 +1,6 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -21,6 +22,7 @@ public class Board {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @JsonIgnore
     public List<BoardList> lists;
 
     private Board(){}
@@ -34,7 +36,7 @@ public class Board {
         this.lists = lists;
     }
 
-    public void addList(BoardList boardList) {
+    public void addBoardList(BoardList boardList) {
         this.lists.add(boardList);
     }
 
