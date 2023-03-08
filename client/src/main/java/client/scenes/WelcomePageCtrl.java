@@ -22,13 +22,21 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
 public class WelcomePageCtrl {
-
     private final FakeServerUtils fakeServer;
     private final MainCtrl mainCtrl;
+
+    @FXML
+    private TextField chosenServer;
 
     @Inject
     public WelcomePageCtrl(FakeServerUtils fakeServer, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.fakeServer = fakeServer;
+    }
+
+    public void connectToChosenServer() {
+        // For now, it just sends you to the main board.
+        // Eventually it will get the string from chosenServer and change the server host.
+        mainCtrl.showBoard();
     }
 }
