@@ -84,7 +84,8 @@ public class BoardListController {
      * @return
      */
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateTitleById(@PathVariable("id") Integer id, @RequestBody String title) {
+    public ResponseEntity<String> updateTitleById(@PathVariable("id") Integer id,
+                                                  @RequestBody String title) {
         String response;
         try {
             response = this.boardListService.updateTitleById(id, title);

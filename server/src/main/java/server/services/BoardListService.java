@@ -21,7 +21,8 @@ public class BoardListService {
      * @param boardListRepository
      * @param boardRepository
      */
-    public BoardListService(BoardListRepository boardListRepository, BoardRepository boardRepository) {
+    public BoardListService(BoardListRepository boardListRepository,
+                            BoardRepository boardRepository) {
         this.boardListRepository = boardListRepository;
         this.boardRepository = boardRepository;
     }
@@ -59,7 +60,8 @@ public class BoardListService {
         if (id < 0 || !this.boardListRepository.existsById(id)) {
             throw new Exception("Invalid id");
         }
-        ResponseEntity<BoardList> deletedRecord = ResponseEntity.ok(this.boardListRepository.findById(id).get());
+        ResponseEntity<BoardList> deletedRecord =
+                ResponseEntity.ok(this.boardListRepository.findById(id).get());
         this.boardListRepository.deleteById(id);
         return deletedRecord;
     }
