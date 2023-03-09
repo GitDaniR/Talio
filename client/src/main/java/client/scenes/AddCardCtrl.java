@@ -1,6 +1,4 @@
 package client.scenes;
-
-import client.utils.FakeServerUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.BoardList;
@@ -53,6 +51,8 @@ public class AddCardCtrl implements Initializable {
 
     public void ok() {
         try {
+            Card card = getCard();
+
             server.addCard(getCard());
         } catch (WebApplicationException e) {
 
@@ -71,7 +71,11 @@ public class AddCardCtrl implements Initializable {
     private Card getCard() {
         var t = title.getText();
         var d = description.getText();
-        return new Card(t, d, 0, list);
+        if(list == null){
+            return new Card(t, d, 0, null, null);
+        }else{
+            return new Card(t, d, 0, list, this.list.getId());
+        }
     }
 
     public void setList(BoardList list){

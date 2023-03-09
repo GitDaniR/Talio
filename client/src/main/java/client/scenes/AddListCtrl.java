@@ -15,7 +15,6 @@
  */
 package client.scenes;
 
-import client.utils.FakeServerUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 
