@@ -10,12 +10,10 @@ import commons.Card;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.Node;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 
 public class BoardOverviewCtrl implements Initializable {
 
@@ -44,36 +42,34 @@ public class BoardOverviewCtrl implements Initializable {
     }
 
     public void refresh() {
-        mainBoard.getChildren().clear();
-        var lists = fakeServer.getBoardLists();
-        data = FXCollections.observableList(lists);
+        try {
+            mainBoard.getChildren().clear();
+            var lists = fakeServer.getBoardLists();
+            data = FXCollections.observableList(lists);
 
-        for (BoardList currentList : data) {
-            ListCtrl listObject = new ListCtrl(); ///Instantiating a new list to be shown
-            Label listTitle =
-                ((Label) ((VBox) listObject.getChildren().get(0))
-                    .getChildren().get(0)); ///the title of the list
-            listTitle.setText(currentList.title);
-
-            ObservableList<Card> cardsInList =
-                FXCollections.observableList(fakeServer.getCards(currentList));
-            for (Card currentCard : cardsInList) {
-                CardCtrl cardObject = new CardCtrl(); ///Instantiating a new card to be shown
-                Label cardTitle = ((Label) ((HBox) cardObject.getChildren().get(0))
-                    .getChildren().get(0)); ///the title of the card
-                cardTitle.setText(currentCard.title);
-
-                ((VBox) ((VBox) listObject.getChildren().get(0))
-                    .getChildren().get(1)).getChildren().add(cardObject);
+            for (BoardList currentList : data) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("List.fxml"));
+                Node listObject = loader.load();
+                ListCtrl listObjectController = loader.getController();
+                ///Instantiating a new list to be shown
+                listObjectController.setListTitleText(currentList.title);
+                //Setting the title of the list
+                ObservableList<Card> cardsInList =
+                    FXCollections.observableList(fakeServer.getCards(currentList));
+//                for (Card currentCard : cardsInList) {
+//                    CardCtrl cardObject = new CardCtrl();
+//                    //Instantiating a new card to be shown
+//                    cardObject.setCardTitleText(currentCard.title);
+//                    //Setting the title of the card
+//                    listObject.addCardToList(cardObject);
+//                    //Adding the card to the list
+//                }
+                listObjectController.getListAddCardButton().
+                        setOnAction(event -> mainCtrl.showAddCard(currentList));
+                mainBoard.getChildren().add(listObject);
             }
-
-            ((Button) ((VBox) listObject.getChildren().get(0))
-                .getChildren().get(2)).setOnAction(event -> {
-                    mainCtrl.showAddCard(currentList);
-                });
-
-            //listObject.getChildren().add(new Label(currentList.title));
-            mainBoard.getChildren().add(listObject);
+        } catch (Exception e){
+            System.out.print("IO Exception");
         }
     }
 
