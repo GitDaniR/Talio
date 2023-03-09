@@ -31,4 +31,10 @@ public class CardCtrl extends AnchorPane implements Initializable{
         } catch (IOException ix){}
     }
 
+    /** Sets text of the title of the card
+     * @param text
+     */
+    public void setCardTitleText(String text) {
+        cardTitle.setText(text);
+    }
 }
