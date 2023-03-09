@@ -1,5 +1,7 @@
 package client.scenes;
 
+import client.utils.ServerUtils;
+import com.google.inject.Inject;
 import javafx.fxml.FXML;
 
 import javafx.scene.Node;
@@ -26,11 +28,29 @@ public class ListCtrl extends AnchorPane implements Initializable{
     @FXML
     private Button listEditButton;
 
+    private Integer listID;
+
+    private final ServerUtils server;
+    private final MainCtrl mainCtrl;
+    ///This probably doesn't inject anything - needs to be solved!
+    @Inject
+    public ListCtrl(ServerUtils server, MainCtrl mainCtrl) {
+        this.mainCtrl = mainCtrl;
+        this.server = server;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
     }
+    public void addCardToList(Node card){
+        cardBox.getChildren().add(card);
+    }
 
+    public void deleteList(){
+        server.deleteBoardList(listID);
+        mainCtrl.deleteList();
+    }
 
     /** Sets the text of the title of the list
      * @param text
@@ -39,29 +59,8 @@ public class ListCtrl extends AnchorPane implements Initializable{
         listTitle.setText(text);
     }
 
-    public void addCardToList(Node card){
-        cardBox.getChildren().add(card);
-    }
-
-    /**
-     * @return the title of the list
-     */
-    public Label getListTitle() {
-        return listTitle;
-    }
-
-    /**
-     * @return the Edit button of the list
-     */
-    public Button getListEditButton() {
-        return listEditButton;
-    }
-
-    /**
-     * @return the X button for the list
-     */
-    public Button getListCloseButton() {
-        return listCloseButton;
+    public void setListID(int listID){
+        this.listID = listID;
     }
 
     /**
