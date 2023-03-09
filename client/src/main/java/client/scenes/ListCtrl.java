@@ -17,6 +17,10 @@ public class ListCtrl extends AnchorPane implements Initializable{
     private Label listTitle;
     @FXML
     private Button listAddCard;
+    @FXML
+    private Button listCloseButton;
+    @FXML
+    private Button listEditButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -35,4 +39,31 @@ public class ListCtrl extends AnchorPane implements Initializable{
         }
     }
 
+    /**
+     * @return the title of the list
+     */
+    public Label getListTitle() {
+        return listTitle;
+    }
+
+    /**
+     * @return the Edit button of the list
+     */
+    public Button getListEditButton() {
+        return listEditButton;
+    }
+
+    /**
+     * @return the X button for the list
+     */
+    public Button getListCloseButton() {
+        return listCloseButton;
+    }
+
+    /**
+     * @return the list button of the list
+     */
+    public Button getListAddCard() {
+        return listAddCard;
+    }
 }
