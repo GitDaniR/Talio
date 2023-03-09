@@ -56,7 +56,7 @@ public class CardService {
         return res;
     }
 
-    //Method to edit a card
+    //Method to edit a card by listId
     public Card editCardById(int id, Card card)throws Exception{
         card.id = id;
         if(!listRepo.existsById(card.listId))
@@ -66,5 +66,19 @@ public class CardService {
         );
         card.index = res.index;
         return cardRepo.save(card);
+    }
+
+    public List<Card> getAllByListId(Integer listId) throws Exception{
+        if(!listRepo.existsById(listId))
+            throw new Exception("List does not exist");
+        return cardRepo.findAllByListId(listId);
+    }
+
+    public Card getCardByListIdAndIndex(Integer listId, Integer index) throws Exception{
+        if(!listRepo.existsById(listId))
+            throw new Exception("List does not exist");
+        return cardRepo.findByListIdAndIndex(listId, index);
+
+
     }
 }
