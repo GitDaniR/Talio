@@ -11,7 +11,7 @@
       <HBox alignment="TOP_RIGHT" prefHeight="19.0" prefWidth="140.0">
          <children>
             <Button fx:id="listEditButton" mnemonicParsing="false" text="Edit" />
-            <Button fx:id="listCloseButton" mnemonicParsing="false" text="X" />
+            <Button fx:id="listCloseButton" mnemonicParsing="false" onAction="#deleteList" text="X" />
          </children>
       </HBox>
       <Label id="ListTitle" fx:id="listTitle" alignment="CENTER" prefHeight="17.0" prefWidth="206.0" text="Default List Name" />
