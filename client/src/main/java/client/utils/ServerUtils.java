@@ -47,6 +47,24 @@ public class ServerUtils {
                 .post(Entity.entity(list, APPLICATION_JSON), BoardList.class);
     }
 
+    public void deleteBoardList(Integer id){
+//        return ClientBuilder.newClient(new ClientConfig()) //
+//                .target(SERVER).path("api/lists/") //
+//                .request(APPLICATION_JSON) //
+//                .accept(APPLICATION_JSON) //
+//                .delete(Entity.entity(list, APPLICATION_JSON), BoardList.class);
+//        ///Need to edit to add id insead of list
+    }
+
+    public void updateBoardListTitle(Integer id, String title){
+//        return ClientBuilder.newClient(new ClientConfig()) //
+//                .target(SERVER).path("api/lists/") //
+//                .request(APPLICATION_JSON) //
+//                .accept(APPLICATION_JSON) //
+//                .post(Entity.entity(list, APPLICATION_JSON), BoardList.class);
+//        ///Need to edit to add id instead of list and also pass new title
+    }
+
 
     // Dummy placeholder methods for getting and posting cards
     public List<Card> getCards() {
