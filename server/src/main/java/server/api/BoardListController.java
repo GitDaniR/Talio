@@ -40,7 +40,7 @@ public class BoardListController {
      * Method which returns all lists.
      * @return
      */
-    @GetMapping("/")
+    @GetMapping(path = { "", "/" })
     public List<BoardList> getAll() {
         return boardListService.findAll();
     }
@@ -50,7 +50,7 @@ public class BoardListController {
      * @param boardList
      * @return
      */
-    @PostMapping("/")
+    @PostMapping(path = { "", "/" })
     public ResponseEntity<BoardList> add(@RequestBody BoardList boardList) {
         ResponseEntity<BoardList> saved;
         try {

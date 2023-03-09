@@ -34,7 +34,7 @@ public class BoardListTest {
     @Test
     public void checkAddCard(){
         var list = new BoardList("List", board);
-        var card = new Card("title", "description", 1, null);
+        var card = new Card("title", "description", 1, null,null);
         var cards = new ArrayList<Card>();
         cards.add(card);
         list.addCard(card);

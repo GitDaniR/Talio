@@ -1,6 +1,5 @@
 package client.scenes;
-
-import client.utils.FakeServerUtils;
+import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.BoardList;
 import commons.Card;
@@ -17,7 +16,8 @@ import java.util.ResourceBundle;
 
 public class AddCardCtrl implements Initializable {
 
-    private final FakeServerUtils fakeServer;
+    //private final FakeServerUtils fakeServer;
+    private final ServerUtils server;
     private final MainCtrl mainCtrl;
     @FXML
     private TextField title;
@@ -31,8 +31,8 @@ public class AddCardCtrl implements Initializable {
     private BoardList list = null;
 
     @Inject
-    public AddCardCtrl(FakeServerUtils fakeServer, MainCtrl mainCtrl) {
-        this.fakeServer = fakeServer;
+    public AddCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
+        this.server = server;
         this.mainCtrl = mainCtrl;
     }
 
@@ -51,8 +51,9 @@ public class AddCardCtrl implements Initializable {
 
     public void ok() {
         try {
-            fakeServer.addCard(getCard(), list);
+            Card card = getCard();
 
+            server.addCard(getCard());
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -70,7 +71,11 @@ public class AddCardCtrl implements Initializable {
     private Card getCard() {
         var t = title.getText();
         var d = description.getText();
-        return new Card(t, d, 0, list);
+        if(list == null){
+            return new Card(t, d, 0, null, null);
+        }else{
+            return new Card(t, d, 0, list, this.list.getId());
+        }
     }
 
     public void setList(BoardList list){
