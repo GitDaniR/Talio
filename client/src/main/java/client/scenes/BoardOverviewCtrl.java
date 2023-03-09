@@ -1,9 +1,6 @@
 package client.scenes;
 
-import java.net.URL;
-import java.util.*;
-
-import client.utils.FakeServerUtils;
+import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.BoardList;
 import commons.Card;
@@ -15,9 +12,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.layout.FlowPane;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
 public class BoardOverviewCtrl implements Initializable {
 
-    private final FakeServerUtils fakeServer;
+    private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
     private ObservableList<BoardList> data;
@@ -26,14 +26,13 @@ public class BoardOverviewCtrl implements Initializable {
     private FlowPane mainBoard;
 
     @Inject
-    public BoardOverviewCtrl(FakeServerUtils fakeServer, MainCtrl mainCtrl) {
-        this.fakeServer = fakeServer;
+    public BoardOverviewCtrl(ServerUtils server, MainCtrl mainCtrl) {
+        this.server = server;
         this.mainCtrl = mainCtrl;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        fakeServer.setup();
         refresh();
     }
 
@@ -44,26 +43,32 @@ public class BoardOverviewCtrl implements Initializable {
     public void refresh() {
         try {
             mainBoard.getChildren().clear();
-            var lists = fakeServer.getBoardLists();
+            var lists = server.getBoardLists();
             data = FXCollections.observableList(lists);
 
             for (BoardList currentList : data) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("List.fxml"));
-                Node listObject = loader.load();
-                ListCtrl listObjectController = loader.getController();
-                ///Instantiating a new list to be shown
+                FXMLLoader listLoader = new FXMLLoader(getClass().getResource("List.fxml"));
+                Node listObject = listLoader.load();///Need to also load serverUtils and mainCtrl
+                ListCtrl listObjectController = listLoader.getController();
+                ///Instantiating a new list
+                listObjectController.setListID(currentList.id);
+                ///Attaching the id of the list to the listObjectController
                 listObjectController.setListTitleText(currentList.title);
                 //Setting the title of the list
+
                 ObservableList<Card> cardsInList =
-                    FXCollections.observableList(fakeServer.getCards(currentList));
-//                for (Card currentCard : cardsInList) {
-//                    CardCtrl cardObject = new CardCtrl();
-//                    //Instantiating a new card to be shown
-//                    cardObject.setCardTitleText(currentCard.title);
-//                    //Setting the title of the card
-//                    listObject.addCardToList(cardObject);
-//                    //Adding the card to the list
-//                }
+                    FXCollections.observableList(server.getCards());
+                for (Card currentCard : cardsInList) {
+                    FXMLLoader cardLoader = new FXMLLoader((getClass().getResource("Card.fxml")));
+                    Node cardObject = cardLoader.load();
+                    CardCtrl cardObjectController = cardLoader.getController();
+                    //Instantiating a new card
+                    cardObjectController.setCardTitleText(currentCard.title);
+                    //Setting the title of the card
+                    listObjectController.addCardToList(cardObject);
+                    //Adding the card to the list
+                }
+                ///This can be done with the ID of the list
                 listObjectController.getListAddCardButton().
                         setOnAction(event -> mainCtrl.showAddCard(currentList));
                 mainBoard.getChildren().add(listObject);
