@@ -43,6 +43,10 @@ public class BoardList {
         this.title = text;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
     public void setCards(List<Card> cards) {
         this.cards = cards;
     }

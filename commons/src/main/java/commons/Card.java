@@ -20,6 +20,7 @@ public class Card {
 
     public Integer id;
 
+
     public String title;
     public String description;
     @ManyToMany(
@@ -41,16 +42,17 @@ public class Card {
     @JsonIgnore
     public BoardList list;
 
-    public int listId;
+    public Integer listId;
 
     private Card() {
     }
 
-    public Card(String title, String description, int index, BoardList list) {
+    public Card(String title, String description, int index, BoardList list, Integer listId) {
         this.title = title;
         this.description = description;
         this.index = index;
         this.list = list;
+        this.listId = listId;
     }
 
     public void addTag(Tag tag) {
