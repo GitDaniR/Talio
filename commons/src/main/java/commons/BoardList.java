@@ -18,7 +18,9 @@ public class BoardList {
     public Integer id;
 
     public String title;
+
     @ManyToOne
+    @JoinColumn(name = "board_id", referencedColumnName = "id")
     public Board board;
 
     public int index;

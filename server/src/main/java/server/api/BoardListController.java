@@ -16,43 +16,82 @@
 package server.api;
 
 import java.util.List;
-import java.util.Random;
 import commons.BoardList;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import server.database.BoardListRepository;
+import server.services.BoardListService;
 
 @RestController
 @RequestMapping("/api/lists")
 public class BoardListController {
+    private final BoardListService boardListService;
 
-    private final Random random;
-    private final BoardListRepository repo;
-
-    public BoardListController(Random random, BoardListRepository repo) {
-        this.random = random;
-        this.repo = repo;
+    /**
+     * Constructor for BoardListController which uses boardListService.
+     * @param boardListService
+     */
+    public BoardListController(BoardListService boardListService) {
+        this.boardListService = boardListService;
     }
 
-    @GetMapping(path = { "", "/" })
+    /**
+     * Method which returns all lists.
+     * @return
+     */
+    @GetMapping("/")
     public List<BoardList> getAll() {
-        return repo.findAll();
+        return boardListService.findAll();
     }
 
-    @PostMapping(path = { "", "/" })
-    public ResponseEntity<BoardList> add(@RequestBody BoardList list) {
-
-        if (list.title == null) {
+    /**
+     * Method which adds a new list to repo.
+     * @param boardList
+     * @return
+     */
+    @PostMapping("/")
+    public ResponseEntity<BoardList> add(@RequestBody BoardList boardList) {
+        ResponseEntity<BoardList> saved;
+        try {
+            saved = this.boardListService.add(boardList);
+        } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
+        return saved;
+    }
 
-        BoardList saved = repo.save(list);
-        return ResponseEntity.ok(saved);
+    /**
+     * Method which deletes a board by id from repo.
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<BoardList> deleteById(@PathVariable("id") Integer id) {
+        ResponseEntity<BoardList> deletedRecord;
+        try {
+            deletedRecord = this.boardListService.deleteById(id);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+        return deletedRecord;
+    }
+
+    /**
+     * Method which updates a list title by id.
+     * @param id
+     * @param title
+     * @return
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateTitleById(@PathVariable("id") Integer id,
+                                                  @RequestBody String title) {
+        String response;
+        try {
+            response = this.boardListService.updateTitleById(id, title);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(response);
     }
 }
