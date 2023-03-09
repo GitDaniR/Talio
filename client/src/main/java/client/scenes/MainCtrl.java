@@ -77,6 +77,15 @@ public class MainCtrl {
         primaryStage.setScene(addList);
     }
 
+    public void showEditList(){
+        primaryStage.setTitle("Editing List");
+        //primaryStage.setScene(editList);
+    }
+
+    public void deleteList(){
+        boardOverviewCtrl.refresh();
+    }
+
     public void showWelcomePage() {
         primaryStage.setTitle("Welcome Page");
         primaryStage.setScene(welcomePage);
