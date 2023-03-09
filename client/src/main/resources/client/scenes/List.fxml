@@ -15,7 +15,7 @@
          </children>
       </HBox>
       <Label id="ListTitle" fx:id="listTitle" alignment="CENTER" prefHeight="17.0" prefWidth="206.0" text="Default List Name" />
-      <VBox prefHeight="142.0" prefWidth="140.0" />
+      <VBox fx:id="cardBox" prefHeight="142.0" prefWidth="140.0" />
       <Button id="ListAddCard" fx:id="listAddCard" alignment="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="202.0" text="Add card" />
    </children>
    <padding>
