@@ -47,7 +47,8 @@ public class CardController {
     }
 
     @GetMapping("/list/{listId}/{index}")
-    public ResponseEntity<Card> getCardByListIdAndIndex(@PathVariable Integer listId,@PathVariable Integer index){
+    public ResponseEntity<Card> getCardByListIdAndIndex(@PathVariable Integer listId,
+                                                        @PathVariable Integer index){
         try{
             Card res = cardService.getCardByListIdAndIndex(listId, index);
             return ResponseEntity.ok(res);
