@@ -58,13 +58,13 @@ public class CardService {
 
     //Method to edit a card
     public Card editCardById(int id, Card card)throws Exception{
-        card.id = id;
         if(!listRepo.existsById(card.listId))
             throw new Exception("List does not exist");
         Card res = cardRepo.findById(id).orElseThrow(
             ()->new Exception("Card with id: " + id +" not found")
         );
-        card.index = res.index;
-        return cardRepo.save(card);
+        res.title = card.title;
+        res.description = card.description;
+        return cardRepo.save(res);
     }
 }
