@@ -53,6 +53,14 @@ public class Card {
         this.list = list;
     }
 
+    public Card(Integer id, String title, String description, int index, BoardList list) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.index = index;
+        this.list = list;
+    }
+
     public void addTag(Tag tag) {
         tags.add(tag);
     }

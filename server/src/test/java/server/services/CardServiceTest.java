@@ -10,8 +10,7 @@ import server.database.TestCardRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CardServiceTest {
 
@@ -25,9 +24,9 @@ public class CardServiceTest {
     public void setup(){
         cardRepo = new TestCardRepository();
         listRepo = null;
-        c1 = new Card("a", "a", 0, null);
-        c2 = new Card("b", "b", 1, null);
-        c3 = new Card("c", "c", 2, null);
+        c1 = new Card(0, "a", "a", 0, null);
+        c2 = new Card(1, "b", "b", 1, null);
+        c3 = new Card(2, "c", "c", 2, null);
         cards = new ArrayList<>();
         cards.add(c1);
         cards.add(c2);
@@ -51,6 +50,25 @@ public class CardServiceTest {
         List<String> expectedCalls = new ArrayList<>();
         expectedCalls.add(TestCardRepository.FIND_ALL);
         assertEquals(expectedResult, res);
+        assertEquals(expectedCalls, cardRepo.getCalls());
+    }
+
+    @Test
+    public void testFindById() throws Exception {
+        cardRepo.setCards(cards);
+        Card res = sut.getCardById(1);
+        List<String> expectedCalls = new ArrayList<>();
+        assertEquals(c2, res);
+        expectedCalls.add(TestCardRepository.FIND_BY_ID);
+        assertEquals(expectedCalls, cardRepo.getCalls());
+    }
+
+    @Test
+    public void testFindByIdNotExists() throws Exception {
+        cardRepo.setCards(cards);
+        List<String> expectedCalls = new ArrayList<>();
+        assertThrows(Exception.class, ()->sut.getCardById(4));
+        expectedCalls.add(TestCardRepository.FIND_BY_ID);
         assertEquals(expectedCalls, cardRepo.getCalls());
     }
 }

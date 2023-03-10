@@ -17,6 +17,7 @@ public class TestCardRepository implements CardRepository{
     public static final String SHIFT_CARDS_RIGHT = "Shift Cards Right";
     public static final String SHIFT_CARDS_LEFT = "Shift Cards Left";
     public static final String FIND_ALL = "Find All";
+    public static final String FIND_BY_ID = "Find By Id";
 
     private List<String> calls;
     private List<Card> cards;
@@ -58,9 +59,33 @@ public class TestCardRepository implements CardRepository{
     }
 
     @Override
+    public <S extends Card> S save(S entity) {
+        int maxId = -1;
+        for(Card c: cards){
+            if(c.id != null && c.id == entity.id){
+                cards.remove(c);
+                cards.add(entity);
+                return entity;
+            }
+        }
+        entity.id = maxId + 1;
+        cards.add(entity);
+        return entity;
+    }
+
+    @Override
     public List<Card> findAll() {
         call(FIND_ALL);
         return cards;
+    }
+
+    @Override
+    public Optional<Card> findById(Integer integer) {
+        calls.add(FIND_BY_ID);
+        for(Card c: cards){
+            if(c.id == integer) return Optional.of(c);
+        }
+        return Optional.empty();
     }
 
     @Override
@@ -109,18 +134,8 @@ public class TestCardRepository implements CardRepository{
     }
 
     @Override
-    public <S extends Card> S save(S entity) {
-        return null;
-    }
-
-    @Override
     public <S extends Card> List<S> saveAll(Iterable<S> entities) {
         return null;
-    }
-
-    @Override
-    public Optional<Card> findById(Integer integer) {
-        return Optional.empty();
     }
 
     @Override
