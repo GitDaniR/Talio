@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import server.database.BoardListRepository;
 import server.database.CardRepository;
+import server.database.TestBoardListRepository;
 import server.database.TestCardRepository;
 
 import java.util.ArrayList;
@@ -23,14 +24,15 @@ public class CardServiceTest {
     @BeforeEach
     public void setup(){
         cardRepo = new TestCardRepository();
-        listRepo = null;
-        c1 = new Card(0, "a", "a", 0, null);
-        c2 = new Card(1, "b", "b", 1, null);
-        c3 = new Card(2, "c", "c", 2, null);
+        listRepo = new TestBoardListRepository();
+        c1 = new Card(0, "a", "a", 0, null, 1);
+        c2 = new Card(1, "b", "b", 1, null, 1);
+        c3 = new Card(2, "c", "c", 2, null, 1);
         cards = new ArrayList<>();
         cards.add(c1);
         cards.add(c2);
         cards.add(c3);
+        cardRepo.setCards(cards);
         sut = new CardService(cardRepo, listRepo);
     }
 
@@ -41,7 +43,6 @@ public class CardServiceTest {
 
     @Test
     public void testFindAll(){
-        cardRepo.setCards(cards);
         List<Card> res = sut.getAllCards();
         List<Card> expectedResult = new ArrayList<>();
         expectedResult.add(c1);
@@ -55,7 +56,6 @@ public class CardServiceTest {
 
     @Test
     public void testFindById() throws Exception {
-        cardRepo.setCards(cards);
         Card res = sut.getCardById(1);
         List<String> expectedCalls = new ArrayList<>();
         assertEquals(c2, res);
@@ -65,10 +65,40 @@ public class CardServiceTest {
 
     @Test
     public void testFindByIdNotExists() throws Exception {
-        cardRepo.setCards(cards);
         List<String> expectedCalls = new ArrayList<>();
         assertThrows(Exception.class, ()->sut.getCardById(4));
         expectedCalls.add(TestCardRepository.FIND_BY_ID);
+        assertEquals(expectedCalls, cardRepo.getCalls());
+    }
+
+    @Test
+    public void testAddCard() throws Exception {
+        Card c4 = new Card(null, "d", "d", 1, null, 1);
+        Card res1 = sut.addCard(c4);
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestCardRepository.SHIFT_CARDS_RIGHT);
+        expectedCalls.add(TestCardRepository.SAVE);
+        assertEquals(expectedCalls, cardRepo.getCalls());
+        Card res2 = sut.getCardById(1);
+        assertEquals(c4, res1);
+        assertEquals(3, res1.id);
+        assertEquals(2, res2.index);
+    }
+
+    @Test
+    public void testAddCardNoList() throws Exception {
+        Card c4 = new Card(5, "d", "d", 1, null, 2);
+        assertThrows(Exception.class, ()->sut.addCard(c4));
+        List<String> expectedCalls = new ArrayList<>();
+        assertEquals(expectedCalls, cardRepo.getCalls());
+    }
+
+    @Test
+    public void testAddCardAlreadyExists() throws Exception {
+        Card c4 = new Card(2, "d", "d", 1, null, 1);
+        assertThrows(Exception.class, ()->sut.addCard(c4));
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestCardRepository.EXISTS_BY_ID);
         assertEquals(expectedCalls, cardRepo.getCalls());
     }
 }
