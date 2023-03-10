@@ -64,7 +64,7 @@ public class CardServiceTest {
     }
 
     @Test
-    public void testFindByIdNotExists() throws Exception {
+    public void testFindByIdNotExists(){
         List<String> expectedCalls = new ArrayList<>();
         assertThrows(Exception.class, ()->sut.getCardById(4));
         expectedCalls.add(TestCardRepository.FIND_BY_ID);
@@ -86,7 +86,7 @@ public class CardServiceTest {
     }
 
     @Test
-    public void testAddCardNoList() throws Exception {
+    public void testAddCardNoList(){
         Card c4 = new Card(5, "d", "d", 1, null, 2);
         assertThrows(Exception.class, ()->sut.addCard(c4));
         List<String> expectedCalls = new ArrayList<>();
@@ -94,11 +94,33 @@ public class CardServiceTest {
     }
 
     @Test
-    public void testAddCardAlreadyExists() throws Exception {
+    public void testAddCardAlreadyExists(){
         Card c4 = new Card(2, "d", "d", 1, null, 1);
         assertThrows(Exception.class, ()->sut.addCard(c4));
         List<String> expectedCalls = new ArrayList<>();
         expectedCalls.add(TestCardRepository.EXISTS_BY_ID);
+        assertEquals(expectedCalls, cardRepo.getCalls());
+    }
+
+    @Test
+    public void testDeleteById()throws Exception{
+        Card res1 = sut.removeCardById(1);
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestCardRepository.FIND_BY_ID);
+        expectedCalls.add(TestCardRepository.SHIFT_CARDS_LEFT);
+        expectedCalls.add(TestCardRepository.DELETE_BY_ID);
+        assertEquals(expectedCalls, cardRepo.getCalls());
+        Card res2 = sut.getCardById(2);
+        assertEquals(c2, res1);
+        assertFalse(cardRepo.existsById(1));
+        assertEquals(1, res2.index);
+    }
+
+    @Test
+    public void testDeleteByIdNotFound(){
+        assertThrows(Exception.class, ()->sut.removeCardById(4));
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestCardRepository.FIND_BY_ID);
         assertEquals(expectedCalls, cardRepo.getCalls());
     }
 }

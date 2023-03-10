@@ -20,6 +20,7 @@ public class TestCardRepository implements CardRepository{
     public static final String FIND_BY_ID = "Find By Id";
     public static final String EXISTS_BY_ID = "Exists By Id";
     public static final String SAVE = "Save";
+    public static final String DELETE_BY_ID = "Delete By Id";
 
     private List<String> calls;
     private List<Card> cards;
@@ -102,6 +103,16 @@ public class TestCardRepository implements CardRepository{
     }
 
     @Override
+    public void deleteById(Integer integer) {
+        call(DELETE_BY_ID);
+        for(Card c: cards){
+            if(c.id == integer){
+                cards.remove(c);
+            }
+        }
+    }
+
+    @Override
     public List<Card> findAll(Sort sort) {
         return null;
     }
@@ -119,11 +130,6 @@ public class TestCardRepository implements CardRepository{
     @Override
     public long count() {
         return 0;
-    }
-
-    @Override
-    public void deleteById(Integer integer) {
-
     }
 
     @Override
