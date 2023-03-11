@@ -1,5 +1,6 @@
 package client.scenes;
 
+import commons.Card;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -15,6 +16,8 @@ public class CardCtrl extends AnchorPane implements Initializable{
     @FXML
     private Button cardDelete;
 
+    private Card card;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {}
 
@@ -23,5 +26,9 @@ public class CardCtrl extends AnchorPane implements Initializable{
      */
     public void setCardTitleText(String text) {
         cardTitle.setText(text);
+    }
+
+    public void setCard(Card card){
+        this.card=card;
     }
 }
