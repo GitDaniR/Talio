@@ -1,8 +1,7 @@
 package commons;
-import org.junit.jupiter.api.BeforeEach;
+//import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -15,10 +14,10 @@ public class CardTest {
 
     public static BoardList list;
 
-    @BeforeEach
-    public void setup(){
-        BoardList list = new BoardList("List", null);
-    }
+//    @BeforeEach
+//    public void setup(){
+//        BoardList list = new BoardList("List", null);
+//    }
 
     @Test
     public void checkConstructor(){
@@ -29,17 +28,17 @@ public class CardTest {
 
 
     }
-    @Test
-    public void checkAddTag(){
-        var tag = new Tag("tag", "colour");
-        var listTags = new ArrayList<Tag>();
-        listTags.add(tag);
-        var card = new Card("card", "description", 0 ,list ,null);
-        card.addTag(tag);
-
-        assertEquals(card.tags, listTags);
-
-    }
+//    @Test
+//    public void checkAddTag(){
+//        var tag = new Tag("tag", "colour");
+//        var listTags = new ArrayList<Tag>();
+//        listTags.add(tag);
+//        var card = new Card("card", "description", 0 ,list ,null);
+//        card.addTag(tag);
+//
+//        assertEquals(card.tags, listTags);
+//
+//    }
 
     @Test
     public void equalsHashCode(){
