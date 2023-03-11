@@ -39,11 +39,11 @@ public class BoardService {
      * @return the saved board
      * @throws Exception if title is null.
      */
-    public ResponseEntity<Board> add(Board board) throws Exception {
+    public Board add(Board board) throws Exception {
         if (board.title == null) {
             throw new Exception("Invalid title");
         }
-        return ResponseEntity.ok(this.repo.save(board));
+        return this.repo.save(board);
     }
 
     /**

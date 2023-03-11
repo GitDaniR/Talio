@@ -69,13 +69,13 @@ public class BoardController {
      */
     @PostMapping("/")
     public ResponseEntity<Board> add(@RequestBody Board board) {
-        ResponseEntity<Board> saved;
+        Board saved;
         try {
             saved = this.boardService.add(board);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
-        return saved;
+        return ResponseEntity.ok(saved);
     }
 
     /**
