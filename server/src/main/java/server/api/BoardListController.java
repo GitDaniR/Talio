@@ -68,13 +68,13 @@ public class BoardListController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<BoardList> deleteById(@PathVariable("id") Integer id) {
-        ResponseEntity<BoardList> deletedRecord;
+        BoardList deletedRecord;
         try {
             deletedRecord = this.boardListService.deleteById(id);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
-        return deletedRecord;
+        return ResponseEntity.ok(deletedRecord);
     }
 
     /**

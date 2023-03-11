@@ -56,12 +56,11 @@ public class BoardListService {
      * @return the deleted list.
      * @throws Exception if list does not exist.
      */
-    public ResponseEntity<BoardList> deleteById(Integer id) throws Exception {
+    public BoardList deleteById(Integer id) throws Exception {
         if (id < 0 || !this.boardListRepository.existsById(id)) {
             throw new Exception("Invalid id");
         }
-        ResponseEntity<BoardList> deletedRecord =
-                ResponseEntity.ok(this.boardListRepository.findById(id).get());
+        BoardList deletedRecord = this.boardListRepository.findById(id).get();
         this.boardListRepository.deleteById(id);
         return deletedRecord;
     }
