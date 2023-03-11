@@ -41,13 +41,13 @@ public class BoardListService {
      * @return the saved list.
      * @throws Exception if title is not valid
      */
-    public ResponseEntity<BoardList> add(BoardList boardList) throws Exception {
+    public BoardList add(BoardList boardList) throws Exception {
         if (boardList.title == null) {
             throw new Exception("Invalid title");
         }
         Board board = this.boardRepository.findById(boardList.board.id).get();
         board.addBoardList(boardList);
-        return ResponseEntity.ok(this.boardListRepository.save(boardList));
+        return this.boardListRepository.save(boardList);
     }
 
     /**

@@ -52,13 +52,13 @@ public class BoardListController {
      */
     @PostMapping(path = { "", "/" })
     public ResponseEntity<BoardList> add(@RequestBody BoardList boardList) {
-        ResponseEntity<BoardList> saved;
+        BoardList saved;
         try {
             saved = this.boardListService.add(boardList);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
-        return saved;
+        return ResponseEntity.ok(saved);
     }
 
     /**
