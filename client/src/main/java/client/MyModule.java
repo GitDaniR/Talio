@@ -15,10 +15,7 @@
  */
 package client;
 
-import client.scenes.AddCardCtrl;
-import client.scenes.AddListCtrl;
-import client.scenes.BoardOverviewCtrl;
-import client.scenes.MainCtrl;
+import client.scenes.*;
 import client.utils.ServerUtils;
 import com.google.inject.Binder;
 import com.google.inject.Module;
@@ -33,5 +30,6 @@ public class MyModule implements Module {
         binder.bind(AddListCtrl.class).in(Scopes.SINGLETON);
         binder.bind(BoardOverviewCtrl.class).in(Scopes.SINGLETON);
         binder.bind(ServerUtils.class).in(Scopes.SINGLETON);
+        binder.bind(EditListCtrl.class).in(Scopes.SINGLETON);
     }
 }
