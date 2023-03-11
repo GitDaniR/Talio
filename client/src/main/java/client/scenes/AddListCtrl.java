@@ -31,6 +31,8 @@ public class AddListCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
+    private Board boardToAddTo;
+
     @FXML
     private TextField title;
 
@@ -40,11 +42,17 @@ public class AddListCtrl {
         this.server = server;
     }
 
+    /**
+     * @param boardToAddTo setting the board to add to
+     */
+    public void setBoardToAddTo(Board boardToAddTo){
+        this.boardToAddTo=boardToAddTo;
+    }
+
     public void addList() {
         try {
             server.addBoardList(getBoardList());
         } catch (WebApplicationException e) {
-
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText(e.getMessage());
@@ -57,7 +65,7 @@ public class AddListCtrl {
     }
 
     private BoardList getBoardList() {
-        return new BoardList(title.getText(),new Board("DONE","456"));
+        return new BoardList(title.getText(),boardToAddTo);
     }
 
     private void clearFields() {
