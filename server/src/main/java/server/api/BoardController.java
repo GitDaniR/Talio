@@ -28,25 +28,22 @@ import server.services.BoardService;
 @RequestMapping("/api/boards")
 public class BoardController {
     private final BoardService boardService;
-    private final BoardRepository repo;
 
     /**
      * Constructor for BoardController which uses BoardService and BoardRepository.
      * @param boardService
-     * @param repo
      */
-    public BoardController(BoardService boardService, BoardRepository repo) {
+    public BoardController(BoardService boardService) {
         this.boardService = boardService;
-        this.repo = repo;
     }
 
     /**
-     * Method which returns all boards in repo.
+     * Method which returns all boards.
      * @return all boards
      */
-    @GetMapping(path = { "", "/" })
+    @GetMapping("/")
     public List<Board> getAll(){
-        return repo.findAll();
+        return this.boardService.findAll();
     }
 
     /**
@@ -54,11 +51,11 @@ public class BoardController {
      * @param id
      * @return a board
      */
-    @GetMapping(path = { "", "/" })
+    @GetMapping("/{id}")
     public ResponseEntity<Board> getById(@PathVariable("id") Integer id) {
         ResponseEntity<Board> found;
         try {
-            found = this.boardService.getById(id, repo);
+            found = this.boardService.getById(id);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
@@ -70,11 +67,11 @@ public class BoardController {
      * @param board
      * @return the saved board or BAD_REQUEST
      */
-    @PostMapping(path = { "", "/" })
+    @PostMapping("/")
     public ResponseEntity<Board> add(@RequestBody Board board) {
         ResponseEntity<Board> saved;
         try {
-            saved = this.boardService.add(board, repo);
+            saved = this.boardService.add(board);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
@@ -86,11 +83,11 @@ public class BoardController {
      * @param id
      * @return the deleted board or BAD_REQUEST
      */
-    @DeleteMapping(path = { "", "/" })
+    @DeleteMapping("/{id}")
     public ResponseEntity<Board> deleteById(@PathVariable("id") Integer id) {
         ResponseEntity<Board> deletedRecord;
         try {
-            deletedRecord = this.boardService.deleteById(id, repo);
+            deletedRecord = this.boardService.deleteById(id);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
