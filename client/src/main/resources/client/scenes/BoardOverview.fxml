@@ -7,12 +7,12 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BoardOverviewCtrl">
    <children>
-      <Button layoutX="511.0" layoutY="355.0" mnemonicParsing="false" onAction="#addList" text="AddList" />
-      <ScrollPane layoutX="23.0" layoutY="8.0" prefHeight="323.0" prefWidth="555.0">
+      <Button layoutX="503.0" layoutY="355.0" mnemonicParsing="false" onAction="#addList" prefHeight="25.0" prefWidth="75.0" text="AddList" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="22.0" />
+      <ScrollPane fitToHeight="true" fitToWidth="true" layoutX="23.0" layoutY="8.0" prefHeight="323.0" prefWidth="555.0" AnchorPane.bottomAnchor="69.0" AnchorPane.leftAnchor="23.0" AnchorPane.rightAnchor="22.0" AnchorPane.topAnchor="8.0">
          <content>
-            <FlowPane id="mainBoard" fx:id="mainBoard" prefHeight="320.0" prefWidth="540.0" style="-fx-background-color: orange;" />
+            <FlowPane id="mainBoard" fx:id="mainBoard" style="-fx-background-color: orange;" />
          </content>
       </ScrollPane>
-      <Button layoutX="24.0" layoutY="355.0" mnemonicParsing="false" onAction="#disconnectFromServer" text="Disconnect" />
+      <Button layoutX="24.0" layoutY="355.0" mnemonicParsing="false" onAction="#disconnectFromServer" text="Disconnect" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="24.0" />
    </children>
 </AnchorPane>

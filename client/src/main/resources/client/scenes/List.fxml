@@ -10,7 +10,7 @@
    <children>
       <HBox alignment="TOP_RIGHT" prefHeight="19.0" prefWidth="140.0">
          <children>
-            <Button fx:id="listEditButton" mnemonicParsing="false" text="Edit" />
+            <Button fx:id="listEditButton" mnemonicParsing="false" onAction="#editList" text="Edit" />
             <Button fx:id="listCloseButton" mnemonicParsing="false" onAction="#deleteList" text="X" />
          </children>
       </HBox>
