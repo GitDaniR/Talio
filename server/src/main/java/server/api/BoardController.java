@@ -53,13 +53,13 @@ public class BoardController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<Board> getById(@PathVariable("id") Integer id) {
-        ResponseEntity<Board> found;
+        Board found;
         try {
             found = this.boardService.getById(id);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
-        return found;
+        return ResponseEntity.ok(found);
     }
 
     /**

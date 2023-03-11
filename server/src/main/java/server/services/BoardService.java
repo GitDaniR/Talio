@@ -26,11 +26,11 @@ public class BoardService {
      * @return board
      * @throws Exception if id is not in repo.
      */
-    public ResponseEntity<Board> getById(Integer id) throws Exception {
+    public Board getById(Integer id) throws Exception {
         if (id < 0 || !this.repo.existsById(id)) {
             throw new Exception("Invalid id");
         }
-        return ResponseEntity.ok(this.repo.findById(id).get());
+        return this.repo.findById(id).get();
     }
 
     /**
