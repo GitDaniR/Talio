@@ -21,7 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import commons.Board;
-import server.database.BoardRepository;
 import server.services.BoardService;
 
 @RestController
