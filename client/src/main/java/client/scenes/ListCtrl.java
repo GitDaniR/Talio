@@ -1,7 +1,7 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-import com.google.inject.Inject;
+import commons.BoardList;
 import javafx.fxml.FXML;
 
 import javafx.scene.Node;
@@ -28,16 +28,10 @@ public class ListCtrl extends AnchorPane implements Initializable{
     @FXML
     private Button listEditButton;
 
-    private Integer listID;
+    private BoardList boardList;
 
-    private final ServerUtils server;
-    private final MainCtrl mainCtrl;
-    ///This probably doesn't inject anything - needs to be solved!
-    @Inject
-    public ListCtrl(ServerUtils server, MainCtrl mainCtrl) {
-        this.mainCtrl = mainCtrl;
-        this.server = server;
-    }
+    private ServerUtils server;
+    private MainCtrl mainCtrl;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -48,8 +42,12 @@ public class ListCtrl extends AnchorPane implements Initializable{
     }
 
     public void deleteList(){
-        server.deleteBoardList(listID);
+        server.deleteBoardList(boardList.id);
         mainCtrl.deleteList();
+    }
+
+    public void editList(){
+        mainCtrl.showEditList(boardList);
     }
 
     /** Sets the text of the title of the list
@@ -59,8 +57,16 @@ public class ListCtrl extends AnchorPane implements Initializable{
         listTitle.setText(text);
     }
 
-    public void setListID(int listID){
-        this.listID = listID;
+    public void setServerAndCtrl(ServerUtils server,MainCtrl mainCtrl){
+        this.server=server;
+        this.mainCtrl=mainCtrl;
+    }
+
+    /** This method associates a boardList to the controller for easy access
+     * @param boardList the boardList to be associated with the controller
+     */
+    public void setBoardList(BoardList boardList){
+        this.boardList = boardList;
     }
 
     /**
