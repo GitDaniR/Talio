@@ -52,11 +52,11 @@ public class BoardService {
      * @return the deleted board
      * @throws Exception if id is not in repo.
      */
-    public ResponseEntity<Board> deleteById(Integer id) throws Exception {
+    public Board deleteById(Integer id) throws Exception {
         if (id < 0 || !this.repo.existsById(id)) {
             throw new Exception("Invalid id");
         }
-        ResponseEntity<Board> deletedRecord = ResponseEntity.ok(this.repo.findById(id).get());
+        Board deletedRecord = this.repo.findById(id).get();
         this.repo.deleteById(id);
         return deletedRecord;
     }
