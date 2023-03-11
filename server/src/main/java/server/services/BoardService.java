@@ -12,10 +12,18 @@ import java.util.List;
 public class BoardService {
     private final BoardRepository repo;
 
+    /**
+     * Constructor for BoardService which uses BoardRepository.
+     * @param repo
+     */
     public BoardService(BoardRepository repo) {
         this.repo = repo;
     }
 
+    /**
+     * Method which returns all boards.
+     * @return
+     */
     public List<Board> findAll() {
         return this.repo.findAll();
     }
