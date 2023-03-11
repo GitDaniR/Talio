@@ -30,7 +30,7 @@ public class BoardController {
     private final BoardService boardService;
 
     /**
-     * Constructor for BoardController which uses BoardService and BoardRepository.
+     * Constructor for BoardController which uses BoardService.
      * @param boardService
      */
     public BoardController(BoardService boardService) {
@@ -47,7 +47,7 @@ public class BoardController {
     }
 
     /**
-     * Method which returns a board by an id from repo.
+     * Method which returns a board by an id.
      * @param id
      * @return a board
      */
@@ -63,7 +63,7 @@ public class BoardController {
     }
 
     /**
-     * Method which adds a new board to repo.
+     * Method which adds a new board.
      * @param board
      * @return the saved board or BAD_REQUEST
      */
@@ -79,7 +79,7 @@ public class BoardController {
     }
 
     /**
-     * Method which deletes a board by id from repo.
+     * Method which deletes a board by id.
      * @param id
      * @return the deleted board or BAD_REQUEST
      */
