@@ -6,8 +6,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
@@ -23,19 +21,19 @@ public class Card {
 
     public String title;
     public String description;
-    @ManyToMany(
-        mappedBy = "cards",
-        cascade = CascadeType.PERSIST
-    )
-    @JsonIgnore
-    public List<Tag> tags = new ArrayList<>();
+//    @ManyToMany(
+//        mappedBy = "cards",
+//        cascade = CascadeType.PERSIST
+//    )
+//    @JsonIgnore
+//    public List<Tag> tags = new ArrayList<>();
 
-    @OneToMany(
-        mappedBy = "card",
-        cascade = CascadeType.PERSIST
-    )
-    @JsonIgnore
-    public List<Subtask> subtasks;
+//    @OneToMany(
+//        mappedBy = "card",
+//        cascade = CascadeType.PERSIST
+//    )
+//    @JsonIgnore
+//    public List<Subtask> subtasks;
     public int index;
     @ManyToOne
     @JoinColumn(name = "listId", insertable = false, updatable = false)
@@ -55,9 +53,9 @@ public class Card {
         this.listId = listId;
     }
 
-    public void addTag(Tag tag) {
-        tags.add(tag);
-    }
+    //public void addTag(Tag tag) {
+    //    tags.add(tag);
+    //}
 
     @Override
     public boolean equals(Object obj) {
