@@ -54,7 +54,7 @@ public class BoardController {
      * @param id
      * @return a board
      */
-    @GetMapping(path = { "", "/" })
+    @GetMapping(path = {  "/{id}" })
     public ResponseEntity<Board> getById(@PathVariable("id") Integer id) {
         ResponseEntity<Board> found;
         try {
@@ -65,7 +65,7 @@ public class BoardController {
         return found;
     }
 
-    /**
+    /**git 
      * Method which adds a new board to repo.
      * @param board
      * @return the saved board or BAD_REQUEST
