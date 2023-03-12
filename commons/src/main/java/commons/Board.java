@@ -22,7 +22,6 @@ public class Board {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    @JsonIgnore
     public List<BoardList> lists;
 
     private Board(){}
