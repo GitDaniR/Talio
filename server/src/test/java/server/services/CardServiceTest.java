@@ -81,8 +81,8 @@ public class CardServiceTest {
         assertEquals(expectedCalls, cardRepo.getCalls());
         Card res2 = sut.getCardById(1);
         assertEquals(c4, res1);
-        assertEquals(3, res1.id);
-        assertEquals(2, res2.index);
+        assertEquals(new Card(3, "d", "d", 1, null, 1), res1);
+        assertEquals(new Card(1, "b", "b", 2, null, 1), res2);
     }
 
     @Test
@@ -111,9 +111,9 @@ public class CardServiceTest {
         expectedCalls.add(TestCardRepository.DELETE_BY_ID);
         assertEquals(expectedCalls, cardRepo.getCalls());
         Card res2 = sut.getCardById(2);
-        assertEquals(c2, res1);
+        assertEquals(new Card(1, "b", "b", 1, null, 1), res1);
         assertFalse(cardRepo.existsById(1));
-        assertEquals(1, res2.index);
+        assertEquals(new Card(2, "c", "c", 1, null, 1), res2);
     }
 
     @Test
@@ -123,4 +123,5 @@ public class CardServiceTest {
         expectedCalls.add(TestCardRepository.FIND_BY_ID);
         assertEquals(expectedCalls, cardRepo.getCalls());
     }
+
 }
