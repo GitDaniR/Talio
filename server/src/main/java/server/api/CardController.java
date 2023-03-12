@@ -34,32 +34,6 @@ public class CardController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/list/{listId}")
-    public ResponseEntity<List<Card>> getCardsByListId(@PathVariable Integer listId){
-        try{
-            List<Card> res = cardService.getAllByListId(listId);
-            return ResponseEntity.ok(res);
-        }catch (Exception e){
-            System.out.println(e.getMessage());
-        }
-        return ResponseEntity.notFound().build();
-
-    }
-
-    @GetMapping("/list/{listId}/{index}")
-    public ResponseEntity<Card> getCardByListIdAndIndex(@PathVariable Integer listId,
-                                                        @PathVariable Integer index){
-        try{
-            Card res = cardService.getCardByListIdAndIndex(listId, index);
-            return ResponseEntity.ok(res);
-        }
-        catch (Exception e){
-            System.out.println(e.getMessage());
-
-        }
-        return ResponseEntity.notFound().build();
-    }
-
     //Post mapping to add a card
     @PostMapping(path = { "", "/" })
     public ResponseEntity<Card> addCard(@RequestBody Card card){

@@ -54,7 +54,7 @@ public class BoardController {
      * @param id
      * @return a board
      */
-    @GetMapping(path = { "", "/" })
+    @GetMapping("/{id}")
     public ResponseEntity<Board> getById(@PathVariable("id") Integer id) {
         ResponseEntity<Board> found;
         try {
