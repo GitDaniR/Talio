@@ -53,7 +53,8 @@ public class Card {
         this.list = list;
     }
 
-    public Card(Integer id, String title, String description, int index, BoardList list, int listId) {
+    public Card(Integer id, String title, String description,
+                int index, BoardList list, int listId) {
         this.id = id;
         this.title = title;
         this.description = description;
