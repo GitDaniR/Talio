@@ -3,6 +3,7 @@ package server.services;
 import commons.Board;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import server.database.TestBoardRepository;
 
 import java.util.ArrayList;
@@ -56,6 +57,14 @@ class BoardServiceTest {
         List<String> expectedCalls = new ArrayList<>();
         expectedCalls.add(TestBoardRepository.FIND_BY_ID);
         assertEquals(expected, result);
+        assertEquals(expectedCalls, repo.getCalls());
+    }
+
+    @Test
+    public void testGetByIdInvalid() throws Exception {
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestBoardRepository.FIND_BY_ID);
+        assertThrows(Exception.class, (Executable) sut.getById(-1));
         assertEquals(expectedCalls, repo.getCalls());
     }
 
