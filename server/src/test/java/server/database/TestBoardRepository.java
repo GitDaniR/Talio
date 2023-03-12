@@ -7,15 +7,47 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
 class TestBoardRepository implements BoardRepository{
 
+    public static final String FIND_ALL = "Find All";
+    public static final String FIND_BY_ID = "Find By Id";
+    public static final String EXISTS_BY_ID = "Exists By Id";
+    public static final String SAVE = "Save";
+    public static final String DELETE_BY_ID = "Delete By Id";
+
+    private List<String> calls;
+    private List<Board> boards;
+
+    public TestBoardRepository(){
+        this.calls = new ArrayList<String>();
+        this.boards = new ArrayList<Board>();
+    }
+
+    public void call(String method){
+        calls.add(method);
+    }
+
+    public List<String> getCalls(){
+        return calls;
+    }
+
+    public void setBoards(List<Board> boards){
+        this.boards = boards;
+    }
+
+    public List<Board> getBoards(){
+        return this.boards;
+    }
+
     @Override
     public List<Board> findAll() {
-        return null;
+        call(FIND_ALL);
+        return this.boards;
     }
 
     @Override
@@ -40,7 +72,12 @@ class TestBoardRepository implements BoardRepository{
 
     @Override
     public void deleteById(Integer integer) {
-
+        call(DELETE_BY_ID);
+        for (Board b : this.boards) {
+            if (b.id == integer) {
+                this.boards.remove(b);
+            }
+        }
     }
 
     @Override
@@ -65,7 +102,10 @@ class TestBoardRepository implements BoardRepository{
 
     @Override
     public <S extends Board> S save(S entity) {
-        return null;
+        call(SAVE);
+        entity.id = this.boards.size();
+        this.boards.add(entity);
+        return entity;
     }
 
     @Override
@@ -75,11 +115,21 @@ class TestBoardRepository implements BoardRepository{
 
     @Override
     public Optional<Board> findById(Integer integer) {
+        calls.add(FIND_BY_ID);
+        for(Board b: this.boards){
+            if(b.id == integer)
+                return Optional.of(b);
+        }
         return Optional.empty();
     }
 
     @Override
     public boolean existsById(Integer integer) {
+        call(EXISTS_BY_ID);
+        for (Board b : this.boards) {
+            if (b.id == integer)
+                return true;
+        }
         return false;
     }
 
