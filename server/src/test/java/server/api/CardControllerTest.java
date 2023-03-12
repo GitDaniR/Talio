@@ -94,4 +94,21 @@ public class CardControllerTest {
     public void testDeleteCardNotFound(){
         assertEquals(HttpStatus.NOT_FOUND, sut.removeCard(4).getStatusCode());
     }
+
+    @Test
+    public void testEditCard(){
+        ResponseEntity<Card> cardResponse = sut.editCard(1, new Card(2, "d", "d", 3, null, 1));
+        List<Card> expected = new ArrayList<>();
+        expected.add(new Card(0, "a", "a", 0, null, 1));
+        expected.add(new Card(2, "c", "c", 2, null, 1));
+        expected.add(new Card(1, "d", "d", 1, null, 1));
+        assertEquals(HttpStatus.OK, cardResponse.getStatusCode());
+        assertEquals(new Card(1, "d", "d", 1, null, 1), cardResponse.getBody());
+        assertEquals(expected, cardRepo.getCards());
+    }
+
+    @Test
+    public void testEditCardNotFound(){
+        assertEquals(HttpStatus.NOT_FOUND, sut.editCard(3, new Card(3, "d", "d", 3, null, 1)).getStatusCode());
+    }
 }
