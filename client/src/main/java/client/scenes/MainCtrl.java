@@ -15,6 +15,7 @@
  */
 package client.scenes;
 
+import commons.Board;
 import commons.BoardList;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -33,11 +34,22 @@ public class MainCtrl {
     private AddListCtrl addListCtrl;
     private Scene addList;
 
+    private WelcomePageCtrl welcomePageCtrl;
+    private Scene welcomePage;
+
+    private EditListCtrl editListCtrl;
+    private Scene editList;
+
+    private double windowHeight;
+    private double windowWidth;
+
 
     public void initialize(Stage primaryStage,
             Pair<AddCardCtrl, Parent> addCard,
                            Pair<AddListCtrl, Parent> addList,
-                           Pair<BoardOverviewCtrl, Parent> board) {
+                           Pair<BoardOverviewCtrl, Parent> board,
+                           Pair<WelcomePageCtrl, Parent> welcomePage,
+                           Pair<EditListCtrl, Parent> editList) {
         this.primaryStage = primaryStage;
 
         this.boardOverviewCtrl = board.getKey();
@@ -49,8 +61,24 @@ public class MainCtrl {
         this.addCardCtrl = addCard.getKey();
         this.addCard = new Scene(addCard.getValue());
 
-        showBoard();
+        this.welcomePageCtrl = welcomePage.getKey();
+        this.welcomePage = new Scene(welcomePage.getValue());
+
+        this.editListCtrl=editList.getKey();
+        this.editList = new Scene(editList.getValue());
+
+        showWelcomePage();
         primaryStage.show();
+    }
+
+    private void storeWindowSize(Scene current){
+        windowHeight = current.getHeight();
+        windowWidth = current.getWidth();
+    }
+
+    private void setWindowSize(){
+        primaryStage.setHeight(windowHeight);
+        primaryStage.setWidth(windowWidth);
     }
 
     public void showAddCard(BoardList list) {
@@ -60,13 +88,31 @@ public class MainCtrl {
     }
 
     public void showBoard() {
+        //storeWindowSize(primaryStage.getScene());
         primaryStage.setTitle("Board Overview");
         primaryStage.setScene(board);
+        //setWindowSize();
         boardOverviewCtrl.refresh();
     }
 
-    public void showAddList() {
+    public void showAddList(Board boardToAddTo) {
         primaryStage.setTitle("Adding List");
         primaryStage.setScene(addList);
+        addListCtrl.setBoardToAddTo(boardToAddTo);
+    }
+
+    public void showEditList(BoardList boardListToEdit){
+        primaryStage.setTitle("Editing List");
+        primaryStage.setScene(editList);
+        editListCtrl.setBoardListToEdit(boardListToEdit);
+    }
+
+    public void deleteList(){
+        boardOverviewCtrl.refresh();
+    }
+
+    public void showWelcomePage() {
+        primaryStage.setTitle("Welcome Page");
+        primaryStage.setScene(welcomePage);
     }
 }

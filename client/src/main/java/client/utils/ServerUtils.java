@@ -16,9 +16,11 @@
 package client.utils;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+import static jakarta.ws.rs.core.MediaType.TEXT_PLAIN;
 
 import java.util.List;
 
+import commons.Board;
 import commons.BoardList;
 import commons.Card;
 import org.glassfish.jersey.client.ClientConfig;
@@ -31,6 +33,23 @@ public class ServerUtils {
 
     private static final String SERVER = "http://localhost:8080/";
 
+    public List<Board> getBoards(){
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("api/boards/")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<List<Board>>() {});
+    }
+    //This does not work!!!
+
+    public Board getBoardByID(int id){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/boards/"+id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<Board>() {});
+    }
+
     public List<BoardList> getBoardLists() {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/lists") //
@@ -38,6 +57,14 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<List<BoardList>>() {});
     }
+
+//    public List<BoardList> getBoardListById(){
+//        return ClientBuilder.newClient(new ClientConfig())
+//                .target(SERVER).path("api/lists/")
+//                .request(APPLICATION_JSON)
+//                .accept(APPLICATION_JSON)
+//                .get(new GenericType<List<BoardList>>() {});
+//    }
 
     public BoardList addBoardList(BoardList list) {
         return ClientBuilder.newClient(new ClientConfig()) //
@@ -47,10 +74,31 @@ public class ServerUtils {
                 .post(Entity.entity(list, APPLICATION_JSON), BoardList.class);
     }
 
+    public void deleteBoardList(Integer id){
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/lists/"+id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .delete();
+    }
+
+    public void updateBoardListTitle(Integer id, String title){
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/lists/"+id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(title, TEXT_PLAIN), String.class);
+        ///Need to edit to add id instead of list and also pass new title
+    }
+
 
     // Dummy placeholder methods for getting and posting cards
-    public List<Card> getCards() {
-        return null;
+    public List<Card> getCards(int listId) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/cards/list/"+listId) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<List<Card>>() {});
     }
 
     public Card addCard(Card card) {

@@ -6,7 +6,7 @@
 
 <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="143.0" style="-fx-border-color: black; -fx-border-width: 4; -fx-background-color: pink;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CardCtrl">
    <children>
-      <Label fx:id="CardTitle" alignment="CENTER" prefHeight="72.0" prefWidth="138.0" text="Default Card Name" />
+      <Label fx:id="cardTitle" alignment="CENTER" prefHeight="72.0" prefWidth="138.0" text="Default Card Name" />
       <Button fx:id="delete" mnemonicParsing="false" text="x" />
    </children>
 </HBox>

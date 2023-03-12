@@ -13,23 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package client;
+package client.scenes;
 
-import client.scenes.*;
 import client.utils.ServerUtils;
-import com.google.inject.Binder;
-import com.google.inject.Module;
-import com.google.inject.Scopes;
+import com.google.inject.Inject;
+import javafx.fxml.FXML;
+import javafx.scene.control.TextField;
 
-public class MyModule implements Module {
+public class WelcomePageCtrl {
+    private final ServerUtils server;
+    private final MainCtrl mainCtrl;
 
-    @Override
-    public void configure(Binder binder) {
-        binder.bind(MainCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(AddCardCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(AddListCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(BoardOverviewCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(ServerUtils.class).in(Scopes.SINGLETON);
-        binder.bind(EditListCtrl.class).in(Scopes.SINGLETON);
+    @FXML
+    private TextField chosenServer;
+
+    @Inject
+    public WelcomePageCtrl(ServerUtils server, MainCtrl mainCtrl) {
+        this.mainCtrl = mainCtrl;
+        this.server = server;
+    }
+
+    public void connectToChosenServer() {
+        // For now, it just sends you to the main board.
+        // Eventually it will get the string from chosenServer and change the server host.
+        mainCtrl.showBoard();
     }
 }
