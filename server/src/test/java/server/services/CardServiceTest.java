@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CardServiceTest {
 
     private TestCardRepository cardRepo;
-    private BoardListRepository listRepo;
+    private TestBoardListRepository listRepo;
     private CardService sut;
     private Card c1, c2, c3;
     private List<Card> cards;
