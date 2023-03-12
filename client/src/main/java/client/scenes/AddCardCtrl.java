@@ -71,7 +71,7 @@ public class AddCardCtrl implements Initializable {
     private Card getCard() {
         var t = title.getText();
         var d = description.getText();
-        return new Card(t, d, 0, list,0);
+        return new Card(t, d, 0, list,list.getId());
     }
 
     public void setList(BoardList list){

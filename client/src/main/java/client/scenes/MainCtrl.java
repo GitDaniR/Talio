@@ -83,8 +83,9 @@ public class MainCtrl {
 
     public void showAddCard(BoardList list) {
         primaryStage.setTitle("A new card");
-        primaryStage.setScene(addCard);
         addCardCtrl.setList(list);
+        primaryStage.setScene(addCard);
+
     }
 
     public void showBoard() {

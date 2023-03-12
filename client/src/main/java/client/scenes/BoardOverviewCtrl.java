@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import java.util.*;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.BoardList;
@@ -17,10 +18,13 @@ import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 
 import java.net.URL;
+import java.util.Collections;
 import java.util.ResourceBundle;
+import java.util.concurrent.Flow;
 
 
 public class BoardOverviewCtrl implements Initializable {
@@ -48,6 +52,10 @@ public class BoardOverviewCtrl implements Initializable {
         //Setting the first board as the main board
         //I tried to get the first boards of all boards but didn't work
     }
+
+
+
+
 
     public void addList() {
         mainCtrl.showAddList(board);
@@ -110,6 +118,8 @@ public class BoardOverviewCtrl implements Initializable {
     }
     // method that highlights the card when it is dragged and dropped
     private void setDragAndDropEffect(final HBox card){
+        String initialStyle = card.getStyle();
+
         card.setOnMouseDragEntered(new EventHandler<MouseDragEvent>() {
             @Override
             public void handle(MouseDragEvent event) {
@@ -120,12 +130,191 @@ public class BoardOverviewCtrl implements Initializable {
         card.setOnMouseDragExited(new EventHandler<MouseDragEvent>() {
             @Override
             public void handle(MouseDragEvent event) {
-                card.setStyle("");
+                card.setStyle(initialStyle);
             }
         });
 
     }
-    
+
+    private void adjustCards(final FlowPane board, int indexInitialList, int indexFinalList, int indexCardDragged, int indexCardsDropped){
+
+        BoardList initialList = data.get(indexInitialList);
+        BoardList finalList = data.get(indexFinalList);
+        Card card = initialList.getCardByIndex(indexCardDragged);
+
+        server.deleteCard(card.getId());
+        card.setIndex(indexCardsDropped);
+
+        if(indexInitialList == indexFinalList){
+            card.setList(initialList);
+            server.addCard(card);
+        }else{
+            card.setList(finalList);
+            server.addCard(card);
+        }
+
+        refresh();
+
+    }
+
+
+    // sets drag and drop feature to cards
+    private void addDragAndDrop(final FlowPane board, final VBox list, final HBox card){
+        VBox cardsSection = (VBox) list.getChildren().get(2);
+        card.setOnDragDetected(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                card.startFullDrag();
+                addPreview(board, card);
+            }
+        });
+        // add style effects
+        setDragAndDropEffect(card);
+        card.setOnMouseDragReleased(new EventHandler<MouseDragEvent>() {
+            @Override
+            public void handle(MouseDragEvent event) {
+                card.setStyle("");
+
+                removePreview(board);
+
+
+                Node initial = (Node) event.getGestureSource();
+                Node initialCardsSection = initial.getParent();
+                Node initialList = initialCardsSection.getParent();
+                int indexOfInitialList = board.getChildren().indexOf(initialList);
+
+                Node target = (Node) event.getSource();
+                Node targetCardsSection = target.getParent();
+                Node targetList = targetCardsSection.getParent();
+                int indexOfList = board.getChildren().indexOf(targetList);
+
+                //System.out.println(event.getSource());
+
+                System.out.println("*********************************************");
+                System.out.println("Index of List: "+ indexOfList);
+                System.out.println("Index of Initial List: "+ indexOfInitialList);
+                System.out.println("*********************************************");
+
+                HBox draggedLabel = (HBox) initial;
+                VBox draggedCardsSection = (VBox) initialCardsSection;
+
+                VBox droppedCardsSection = (VBox) targetCardsSection;
+                int indexOfDraggingNode = draggedCardsSection.getChildren().indexOf(draggedLabel);
+                int indexOfDropTarget = droppedCardsSection.getChildren().indexOf(target);
+
+                System.out.println(droppedCardsSection.getChildren().indexOf(target));
+                System.out.println("*********************************************");
+                System.out.println("Index of card dragged: "+ indexOfDraggingNode);
+                System.out.println("Index of card dropped: "+ indexOfDropTarget);
+                System.out.println("*********************************************");
+
+                //rotateCards(board, indexOfInitialList, indexOfList, indexOfDraggingNode, indexOfDropTarget);
+                adjustCards(board, indexOfInitialList, indexOfList, indexOfDraggingNode, indexOfDropTarget);
+                event.consume();
+            }
+        });
+
+        cardsSection.setOnMouseDragReleased(new EventHandler<MouseDragEvent>() {
+            @Override
+            public void handle(MouseDragEvent event) {
+                System.out.println("CardsSection");
+
+
+                Node parent = (Node) event.getGestureSource();
+                parent = parent.getParent();
+                parent = parent.getParent();
+                removePreview(board);
+
+                int indexOfInitialList = board.getChildren().indexOf(parent);
+                int indexOfList = board.getChildren().indexOf(list);
+
+                System.out.println("*********************************************");
+                System.out.println("Index of List: "+ indexOfList);
+                System.out.println("Index of Initial List: "+ indexOfInitialList);
+                System.out.println("*********************************************");
+
+                HBox draggedLabel = (HBox) event.getGestureSource();
+                VBox draggedCardsSection = (VBox) draggedLabel.getParent();
+                int indexOfDraggingNode = draggedCardsSection.getChildren().indexOf(event.getGestureSource());
+
+                System.out.println("*********************************************");
+                System.out.println("Index of card dragged: "+ indexOfDraggingNode);
+                System.out.println("*********************************************");
+
+                //insertCard(board, indexOfInitialList, indexOfList, indexOfDraggingNode);
+                adjustCards(board, indexOfInitialList, indexOfList, indexOfDraggingNode, cardsSection.getChildren().size());
+                event.consume();
+
+
+            }
+        });
+        list.setOnMouseDragReleased(new EventHandler<MouseDragEvent>() {
+            @Override
+            public void handle(MouseDragEvent event) {
+                removePreview(board);
+                System.out.println("List");
+
+                Node initial = (Node) event.getGestureSource();
+                Node initialCardsSection = initial.getParent();
+                Node initialList = initialCardsSection.getParent();
+                int indexOfInitialList = board.getChildren().indexOf(initialList);
+
+                Node targetList = (Node) event.getSource();
+                int indexOfList = board.getChildren().indexOf(targetList);
+
+                HBox draggedLabel = (HBox) initial;
+                VBox draggedCardsSection = (VBox) initialCardsSection;
+                int indexOfDraggingNode = draggedCardsSection.getChildren().indexOf(draggedLabel);
+                event.consume();
+
+                adjustCards(board, indexOfInitialList, indexOfList, indexOfDraggingNode, cardsSection.getChildren().size()-1);
+
+
+            }
+        });
+
+        for(int i = 0;i<list.getChildren().size();i++){
+            if(i!=0){
+                Node item = list.getChildren().get(i);
+                item.setOnMouseDragReleased(new EventHandler<MouseDragEvent>() {
+                    @Override
+                    public void handle(MouseDragEvent event) {
+                        removePreview(board);
+                    }
+                });
+
+            }
+            else{
+
+                HBox item = (HBox) list.getChildren().get(i);
+                for(int j = 0;j<item.getChildren().size();j++){
+                    Node itemChild = item.getChildren().get(j);
+                    itemChild.setOnMouseDragReleased(new EventHandler<MouseDragEvent>() {
+                        @Override
+                        public void handle(MouseDragEvent event) {
+                            removePreview(board);
+                        }
+                    });
+                }
+
+            }
+        }
+
+        board.setOnMouseDragReleased(new EventHandler<MouseDragEvent>() {
+
+
+            @Override
+            public void handle(MouseDragEvent event) {
+
+                removePreview(board);
+                System.out.println("Board");
+
+            }
+        });
+
+
+    }
+
     // end of Drag&Drop
 
     public void refresh() {
@@ -139,6 +328,9 @@ public class BoardOverviewCtrl implements Initializable {
                 ListCtrl listObjectController = createListObject(listLoader,currentList);
                 ObservableList<Card> cardsInList =
                     FXCollections.observableList(server.getCards(currentList.id));
+
+                Collections.sort(cardsInList, (s1, s2) -> { return s1.index-s2.index; });
+                currentList.setCards(cardsInList);
                 for (Card currentCard : cardsInList) {
                     FXMLLoader cardLoader = new FXMLLoader((getClass().getResource("Card.fxml")));
                     Node cardObject = cardLoader.load();
@@ -150,6 +342,11 @@ public class BoardOverviewCtrl implements Initializable {
                 listObjectController.getListAddCardButton().
                         setOnAction(event -> mainCtrl.showAddCard(currentList));
                 mainBoard.getChildren().add(listObject);
+
+                VBox cardsBox = (VBox) ((VBox)listObject ).getChildren().get(2);
+                for(int i =0;i<cardsBox.getChildren().size();i++){
+                    addDragAndDrop(mainBoard, (VBox) listObject, (HBox) cardsBox.getChildren().get(i));
+                }
             }
         } catch (Exception e){
             System.out.print("IO Exception");
