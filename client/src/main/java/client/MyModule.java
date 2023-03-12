@@ -16,7 +16,7 @@
 package client;
 
 import client.scenes.*;
-import client.utils.FakeServerUtils;
+import client.utils.ServerUtils;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
@@ -29,6 +29,7 @@ public class MyModule implements Module {
         binder.bind(AddCardCtrl.class).in(Scopes.SINGLETON);
         binder.bind(AddListCtrl.class).in(Scopes.SINGLETON);
         binder.bind(BoardOverviewCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(FakeServerUtils.class).in(Scopes.SINGLETON);
+        binder.bind(ServerUtils.class).in(Scopes.SINGLETON);
+        binder.bind(EditListCtrl.class).in(Scopes.SINGLETON);
     }
 }

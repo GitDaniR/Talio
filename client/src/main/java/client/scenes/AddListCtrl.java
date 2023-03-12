@@ -18,6 +18,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 
+import commons.Board;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -27,10 +28,10 @@ import commons.BoardList;
 
 public class AddListCtrl {
 
-    //private final FakeServerUtils fakeServer;
-
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+
+    private Board boardToAddTo;
 
     @FXML
     private TextField title;
@@ -41,11 +42,17 @@ public class AddListCtrl {
         this.server = server;
     }
 
-    public void add() {
+    /**
+     * @param boardToAddTo setting the board to add to
+     */
+    public void setBoardToAddTo(Board boardToAddTo){
+        this.boardToAddTo=boardToAddTo;
+    }
+
+    public void addList() {
         try {
             server.addBoardList(getBoardList());
         } catch (WebApplicationException e) {
-
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText(e.getMessage());
@@ -58,7 +65,7 @@ public class AddListCtrl {
     }
 
     private BoardList getBoardList() {
-        return new BoardList(title.getText());
+        return new BoardList(title.getText(),boardToAddTo);
     }
 
     private void clearFields() {

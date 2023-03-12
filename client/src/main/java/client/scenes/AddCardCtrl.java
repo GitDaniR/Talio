@@ -1,4 +1,5 @@
 package client.scenes;
+
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.BoardList;
@@ -11,12 +12,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class AddCardCtrl implements Initializable {
 
-    //private final FakeServerUtils fakeServer;
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     @FXML
@@ -51,9 +52,8 @@ public class AddCardCtrl implements Initializable {
 
     public void ok() {
         try {
-            Card card = getCard();
-
             server.addCard(getCard());
+
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -71,11 +71,7 @@ public class AddCardCtrl implements Initializable {
     private Card getCard() {
         var t = title.getText();
         var d = description.getText();
-        if(list == null){
-            return new Card(t, d, 0, null, null);
-        }else{
-            return new Card(t, d, 0, list, this.list.getId());
-        }
+        return new Card(t, d, 0, list,0);
     }
 
     public void setList(BoardList list){
