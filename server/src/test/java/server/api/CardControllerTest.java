@@ -3,6 +3,8 @@ package server.api;
 import commons.Card;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import server.database.BoardListRepository;
 import server.database.TestBoardListRepository;
 import server.database.TestCardRepository;
@@ -44,5 +46,16 @@ public class CardControllerTest {
         expected.add(new Card(2, "c", "c", 2, null, 1));
         List<Card> res = sut.getAllCards();
         assertEquals(expected, res);
+    }
+
+    @Test
+    public void getCardById(){
+        Card c = sut.getCardById(1).getBody();
+        assertEquals(new Card(1, "b", "b", 1, null, 1), c);
+    }
+
+    @Test
+    public void getCardByIdNotFound(){
+        assertEquals(HttpStatus.NOT_FOUND, sut.getCardById(4).getStatusCode());
     }
 }
