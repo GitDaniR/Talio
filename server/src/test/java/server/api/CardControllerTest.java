@@ -79,4 +79,19 @@ public class CardControllerTest {
         assertEquals(HttpStatus.BAD_REQUEST, sut.addCard(new Card(2, "d", "d", 3, null, 1)).getStatusCode());
     }
 
+    @Test
+    public void testDeleteCard(){
+        ResponseEntity<Card> cardResponse = sut.removeCard(1);
+        List<Card> expected = new ArrayList<>();
+        expected.add(new Card(0, "a", "a", 0, null, 1));
+        expected.add(new Card(2, "c", "c", 1, null, 1));
+        assertEquals(HttpStatus.OK, cardResponse.getStatusCode());
+        assertEquals(new Card(1, "b", "b", 1, null, 1), cardResponse.getBody());
+        assertEquals(expected, cardRepo.getCards());
+    }
+
+    @Test
+    public void testDeleteCardNotFound(){
+        assertEquals(HttpStatus.NOT_FOUND, sut.removeCard(4).getStatusCode());
+    }
 }
