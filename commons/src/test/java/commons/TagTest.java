@@ -19,7 +19,7 @@ public class TagTest {
     @Test
     public void addToCard(){
         var tag = new Tag("Tag", "color");
-        var card = new Card("TODO", "description", 0, null);
+        var card = new Card("TODO", "description", 0, null, null);
         var listCards = new ArrayList<Card>();
         listCards.add(card);
         tag.addToCard(card);

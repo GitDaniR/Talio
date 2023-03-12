@@ -44,7 +44,7 @@ public class BoardController {
      * Method which returns all boards in repo.
      * @return all boards
      */
-    @GetMapping("/")
+    @GetMapping(path = { "", "/" })
     public List<Board> getAll(){
         return repo.findAll();
     }
@@ -54,7 +54,7 @@ public class BoardController {
      * @param id
      * @return a board
      */
-    @GetMapping("/{id}")
+    @GetMapping(path = { "", "/" })
     public ResponseEntity<Board> getById(@PathVariable("id") Integer id) {
         ResponseEntity<Board> found;
         try {
@@ -70,7 +70,7 @@ public class BoardController {
      * @param board
      * @return the saved board or BAD_REQUEST
      */
-    @PostMapping("/")
+    @PostMapping(path = { "", "/" })
     public ResponseEntity<Board> add(@RequestBody Board board) {
         ResponseEntity<Board> saved;
         try {
@@ -86,7 +86,7 @@ public class BoardController {
      * @param id
      * @return the deleted board or BAD_REQUEST
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping(path = { "", "/" })
     public ResponseEntity<Board> deleteById(@PathVariable("id") Integer id) {
         ResponseEntity<Board> deletedRecord;
         try {
