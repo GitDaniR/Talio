@@ -36,10 +36,6 @@ public class BoardOverviewCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        refresh();
-        board = server.getBoardByID(1);
-        //Setting the first board as the main board
-        //I tried to get the first boards of all boards but didn't work
     }
 
     public void addList() {
@@ -80,6 +76,7 @@ public class BoardOverviewCtrl implements Initializable {
 
     public void refresh() {
         try {
+            board = server.getBoardByID(1);
             mainBoard.getChildren().clear();
             var lists = server.getBoardLists();
             data = FXCollections.observableList(lists);
@@ -107,6 +104,6 @@ public class BoardOverviewCtrl implements Initializable {
     }
 
     public void disconnectFromServer() {
-        mainCtrl.showWelcomePage();
+        refresh();
     }
 }
