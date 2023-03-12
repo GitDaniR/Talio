@@ -124,4 +124,23 @@ public class CardServiceTest {
         assertEquals(expectedCalls, cardRepo.getCalls());
     }
 
+    @Test
+    public void testEditById() throws Exception {
+        c2.title = "bb";
+        c2.description = "bb";
+        Card res = sut.editCardById(1, c2);
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestCardRepository.FIND_BY_ID);
+        expectedCalls.add(TestCardRepository.SAVE);
+        assertEquals(expectedCalls, cardRepo.getCalls());
+        assertEquals(new Card(1, "bb", "bb", 1, null, 1), res);
+    }
+
+    @Test
+    public void testEditByIdNotFound() throws Exception {
+        assertThrows(Exception.class, ()->sut.editCardById(4, c2));
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestCardRepository.FIND_BY_ID);
+        assertEquals(expectedCalls, cardRepo.getCalls());
+    }
 }
