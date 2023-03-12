@@ -21,9 +21,9 @@ class BoardServiceTest {
     @BeforeEach
     public void setUp() {
         repo = new TestBoardRepository();
-        b1 = new Board("First", "123");
-        b2 = new Board("Second", "456");
-        b3 = new Board("Third", "789");
+        b1 = new Board(1, "First", "123", new ArrayList<>());
+        b2 = new Board(2, "Second", "456", new ArrayList<>());
+        b3 = new Board(3, "Third", "789", new ArrayList<>());
         this.boards = new ArrayList<>();
         boards.add(b1);
         boards.add(b2);
@@ -55,6 +55,7 @@ class BoardServiceTest {
         Board result = sut.getById(2);
         Board expected = b2;
         List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestBoardRepository.EXISTS_BY_ID);
         expectedCalls.add(TestBoardRepository.FIND_BY_ID);
         assertEquals(expected, result);
         assertEquals(expectedCalls, repo.getCalls());
@@ -63,16 +64,15 @@ class BoardServiceTest {
     @Test
     public void testGetByIdInvalid() throws Exception {
         List<String> expectedCalls = new ArrayList<>();
-        expectedCalls.add(TestBoardRepository.FIND_BY_ID);
-        assertThrows(Exception.class, (Executable) sut.getById(-1));
+        assertThrows(Exception.class, () -> sut.getById(-1));
         assertEquals(expectedCalls, repo.getCalls());
     }
 
     @Test
     public void testGetByIdNotExists() throws Exception {
         List<String> expectedCalls = new ArrayList<>();
-        expectedCalls.add(TestBoardRepository.FIND_BY_ID);
-        assertThrows(Exception.class, (Executable) sut.getById(100));
+        expectedCalls.add(TestBoardRepository.EXISTS_BY_ID);
+        assertThrows(Exception.class, () -> sut.getById(100));
         assertEquals(expectedCalls, repo.getCalls());
     }
 
