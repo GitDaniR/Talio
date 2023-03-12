@@ -69,6 +69,14 @@ class BoardServiceTest {
     }
 
     @Test
+    public void testGetByIdNotExists() throws Exception {
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestBoardRepository.FIND_BY_ID);
+        assertThrows(Exception.class, (Executable) sut.getById(100));
+        assertEquals(expectedCalls, repo.getCalls());
+    }
+
+    @Test
     void add() {
     }
 
