@@ -7,14 +7,21 @@ import commons.BoardList;
 import commons.Card;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseDragEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.Flow;
 
 public class BoardOverviewCtrl implements Initializable {
 
@@ -77,6 +84,49 @@ public class BoardOverviewCtrl implements Initializable {
         //Setting the title of the card
         return cardObjectController;
     }
+
+    // Drag&Drop methods
+
+    // method that activates snapshot image being available while dragging the card
+    private void addPreview(final FlowPane board, final HBox card){
+        ImageView imageView = new ImageView(card.snapshot(null, null));
+        imageView.setManaged(false);
+        imageView.setMouseTransparent(true);
+        board.getChildren().add(imageView);
+        board.setUserData(imageView);
+        board.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                imageView.relocate(event.getX(), event.getY());
+            }
+        });
+    }
+
+    // method that stops showing preview when dragging is finished
+    private void removePreview(final FlowPane board){
+        board.setOnMouseDragged(null);
+        board.getChildren().remove(board.getUserData());
+        board.setUserData(null);
+    }
+    // method that highlights the card when it is dragged and dropped
+    private void setDragAndDropEffect(final HBox card){
+        card.setOnMouseDragEntered(new EventHandler<MouseDragEvent>() {
+            @Override
+            public void handle(MouseDragEvent event) {
+                card.setStyle("-fx-background-color: #ffffa0;");
+            }
+        });
+
+        card.setOnMouseDragExited(new EventHandler<MouseDragEvent>() {
+            @Override
+            public void handle(MouseDragEvent event) {
+                card.setStyle("");
+            }
+        });
+
+    }
+
+    // end of Drag&Drop
 
     public void refresh() {
         try {
