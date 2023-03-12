@@ -233,7 +233,7 @@ public class TestCardRepository implements CardRepository{
 
     @Override
     public <S extends Card, R> R findBy(Example<S> example,
-                                        Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+        Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         return null;
     }
 }

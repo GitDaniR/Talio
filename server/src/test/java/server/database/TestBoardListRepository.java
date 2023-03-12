@@ -159,7 +159,7 @@ public class TestBoardListRepository implements BoardListRepository{
 
     @Override
     public <S extends BoardList, R> R findBy(Example<S> example,
-                                             Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+        Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         return null;
     }
 }
