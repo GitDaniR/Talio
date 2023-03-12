@@ -21,6 +21,7 @@ public class BoardList {
     public String title;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "board_id", referencedColumnName = "id")
     public Board board;
 
@@ -30,7 +31,6 @@ public class BoardList {
             cascade = CascadeType.PERSIST,
             orphanRemoval = true
     )
-    @JsonIgnore
     public List<Card> cards = new ArrayList<>();
 
     private BoardList(){}

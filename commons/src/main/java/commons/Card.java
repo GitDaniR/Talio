@@ -52,6 +52,15 @@ public class Card {
         this.list = list;
         this.listId = listId;
     }
+    public Card(Integer id, String title, String description,
+                int index, BoardList list, int listId) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.index = index;
+        this.list = list;
+        this.listId = listId;
+    }
 
     public Card(Integer id, String title, String description,
 
@@ -87,6 +96,7 @@ public class Card {
     //public void addTag(Tag tag) {
     //    tags.add(tag);
     //}
+
 
     @Override
     public boolean equals(Object obj) {
