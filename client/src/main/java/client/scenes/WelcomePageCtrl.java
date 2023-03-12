@@ -33,9 +33,9 @@ public class WelcomePageCtrl {
         this.server = server;
     }
 
+    // Connects to the server the user inputs in the field "chosenServer"
     public void connectToChosenServer() {
-        // For now, it just sends you to the main board.
-        // Eventually it will get the string from chosenServer and change the server host.
+        //server.setServer(chosenServer.getText());
         mainCtrl.showBoard();
     }
 }

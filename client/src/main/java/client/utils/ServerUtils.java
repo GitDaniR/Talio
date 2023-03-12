@@ -31,7 +31,7 @@ import jakarta.ws.rs.core.GenericType;
 
 public class ServerUtils {
 
-    private static final String SERVER = "http://localhost:8080/";
+    private static String SERVER;
 
     public List<Board> getBoards(){
         return ClientBuilder.newClient(new ClientConfig())
@@ -103,5 +103,9 @@ public class ServerUtils {
 
     public Card addCard(Card card) {
         return null;
+    }
+
+    public void setServer(String chosenServer) {
+        SERVER = chosenServer;
     }
 }
