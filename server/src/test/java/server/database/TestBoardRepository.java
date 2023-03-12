@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-class TestBoardRepository implements BoardRepository{
+public class TestBoardRepository implements BoardRepository{
 
     public static final String FIND_ALL = "Find All";
     public static final String FIND_BY_ID = "Find By Id";
