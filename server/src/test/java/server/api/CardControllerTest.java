@@ -1,6 +1,7 @@
 package server.api;
 
 import commons.Card;
+import org.apache.coyote.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -50,12 +51,31 @@ public class CardControllerTest {
 
     @Test
     public void getCardById(){
-        Card c = sut.getCardById(1).getBody();
-        assertEquals(new Card(1, "b", "b", 1, null, 1), c);
+        ResponseEntity<Card> cardResponse = sut.getCardById(1);
+        assertEquals(HttpStatus.OK, cardResponse.getStatusCode());
+        assertEquals(new Card(1, "b", "b", 1, null, 1), cardResponse.getBody());
     }
 
     @Test
     public void getCardByIdNotFound(){
         assertEquals(HttpStatus.NOT_FOUND, sut.getCardById(4).getStatusCode());
+    }
+
+    @Test
+    public void addCard(){
+        ResponseEntity<Card>  cardResponse = sut.addCard(new Card(3, "d", "d", 3, null, 1));
+        List<Card> expected = new ArrayList<>();
+        expected.add(new Card(0, "a", "a", 0, null, 1));
+        expected.add(new Card(1, "b", "b", 1, null, 1));
+        expected.add(new Card(2, "c", "c", 2, null, 1));
+        expected.add(new Card(3, "d", "d", 3, null, 1));
+        assertEquals(HttpStatus.OK, cardResponse.getStatusCode());
+        assertEquals(new Card(3, "d", "d", 3, null, 1), cardResponse.getBody());
+        assertEquals(expected, cardRepo.getCards());
+    }
+
+    @Test
+    public void addCardBadRequest(){
+        assertEquals(HttpStatus.BAD_REQUEST, sut.addCard(new Card(2, "d", "d", 3, null, 1)).getStatusCode());
     }
 }

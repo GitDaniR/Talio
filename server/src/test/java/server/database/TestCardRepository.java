@@ -41,6 +41,10 @@ public class TestCardRepository implements CardRepository{
     public void setCards(List<Card> cards){
         this.cards = cards;
     }
+
+    public List<Card> getCards(){
+        return this.cards;
+    }
     @Override
     public void shiftCardsRight(int index, int listId) {
         call(SHIFT_CARDS_RIGHT);
