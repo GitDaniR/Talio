@@ -95,6 +95,13 @@ class BoardServiceTest {
     }
 
     @Test
-    void deleteById() {
+    public void testDeleteByIdSuccess() throws Exception {
+        Board result = sut.deleteById(2);
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestBoardRepository.EXISTS_BY_ID);
+        expectedCalls.add(TestBoardRepository.FIND_BY_ID);
+        expectedCalls.add(TestBoardRepository.DELETE_BY_ID);
+        assertEquals(b2, result);
+        assertEquals(expectedCalls, repo.getCalls());
     }
 }
