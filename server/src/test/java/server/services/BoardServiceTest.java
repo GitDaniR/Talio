@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import server.database.TestBoardRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,7 +18,7 @@ class BoardServiceTest {
     private List<Board> boards;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         repo = new TestBoardRepository();
         b1 = new Board("First", "123");
         b2 = new Board("Second", "456");
@@ -30,7 +31,21 @@ class BoardServiceTest {
     }
 
     @Test
-    void findAll() {
+    public void testConstructor() {
+        assertNotNull(sut);
+    }
+
+    @Test
+    public void testFindAll() {
+        List<Board> result = sut.findAll();
+        List<Board> expected = new ArrayList<>();
+        expected.add(b1);
+        expected.add(b2);
+        expected.add(b3);
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestBoardRepository.FIND_ALL);
+        assertEquals(expected, result);
+        assertEquals(expectedCalls, repo.getCalls());
     }
 
     @Test
