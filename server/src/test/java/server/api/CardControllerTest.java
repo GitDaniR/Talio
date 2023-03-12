@@ -50,19 +50,19 @@ public class CardControllerTest {
     }
 
     @Test
-    public void getCardById(){
+    public void testGetCardById(){
         ResponseEntity<Card> cardResponse = sut.getCardById(1);
         assertEquals(HttpStatus.OK, cardResponse.getStatusCode());
         assertEquals(new Card(1, "b", "b", 1, null, 1), cardResponse.getBody());
     }
 
     @Test
-    public void getCardByIdNotFound(){
+    public void testGetCardByIdNotFound(){
         assertEquals(HttpStatus.NOT_FOUND, sut.getCardById(4).getStatusCode());
     }
 
     @Test
-    public void addCard(){
+    public void testAddCard(){
         ResponseEntity<Card>  cardResponse = sut.addCard(new Card(3, "d", "d", 3, null, 1));
         List<Card> expected = new ArrayList<>();
         expected.add(new Card(0, "a", "a", 0, null, 1));
@@ -75,7 +75,8 @@ public class CardControllerTest {
     }
 
     @Test
-    public void addCardBadRequest(){
+    public void testAddCardBadRequest(){
         assertEquals(HttpStatus.BAD_REQUEST, sut.addCard(new Card(2, "d", "d", 3, null, 1)).getStatusCode());
     }
+
 }
