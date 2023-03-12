@@ -111,4 +111,12 @@ class BoardServiceTest {
         assertThrows(Exception.class, () -> sut.deleteById(-1));
         assertEquals(expectedCalls, repo.getCalls());
     }
+
+    @Test
+    public void testDeleteByIdNonExistent() throws Exception {
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestBoardRepository.EXISTS_BY_ID);
+        assertThrows(Exception.class, () -> sut.deleteById(100));
+        assertEquals(expectedCalls, repo.getCalls());
+    }
 }
