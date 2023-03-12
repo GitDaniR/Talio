@@ -135,6 +135,11 @@ public class BoardOverviewCtrl implements Initializable {
                              int indexCardDragged, int indexCardsDropped){
         if(indexCardDragged ==-1)
             return;
+        // decided to leave the card as it was
+        if(indexCardsDropped == -1 &&
+                (indexInitialList == indexFinalList)){
+            return;
+        }
 
         BoardList initialList = data.get(indexInitialList);
         BoardList finalList = data.get(indexFinalList);
@@ -167,14 +172,16 @@ public class BoardOverviewCtrl implements Initializable {
                 Node initialList = initialCardsSection.getParent();
                 int indexOfInitialList = mainBoard.getChildren().indexOf(initialList);
                 Node targetList = (Node) event.getSource();
+                VBox targetCardsSection = (VBox) ((VBox)targetList ).getChildren().get(2);
                 int indexOfList = mainBoard.getChildren().indexOf(targetList);
 
                 HBox draggedCard = (HBox) initial;
                 VBox draggedCardsSection = (VBox) initialCardsSection;
                 int indexOfDraggingNode = draggedCardsSection.getChildren().indexOf(draggedCard);
                 event.consume();
+                if(indexOfList == indexOfInitialList)return;
                 adjustCards(indexOfInitialList, indexOfList, indexOfDraggingNode,
-                        cardsBox.getChildren().size()-1);
+                        targetCardsSection.getChildren().size());
             }
         });
         for(int i = 0;i<((VBox)list).getChildren().size();i++){
@@ -198,29 +205,6 @@ public class BoardOverviewCtrl implements Initializable {
         mainBoard.setOnMouseDragReleased(event -> removePreview(mainBoard));
     }
 
-    private void setDragReleaseCardsBox(VBox  cardsSection){
-        cardsSection.setOnMouseDragReleased(event -> {
-            Node parent = (Node) event.getGestureSource();
-            parent = parent.getParent();
-            parent = parent.getParent();
-            removePreview(mainBoard);
-
-            int indexOfInitialList = mainBoard.getChildren().indexOf(parent);
-            int indexOfList = mainBoard.getChildren().indexOf(mainBoard);
-
-            HBox draggedCard = (HBox) event.getGestureSource();
-            VBox draggedCardsSection = (VBox) draggedCard.getParent();
-            int indexOfDraggingNode =
-                    draggedCardsSection.getChildren().indexOf(event.getGestureSource());
-
-            adjustCards(indexOfInitialList, indexOfList,
-                    indexOfDraggingNode, cardsSection.getChildren().size()-1);
-            event.consume();
-
-        });
-
-    }
-
     // sets drag and drop feature to cards
     private void addDragAndDrop(final Node list, final HBox card){
         VBox cardsBox = (VBox) ((VBox)list).getChildren().get(2);
@@ -238,7 +222,6 @@ public class BoardOverviewCtrl implements Initializable {
             @Override
             public void handle(MouseDragEvent event) {
                 card.setStyle("");
-
                 removePreview(mainBoard);
                 //getting the index of the list that holds the card being dragged
                 Node initial = (Node) event.getGestureSource();
@@ -258,14 +241,18 @@ public class BoardOverviewCtrl implements Initializable {
                 int indexOfDraggingNode = draggedCardsSection.getChildren().indexOf(draggedCard);
                 int indexOfDropTarget = droppedCardsSection.getChildren().indexOf(target);
                 if(indexOfDropTarget == -1){
-                    indexOfDropTarget = cardsBox.getChildren().size()-1;
+                    if(indexOfList == indexOfInitialList)
+                        indexOfDropTarget = Math.max(cardsBox.getChildren().size()-1,0);
+                    else
+                        indexOfDropTarget = droppedCardsSection.getChildren().size();
                 }
+
                 adjustCards(indexOfInitialList, indexOfList,
                         indexOfDraggingNode, indexOfDropTarget);
                 event.consume();
             }
         });
-        setDragReleaseCardsBox(cardsBox);
+
         setDragReleaseBoard();
 
     }
