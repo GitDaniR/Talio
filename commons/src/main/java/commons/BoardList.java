@@ -21,8 +21,10 @@ public class BoardList {
 
     @ManyToOne
     @JsonIgnore
-    @JoinColumn(name = "board_id", referencedColumnName = "id")
+    @JoinColumn(name = "boardId", insertable = false, updatable = false)
     public Board board;
+
+    public Integer boardId;
 
     public int index;
     @OneToMany(
@@ -34,9 +36,10 @@ public class BoardList {
 
     private BoardList(){}
 
-    public BoardList(String title, Board board) {
+    public BoardList(String title, Board board, int boardId) {
         this.title = title;
         this.board = board;
+        this.boardId = boardId;
     }
 
     public BoardList(String text) {
