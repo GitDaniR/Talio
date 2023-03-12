@@ -32,6 +32,12 @@ public class Board {
         this.password = password;
     }
 
+    public Board(Integer id, String title, String password, List<BoardList> lists) {
+        this(title, password);
+        this.id = id;
+        this.lists = lists;
+    }
+
     public void setLists(List<BoardList> lists) {
         this.lists = lists;
     }
