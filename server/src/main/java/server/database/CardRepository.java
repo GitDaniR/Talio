@@ -31,8 +31,5 @@ public interface CardRepository extends JpaRepository<Card, Integer> {
     @Modifying
     @Query("UPDATE Card c SET c.index = c.index - 1 WHERE c.index > :index AND c.listId = :listId")
     void shiftCardsLeft(int index, int listId);
-
-    List<Card> findAllByListId(Integer listId);
-    Card findByListIdAndIndex(Integer listId, Integer index);
 }
 

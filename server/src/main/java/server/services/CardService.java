@@ -65,18 +65,4 @@ public class CardService {
         res.description = card.description;
         return cardRepo.save(res);
     }
-
-    public List<Card> getAllByListId(Integer listId) throws Exception{
-        if(!listRepo.existsById(listId))
-            throw new Exception("List does not exist");
-        return cardRepo.findAllByListId(listId);
-    }
-
-    public Card getCardByListIdAndIndex(Integer listId, Integer index) throws Exception{
-        if(!listRepo.existsById(listId))
-            throw new Exception("List does not exist");
-        return cardRepo.findByListIdAndIndex(listId, index);
-
-
-    }
 }
