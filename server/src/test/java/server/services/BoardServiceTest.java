@@ -77,7 +77,13 @@ class BoardServiceTest {
     }
 
     @Test
-    void add() {
+    public void testAddSuccessful() throws Exception {
+        Board b4 = new Board(4, "Fourth", "000", new ArrayList<>());
+        Board expected = sut.add(b4);
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestBoardRepository.SAVE);
+        assertEquals(expected, b4);
+        assertEquals(expectedCalls, repo.getCalls());
     }
 
     @Test
