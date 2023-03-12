@@ -17,11 +17,11 @@ import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.concurrent.Flow;
+
 
 public class BoardOverviewCtrl implements Initializable {
 
@@ -125,7 +125,7 @@ public class BoardOverviewCtrl implements Initializable {
         });
 
     }
-
+    
     // end of Drag&Drop
 
     public void refresh() {
