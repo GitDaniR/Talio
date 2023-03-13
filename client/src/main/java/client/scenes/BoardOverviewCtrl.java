@@ -36,8 +36,6 @@ public class BoardOverviewCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        board = server.getBoardByID(1);
-        refresh();
         //Setting the first board as the main board
         //I tried to get the first boards of all boards but didn't work
     }
@@ -79,6 +77,7 @@ public class BoardOverviewCtrl implements Initializable {
     }
 
     public void refresh() {
+        board = server.getBoardByID(1);
         try {
             mainBoard.getChildren().clear();
             var lists = board.lists;
@@ -107,6 +106,6 @@ public class BoardOverviewCtrl implements Initializable {
     }
 
     public void disconnectFromServer() {
-        mainCtrl.showWelcomePage();
+        refresh();
     }
 }
