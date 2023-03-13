@@ -73,6 +73,8 @@ public class BoardOverviewCtrl implements Initializable {
         ///Attaching the card object to the cardCtrl
         cardObjectController.setCardTitleText(currentCard.title);
         //Setting the title of the card
+        cardObjectController.setServerAndCtrl(server,mainCtrl);
+        //Just as done with lists
         return cardObjectController;
     }
 

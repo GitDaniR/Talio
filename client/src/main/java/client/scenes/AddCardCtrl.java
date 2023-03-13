@@ -29,7 +29,7 @@ public class AddCardCtrl implements Initializable {
     private Button save;
     @FXML
     private Button cancel;
-    private BoardList list = null;
+    private BoardList listToAddTo;
 
     @Inject
     public AddCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -71,10 +71,10 @@ public class AddCardCtrl implements Initializable {
     private Card getCard() {
         var t = title.getText();
         var d = description.getText();
-        return new Card(t, d, 0, list,0);
+        return new Card(t, d, 0, listToAddTo,listToAddTo.id);
     }
 
     public void setList(BoardList list){
-        this.list = list;
+        this.listToAddTo = list;
     }
 }
