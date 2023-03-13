@@ -46,8 +46,8 @@ public class BoardOverviewCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        refresh();
         board = server.getBoardByID(1);
+        refresh();
         //Setting the first board as the main board
         //I tried to get the first boards of all boards but didn't work
     }
@@ -261,17 +261,21 @@ public class BoardOverviewCtrl implements Initializable {
     public void refresh() {
         try {
             mainBoard.getChildren().clear();
-            var lists = server.getBoardLists();
+            var lists = board.lists;
             data = FXCollections.observableList(lists);
             for (BoardList currentList : data) {
                 FXMLLoader listLoader = new FXMLLoader(getClass().getResource("List.fxml"));
                 Node listObject = listLoader.load();
                 ListCtrl listObjectController = createListObject(listLoader,currentList);
                 ObservableList<Card> cardsInList =
+
                     FXCollections.observableList(server.getCards(currentList.id));
 
                 Collections.sort(cardsInList, (s1, s2) -> { return s1.index-s2.index; });
                 currentList.setCards(cardsInList);
+
+                    FXCollections.observableList(currentList.cards);
+
                 for (Card currentCard : cardsInList) {
                     FXMLLoader cardLoader = new FXMLLoader((getClass().getResource("Card.fxml")));
                     Node cardObject = cardLoader.load();
