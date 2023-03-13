@@ -18,14 +18,14 @@ public class BoardListTest {
 
     @Test
     public void checkConstructor(){
-        var list = new BoardList("List", board);
+        var list = new BoardList("List", board, 1);
         assertEquals(list.board, board);
         assertEquals(list.title, "List");
     }
 
     @Test
     public void checkSetCards(){
-        var list = new BoardList("List", board);
+        var list = new BoardList("List", board, 1);
         var cards = new ArrayList<Card>();
         list.setCards(cards);
         assertEquals(list.cards, cards);
@@ -33,7 +33,7 @@ public class BoardListTest {
 
     @Test
     public void checkAddCard(){
-        var list = new BoardList("List", board);
+        var list = new BoardList("List", board, 1);
         var card = new Card("title", "description", 1, null,null);
         var cards = new ArrayList<Card>();
         cards.add(card);
@@ -44,8 +44,8 @@ public class BoardListTest {
 
     @Test
     public void equalsHashCode(){
-        var list1 = new BoardList("List1", board);
-        var list2 = new BoardList("List1", board);
+        var list1 = new BoardList("List1", board, 1);
+        var list2 = new BoardList("List1", board, 1);
 
         assertEquals(list1, list2);
         assertEquals(list1.hashCode(), list2.hashCode());
@@ -53,8 +53,8 @@ public class BoardListTest {
 
     @Test
     public void notEqualsHashCode(){
-        var list1 = new BoardList("List1", board);
-        var list2 = new BoardList("List2", board);
+        var list1 = new BoardList("List1", board, 1);
+        var list2 = new BoardList("List2", board, 1);
 
         assertNotEquals(list1, list2);
         assertNotEquals(list1.hashCode(), list2.hashCode());
@@ -63,7 +63,7 @@ public class BoardListTest {
 
     @Test
     public void hasToString(){
-        var list = new BoardList("List1", board);
+        var list = new BoardList("List1", board, 1);
         assertTrue(list.toString().contains("List1"));
 
     }
