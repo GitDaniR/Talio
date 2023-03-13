@@ -178,7 +178,6 @@ public class BoardOverviewCtrl implements Initializable {
     }
     // method that handles the drag event on the list
     private void setDragReleaseList(Node list){
-        VBox cardsBox = (VBox) ((VBox)list ).getChildren().get(2);
         list.setOnMouseDragReleased(new EventHandler<MouseDragEvent>() {
             @Override
             public void handle(MouseDragEvent event) {
@@ -207,7 +206,6 @@ public class BoardOverviewCtrl implements Initializable {
                 item.setOnMouseDragReleased(event -> removePreview(mainBoard));
             }
             else{
-
                 HBox item = (HBox)((VBox)list).getChildren().get(i);
                 for(int j = 0;j<item.getChildren().size();j++){
                     Node itemChild = item.getChildren().get(j);
