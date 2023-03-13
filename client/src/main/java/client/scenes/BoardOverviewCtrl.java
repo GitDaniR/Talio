@@ -1,6 +1,8 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+
+import java.io.IOException;
 import java.util.*;
 import com.google.inject.Inject;
 import commons.Board;
@@ -68,21 +70,37 @@ public class BoardOverviewCtrl implements Initializable {
         //Setting the title of the list
         listObjectController.setServerAndCtrl(server,mainCtrl);
         //Setting the server and  ctrl because I have no idea how to inject it
+        listObjectController.getListAddCardButton().
+                setOnAction(event -> mainCtrl.showAddCard(currentList));
+        //Telling the button what to do
         return listObjectController;
     }
 
-    /**
-     * @param cardLoader the loader to load @FXML contents
-     * @param currentCard the card to be associated to the ctrl
-     * @return the cardCtrl with the associated card
+
+    /** Method that instantiates and adds the card to the list
+     * @param cardLoader the card fxml loader
+     * @param currentCard the card to represent
+     * @param listObject the list object to add drag and drop to
+     * @param listObjectController the controller for adding objects
+     * @return the controller of the card
+     * @throws IOException related to the loader
      */
-    private CardCtrl createCardObject(FXMLLoader cardLoader, Card currentCard){
+    private CardCtrl createAndAddCardObject(
+            FXMLLoader cardLoader,
+            Card currentCard,
+            Node listObject, ListCtrl listObjectController) throws IOException {
+
+        Node cardObject = cardLoader.load();
         CardCtrl cardObjectController = cardLoader.getController();
-        //Instantiating a new card
+        //Instantiating a new card and its controller
         cardObjectController.setCard(currentCard);
-        ///Attaching the card object to the cardCtrl
+        ///Attaching the card to be represented to the cardCtrl
         cardObjectController.setCardTitleText(currentCard.title);
         //Setting the title of the card
+        listObjectController.addCardToList(cardObject);
+        //Adding the card to the list
+        addDragAndDrop(listObject, (HBox) cardObject);
+        //Setting drag and drop property
         return cardObjectController;
     }
 
@@ -267,32 +285,17 @@ public class BoardOverviewCtrl implements Initializable {
                 Node listObject = listLoader.load();
                 ListCtrl listObjectController = createListObject(listLoader,currentList);
 
+                //Adding the cards to the list
                 ObservableList<Card> cardsInList = FXCollections.observableList(currentList.cards);
-
-                    //FXCollections.observableList(server.getCards(currentList.id));
-
                 Collections.sort(cardsInList, (s1, s2) -> { return s1.index-s2.index; });
                 currentList.setCards(cardsInList);
-
                 for (Card currentCard : cardsInList) {
                     FXMLLoader cardLoader = new FXMLLoader((getClass().getResource("Card.fxml")));
-                    Node cardObject = cardLoader.load();
-                    CardCtrl cardObjectController = createCardObject(cardLoader,currentCard);
-                    listObjectController.addCardToList(cardObject);
-                    //Adding the card to the list
+                    createAndAddCardObject(cardLoader,currentCard,listObject,listObjectController);
                 }
-                ///This can be done with the ID of the list
-                listObjectController.getListAddCardButton().
-                        setOnAction(event -> mainCtrl.showAddCard(currentList));
+
                 mainBoard.getChildren().add(listObject);
-
-                VBox cardsBox = (VBox) ((VBox)listObject ).getChildren().get(2);
-                for(int i =0;i<cardsBox.getChildren().size();i++){
-                    addDragAndDrop(listObject, (HBox) cardsBox.getChildren().get(i));
-                }
                 setDragReleaseList(listObject);
-
-
             }
         } catch (Exception e){
             System.out.print("IO Exception");
