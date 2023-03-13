@@ -67,7 +67,7 @@ public class TestCardRepository implements CardRepository{
 
     // I changed the CardRepository, so it prompted to add a method here
     @Override
-    public void updateListById(Integer id, String title, String description) {
+    public void updateCardById(Integer id, String title, String description) {
 
     }
 
