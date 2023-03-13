@@ -65,6 +65,12 @@ public class TestCardRepository implements CardRepository{
         }
     }
 
+    // I changed the CardRepository, so it prompted to add a method here
+    @Override
+    public void updateListById(Integer id, String title, String description) {
+
+    }
+
     @Override
     public <S extends Card> S save(S entity) {
         call(SAVE);
