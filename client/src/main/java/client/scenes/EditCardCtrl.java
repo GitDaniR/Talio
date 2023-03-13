@@ -2,7 +2,6 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.BoardList;
 import commons.Card;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
@@ -16,7 +15,7 @@ import javafx.stage.Modality;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class AddCardCtrl implements Initializable {
+public class EditCardCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -29,10 +28,10 @@ public class AddCardCtrl implements Initializable {
     private Button save;
     @FXML
     private Button cancel;
-    private BoardList list = null;
+    private Card cardToEdit;
 
     @Inject
-    public AddCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public EditCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
@@ -52,7 +51,7 @@ public class AddCardCtrl implements Initializable {
 
     public void ok() {
         try {
-            server.addCard(getCard());
+            server.editCard(cardToEdit.id, getUpdatedCard(cardToEdit));
 
         } catch (WebApplicationException e) {
 
@@ -67,14 +66,19 @@ public class AddCardCtrl implements Initializable {
         mainCtrl.showBoard();
     }
 
-    // Getting the correct index should be done
-    private Card getCard() {
+    /**
+     * Makes a card with updated title and description
+     * @param oldCard the old version
+     * @return a new version of the card
+     */
+    private Card getUpdatedCard(Card oldCard) {
         var t = title.getText();
         var d = description.getText();
-        return new Card(t, d, 0, list,0);
+
+        return new Card(t, d, oldCard.index, oldCard.list, oldCard.listId);
     }
 
-    public void setList(BoardList list){
-        this.list = list;
+    public void setCardToEdit(Card cardToEdit) {
+        this.cardToEdit = cardToEdit;
     }
 }
