@@ -266,6 +266,7 @@ public class BoardOverviewCtrl implements Initializable {
                 FXMLLoader listLoader = new FXMLLoader(getClass().getResource("List.fxml"));
                 Node listObject = listLoader.load();
                 ListCtrl listObjectController = createListObject(listLoader,currentList);
+
                 ObservableList<Card> cardsInList = FXCollections.observableList(currentList.cards);
 
                     //FXCollections.observableList(server.getCards(currentList.id));

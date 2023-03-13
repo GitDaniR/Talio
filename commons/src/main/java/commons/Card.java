@@ -63,6 +63,7 @@ public class Card {
     }
 
 
+
     public Integer getId() {
         return id;
     }
