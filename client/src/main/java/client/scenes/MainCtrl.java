@@ -90,10 +90,12 @@ public class MainCtrl {
 
     public void showBoard() {
         //storeWindowSize(primaryStage.getScene());
+
         primaryStage.setTitle("Board Overview");
         primaryStage.setScene(board);
-        //setWindowSize();
         boardOverviewCtrl.refresh();
+        //setWindowSize();
+
     }
 
     public void showAddList(Board boardToAddTo) {

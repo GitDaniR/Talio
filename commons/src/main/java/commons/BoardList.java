@@ -24,7 +24,6 @@ public class BoardList {
     @JsonIgnore
     @JoinColumn(name = "boardId", insertable = false, updatable = false)
     public Board board;
-
     public Integer boardId;
 
     public int index;
