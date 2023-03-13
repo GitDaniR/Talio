@@ -69,6 +69,14 @@ public class ListCtrl extends AnchorPane implements Initializable{
         this.boardList = boardList;
     }
 
+    public VBox getCardBox() {
+        return cardBox;
+    }
+
+    public int getAmountOfCardsInList(){
+        return boardList.cards.size();
+    }
+
     /**
      * @return the list button of the list
      */

@@ -99,7 +99,8 @@ public class BoardOverviewCtrl implements Initializable {
         //Setting the title of the card
         listObjectController.addCardToList(cardObject);
         //Adding the card to the list
-        addDragAndDrop(listObject, (HBox) cardObject);
+        addDragAndDrop(listObjectController.getAmountOfCardsInList(),
+                (HBox) cardObject);
         //Setting drag and drop property
         return cardObjectController;
     }
@@ -222,8 +223,8 @@ public class BoardOverviewCtrl implements Initializable {
     }
 
     // sets drag and drop feature to cards
-    private void addDragAndDrop(final Node list, final HBox card){
-        VBox cardsBox = (VBox) ((VBox)list).getChildren().get(2);
+    private void addDragAndDrop(int cardNumber, final HBox card){
+        //VBox cardsBox = (VBox) ((VBox)list).getChildren().get(2);
         card.setOnDragDetected(new EventHandler<MouseEvent>()
         {
             @Override
@@ -258,7 +259,7 @@ public class BoardOverviewCtrl implements Initializable {
                 int indexOfDropTarget = droppedCardsSection.getChildren().indexOf(target);
                 if(indexOfDropTarget == -1){
                     if(indexOfList == indexOfInitialList)
-                        indexOfDropTarget = Math.max(cardsBox.getChildren().size()-1,0);
+                        indexOfDropTarget = Math.max(cardNumber-1,0);
                     else
                         indexOfDropTarget = droppedCardsSection.getChildren().size();
                 }
