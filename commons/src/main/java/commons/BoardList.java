@@ -1,5 +1,6 @@
 package commons;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -23,7 +24,6 @@ public class BoardList {
     @JsonIgnore
     @JoinColumn(name = "boardId", insertable = false, updatable = false)
     public Board board;
-
     public Integer boardId;
 
     public int index;
@@ -56,6 +56,10 @@ public class BoardList {
 
     public void addCard(Card card){
         this.cards.add(card);
+    }
+
+    public Card getCardByIndex(int index){
+        return cards.get(index);
     }
 
 

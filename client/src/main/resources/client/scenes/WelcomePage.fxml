@@ -7,7 +7,7 @@
 <?import javafx.scene.text.Text?>
 
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.WelcomePageCtrl">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.WelcomePageCtrl">
    <children>
       <Button layoutX="414.0" layoutY="323.0" mnemonicParsing="false" onAction="#connectToChosenServer" text="Connect" />
       <TextField fx:id="chosenServer" layoutX="233.0" layoutY="323.0" prefHeight="26.0" prefWidth="170.0" />

@@ -82,6 +82,15 @@ public class ServerUtils {
                 .delete();
     }
 
+    public void deleteCard(Integer id){
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/cards/"+id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .delete();
+
+    }
+
     public void updateBoardListTitle(Integer id, String title){
         ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/lists/"+id) //
@@ -113,13 +122,5 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(card, APPLICATION_JSON), Card.class);
-    }
-
-    public void deleteCard(Integer id){
-        ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/cards/"+id) //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .delete();
     }
 }

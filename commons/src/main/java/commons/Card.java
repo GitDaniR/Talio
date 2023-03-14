@@ -62,6 +62,21 @@ public class Card {
         this.listId = listId;
     }
 
+
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    public void setList(BoardList list) {
+        this.list = list;
+        this.listId = list.getId();
+    }
+
     //public void addTag(Tag tag) {
     //    tags.add(tag);
     //}

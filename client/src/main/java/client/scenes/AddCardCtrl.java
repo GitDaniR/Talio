@@ -67,11 +67,11 @@ public class AddCardCtrl implements Initializable {
         mainCtrl.showBoard();
     }
 
-    // Getting the correct index should be done
     private Card getCard() {
         var t = title.getText();
         var d = description.getText();
-        return new Card(t, d, 0, listToAddTo,listToAddTo.id);
+
+        return new Card(t, d, listToAddTo.cards.size(), listToAddTo,listToAddTo.id);
     }
 
     public void setList(BoardList list){
