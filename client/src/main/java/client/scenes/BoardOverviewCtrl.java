@@ -279,7 +279,6 @@ public class BoardOverviewCtrl implements Initializable {
     public void refresh() {
         board = server.getBoardByID(1);
         try {
-            board = server.getBoardByID(1);
             mainBoard.getChildren().clear();
             var lists = board.lists;
             data = FXCollections.observableList(lists);
