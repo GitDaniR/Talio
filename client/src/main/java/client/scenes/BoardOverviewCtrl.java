@@ -58,7 +58,7 @@ public class BoardOverviewCtrl implements Initializable {
     }
     //A method to start the timer for auto-synchronization and return the instance
     //so that the caller can then control the timer
-    public Timer startTimer(){
+    public Timer startTimer(int refreshRate){
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -70,7 +70,7 @@ public class BoardOverviewCtrl implements Initializable {
                     refresh();
                 });
             }
-        }, 0, 500);
+        }, 0, refreshRate);
         return timer;
     }
 

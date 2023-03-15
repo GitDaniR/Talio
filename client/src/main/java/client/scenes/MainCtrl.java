@@ -48,6 +48,10 @@ public class MainCtrl {
     //Maintain the current running timer so se can stop it when changing views/exiting the app
     private Timer currentTimer;
 
+    //a const to easily manage the refresh rate of auto-sync
+    //buggy when below 200
+    public static final int REFRESH_RATE = 200;
+
 
     public void initialize(Stage primaryStage,
             Pair<AddCardCtrl, Parent> addCard,
@@ -100,7 +104,7 @@ public class MainCtrl {
         primaryStage.setScene(board);
         boardOverviewCtrl.refresh();
         cancelTimer();
-        currentTimer = boardOverviewCtrl.startTimer();
+        currentTimer = boardOverviewCtrl.startTimer(REFRESH_RATE);
     }
 
     public void showAddList(Board boardToAddTo) {
@@ -124,7 +128,7 @@ public class MainCtrl {
         cancelTimer();
     }
 
-    public void refreshBaordOverview(){
+    public void refreshBoardOverview(){
         boardOverviewCtrl.refresh();
     }
 
