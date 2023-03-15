@@ -5,8 +5,9 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="240.0" prefWidth="180.0" style="-fx-border-color: black; -fx-border-width: 10;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ListCtrl">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="413.0" prefWidth="266.0" style="-fx-border-color: black; -fx-border-width: 6;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ListCtrl">
    <children>
       <HBox alignment="TOP_RIGHT" prefHeight="19.0" prefWidth="140.0">
          <children>
@@ -14,9 +15,16 @@
             <Button fx:id="listCloseButton" mnemonicParsing="false" onAction="#deleteList" text="X" />
          </children>
       </HBox>
-      <Label id="ListTitle" fx:id="listTitle" alignment="CENTER" prefHeight="17.0" prefWidth="206.0" text="Default List Name" />
-      <VBox fx:id="cardBox" prefHeight="142.0" prefWidth="140.0" />
-      <Button id="ListAddCard" fx:id="listAddCard" alignment="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="202.0" text="Add card" />
+      <Label id="ListTitle" fx:id="listTitle" alignment="CENTER" prefHeight="24.0" prefWidth="248.0" text="Default List Name">
+         <padding>
+            <Insets bottom="10.0" top="10.0" />
+         </padding>
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <VBox fx:id="cardBox" prefHeight="351.0" prefWidth="214.0" />
+      <Button id="ListAddCard" fx:id="listAddCard" alignment="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="248.0" text="Add card" />
    </children>
    <padding>
       <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
