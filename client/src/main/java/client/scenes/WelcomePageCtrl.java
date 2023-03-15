@@ -18,6 +18,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.io.IOException;
@@ -31,6 +32,9 @@ public class WelcomePageCtrl {
     @FXML
     private TextField chosenServer;
 
+    @FXML
+    private Label connectionLabel;
+
     @Inject
     public WelcomePageCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
@@ -42,6 +46,9 @@ public class WelcomePageCtrl {
         if(testServerConnection()) {
             server.setServer("http://" + chosenServer.getText() + "/");
             mainCtrl.showBoard();
+        }
+        else {
+            connectionLabel.setText("Connection Failed: Server unreachable or wrong input format");
         }
     }
 

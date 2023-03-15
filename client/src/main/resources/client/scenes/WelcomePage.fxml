@@ -31,6 +31,6 @@
             <Font name="System Italic" size="18.0" />
          </font>
       </Text>
-      <Label fx:id="connectionLabel" layoutX="242.0" layoutY="356.0" prefHeight="18.0" prefWidth="152.0" />
+      <Label fx:id="connectionLabel" layoutX="143.0" layoutY="355.0" prefHeight="18.0" prefWidth="349.0" textFill="RED" />
    </children>
 </AnchorPane>
