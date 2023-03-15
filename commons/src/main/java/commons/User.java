@@ -1,6 +1,5 @@
 package commons;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -13,42 +12,21 @@ import java.util.List;
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 @Entity
-public class Board {
+public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Integer id;
-    public String title;
-    public String password;
-    @OneToMany(
-            mappedBy = "board",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    public List<BoardList> lists = new ArrayList<>();
 
-    @ManyToMany
-    @JoinTable(
-            name = "usersJoinedBoard",
-            joinColumns = @JoinColumn(name = "boardId"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
+    @ManyToMany(
+            mappedBy = "usersJoinedBoard",
+            cascade = CascadeType.PERSIST
     )
     @JsonIgnore
-    public List<User> usersJoinedBoard = new ArrayList<>();
+    public List<Board> boardsJoinedByUser = new ArrayList<>();
 
-    private Board(){}
 
-    public Board(String title, String password) {
-        this.title = title;
-        this.password = password;
-    }
-
-    public void setLists(List<BoardList> lists) {
-        this.lists = lists;
-    }
-
-    public void addBoardList(BoardList boardList) {
-        this.lists.add(boardList);
-    }
+    public User() {}
 
     @Override
     public boolean equals(Object obj) {
