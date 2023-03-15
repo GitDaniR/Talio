@@ -115,6 +115,14 @@ public class ServerUtils {
                 .get(new GenericType<List<Card>>() {});
     }
 
+    public Card getCardById(int id) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+            .target(server).path("api/cards/"+id) //
+            .request(APPLICATION_JSON) //
+            .accept(APPLICATION_JSON) //
+            .get(new GenericType<Card>() {});
+    }
+
     public Card addCard(Card card) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(server).path("api/cards") //

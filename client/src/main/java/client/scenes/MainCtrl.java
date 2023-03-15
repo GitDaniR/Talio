@@ -129,11 +129,18 @@ public class MainCtrl {
         currentTimer = editListCtrl.startTimer(REFRESH_RATE);
     }
 
-
     public void showWelcomePage() {
         primaryStage.setTitle("Welcome Page");
         primaryStage.setScene(welcomePage);
         cancelTimer();
+    }
+
+    public void showEditCard(Card cardToEdit) {
+        primaryStage.setTitle("Editing Card");
+        primaryStage.setScene(editCard);
+        editCardCtrl.setCardToEdit(cardToEdit);
+        cancelTimer();
+        editCardCtrl.startTimer(REFRESH_RATE);
     }
 
     public void refreshBoardOverview(){
@@ -149,11 +156,5 @@ public class MainCtrl {
 
     public void deleteCard() {
         boardOverviewCtrl.refresh();
-    }
-
-    public void showEditCard(Card cardToEdit) {
-        primaryStage.setTitle("Editing Card");
-        primaryStage.setScene(editCard);
-        editCardCtrl.setCardToEdit(cardToEdit);
     }
 }
