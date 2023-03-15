@@ -49,8 +49,6 @@ public class BoardOverviewCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //Setting the first board as the main board
-        //I tried to get the first boards of all boards but didn't work
     }
 
     public void addList() {
@@ -115,11 +113,16 @@ public class BoardOverviewCtrl implements Initializable {
         ///Attaching the card to be represented to the cardCtrl
         cardObjectController.setCardTitleText(currentCard.title);
         //Setting the title of the card
+
+        cardObjectController.setServerAndCtrl(server,mainCtrl);
+        //Just as done with lists
+
         listObjectController.addCardToList(cardObject);
         //Adding the card to the list
         addDragAndDrop(listObjectController.getAmountOfCardsInList(),
                 (HBox) cardObject);
         //Setting drag and drop property
+
         return cardObjectController;
     }
 
