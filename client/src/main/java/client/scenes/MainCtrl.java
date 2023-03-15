@@ -177,6 +177,7 @@ public class MainCtrl {
         primaryStage.setTitle("Workspace");
         primaryStage.setScene(workspace);
         workspaceCtrl.setUser(userID);
+        workspaceCtrl.refresh();
     }
 
     public void deleteCard() {

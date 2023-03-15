@@ -134,4 +134,8 @@ public class ServerUtils {
     public void setServer(String chosenServer) {
         server = chosenServer;
     }
+
+    public List<Board> getBoardsByUserID(int userID){
+        return List.of(new Board("Board1","123"),new Board( "Board2","123"));
+    }
 }
