@@ -53,8 +53,7 @@ public class MainCtrl {
     private Timer currentTimer;
 
     //a const to easily manage the refresh rate of auto-sync
-    //buggy when below 200
-    public static final int REFRESH_RATE = 200;
+    public static final int REFRESH_RATE = 500;
 
 
     public void initialize(Stage primaryStage,
@@ -127,6 +126,7 @@ public class MainCtrl {
         primaryStage.setScene(editList);
         editListCtrl.setBoardListToEdit(boardListToEdit);
         cancelTimer();
+        currentTimer = editListCtrl.startTimer(REFRESH_RATE);
     }
 
 
