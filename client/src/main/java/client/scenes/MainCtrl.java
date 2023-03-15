@@ -22,6 +22,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.util.Random;
+
 public class MainCtrl {
 
     private Stage primaryStage;
@@ -40,6 +42,9 @@ public class MainCtrl {
     private EditListCtrl editListCtrl;
     private Scene editList;
 
+    private WorkspaceCtrl workspaceCtrl;
+    private Scene workspace;
+
     private double windowHeight;
     private double windowWidth;
 
@@ -49,7 +54,8 @@ public class MainCtrl {
                            Pair<AddListCtrl, Parent> addList,
                            Pair<BoardOverviewCtrl, Parent> board,
                            Pair<WelcomePageCtrl, Parent> welcomePage,
-                           Pair<EditListCtrl, Parent> editList) {
+                           Pair<EditListCtrl, Parent> editList,
+                           Pair<WorkspaceCtrl, Parent> workspace) {
         this.primaryStage = primaryStage;
 
         this.boardOverviewCtrl = board.getKey();
@@ -64,11 +70,37 @@ public class MainCtrl {
         this.welcomePageCtrl = welcomePage.getKey();
         this.welcomePage = new Scene(welcomePage.getValue());
 
+        this.workspaceCtrl = workspace.getKey();
+        this.workspace = new Scene(workspace.getValue());
+
         this.editListCtrl=editList.getKey();
         this.editList = new Scene(editList.getValue());
 
+
+
         showWelcomePage();
         primaryStage.show();
+    }
+
+
+    /**
+     * @return String: random String that will server as a Board password, it
+     * can contain letters, numbers and special characters, and it is
+     * of length 8-12 (randomly chosen)
+     */
+    private String generatePassword(){
+        Random random = new Random();
+        int length = random.nextInt(8,12);
+
+        String characters = "abcdefghijklmnopqrstuvwxyz*!#@$ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder sb = new StringBuilder();
+
+        for(int i =0;i<length;i++){
+            int index = random.nextInt(characters.length());
+            sb.append(characters.charAt(index));
+        }
+
+        return sb.toString();
     }
 
     private void storeWindowSize(Scene current){
@@ -85,6 +117,16 @@ public class MainCtrl {
         primaryStage.setTitle("A new card");
         addCardCtrl.setList(list);
         primaryStage.setScene(addCard);
+
+    }
+
+    public void showNewBoard(){
+        primaryStage.setTitle("Board");
+        primaryStage.setScene(board);
+        Board newBoard = new Board("Board",generatePassword());
+        boardOverviewCtrl.setBoard(newBoard);
+        boardOverviewCtrl.saveBoardInDatabase();
+        boardOverviewCtrl.refresh();
 
     }
 
@@ -117,5 +159,10 @@ public class MainCtrl {
     public void showWelcomePage() {
         primaryStage.setTitle("Welcome Page");
         primaryStage.setScene(welcomePage);
+    }
+
+    public void showWorkspace(){
+        primaryStage.setTitle("Workspace");
+        primaryStage.setScene(workspace);
     }
 }

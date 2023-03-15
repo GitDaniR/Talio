@@ -36,6 +36,6 @@ public class WelcomePageCtrl {
     public void connectToChosenServer() {
         // For now, it just sends you to the main board.
         // Eventually it will get the string from chosenServer and change the server host.
-        mainCtrl.showBoard();
+        mainCtrl.showWorkspace();
     }
 }

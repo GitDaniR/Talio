@@ -52,6 +52,14 @@ public class BoardOverviewCtrl implements Initializable {
         //I tried to get the first boards of all boards but didn't work
     }
 
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
+    public void saveBoardInDatabase(){
+        this.board = server.addBoard(this.board);
+    }
+
     public void addList() {
         mainCtrl.showAddList(board);
     }
@@ -274,7 +282,7 @@ public class BoardOverviewCtrl implements Initializable {
     // end of Drag&Drop
 
     public void refresh() {
-        board = server.getBoardByID(1);
+        board = server.getBoardByID(board.id);
         try {
             mainBoard.getChildren().clear();
             var lists = board.lists;
