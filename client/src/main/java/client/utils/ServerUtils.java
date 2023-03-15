@@ -100,8 +100,6 @@ public class ServerUtils {
         ///Need to edit to add id instead of list and also pass new title
     }
 
-
-    // Dummy placeholder methods for getting and posting cards
     public List<Card> getCards(int listId) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(server).path("api/cards/list/"+listId) //
@@ -116,7 +114,14 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(card, APPLICATION_JSON), Card.class);
+    }
 
+    public void editCard(Integer id, Card card) {
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/cards/"+id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
 
     //Changes the SERVER variable and updates it with the new server

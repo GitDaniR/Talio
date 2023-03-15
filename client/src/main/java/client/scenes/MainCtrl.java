@@ -17,6 +17,7 @@ package client.scenes;
 
 import commons.Board;
 import commons.BoardList;
+import commons.Card;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -40,6 +41,9 @@ public class MainCtrl {
     private EditListCtrl editListCtrl;
     private Scene editList;
 
+    private EditCardCtrl editCardCtrl;
+    private Scene editCard;
+
     private double windowHeight;
     private double windowWidth;
 
@@ -49,7 +53,8 @@ public class MainCtrl {
                            Pair<AddListCtrl, Parent> addList,
                            Pair<BoardOverviewCtrl, Parent> board,
                            Pair<WelcomePageCtrl, Parent> welcomePage,
-                           Pair<EditListCtrl, Parent> editList) {
+                           Pair<EditListCtrl, Parent> editList,
+                           Pair<EditCardCtrl, Parent> editCard) {
         this.primaryStage = primaryStage;
 
         this.boardOverviewCtrl = board.getKey();
@@ -66,6 +71,9 @@ public class MainCtrl {
 
         this.editListCtrl=editList.getKey();
         this.editList = new Scene(editList.getValue());
+
+        this.editCardCtrl = editCard.getKey();
+        this.editCard = new Scene(editCard.getValue());
 
         showWelcomePage();
         primaryStage.show();
@@ -117,5 +125,15 @@ public class MainCtrl {
     public void showWelcomePage() {
         primaryStage.setTitle("Welcome Page");
         primaryStage.setScene(welcomePage);
+    }
+
+    public void deleteCard() {
+        boardOverviewCtrl.refresh();
+    }
+
+    public void showEditCard(Card cardToEdit) {
+        primaryStage.setTitle("Editing Card");
+        primaryStage.setScene(editCard);
+        editCardCtrl.setCardToEdit(cardToEdit);
     }
 }
