@@ -1,5 +1,4 @@
 package server.api;
-
 import commons.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +13,11 @@ public class UserController {
     private final UserService userService;
     private final UserRepository repo;
 
+
+
     /**
      * Constructor for UserController which uses UserService and UserRepository.
+     *
      * @param userService
      * @param repo
      */
@@ -43,7 +45,7 @@ public class UserController {
     public ResponseEntity<User> getById(@PathVariable("id") Integer id) {
         ResponseEntity<User> found;
         try {
-            found = this.userService.getById(id, repo);
+            found = this.userService.getById(id);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
@@ -59,7 +61,7 @@ public class UserController {
     public ResponseEntity<User> add(@RequestBody User user) {
         ResponseEntity<User> saved;
         try {
-            saved = this.userService.add(user, repo);
+            saved = this.userService.add(user);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
@@ -75,10 +77,29 @@ public class UserController {
     public ResponseEntity<User> deleteById(@PathVariable("id") Integer id) {
         ResponseEntity<User> deletedRecord;
         try {
-            deletedRecord = this.userService.deleteById(id, repo);
+            deletedRecord = this.userService.deleteById(id);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
         return deletedRecord;
+    }
+
+    /**
+     * Method that adds board to list of joined boards by the user
+     * @param userId
+     * @param boardId
+     * @return
+     */
+    @PutMapping(path = "{userId}/boards/{boardId}")
+    public ResponseEntity<User> joinBoard(@PathVariable("userId") Integer userId,
+                                          @PathVariable("boardId") Integer boardId){
+
+        try{
+            return this.userService.joinBoard(userId, boardId);
+
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

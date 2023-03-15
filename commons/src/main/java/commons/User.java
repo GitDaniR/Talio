@@ -1,6 +1,5 @@
 package commons;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -24,7 +23,6 @@ public class User {
             mappedBy = "usersJoinedBoard",
             cascade = CascadeType.PERSIST
     )
-    @JsonIgnore
     public List<Board> boardsJoinedByUser = new ArrayList<>();
 
 
