@@ -20,6 +20,7 @@ import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import org.checkerframework.framework.qual.FromByteCode;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -35,6 +36,12 @@ public class WelcomePageCtrl {
     @FXML
     private Label connectionLabel;
 
+    @FXML
+    private TextField userID;
+
+    @FXML
+    private Label userLabel;
+
     @Inject
     public WelcomePageCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
@@ -45,14 +52,34 @@ public class WelcomePageCtrl {
     public void connectToChosenServer() {
 
         if(testServerConnection()) {
-            server.setServer("http://" + chosenServer.getText() + "/");
-            mainCtrl.showWorkspace();
+            connectionLabel.setText("");
+            if(testUserID()){
+                userLabel.setText("");
+                server.setServer("http://" + chosenServer.getText() + "/");
+                mainCtrl.showWorkspace(Integer.valueOf(userID.getText()));
+            }else{
+                userLabel.setText("Bad input: UserID consists of numbers only");
+            }
+
         }
         else {
             connectionLabel.setText("Connection Failed: Server unreachable or wrong input format");
         }
 
+
+
+
     }
+
+    private boolean testUserID(){
+        if(userID.getText().equals(""))return false;
+        for(int i = 0;i<userID.getText().length();i++){
+            if(!Character.isDigit(userID.getText().charAt(i)))return false;
+        }
+        return true;
+
+    }
+
 
     // It checks if the server address the user inputs is reachable. If yes, then it returns true.
     public boolean testServerConnection() {

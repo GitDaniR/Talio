@@ -14,6 +14,7 @@ public class WorkspaceCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
+
     @FXML
     private Button createBoard;
 
@@ -27,6 +28,10 @@ public class WorkspaceCtrl implements Initializable {
 
     public void createBoard(){
         mainCtrl.showNewBoard();
+    }
+
+    public void setUser(int userID){
+
     }
 
     @Override
