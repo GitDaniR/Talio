@@ -8,6 +8,7 @@ import com.google.inject.Inject;
 import commons.Board;
 import commons.BoardList;
 import commons.Card;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -50,10 +51,28 @@ public class BoardOverviewCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         //Setting the first board as the main board
         //I tried to get the first boards of all boards but didn't work
+        startTimer();
     }
 
     public void addList() {
         mainCtrl.showAddList(board);
+    }
+    //A method to start the timer for auto-synchronization and return the instance
+    //so that the caller can then control the timer
+    public Timer startTimer(){
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                //Since apparently we can't add or remove JavaFX objects on another thread
+                //auto-synchronization needs to be done on the same Thread so we need to use
+                //Platform.runLater  It runs the specified task on the main thread when available
+                Platform.runLater(()->{
+                    refresh();
+                });
+            }
+        }, 0, 500);
+        return timer;
     }
 
     /**
@@ -297,11 +316,12 @@ public class BoardOverviewCtrl implements Initializable {
                 setDragReleaseList(listObject);
             }
         } catch (Exception e){
-            System.out.print("IO Exception");
+            e.printStackTrace();
+            System.out.print(e.getMessage());
         }
     }
 
     public void disconnectFromServer() {
-        refresh();
+        mainCtrl.showWelcomePage();
     }
 }
