@@ -40,8 +40,14 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON)
                 .get(new GenericType<List<Board>>() {});
     }
-    //This does not work!!!
 
+    public Board addBoard(Board board){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/boards") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(board, APPLICATION_JSON), Board.class);
+    }
     public Board getBoardByID(int id){
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/boards/"+id) //
