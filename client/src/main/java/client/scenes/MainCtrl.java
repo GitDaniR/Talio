@@ -17,6 +17,7 @@ package client.scenes;
 
 import commons.Board;
 import commons.BoardList;
+import commons.Card;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -42,8 +43,13 @@ public class MainCtrl {
     private EditListCtrl editListCtrl;
     private Scene editList;
 
+
     private WorkspaceCtrl workspaceCtrl;
     private Scene workspace;
+
+    private EditCardCtrl editCardCtrl;
+    private Scene editCard;
+
 
     private double windowHeight;
     private double windowWidth;
@@ -55,7 +61,11 @@ public class MainCtrl {
                            Pair<BoardOverviewCtrl, Parent> board,
                            Pair<WelcomePageCtrl, Parent> welcomePage,
                            Pair<EditListCtrl, Parent> editList,
-                           Pair<WorkspaceCtrl, Parent> workspace) {
+
+                           Pair<WorkspaceCtrl, Parent> workspace,
+                           Pair<EditCardCtrl, Parent> editCard) {
+
+
         this.primaryStage = primaryStage;
 
         this.boardOverviewCtrl = board.getKey();
@@ -76,7 +86,8 @@ public class MainCtrl {
         this.editListCtrl=editList.getKey();
         this.editList = new Scene(editList.getValue());
 
-
+        this.editCardCtrl = editCard.getKey();
+        this.editCard = new Scene(editCard.getValue());
 
         showWelcomePage();
         primaryStage.show();
@@ -161,8 +172,20 @@ public class MainCtrl {
         primaryStage.setScene(welcomePage);
     }
 
-    public void showWorkspace(){
+
+    public void showWorkspace() {
         primaryStage.setTitle("Workspace");
         primaryStage.setScene(workspace);
+    }
+
+    public void deleteCard() {
+        boardOverviewCtrl.refresh();
+    }
+
+    public void showEditCard(Card cardToEdit) {
+        primaryStage.setTitle("Editing Card");
+        primaryStage.setScene(editCard);
+        editCardCtrl.setCardToEdit(cardToEdit);
+
     }
 }
