@@ -20,7 +20,6 @@ import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import org.checkerframework.framework.qual.FromByteCode;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;

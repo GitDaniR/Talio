@@ -31,7 +31,6 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     public void setUser(int userID){
-
     }
 
     @Override
