@@ -18,6 +18,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Integer id;
 
+    public String username;
+
     @ManyToMany(
             mappedBy = "usersJoinedBoard",
             cascade = CascadeType.PERSIST
@@ -27,6 +29,10 @@ public class User {
 
 
     public User() {}
+
+    public User(String username) {
+        this.username = username;
+    }
 
     @Override
     public boolean equals(Object obj) {
