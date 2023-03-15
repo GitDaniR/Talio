@@ -18,7 +18,6 @@ package client.utils;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 import static jakarta.ws.rs.core.MediaType.TEXT_PLAIN;
 
-import java.io.IOException;
 import java.util.List;
 
 import commons.Board;
