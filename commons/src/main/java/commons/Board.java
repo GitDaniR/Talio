@@ -1,10 +1,12 @@
 package commons;
 
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
@@ -21,7 +23,7 @@ public class Board {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    public List<BoardList> lists;
+    public List<BoardList> lists = new ArrayList<>();
 
     private Board(){}
 

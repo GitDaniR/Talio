@@ -6,7 +6,7 @@
 <?import javafx.scene.text.Text?>
 
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddListCtrl">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddListCtrl">
    <children>
       <Button layoutX="518.0" layoutY="347.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
       <Button layoutX="438.0" layoutY="347.0" mnemonicParsing="false" onAction="#addList" text="Save List" />

@@ -60,7 +60,7 @@ public class ServerUtils {
 
 //    public List<BoardList> getBoardListById(){
 //        return ClientBuilder.newClient(new ClientConfig())
-//                .target(SERVER).path("api/lists/")
+//                .target(server).path("api/lists/")
 //                .request(APPLICATION_JSON)
 //                .accept(APPLICATION_JSON)
 //                .get(new GenericType<List<BoardList>>() {});
@@ -80,6 +80,15 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .delete();
+    }
+
+    public void deleteCard(Integer id){
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/cards/"+id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .delete();
+
     }
 
     public void updateBoardListTitle(Integer id, String title){
@@ -102,7 +111,12 @@ public class ServerUtils {
     }
 
     public Card addCard(Card card) {
-        return null;
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/cards") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(card, APPLICATION_JSON), Card.class);
+
     }
 
     //Changes the SERVER variable and updates it with the new server
