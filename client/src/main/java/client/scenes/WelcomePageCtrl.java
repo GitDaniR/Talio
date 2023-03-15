@@ -18,7 +18,12 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class WelcomePageCtrl {
     private final ServerUtils server;
@@ -27,15 +32,46 @@ public class WelcomePageCtrl {
     @FXML
     private TextField chosenServer;
 
+    @FXML
+    private Label connectionLabel;
+
     @Inject
     public WelcomePageCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
 
+    // Connects to the server the user inputs in the field "chosenServer"
     public void connectToChosenServer() {
-        // For now, it just sends you to the main board.
-        // Eventually it will get the string from chosenServer and change the server host.
-        mainCtrl.showWorkspace();
+
+        if(testServerConnection()) {
+            server.setServer("http://" + chosenServer.getText() + "/");
+            mainCtrl.showWorkspace();
+        }
+        else {
+            connectionLabel.setText("Connection Failed: Server unreachable or wrong input format");
+        }
+
     }
+
+    // It checks if the server address the user inputs is reachable. If yes, then it returns true.
+    public boolean testServerConnection() {
+        try {
+            URL url = new URL("http://" + chosenServer.getText() + "/api/boards/");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setConnectTimeout(5000);
+
+            int responseCode = connection.getResponseCode();
+            connection.disconnect();
+
+            // If the responseCode == 200 => server is reachable
+            return responseCode == HttpURLConnection.HTTP_OK;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
 }
