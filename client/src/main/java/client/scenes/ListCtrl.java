@@ -43,7 +43,7 @@ public class ListCtrl extends AnchorPane implements Initializable{
 
     public void deleteList(){
         server.deleteBoardList(boardList.id);
-        mainCtrl.deleteList();
+        mainCtrl.refreshBaordOverview();
     }
 
     public void editList(){

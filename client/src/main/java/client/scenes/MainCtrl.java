@@ -22,6 +22,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.util.Timer;
+
 public class MainCtrl {
 
     private Stage primaryStage;
@@ -42,6 +44,9 @@ public class MainCtrl {
 
     private double windowHeight;
     private double windowWidth;
+
+    //Maintain the current running timer so se can stop it when changing views/exiting the app
+    private Timer currentTimer;
 
 
     public void initialize(Stage primaryStage,
@@ -85,7 +90,7 @@ public class MainCtrl {
         primaryStage.setTitle("A new card");
         addCardCtrl.setList(list);
         primaryStage.setScene(addCard);
-
+        cancelTimer();
     }
 
     public void showBoard() {
@@ -94,28 +99,39 @@ public class MainCtrl {
         primaryStage.setTitle("Board Overview");
         primaryStage.setScene(board);
         boardOverviewCtrl.refresh();
-        //setWindowSize();
-
+        cancelTimer();
+        currentTimer = boardOverviewCtrl.startTimer();
     }
 
     public void showAddList(Board boardToAddTo) {
         primaryStage.setTitle("Adding List");
         primaryStage.setScene(addList);
         addListCtrl.setBoardToAddTo(boardToAddTo);
+        cancelTimer();
     }
 
     public void showEditList(BoardList boardListToEdit){
         primaryStage.setTitle("Editing List");
         primaryStage.setScene(editList);
         editListCtrl.setBoardListToEdit(boardListToEdit);
+        cancelTimer();
     }
 
-    public void deleteList(){
-        boardOverviewCtrl.refresh();
-    }
 
     public void showWelcomePage() {
         primaryStage.setTitle("Welcome Page");
         primaryStage.setScene(welcomePage);
+        cancelTimer();
+    }
+
+    public void refreshBaordOverview(){
+        boardOverviewCtrl.refresh();
+    }
+
+    //Method to cancel any timer currently running
+    //We should cancel the timer any time we switch views
+    public void cancelTimer(){
+        if(currentTimer == null) return;
+        currentTimer.cancel();
     }
 }

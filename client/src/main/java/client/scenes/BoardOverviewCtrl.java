@@ -51,7 +51,6 @@ public class BoardOverviewCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         //Setting the first board as the main board
         //I tried to get the first boards of all boards but didn't work
-        startTimer();
     }
 
     public void addList() {
