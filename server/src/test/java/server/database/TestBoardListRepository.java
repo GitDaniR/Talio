@@ -22,6 +22,8 @@ public class TestBoardListRepository implements BoardListRepository{
     public static final String SAVE = "Save";
     public static final String DELETE_BY_ID = "Delete By Id";
 
+    public static final String UPDATE_TITLE_BY_ID = "Update Title By Id";
+
     private List<String> calls;
     private List<BoardList> boardLists;
 
@@ -48,7 +50,13 @@ public class TestBoardListRepository implements BoardListRepository{
 
     @Override
     public void updateListById(Integer id, String title) {
-
+        call(UPDATE_TITLE_BY_ID);
+        for (BoardList b : this.boardLists) {
+            if (b.id == id) {
+                b.title = title;
+                break;
+            }
+        }
     }
 
     @Override

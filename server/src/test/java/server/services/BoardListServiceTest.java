@@ -51,7 +51,7 @@ class BoardListServiceTest {
         expected.add(l2);
         expected.add(l3);
         List<String> expectedCalls = new ArrayList<>();
-        expectedCalls.add(TestBoardRepository.FIND_ALL);
+        expectedCalls.add(TestBoardListRepository.FIND_ALL);
         assertEquals(expected, result);
         assertEquals(expectedCalls, listRepo.getCalls());
     }
@@ -61,7 +61,7 @@ class BoardListServiceTest {
         BoardList l4 = new BoardList(4, "Fourth", b1, 0);
         BoardList expected = sut.add(l4);
         List<String> expectedCalls = new ArrayList<>();
-        expectedCalls.add(TestBoardRepository.SAVE);
+        expectedCalls.add(TestBoardListRepository.SAVE);
         assertEquals(expected, l4);
         assertEquals(expectedCalls, listRepo.getCalls());
     }
@@ -78,9 +78,9 @@ class BoardListServiceTest {
     public void testDeleteByIdSuccess() throws Exception {
         BoardList result = sut.deleteById(2);
         List<String> expectedCalls = new ArrayList<>();
-        expectedCalls.add(TestBoardRepository.EXISTS_BY_ID);
-        expectedCalls.add(TestBoardRepository.FIND_BY_ID);
-        expectedCalls.add(TestBoardRepository.DELETE_BY_ID);
+        expectedCalls.add(TestBoardListRepository.EXISTS_BY_ID);
+        expectedCalls.add(TestBoardListRepository.FIND_BY_ID);
+        expectedCalls.add(TestBoardListRepository.DELETE_BY_ID);
         assertEquals(l2, result);
         assertEquals(expectedCalls, listRepo.getCalls());
     }
@@ -95,12 +95,19 @@ class BoardListServiceTest {
     @Test
     public void testDeleteByIdNonExistent() throws Exception {
         List<String> expectedCalls = new ArrayList<>();
-        expectedCalls.add(TestBoardRepository.EXISTS_BY_ID);
+        expectedCalls.add(TestBoardListRepository.EXISTS_BY_ID);
         assertThrows(Exception.class, () -> sut.deleteById(100));
         assertEquals(expectedCalls, listRepo.getCalls());
     }
 
     @Test
-    void updateTitleById() {
+    public void testUpdateTitleByIdSuccess() throws Exception {
+        List<String> expectedCalls = new ArrayList<>();
+        String expected = "List title has been updated successfully.";
+        String response = sut.updateTitleById(1, "New First");
+        expectedCalls.add(TestBoardListRepository.EXISTS_BY_ID);
+        expectedCalls.add(TestBoardListRepository.UPDATE_TITLE_BY_ID);
+        assertEquals(expectedCalls, listRepo.getCalls());
+        assertEquals(expected, response);
     }
 }
