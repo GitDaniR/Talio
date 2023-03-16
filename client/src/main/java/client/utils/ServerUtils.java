@@ -58,13 +58,19 @@ public class ServerUtils {
                 .get(new GenericType<List<BoardList>>() {});
     }
 
-//    public List<BoardList> getBoardListById(){
+    public BoardList getBoardListById(int id){
+        List<BoardList> lists = getBoardLists();
+        for(BoardList l: lists){
+            if(l.id == id) return l;
+        }
+        //just throwing an unchecked exception for when the board is not found
+        throw new NullPointerException();
 //        return ClientBuilder.newClient(new ClientConfig())
-//                .target(server).path("api/lists/")
+//                .target(server).path("api/lists/" + id)
 //                .request(APPLICATION_JSON)
 //                .accept(APPLICATION_JSON)
-//                .get(new GenericType<List<BoardList>>() {});
-//    }
+//                .get(new GenericType<BoardList>() {});
+    }
 
     public BoardList addBoardList(BoardList list) {
         return ClientBuilder.newClient(new ClientConfig()) //
@@ -106,6 +112,14 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<List<Card>>() {});
+    }
+
+    public Card getCardById(int id) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+            .target(server).path("api/cards/"+id) //
+            .request(APPLICATION_JSON) //
+            .accept(APPLICATION_JSON) //
+            .get(new GenericType<Card>() {});
     }
 
     public Card addCard(Card card) {

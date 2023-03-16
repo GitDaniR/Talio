@@ -23,6 +23,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.util.Timer;
+
 public class MainCtrl {
 
     private Stage primaryStage;
@@ -46,6 +48,12 @@ public class MainCtrl {
 
     private double windowHeight;
     private double windowWidth;
+
+    //Maintain the current running timer so se can stop it when changing views/exiting the app
+    private Timer currentTimer;
+
+    //a const to easily manage the refresh rate of auto-sync
+    public static final int REFRESH_RATE = 500;
 
 
     public void initialize(Stage primaryStage,
@@ -93,7 +101,7 @@ public class MainCtrl {
         primaryStage.setTitle("A new card");
         addCardCtrl.setList(list);
         primaryStage.setScene(addCard);
-
+        cancelTimer();
     }
 
     public void showBoard() {
@@ -102,38 +110,51 @@ public class MainCtrl {
         primaryStage.setTitle("Board Overview");
         primaryStage.setScene(board);
         boardOverviewCtrl.refresh();
-        //setWindowSize();
-
+        cancelTimer();
+        currentTimer = boardOverviewCtrl.startTimer(REFRESH_RATE);
     }
 
     public void showAddList(Board boardToAddTo) {
         primaryStage.setTitle("Adding List");
         primaryStage.setScene(addList);
         addListCtrl.setBoardToAddTo(boardToAddTo);
+        cancelTimer();
     }
 
     public void showEditList(BoardList boardListToEdit){
         primaryStage.setTitle("Editing List");
         primaryStage.setScene(editList);
         editListCtrl.setBoardListToEdit(boardListToEdit);
-    }
-
-    public void deleteList(){
-        boardOverviewCtrl.refresh();
+        cancelTimer();
+        currentTimer = editListCtrl.startTimer(REFRESH_RATE);
     }
 
     public void showWelcomePage() {
         primaryStage.setTitle("Welcome Page");
         primaryStage.setScene(welcomePage);
-    }
-
-    public void deleteCard() {
-        boardOverviewCtrl.refresh();
+        cancelTimer();
     }
 
     public void showEditCard(Card cardToEdit) {
         primaryStage.setTitle("Editing Card");
         primaryStage.setScene(editCard);
         editCardCtrl.setCardToEdit(cardToEdit);
+        cancelTimer();
+        editCardCtrl.startTimer(REFRESH_RATE);
+    }
+
+    public void refreshBoardOverview(){
+        boardOverviewCtrl.refresh();
+    }
+
+    //Method to cancel any timer currently running
+    //We should cancel the timer any time we switch views
+    public void cancelTimer(){
+        if(currentTimer == null) return;
+        currentTimer.cancel();
+    }
+
+    public void deleteCard() {
+        boardOverviewCtrl.refresh();
     }
 }
