@@ -25,11 +25,11 @@ class BoardListServiceTest {
     void setUp() {
         listRepo = new TestBoardListRepository();
         boardRepo = new TestBoardRepository();
-        b1 = new Board("Main Board", "123");
+        b1 = new Board(0, "Main Board", "123", new ArrayList<>());
         boardRepo.save(b1);
-        l1 = new BoardList("First", b1, 0);
-        l2 = new BoardList("Second", b1, 0);
-        l3 = new BoardList("Third", b1, 0);
+        l1 = new BoardList(1, "First", b1, 0);
+        l2 = new BoardList(2, "Second", b1, 0);
+        l3 = new BoardList(3, "Third", b1, 0);
         boardLists = new ArrayList<>();
         boardLists.add(l1);
         boardLists.add(l2);
@@ -58,7 +58,7 @@ class BoardListServiceTest {
 
     @Test
     void testAddSuccessful() throws Exception {
-        BoardList l4 = new BoardList("Fourth", b1, 0);
+        BoardList l4 = new BoardList(4, "Fourth", b1, 0);
         BoardList expected = sut.add(l4);
         List<String> expectedCalls = new ArrayList<>();
         expectedCalls.add(TestBoardRepository.SAVE);
@@ -68,14 +68,21 @@ class BoardListServiceTest {
 
     @Test
     public void testAddInvalidTitle() throws Exception {
-        BoardList l4 = new BoardList(null, b1, 0);
+        BoardList l4 = new BoardList(4, null, b1, 0);
         List<String> expectedCalls = new ArrayList<>();
         assertThrows(Exception.class, () -> sut.add(l4));
         assertEquals(expectedCalls, listRepo.getCalls());
     }
 
     @Test
-    void deleteById() {
+    public void testDeleteByIdSuccess() throws Exception {
+        BoardList result = sut.deleteById(2);
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestBoardRepository.EXISTS_BY_ID);
+        expectedCalls.add(TestBoardRepository.FIND_BY_ID);
+        expectedCalls.add(TestBoardRepository.DELETE_BY_ID);
+        assertEquals(l2, result);
+        assertEquals(expectedCalls, listRepo.getCalls());
     }
 
     @Test
