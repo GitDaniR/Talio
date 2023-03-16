@@ -1,6 +1,7 @@
 package commons;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -24,6 +25,15 @@ public class Board {
             orphanRemoval = true
     )
     public List<BoardList> lists = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "usersJoinedBoard",
+            joinColumns = @JoinColumn(name = "boardId"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    @JsonIgnore
+    public List<User> usersJoinedBoard = new ArrayList<>();
 
     private Board(){}
 
