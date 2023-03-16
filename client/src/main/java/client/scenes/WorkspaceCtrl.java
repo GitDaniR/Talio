@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import commons.Board;
 import commons.BoardList;
+import commons.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -43,11 +44,12 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     public void createBoard(){
-        mainCtrl.showNewBoard();
+        mainCtrl.showNewBoard(userID);
     }
 
     public void setUser(int userID){
-        this.userID = userID;
+       this.userID = userID;
+
     }
 
     @Override
@@ -62,14 +64,14 @@ public class WorkspaceCtrl implements Initializable {
         return ctrl;
 
     }
-
     private void addBoardToJoined(Node boardObject){
         // vbox with all joined boards is at index 2
         ((VBox)preview.getChildren().get(2)).getChildren().add(boardObject);
     }
 
     public void refresh(){
-        List<Board> boards = server.getBoardsByUserID(userID);
+        var user = server.getUserById(this.userID);
+        List<Board> boards = user.boardsJoinedByUser;
         data = FXCollections.observableList(boards);
 
         for(Board board: boards){
