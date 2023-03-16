@@ -110,4 +110,11 @@ class BoardListServiceTest {
         assertEquals(expectedCalls, listRepo.getCalls());
         assertEquals(expected, response);
     }
+
+    @Test
+    public void testUpdateTitleByIdInvalidId() throws Exception {
+        List<String> expectedCalls = new ArrayList<>();
+        assertThrows(Exception.class, () -> sut.updateTitleById(-1, "New First"));
+        assertEquals(expectedCalls, listRepo.getCalls());
+    }
 }
