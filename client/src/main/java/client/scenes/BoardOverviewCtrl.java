@@ -3,7 +3,6 @@ package client.scenes;
 import client.utils.ServerUtils;
 
 import java.io.IOException;
-import java.util.*;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.BoardList;
