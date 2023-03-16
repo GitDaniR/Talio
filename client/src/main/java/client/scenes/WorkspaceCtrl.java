@@ -5,6 +5,8 @@ import commons.Board;
 import commons.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -14,6 +16,7 @@ import javax.inject.Inject;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -31,9 +34,10 @@ public class WorkspaceCtrl implements Initializable {
     private ObservableList<Board> data;
     @FXML
     private Button createBoard;
-
     @FXML
     private Button joinBoard;
+    @FXML
+    private Button disconnectButton;
     @FXML
     private AnchorPane preview;
     @Inject
@@ -47,10 +51,13 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     public void setUser(String username){
-            this.user = server.getUserByUsername(username);
-            if(this.user == null)
-                this.user = server.addUser(new User(username));
+        this.user = server.getUserByUsername(username);
+        if(this.user == null)this.user = server.addUser(new User(username));
 
+    }
+    // disconnects the user
+    public void disconnect(){
+        mainCtrl.showWelcomePage();
     }
 
     @Override
@@ -65,23 +72,40 @@ public class WorkspaceCtrl implements Initializable {
         return ctrl;
 
     }
-    private void addBoardToJoined(Node boardObject){
-        // vbox with all joined boards is at index 2
-        ((VBox)preview.getChildren().get(2)).getChildren().add(boardObject);
+
+    // ads the board to list of joined boards
+    private void addBoardToJoined(Node boardObject, int indexOfBoard){
+        // vbox with all joined boards is at index 3
+        ((VBox)preview.getChildren().get(3)).getChildren().add(boardObject);
+        HBox boardVbox = (HBox) boardObject;
+        int userId = this.user.id;
+        ((Button)(boardVbox.getChildren().get(1))).setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                server.removeBoardFromJoined(userId, data.get(indexOfBoard).id);
+                refresh();
+
+            }
+        });
+    }
+
+    private void clearJoinedBoards(){
+        ((VBox)preview.getChildren().get(3)).getChildren().clear();
     }
 
     public void refresh(){
-        var user = server.getUserByUsername(this.user.username);
+
+        this.user = server.getUserByUsername(this.user.username);
         List<Board> boards = user.boardsJoinedByUser;
         data = FXCollections.observableList(boards);
-
+        clearJoinedBoards();
         for(Board board: boards){
             FXMLLoader boardDummyLoader = new FXMLLoader(getClass().
                     getResource("boardWorkspaceDummy.fxml"));
             try {
                 Node boardObject = boardDummyLoader.load();
                 BoardDummy boardCtrl = setCtrl(boardDummyLoader, board);
-                addBoardToJoined(boardObject);
+                addBoardToJoined(boardObject, boards.indexOf(board));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

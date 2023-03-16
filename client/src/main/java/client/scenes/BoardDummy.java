@@ -19,6 +19,7 @@ public class BoardDummy implements Initializable {
     @FXML
     private Button leaveButton;
 
+
     private Board board;
 
     private ServerUtils server;
