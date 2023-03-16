@@ -50,12 +50,20 @@ public class WorkspaceCtrl implements Initializable {
         mainCtrl.showNewBoard(this.user);
     }
 
+    /**
+     * Method that sets the user for the workspace
+     * @param username - username of the user
+     */
     public void setUser(String username){
         this.user = server.getUserByUsername(username);
         if(this.user == null)this.user = server.addUser(new User(username));
 
     }
-    // disconnects the user
+
+    /**
+     * Method that disconnects the user and redirect to
+     * welcome page
+     */
     public void disconnect(){
         mainCtrl.showWelcomePage();
     }
@@ -65,6 +73,13 @@ public class WorkspaceCtrl implements Initializable {
 
     }
 
+    /**
+     * Method that sets controller for the javaFX object
+     * that represent joined board
+     * @param boardLoader
+     * @param board
+     * @return
+     */
     private BoardDummy setCtrl(FXMLLoader boardLoader, Board board){
         BoardDummy ctrl = boardLoader.getController();
         ctrl.setServerAndCtrl(server, mainCtrl);
@@ -73,7 +88,12 @@ public class WorkspaceCtrl implements Initializable {
 
     }
 
-    // ads the board to list of joined boards
+    /**
+     * Method that adds Board to the list of joined boards
+     * in the preview
+     * @param boardObject - board scene to be added
+     * @param indexOfBoard - index of the board in the data
+     */
     private void addBoardToJoined(Node boardObject, int indexOfBoard){
         // vbox with all joined boards is at index 3
         ((VBox)preview.getChildren().get(3)).getChildren().add(boardObject);
@@ -84,15 +104,21 @@ public class WorkspaceCtrl implements Initializable {
             public void handle(ActionEvent event) {
                 server.removeBoardFromJoined(userId, data.get(indexOfBoard).id);
                 refresh();
-
             }
         });
     }
 
+    /**
+     * Method that clears the preview and removes all boards
+     * from the preview
+     */
     private void clearJoinedBoards(){
         ((VBox)preview.getChildren().get(3)).getChildren().clear();
     }
 
+    /**
+     * Method that refreshes the preview
+     */
     public void refresh(){
 
         this.user = server.getUserByUsername(this.user.username);

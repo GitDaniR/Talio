@@ -124,6 +124,10 @@ public class MainCtrl {
         primaryStage.setWidth(windowWidth);
     }
 
+    /**
+     * Method that starts scene for adding cards to the BoardList
+     * @param list - BoardList to add cards to
+     */
     public void showAddCard(BoardList list) {
         primaryStage.setTitle("A new card");
         addCardCtrl.setList(list);
@@ -131,6 +135,10 @@ public class MainCtrl {
 
     }
 
+    /**
+     * Method that opens new(empty) board for the user
+     * @param user - user creating the board
+     */
     public void showNewBoard(User user){
         primaryStage.setTitle("Board");
         primaryStage.setScene(board);
@@ -141,21 +149,29 @@ public class MainCtrl {
         boardOverviewCtrl.refresh();
     }
 
+    /**
+     * Method that starts the scene showing the board
+     */
     public void showBoard() {
-        //storeWindowSize(primaryStage.getScene());
         primaryStage.setTitle("Board Overview");
         primaryStage.setScene(board);
         boardOverviewCtrl.refresh();
-        //setWindowSize();
-
     }
 
+    /**
+     * Method that starts adding list scene
+     * @param boardToAddTo - board that you add lists to
+     */
     public void showAddList(Board boardToAddTo) {
         primaryStage.setTitle("Adding List");
         primaryStage.setScene(addList);
         addListCtrl.setBoardToAddTo(boardToAddTo);
     }
 
+    /**
+     * Method that starts editing list scene
+     * @param boardListToEdit - BoardList to be edited
+     */
     public void showEditList(BoardList boardListToEdit){
         primaryStage.setTitle("Editing List");
         primaryStage.setScene(editList);
@@ -166,11 +182,18 @@ public class MainCtrl {
         boardOverviewCtrl.refresh();
     }
 
+    /**
+     * Method that starts welcome page
+     */
     public void showWelcomePage() {
         primaryStage.setTitle("Welcome Page");
         primaryStage.setScene(welcomePage);
     }
 
+    /**
+     * Method that starts workspace scene for the user
+     * @param username - username of the user
+     */
     public void showWorkspace(String username) {
         primaryStage.setTitle("Workspace");
         primaryStage.setScene(workspace);
@@ -182,6 +205,10 @@ public class MainCtrl {
         boardOverviewCtrl.refresh();
     }
 
+    /**
+     * Method that starts the editing scene for the card
+     * @param cardToEdit - card to be edited
+     */
     public void showEditCard(Card cardToEdit) {
         primaryStage.setTitle("Editing Card");
         primaryStage.setScene(editCard);
