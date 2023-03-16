@@ -41,7 +41,7 @@ class BoardListServiceTest {
     }
 
     @Test
-    void findAll() {
+    void testFindAll() {
         List<BoardList> result = sut.findAll();
         List<BoardList> expected = new ArrayList<>();
         expected.add(l1);
@@ -54,7 +54,13 @@ class BoardListServiceTest {
     }
 
     @Test
-    void add() {
+    void testAddSuccessful() throws Exception {
+        BoardList l4 = new BoardList("Fourth");
+        BoardList expected = sut.add(l4);
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestBoardRepository.SAVE);
+        assertEquals(expected, l4);
+        assertEquals(expectedCalls, listRepo.getCalls());
     }
 
     @Test
