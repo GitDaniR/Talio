@@ -182,4 +182,18 @@ public class ServerUtils {
 
     }
 
+    /**
+     * Method which deletes board from list of joined boards by the user
+     * @param userId -  id of the user
+     * @param boardId - id of the board
+     */
+    public void removeBoardFromJoined(Integer userId, Integer boardId){
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/users/"+userId+"/boards/"+boardId) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .delete();
+
+    }
+
 }
