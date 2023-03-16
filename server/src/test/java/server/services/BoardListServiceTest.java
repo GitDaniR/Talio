@@ -1,5 +1,6 @@
 package server.services;
 
+import commons.Board;
 import commons.BoardList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,6 +42,15 @@ class BoardListServiceTest {
 
     @Test
     void findAll() {
+        List<BoardList> result = sut.findAll();
+        List<BoardList> expected = new ArrayList<>();
+        expected.add(l1);
+        expected.add(l2);
+        expected.add(l3);
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestBoardRepository.FIND_ALL);
+        assertEquals(expected, result);
+        assertEquals(expectedCalls, listRepo.getCalls());
     }
 
     @Test
