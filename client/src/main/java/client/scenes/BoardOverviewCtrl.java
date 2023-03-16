@@ -26,6 +26,8 @@ import javafx.scene.layout.VBox;
 import java.net.URL;
 import java.util.Collections;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class BoardOverviewCtrl implements Initializable {
