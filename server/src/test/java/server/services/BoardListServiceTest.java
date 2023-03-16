@@ -117,4 +117,12 @@ class BoardListServiceTest {
         assertThrows(Exception.class, () -> sut.updateTitleById(-1, "New First"));
         assertEquals(expectedCalls, listRepo.getCalls());
     }
+
+    @Test
+    public void testUpdateTitleByIdNonExistent() throws Exception {
+        List<String> expectedCalls = new ArrayList<>();
+        assertThrows(Exception.class, () -> sut.updateTitleById(100, "New First"));
+        expectedCalls.add(TestBoardListRepository.EXISTS_BY_ID);
+        assertEquals(expectedCalls, listRepo.getCalls());
+    }
 }
