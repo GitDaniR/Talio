@@ -152,6 +152,19 @@ public class ServerUtils {
     }
 
     /**
+     * Method that gets the user by its username
+     * @param username
+     * @return
+     */
+    public User getUserByUsername(String username){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/users/"+username) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<User>() {});
+    }
+
+    /**
      * Method that assigns board with the BoardID to the list of
      * joined boards by the user with UserID
      * @param userID - id of the user in the database
