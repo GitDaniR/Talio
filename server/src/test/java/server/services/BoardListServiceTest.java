@@ -86,6 +86,13 @@ class BoardListServiceTest {
     }
 
     @Test
+    public void testDeleteByIdInvalid() throws Exception {
+        List<String> expectedCalls = new ArrayList<>();
+        assertThrows(Exception.class, () -> sut.deleteById(-1));
+        assertEquals(expectedCalls, listRepo.getCalls());
+    }
+
+    @Test
     void updateTitleById() {
     }
 }
