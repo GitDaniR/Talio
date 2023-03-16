@@ -125,4 +125,12 @@ class BoardListServiceTest {
         expectedCalls.add(TestBoardListRepository.EXISTS_BY_ID);
         assertEquals(expectedCalls, listRepo.getCalls());
     }
+
+    @Test
+    public void testUpdateTitleByIdInvalidTitle() throws Exception {
+        List<String> expectedCalls = new ArrayList<>();
+        assertThrows(Exception.class, () -> sut.updateTitleById(1, null));
+        expectedCalls.add(TestBoardListRepository.EXISTS_BY_ID);
+        assertEquals(expectedCalls, listRepo.getCalls());
+    }
 }
