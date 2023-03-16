@@ -2,8 +2,6 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Board;
-import commons.BoardList;
-import commons.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -47,10 +45,7 @@ public class WorkspaceCtrl implements Initializable {
         mainCtrl.showNewBoard(userID);
     }
 
-    public void setUser(int userID){
-       this.userID = userID;
-
-    }
+    public void setUser(int userID){this.userID = userID;}
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -75,7 +70,8 @@ public class WorkspaceCtrl implements Initializable {
         data = FXCollections.observableList(boards);
 
         for(Board board: boards){
-            FXMLLoader boardDummyLoader = new FXMLLoader(getClass().getResource("boardWorkspaceDummy.fxml"));
+            FXMLLoader boardDummyLoader = new FXMLLoader(getClass().
+                    getResource("boardWorkspaceDummy.fxml"));
             try {
                 Node boardObject = boardDummyLoader.load();
                 BoardDummy boardCtrl = setCtrl(boardDummyLoader, board);

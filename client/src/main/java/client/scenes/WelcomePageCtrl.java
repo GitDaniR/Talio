@@ -49,7 +49,6 @@ public class WelcomePageCtrl {
 
     // Connects to the server the user inputs in the field "chosenServer"
     public void connectToChosenServer() {
-
         if(testServerConnection()) {
             connectionLabel.setText("");
             if(testUserID()){

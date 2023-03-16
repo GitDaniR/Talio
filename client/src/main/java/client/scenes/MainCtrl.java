@@ -131,19 +131,18 @@ public class MainCtrl {
 
     }
 
-    public void showNewBoard(){
+    public void showNewBoard(int userID){
         primaryStage.setTitle("Board");
         primaryStage.setScene(board);
         Board newBoard = new Board("Board",generatePassword());
         boardOverviewCtrl.setBoard(newBoard);
         boardOverviewCtrl.saveBoardInDatabase();
+        boardOverviewCtrl.assignToUser(userID);
         boardOverviewCtrl.refresh();
-
     }
 
     public void showBoard() {
         //storeWindowSize(primaryStage.getScene());
-
         primaryStage.setTitle("Board Overview");
         primaryStage.setScene(board);
         boardOverviewCtrl.refresh();
@@ -171,7 +170,6 @@ public class MainCtrl {
         primaryStage.setTitle("Welcome Page");
         primaryStage.setScene(welcomePage);
     }
-
 
     public void showWorkspace(Integer userID) {
         primaryStage.setTitle("Workspace");
