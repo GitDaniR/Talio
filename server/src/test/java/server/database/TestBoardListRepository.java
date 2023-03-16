@@ -1,5 +1,6 @@
 package server.database;
 
+import commons.Board;
 import commons.BoardList;
 import commons.Card;
 import org.springframework.data.domain.Example;
@@ -29,6 +30,22 @@ public class TestBoardListRepository implements BoardListRepository{
         this.boardLists = new ArrayList<>();
     }
 
+    public void call(String method) {
+        this.calls.add(method);
+    }
+
+    public List<String> getCalls() {
+        return this.calls;
+    }
+
+    public void setBoardLists(List<BoardList> cards){
+        this.boardLists = cards;
+    }
+
+    public List<BoardList> getBoardLists(){
+        return this.boardLists;
+    }
+
     @Override
     public void updateListById(Integer id, String title) {
 
@@ -36,7 +53,8 @@ public class TestBoardListRepository implements BoardListRepository{
 
     @Override
     public List<BoardList> findAll() {
-        return null;
+        call(FIND_ALL);
+        return this.boardLists;
     }
 
     @Override
@@ -61,7 +79,12 @@ public class TestBoardListRepository implements BoardListRepository{
 
     @Override
     public void deleteById(Integer integer) {
-
+        call(DELETE_BY_ID);
+        for (BoardList b : this.boardLists) {
+            if (b.id == integer) {
+                this.boardLists.remove(b);
+            }
+        }
     }
 
     @Override
@@ -86,6 +109,9 @@ public class TestBoardListRepository implements BoardListRepository{
 
     @Override
     public <S extends BoardList> S save(S entity) {
+        call(SAVE);
+        entity.id = this.boardLists.size();
+        this.boardLists.add(entity);
         return null;
     }
 
@@ -96,12 +122,22 @@ public class TestBoardListRepository implements BoardListRepository{
 
     @Override
     public Optional<BoardList> findById(Integer integer) {
+        calls.add(FIND_BY_ID);
+        for(BoardList b: this.boardLists){
+            if(b.id == integer)
+                return Optional.of(b);
+        }
         return Optional.empty();
     }
 
     @Override
     public boolean existsById(Integer integer) {
-        return integer == 1;
+        call(EXISTS_BY_ID);
+        for (BoardList b : this.boardLists) {
+            if (b.id == integer)
+                return true;
+        }
+        return false;
     }
 
     @Override
