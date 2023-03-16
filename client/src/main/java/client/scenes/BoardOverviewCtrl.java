@@ -7,6 +7,7 @@ import com.google.inject.Inject;
 import commons.Board;
 import commons.BoardList;
 import commons.Card;
+import commons.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -57,8 +58,8 @@ public class BoardOverviewCtrl implements Initializable {
         this.board = server.addBoard(this.board);
     }
 
-    public void assignToUser(int userID){
-        server.assignBoardToUser(userID, this.board.id);
+    public void assignToUser(User user){
+        server.assignBoardToUser(user.id, this.board.id);
     }
 
     public void addList() {

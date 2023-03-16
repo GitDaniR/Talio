@@ -36,7 +36,7 @@ public class WelcomePageCtrl {
     private Label connectionLabel;
 
     @FXML
-    private TextField userID;
+    private TextField username;
 
     @FXML
     private Label userLabel;
@@ -54,7 +54,7 @@ public class WelcomePageCtrl {
             if(testUserID()){
                 userLabel.setText("");
                 server.setServer("http://" + chosenServer.getText() + "/");
-                mainCtrl.showWorkspace(Integer.valueOf(userID.getText()));
+                mainCtrl.showWorkspace(username.getText());
             }else{
                 userLabel.setText("Bad input: UserID consists of numbers only");
             }
@@ -65,18 +65,13 @@ public class WelcomePageCtrl {
         }
 
 
-
-
     }
 
     private boolean testUserID(){
-        if(userID.getText().equals(""))return false;
-        for(int i = 0;i<userID.getText().length();i++){
-            if(!Character.isDigit(userID.getText().charAt(i)))return false;
-        }
+        if(username.equals(""))return false;
         return true;
-
     }
+
 
 
     // It checks if the server address the user inputs is reachable. If yes, then it returns true.

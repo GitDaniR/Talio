@@ -33,12 +33,12 @@
          </font>
       </Text>
       <Label fx:id="connectionLabel" layoutX="126.0" layoutY="272.0" prefHeight="18.0" prefWidth="349.0" textFill="RED" />
-      <Text layoutX="129.0" layoutY="319.0" strokeType="OUTSIDE" strokeWidth="0.0" text="UserID:">
+      <Text layoutX="129.0" layoutY="319.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username:">
          <font>
             <Font size="14.0" />
          </font>
       </Text>
-      <TextField fx:id="userID" layoutX="233.0" layoutY="301.0" prefHeight="26.0" prefWidth="170.0" />
+      <TextField fx:id="username" layoutX="233.0" layoutY="301.0" prefHeight="26.0" prefWidth="170.0" />
       <Label fx:id="userLabel" layoutX="126.0" layoutY="336.0" prefHeight="18.0" prefWidth="349.0" textFill="RED" />
    </children>
 </AnchorPane>

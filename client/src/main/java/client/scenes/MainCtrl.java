@@ -18,6 +18,7 @@ package client.scenes;
 import commons.Board;
 import commons.BoardList;
 import commons.Card;
+import commons.User;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -42,7 +43,6 @@ public class MainCtrl {
 
     private EditListCtrl editListCtrl;
     private Scene editList;
-
 
     private WorkspaceCtrl workspaceCtrl;
     private Scene workspace;
@@ -131,13 +131,13 @@ public class MainCtrl {
 
     }
 
-    public void showNewBoard(int userID){
+    public void showNewBoard(User user){
         primaryStage.setTitle("Board");
         primaryStage.setScene(board);
         Board newBoard = new Board("Board",generatePassword());
         boardOverviewCtrl.setBoard(newBoard);
         boardOverviewCtrl.saveBoardInDatabase();
-        boardOverviewCtrl.assignToUser(userID);
+        boardOverviewCtrl.assignToUser(user);
         boardOverviewCtrl.refresh();
     }
 
@@ -171,10 +171,10 @@ public class MainCtrl {
         primaryStage.setScene(welcomePage);
     }
 
-    public void showWorkspace(Integer userID) {
+    public void showWorkspace(String username) {
         primaryStage.setTitle("Workspace");
         primaryStage.setScene(workspace);
-        workspaceCtrl.setUser(userID);
+        workspaceCtrl.setUser(username);
         workspaceCtrl.refresh();
     }
 
