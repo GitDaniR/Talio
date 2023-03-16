@@ -57,7 +57,7 @@ public class UserController {
      * @param username
      * @return
      */
-    @GetMapping("/{username}")
+    @GetMapping("/username/{username}")
     public ResponseEntity<User> getByUsername(@PathVariable("username") String username){
         try {
             return this.userService.getByUsername(username);

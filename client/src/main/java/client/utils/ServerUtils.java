@@ -65,13 +65,6 @@ public class ServerUtils {
                 .get(new GenericType<List<BoardList>>() {});
     }
 
-//    public List<BoardList> getBoardListById(){
-//        return ClientBuilder.newClient(new ClientConfig())
-//                .target(server).path("api/lists/")
-//                .request(APPLICATION_JSON)
-//                .accept(APPLICATION_JSON)
-//                .get(new GenericType<List<BoardList>>() {});
-//    }
 
     public BoardList addBoardList(BoardList list) {
         return ClientBuilder.newClient(new ClientConfig()) //
@@ -136,6 +129,15 @@ public class ServerUtils {
         server = chosenServer;
     }
 
+    public User addUser(User user){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/users") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(user, APPLICATION_JSON), User.class);
+
+    }
+
     /**
      * Server method to return the user based on userID
      * @param userID - userID for the User table in databse
@@ -158,7 +160,7 @@ public class ServerUtils {
      */
     public User getUserByUsername(String username){
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(server).path("api/users/"+username) //
+                .target(server).path("api/users/username/"+username) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<User>() {});
