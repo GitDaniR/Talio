@@ -53,6 +53,20 @@ public class UserController {
     }
 
     /**
+     * Method which retrieves user by its username
+     * @param username
+     * @return
+     */
+    @GetMapping("/{username}")
+    public ResponseEntity<User> getByUsername(@PathVariable("username") String username){
+        try {
+            return this.userService.getByUsername(username);
+        } catch(Exception e){
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    /**
      * Method which adds a new user to repo.
      * @param user
      * @return the saved user or BAD_REQUEST
@@ -101,4 +115,8 @@ public class UserController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+
+
+
 }

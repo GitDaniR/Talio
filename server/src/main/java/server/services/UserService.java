@@ -70,6 +70,19 @@ public class UserService {
     }
 
     /**
+     * Method which is retrieving the user based on its username
+     * @param username
+     * @return User object
+     * @throws Exception
+     */
+    public ResponseEntity<User> getByUsername(String username)throws Exception{
+        if(username.equals("")){
+            throw new Exception("Invalid id");
+        }
+        return ResponseEntity.ok(repo.findByUsername(username));
+    }
+
+    /**
      * Method that adds board with the BoardID to the list of
      * joined boards by the user
      * @param userId
