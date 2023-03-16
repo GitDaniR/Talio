@@ -93,7 +93,6 @@ public class UserController {
     @PutMapping(path = "{userId}/boards/{boardId}")
     public ResponseEntity<User> joinBoard(@PathVariable("userId") Integer userId,
                                           @PathVariable("boardId") Integer boardId){
-
         try{
             return this.userService.joinBoard(userId, boardId);
 

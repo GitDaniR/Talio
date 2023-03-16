@@ -23,6 +23,7 @@ import java.util.List;
 import commons.Board;
 import commons.BoardList;
 import commons.Card;
+import commons.User;
 import org.glassfish.jersey.client.ClientConfig;
 
 import jakarta.ws.rs.client.ClientBuilder;
@@ -135,7 +136,35 @@ public class ServerUtils {
         server = chosenServer;
     }
 
-    public List<Board> getBoardsByUserID(int userID){
-        return List.of(new Board("Board1","123"),new Board( "Board2","123"));
+    /**
+     * Server method to return the user based on userID
+     * @param userID - userID for the User table in databse
+     * @return - User object correcsponding to user
+     * havin id: userID
+     */
+    public User getUserById(int userID){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/users/"+userID) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<User>() {});
+
     }
+
+    /**
+     * Method that assigns board with the BoardID to the list of
+     * joined boards by the user with UserID
+     * @param userID - id of the user in the database
+     * @param boardID - id of the board in the database
+     * @return
+     */
+    public User assignBoardToUser(Integer userID, Integer boardID){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/users/"+userID+"/boards/"+boardID) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(userID, APPLICATION_JSON), User.class);
+
+    }
+
 }
