@@ -6,6 +6,7 @@
 
 <AnchorPane fx:id="preview" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.WorkspaceCtrl">
    <children>
+      <Button layoutX="20.0" layoutY="366.0" mnemonicParsing="false" text="Disconnect" />
       <Button fx:id="createBoard" layoutX="367.0" layoutY="29.0" mnemonicParsing="false" onAction="#createBoard" text="Create board" />
       <Button fx:id="joinBoard" layoutX="497.0" layoutY="29.0" mnemonicParsing="false" text="Join Board" />
       <VBox layoutX="14.0" layoutY="100.0" prefHeight="266.0" prefWidth="571.0" />
