@@ -121,7 +121,6 @@ public class UserController {
                                             @PathVariable("boardId") Integer boardId){
         try{
             return this.userService.removeBoard(userId, boardId);
-
         }
         catch (Exception e){
             return ResponseEntity.badRequest().build();
