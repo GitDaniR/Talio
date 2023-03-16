@@ -64,6 +64,14 @@ class BoardListServiceTest {
     }
 
     @Test
+    public void testAddInvalidTitle() throws Exception {
+        BoardList l4 = new BoardList("Fourth");
+        List<String> expectedCalls = new ArrayList<>();
+        assertThrows(Exception.class, () -> sut.add(l4));
+        assertEquals(expectedCalls, listRepo.getCalls());
+    }
+
+    @Test
     void deleteById() {
     }
 
