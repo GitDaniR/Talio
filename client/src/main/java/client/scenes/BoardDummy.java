@@ -2,9 +2,7 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Board;
-import commons.BoardList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
