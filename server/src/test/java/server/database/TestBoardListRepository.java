@@ -1,17 +1,34 @@
 package server.database;
 
 import commons.BoardList;
+import commons.Card;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
 public class TestBoardListRepository implements BoardListRepository{
+
+    public static final String FIND_ALL = "Find All";
+    public static final String FIND_BY_ID = "Find By Id";
+    public static final String EXISTS_BY_ID = "Exists By Id";
+    public static final String SAVE = "Save";
+    public static final String DELETE_BY_ID = "Delete By Id";
+
+    private List<String> calls;
+    private List<BoardList> boardLists;
+
+    public TestBoardListRepository() {
+        this.calls = new ArrayList<>();
+        this.boardLists = new ArrayList<>();
+    }
+
     @Override
     public void updateListById(Integer id, String title) {
 
