@@ -112,7 +112,7 @@ public class TestBoardListRepository implements BoardListRepository{
         call(SAVE);
         entity.id = this.boardLists.size();
         this.boardLists.add(entity);
-        return null;
+        return entity;
     }
 
     @Override
