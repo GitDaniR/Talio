@@ -4,9 +4,10 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="143.0" style="-fx-border-color: black; -fx-border-width: 4; -fx-background-color: pink;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CardCtrl">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="234.0" style="-fx-border-color: black; -fx-border-width: 4; -fx-background-color: pink;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CardCtrl">
    <children>
-      <Label fx:id="cardTitle" alignment="CENTER" prefHeight="72.0" prefWidth="138.0" text="Default Card Name" />
-      <Button fx:id="delete" mnemonicParsing="false" text="x" />
+      <Label fx:id="cardTitle" alignment="CENTER" prefHeight="42.0" prefWidth="159.0" text="Default Card Name" />
+      <Button fx:id="cardEdit" mnemonicParsing="false" onAction="#editCard" text="Edit" />
+      <Button fx:id="cardDelete" mnemonicParsing="false" onAction="#deleteCard" text="x" />
    </children>
 </HBox>

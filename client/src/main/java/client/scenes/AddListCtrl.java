@@ -65,7 +65,7 @@ public class AddListCtrl {
     }
 
     private BoardList getBoardList() {
-        return new BoardList(title.getText(),boardToAddTo);
+        return new BoardList(title.getText(),boardToAddTo, boardToAddTo.id);
     }
 
     private void clearFields() {

@@ -44,7 +44,7 @@ public class BoardListService {
         if (boardList.title == null) {
             throw new Exception("Invalid title");
         }
-        Board board = this.boardRepository.findById(boardList.board.id).get();
+        Board board = this.boardRepository.findById(boardList.boardId).get();
         board.addBoardList(boardList);
         return this.boardListRepository.save(boardList);
     }

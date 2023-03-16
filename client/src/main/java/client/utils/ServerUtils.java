@@ -31,11 +31,11 @@ import jakarta.ws.rs.core.GenericType;
 
 public class ServerUtils {
 
-    private static final String SERVER = "http://localhost:8080/";
+    private static String server = "http://localhost:8080/";
 
     public List<Board> getBoards(){
         return ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("api/boards/")
+                .target(server).path("api/boards/")
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get(new GenericType<List<Board>>() {});
@@ -44,7 +44,7 @@ public class ServerUtils {
 
     public Board getBoardByID(int id){
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/boards/"+id) //
+                .target(server).path("api/boards/"+id) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<Board>() {});
@@ -52,23 +52,29 @@ public class ServerUtils {
 
     public List<BoardList> getBoardLists() {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/lists") //
+                .target(server).path("api/lists") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<List<BoardList>>() {});
     }
 
-//    public List<BoardList> getBoardListById(){
+    public BoardList getBoardListById(int id){
+        List<BoardList> lists = getBoardLists();
+        for(BoardList l: lists){
+            if(l.id == id) return l;
+        }
+        //just throwing an unchecked exception for when the board is not found
+        throw new NullPointerException();
 //        return ClientBuilder.newClient(new ClientConfig())
-//                .target(SERVER).path("api/lists/")
+//                .target(server).path("api/lists/" + id)
 //                .request(APPLICATION_JSON)
 //                .accept(APPLICATION_JSON)
-//                .get(new GenericType<List<BoardList>>() {});
-//    }
+//                .get(new GenericType<BoardList>() {});
+    }
 
     public BoardList addBoardList(BoardList list) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/lists") //
+                .target(server).path("api/lists") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(list, APPLICATION_JSON), BoardList.class);
@@ -76,32 +82,64 @@ public class ServerUtils {
 
     public void deleteBoardList(Integer id){
         ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/lists/"+id) //
+                .target(server).path("api/lists/"+id) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .delete();
     }
 
+    public void deleteCard(Integer id){
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/cards/"+id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .delete();
+
+    }
+
     public void updateBoardListTitle(Integer id, String title){
         ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/lists/"+id) //
+                .target(server).path("api/lists/"+id) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(title, TEXT_PLAIN), String.class);
         ///Need to edit to add id instead of list and also pass new title
     }
 
-
-    // Dummy placeholder methods for getting and posting cards
     public List<Card> getCards(int listId) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/cards/list/"+listId) //
+                .target(server).path("api/cards/list/"+listId) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<List<Card>>() {});
     }
 
+    public Card getCardById(int id) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+            .target(server).path("api/cards/"+id) //
+            .request(APPLICATION_JSON) //
+            .accept(APPLICATION_JSON) //
+            .get(new GenericType<Card>() {});
+    }
+
     public Card addCard(Card card) {
-        return null;
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/cards") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(card, APPLICATION_JSON), Card.class);
+    }
+
+    public void editCard(Integer id, Card card) {
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/cards/"+id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(card, APPLICATION_JSON), Card.class);
+    }
+
+    //Changes the SERVER variable and updates it with the new server
+    public void setServer(String chosenServer) {
+        server = chosenServer;
     }
 }
