@@ -35,6 +35,11 @@ class BoardListServiceTest {
     }
 
     @Test
+    public void constructorTest() {
+        assertNotNull(sut);
+    }
+
+    @Test
     void findAll() {
     }
 
