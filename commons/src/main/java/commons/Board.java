@@ -28,12 +28,12 @@ public class Board {
 
     @ManyToMany
     @JoinTable(
-            name = "usersJoinedBoard",
+            name = "boardIsJoinedByUser",
             joinColumns = @JoinColumn(name = "boardId"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     @JsonIgnore
-    public List<User> usersJoinedBoard = new ArrayList<>();
+    public List<User> users = new ArrayList<>();
 
     private Board(){}
 
