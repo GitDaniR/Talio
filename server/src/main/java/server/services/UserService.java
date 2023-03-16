@@ -99,4 +99,21 @@ public class UserService {
         return ResponseEntity.ok(user);
     }
 
+    /**
+     * Method which deletes the board from joined boards by the user
+     * @param userId - id of the user
+     * @param boardId - id of the board
+     * @return
+     * @throws Exception
+     */
+    public ResponseEntity<User> removeBoard(Integer userId, Integer boardId) throws Exception{
+        Board board = boardCtrl.getById(boardId).getBody();
+        User user = getById(userId).getBody();
+
+        board.usersJoinedBoard.remove(user);
+        boardRepository.save(board);
+        user = getById(userId).getBody();
+        return ResponseEntity.ok(user);
+    }
+
 }

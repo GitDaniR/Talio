@@ -87,7 +87,7 @@ public class UserController {
      * @param id
      * @return the deleted user or BAD_REQUEST
      */
-    @DeleteMapping(path = { "", "/" })
+    @DeleteMapping(path = { "/{id}" })
     public ResponseEntity<User> deleteById(@PathVariable("id") Integer id) {
         ResponseEntity<User> deletedRecord;
         try {
@@ -114,6 +114,19 @@ public class UserController {
         catch (Exception e){
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    @DeleteMapping(path = "{userId}/boards/{boardId}")
+    public ResponseEntity<User> removeBoard(@PathVariable("userId") Integer userId,
+                                            @PathVariable("boardId") Integer boardId){
+        try{
+            return this.userService.removeBoard(userId, boardId);
+
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
+
     }
 
 
