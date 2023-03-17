@@ -3,11 +3,11 @@ package client.scenes;
 import client.utils.ServerUtils;
 
 import java.io.IOException;
-import java.util.*;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.BoardList;
 import commons.Card;
+import commons.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -48,8 +48,6 @@ public class BoardOverviewCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //Setting the first board as the main board
-        //I tried to get the first boards of all boards but didn't work
     }
 
     public void setBoard(Board board) {
@@ -58,6 +56,10 @@ public class BoardOverviewCtrl implements Initializable {
 
     public void saveBoardInDatabase(){
         this.board = server.addBoard(this.board);
+    }
+
+    public void assignToUser(User user){
+        server.assignBoardToUser(user.id, this.board.id);
     }
 
     public void addList() {
