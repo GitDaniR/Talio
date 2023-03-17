@@ -106,14 +106,15 @@ public class UserService {
      * @return
      * @throws Exception
      */
-    public ResponseEntity<User> removeBoard(Integer userId, Integer boardId) throws Exception{
+    public ResponseEntity<User> removeBoard(Integer userId, Integer boardId) throws Exception {
         Board board = boardCtrl.getById(boardId).getBody();
         User user = getById(userId).getBody();
 
-        board.usersJoinedBoard.remove(user);
+        board.users.remove(user);
         boardRepository.save(board);
         user = getById(userId).getBody();
         return ResponseEntity.ok(user);
+    }
 
     public UserRepository getRepo(){
         return this.repo;

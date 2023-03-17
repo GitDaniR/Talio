@@ -122,7 +122,7 @@ public class WorkspaceCtrl implements Initializable {
     public void refresh(){
 
         this.user = server.getUserByUsername(this.user.username);
-        List<Board> boards = user.boardsJoinedByUser;
+        List<Board> boards = user.boards;
         data = FXCollections.observableList(boards);
         clearJoinedBoards();
         for(Board board: boards){

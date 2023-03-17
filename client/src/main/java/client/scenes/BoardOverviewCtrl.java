@@ -312,7 +312,7 @@ public class BoardOverviewCtrl implements Initializable {
     public void refresh() {
         //If we are dragging we don't want to recreate all cards
         if(isDragging) return;
-        board = server.getBoardByID(1);
+        board = server.getBoardByID(board.id);
         try {
             mainBoard.getChildren().clear();
             var lists = board.lists;

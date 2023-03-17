@@ -58,8 +58,7 @@ public class MainCtrl {
     private Timer currentTimer;
 
     //a const to easily manage the refresh rate of auto-sync
-    public static final int REFRESH_RATE = 500;
-
+    public static final int REFRESH_RATE = 5000;
 
     public void initialize(Stage primaryStage,
             Pair<AddCardCtrl, Parent> addCard,
