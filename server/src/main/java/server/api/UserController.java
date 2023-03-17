@@ -2,7 +2,6 @@ package server.api;
 import commons.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import server.database.UserRepository;
 import server.services.UserService;
 
 import java.util.List;
@@ -11,19 +10,14 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserController {
     private final UserService userService;
-    private final UserRepository repo;
-
-
 
     /**
      * Constructor for UserController which uses UserService and UserRepository.
      *
      * @param userService
-     * @param repo
      */
-    public UserController(UserService userService, UserRepository repo) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.repo = repo;
     }
 
     /**
@@ -32,7 +26,7 @@ public class UserController {
      */
     @GetMapping(path = { "", "/" })
     public List<User> getAll(){
-        return repo.findAll();
+        return userService.getRepo().findAll();
     }
 
     /**

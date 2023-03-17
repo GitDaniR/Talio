@@ -93,7 +93,7 @@ public class UserService {
     public ResponseEntity<User> joinBoard(Integer userId, Integer boardId) throws Exception{
         Board board = boardCtrl.getById(boardId).getBody();
         User user = getById(userId).getBody();
-        board.usersJoinedBoard.add(user);
+        board.users.add(user);
         boardRepository.save(board);
         user = getById(userId).getBody();
         return ResponseEntity.ok(user);
@@ -114,6 +114,10 @@ public class UserService {
         boardRepository.save(board);
         user = getById(userId).getBody();
         return ResponseEntity.ok(user);
+
+    public UserRepository getRepo(){
+        return this.repo;
+
     }
 
 }

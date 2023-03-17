@@ -20,10 +20,10 @@ public class User {
     public String username;
 
     @ManyToMany(
-            mappedBy = "usersJoinedBoard",
+            mappedBy = "users",
             cascade = CascadeType.PERSIST
     )
-    public List<Board> boardsJoinedByUser = new ArrayList<>();
+    public List<Board> boards = new ArrayList<>();
 
 
     public User() {}

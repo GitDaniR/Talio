@@ -8,6 +8,7 @@ import commons.Board;
 import commons.BoardList;
 import commons.Card;
 import commons.User;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -26,6 +27,8 @@ import javafx.scene.layout.VBox;
 import java.net.URL;
 import java.util.Collections;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class BoardOverviewCtrl implements Initializable {
@@ -36,6 +39,8 @@ public class BoardOverviewCtrl implements Initializable {
     private ObservableList<BoardList> data;
 
     private Board board;
+
+    private boolean isDragging = false;
 
     @FXML
     private FlowPane mainBoard;
@@ -64,6 +69,23 @@ public class BoardOverviewCtrl implements Initializable {
 
     public void addList() {
         mainCtrl.showAddList(board);
+    }
+    //A method to start the timer for auto-synchronization and return the instance
+    //so that the caller can then control the timer
+    public Timer startTimer(int refreshRate){
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                //Since apparently we can't add or remove JavaFX objects on another thread
+                //auto-synchronization needs to be done on the same Thread so we need to use
+                //Platform.runLater  It runs the specified task on the main thread when available
+                Platform.runLater(()->{
+                    refresh();
+                });
+            }
+        }, 0, refreshRate);
+        return timer;
     }
 
     /**
@@ -139,6 +161,7 @@ public class BoardOverviewCtrl implements Initializable {
 
     // method that stops showing preview when dragging is finished
     private void removePreview(final FlowPane board){
+        isDragging = false;
         board.setOnMouseDragged(null);
         board.getChildren().remove(board.getUserData());
         board.setUserData(null);
@@ -187,9 +210,7 @@ public class BoardOverviewCtrl implements Initializable {
             card.setList(finalList);
             server.addCard(card);
         }
-
         refresh();
-
     }
     // method that handles the drag event on the list
     private void setDragReleaseList(Node list){
@@ -242,6 +263,7 @@ public class BoardOverviewCtrl implements Initializable {
         {
             @Override
             public void handle(MouseEvent event) {
+                isDragging = true;
                 card.startFullDrag();
                 addPreview(mainBoard, card);
             }
@@ -276,7 +298,6 @@ public class BoardOverviewCtrl implements Initializable {
                     else
                         indexOfDropTarget = droppedCardsSection.getChildren().size();
                 }
-
                 adjustCards(indexOfInitialList, indexOfList,
                         indexOfDraggingNode, indexOfDropTarget);
                 event.consume();
@@ -289,7 +310,9 @@ public class BoardOverviewCtrl implements Initializable {
     // end of Drag&Drop
 
     public void refresh() {
-        board = server.getBoardByID(board.id);
+        //If we are dragging we don't want to recreate all cards
+        if(isDragging) return;
+        board = server.getBoardByID(1);
         try {
             mainBoard.getChildren().clear();
             var lists = board.lists;
@@ -312,11 +335,12 @@ public class BoardOverviewCtrl implements Initializable {
                 setDragReleaseList(listObject);
             }
         } catch (Exception e){
-            System.out.print("IO Exception");
+            e.printStackTrace();
+            System.out.print(e.getMessage());
         }
     }
 
     public void disconnectFromServer() {
-        refresh();
+        mainCtrl.showWelcomePage();
     }
 }

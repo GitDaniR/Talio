@@ -4,16 +4,16 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Card;
 import jakarta.ws.rs.WebApplicationException;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Modality;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class EditCardCtrl implements Initializable {
 
@@ -23,6 +23,10 @@ public class EditCardCtrl implements Initializable {
     private TextField title;
     @FXML
     private TextArea description;
+    @FXML
+    private Label oldTitle;
+    @FXML
+    private Label oldDescription;
 
     @FXML
     private Button save;
@@ -80,5 +84,33 @@ public class EditCardCtrl implements Initializable {
 
     public void setCardToEdit(Card cardToEdit) {
         this.cardToEdit = cardToEdit;
+    }
+
+    public Timer startTimer(int refreshRate){
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(()->{
+                    refresh();
+                });
+            }
+        }, 0, refreshRate);
+        return timer;
+    }
+
+    public void refresh(){
+        int id = cardToEdit.id;
+        try{
+            //fetch the card from the server
+            cardToEdit = server.getCardById(id);
+            oldTitle.setText(cardToEdit.title);
+            oldDescription.setText(cardToEdit.description);
+        }catch(Exception e){
+            //if it doesn't exist someone probably deleted it while we were editing the card
+            //so we are returned to the board overview
+            e.printStackTrace();
+            mainCtrl.showBoard();
+        }
     }
 }

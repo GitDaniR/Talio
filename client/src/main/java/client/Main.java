@@ -54,4 +54,11 @@ public class Main extends Application {
 
 
     }
+
+    //Override the stop method of the application so that we can cancel any timer left running
+    //and allow the client to close properly
+    @Override
+    public void stop(){
+        INJECTOR.getInstance(MainCtrl.class).cancelTimer();
+    }
 }
