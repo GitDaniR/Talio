@@ -148,6 +148,7 @@ public class BoardOverviewCtrl implements Initializable {
 
     // method that stops showing preview when dragging is finished
     private void removePreview(final FlowPane board){
+        isDragging = false;
         board.setOnMouseDragged(null);
         board.getChildren().remove(board.getUserData());
         board.setUserData(null);
@@ -196,8 +197,6 @@ public class BoardOverviewCtrl implements Initializable {
             card.setList(finalList);
             server.addCard(card);
         }
-
-        isDragging = false;
         refresh();
     }
     // method that handles the drag event on the list
