@@ -18,11 +18,12 @@ package client.scenes;
 import commons.Board;
 import commons.BoardList;
 import commons.Card;
+import commons.User;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-
+import java.util.Random;
 import java.util.Timer;
 
 public class MainCtrl {
@@ -43,8 +44,12 @@ public class MainCtrl {
     private EditListCtrl editListCtrl;
     private Scene editList;
 
+    private WorkspaceCtrl workspaceCtrl;
+    private Scene workspace;
+
     private EditCardCtrl editCardCtrl;
     private Scene editCard;
+
 
     private double windowHeight;
     private double windowWidth;
@@ -53,8 +58,7 @@ public class MainCtrl {
     private Timer currentTimer;
 
     //a const to easily manage the refresh rate of auto-sync
-    public static final int REFRESH_RATE = 500;
-
+    public static final int REFRESH_RATE = 5000;
 
     public void initialize(Stage primaryStage,
             Pair<AddCardCtrl, Parent> addCard,
@@ -62,7 +66,11 @@ public class MainCtrl {
                            Pair<BoardOverviewCtrl, Parent> board,
                            Pair<WelcomePageCtrl, Parent> welcomePage,
                            Pair<EditListCtrl, Parent> editList,
+
+                           Pair<WorkspaceCtrl, Parent> workspace,
                            Pair<EditCardCtrl, Parent> editCard) {
+
+
         this.primaryStage = primaryStage;
 
         this.boardOverviewCtrl = board.getKey();
@@ -77,6 +85,9 @@ public class MainCtrl {
         this.welcomePageCtrl = welcomePage.getKey();
         this.welcomePage = new Scene(welcomePage.getValue());
 
+        this.workspaceCtrl = workspace.getKey();
+        this.workspace = new Scene(workspace.getValue());
+
         this.editListCtrl=editList.getKey();
         this.editList = new Scene(editList.getValue());
 
@@ -85,6 +96,27 @@ public class MainCtrl {
 
         showWelcomePage();
         primaryStage.show();
+    }
+
+
+    /**
+     * @return String: random String that will server as a Board password, it
+     * can contain letters, numbers and special characters, and it is
+     * of length 8-12 (randomly chosen)
+     */
+    private String generatePassword(){
+        Random random = new Random();
+        int length = random.nextInt(8,12);
+
+        String characters = "abcdefghijklmnopqrstuvwxyz*!#@$ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder sb = new StringBuilder();
+
+        for(int i =0;i<length;i++){
+            int index = random.nextInt(characters.length());
+            sb.append(characters.charAt(index));
+        }
+
+        return sb.toString();
     }
 
     private void storeWindowSize(Scene current){
@@ -97,6 +129,10 @@ public class MainCtrl {
         primaryStage.setWidth(windowWidth);
     }
 
+    /**
+     * Method that starts scene for adding cards to the BoardList
+     * @param list - BoardList to add cards to
+     */
     public void showAddCard(BoardList list) {
         primaryStage.setTitle("A new card");
         addCardCtrl.setList(list);
@@ -104,16 +140,37 @@ public class MainCtrl {
         cancelTimer();
     }
 
-    public void showBoard() {
-        //storeWindowSize(primaryStage.getScene());
+    /**
+     * Method that opens new(empty) board for the user
+     * @param user - user creating the board
+     */
+    public void showNewBoard(User user){
+        primaryStage.setTitle("Board");
+        primaryStage.setScene(board);
+        Board newBoard = new Board("Board",generatePassword());
+        boardOverviewCtrl.setBoard(newBoard);
+        boardOverviewCtrl.saveBoardInDatabase();
+        boardOverviewCtrl.assignToUser(user);
+        boardOverviewCtrl.refresh();
+    }
 
+    /**
+     * Method that starts the scene showing the board
+     */
+    public void showBoard() {
         primaryStage.setTitle("Board Overview");
         primaryStage.setScene(board);
         boardOverviewCtrl.refresh();
+
         cancelTimer();
         currentTimer = boardOverviewCtrl.startTimer(REFRESH_RATE);
+
     }
 
+    /**
+     * Method that starts adding list scene
+     * @param boardToAddTo - board that you add lists to
+     */
     public void showAddList(Board boardToAddTo) {
         primaryStage.setTitle("Adding List");
         primaryStage.setScene(addList);
@@ -121,6 +178,10 @@ public class MainCtrl {
         cancelTimer();
     }
 
+    /**
+     * Method that starts editing list scene
+     * @param boardListToEdit - BoardList to be edited
+     */
     public void showEditList(BoardList boardListToEdit){
         primaryStage.setTitle("Editing List");
         primaryStage.setScene(editList);
@@ -129,16 +190,40 @@ public class MainCtrl {
         currentTimer = editListCtrl.startTimer(REFRESH_RATE);
     }
 
+    /**
+     * Method that starts welcome page
+     */
     public void showWelcomePage() {
         primaryStage.setTitle("Welcome Page");
         primaryStage.setScene(welcomePage);
         cancelTimer();
+
     }
 
+    /**
+     * Method that starts workspace scene for the user
+     * @param username - username of the user
+     */
+    public void showWorkspace(String username) {
+        primaryStage.setTitle("Workspace");
+        primaryStage.setScene(workspace);
+        workspaceCtrl.setUser(username);
+        workspaceCtrl.refresh();
+    }
+
+    public void deleteCard() {
+        boardOverviewCtrl.refresh();
+    }
+
+    /**
+     * Method that starts the editing scene for the card
+     * @param cardToEdit - card to be edited
+     */
     public void showEditCard(Card cardToEdit) {
         primaryStage.setTitle("Editing Card");
         primaryStage.setScene(editCard);
         editCardCtrl.setCardToEdit(cardToEdit);
+
         cancelTimer();
         editCardCtrl.startTimer(REFRESH_RATE);
     }
@@ -154,7 +239,5 @@ public class MainCtrl {
         currentTimer.cancel();
     }
 
-    public void deleteCard() {
-        boardOverviewCtrl.refresh();
-    }
+    
 }

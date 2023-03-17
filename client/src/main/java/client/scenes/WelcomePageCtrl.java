@@ -35,6 +35,12 @@ public class WelcomePageCtrl {
     @FXML
     private Label connectionLabel;
 
+    @FXML
+    private TextField username;
+
+    @FXML
+    private Label userLabel;
+
     @Inject
     public WelcomePageCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
@@ -44,13 +50,29 @@ public class WelcomePageCtrl {
     // Connects to the server the user inputs in the field "chosenServer"
     public void connectToChosenServer() {
         if(testServerConnection()) {
-            server.setServer("http://" + chosenServer.getText() + "/");
-            mainCtrl.showBoard();
+            connectionLabel.setText("");
+            if(testUserID()){
+                userLabel.setText("");
+                server.setServer("http://" + chosenServer.getText() + "/");
+                mainCtrl.showWorkspace(username.getText());
+            }else{
+                userLabel.setText("Bad input: UserID consists of numbers only");
+            }
+
         }
         else {
             connectionLabel.setText("Connection Failed: Server unreachable or wrong input format");
         }
+
+
     }
+
+    private boolean testUserID(){
+        if(username.equals(""))return false;
+        return true;
+    }
+
+
 
     // It checks if the server address the user inputs is reachable. If yes, then it returns true.
     public boolean testServerConnection() {

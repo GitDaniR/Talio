@@ -47,6 +47,20 @@ public class UserController {
     }
 
     /**
+     * Method which retrieves user by its username
+     * @param username
+     * @return
+     */
+    @GetMapping("/username/{username}")
+    public ResponseEntity<User> getByUsername(@PathVariable("username") String username){
+        try {
+            return this.userService.getByUsername(username);
+        } catch(Exception e){
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    /**
      * Method which adds a new user to repo.
      * @param user
      * @return the saved user or BAD_REQUEST
@@ -67,7 +81,7 @@ public class UserController {
      * @param id
      * @return the deleted user or BAD_REQUEST
      */
-    @DeleteMapping(path = { "", "/" })
+    @DeleteMapping(path = { "/{id}" })
     public ResponseEntity<User> deleteById(@PathVariable("id") Integer id) {
         ResponseEntity<User> deletedRecord;
         try {
@@ -87,7 +101,6 @@ public class UserController {
     @PutMapping(path = "{userId}/boards/{boardId}")
     public ResponseEntity<User> joinBoard(@PathVariable("userId") Integer userId,
                                           @PathVariable("boardId") Integer boardId){
-
         try{
             return this.userService.joinBoard(userId, boardId);
 
@@ -96,4 +109,20 @@ public class UserController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @DeleteMapping(path = "{userId}/boards/{boardId}")
+    public ResponseEntity<User> removeBoard(@PathVariable("userId") Integer userId,
+                                            @PathVariable("boardId") Integer boardId){
+        try{
+            return this.userService.removeBoard(userId, boardId);
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
+
+    }
+
+
+
+
 }

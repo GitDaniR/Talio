@@ -44,11 +44,14 @@ public class Main extends Application {
         var welcomePage = FXML.load(WelcomePageCtrl.class, "client", "scenes",
                 "WelcomePage.fxml");
         var editList = FXML.load(EditListCtrl.class,"client","scenes","EditList.fxml");
+
+        var workspace = FXML.load(WorkspaceCtrl.class , "client", "scenes", "Workspace.fxml");
         var editCard = FXML.load(EditCardCtrl.class,"client","scenes","EditCard.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, addCard, addList, currentBoard, welcomePage, editList,
-                editCard);
+        mainCtrl.initialize(primaryStage, addCard, addList,
+                currentBoard, welcomePage,editList, workspace, editCard);
+
 
     }
 

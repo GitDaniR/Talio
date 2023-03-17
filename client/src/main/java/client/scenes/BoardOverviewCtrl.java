@@ -7,6 +7,7 @@ import com.google.inject.Inject;
 import commons.Board;
 import commons.BoardList;
 import commons.Card;
+import commons.User;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -52,6 +53,18 @@ public class BoardOverviewCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
+    public void saveBoardInDatabase(){
+        this.board = server.addBoard(this.board);
+    }
+
+    public void assignToUser(User user){
+        server.assignBoardToUser(user.id, this.board.id);
     }
 
     public void addList() {
@@ -299,7 +312,7 @@ public class BoardOverviewCtrl implements Initializable {
     public void refresh() {
         //If we are dragging we don't want to recreate all cards
         if(isDragging) return;
-        board = server.getBoardByID(1);
+        board = server.getBoardByID(board.id);
         try {
             mainBoard.getChildren().clear();
             var lists = board.lists;
