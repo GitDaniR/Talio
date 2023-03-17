@@ -286,7 +286,6 @@ public class BoardOverviewCtrl implements Initializable {
                     else
                         indexOfDropTarget = droppedCardsSection.getChildren().size();
                 }
-
                 adjustCards(indexOfInitialList, indexOfList,
                         indexOfDraggingNode, indexOfDropTarget);
                 event.consume();
