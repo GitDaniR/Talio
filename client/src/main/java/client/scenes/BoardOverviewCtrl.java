@@ -39,6 +39,8 @@ public class BoardOverviewCtrl implements Initializable {
 
     private Board board;
 
+    private boolean isDragging = false;
+
     @FXML
     private FlowPane mainBoard;
 
@@ -146,6 +148,7 @@ public class BoardOverviewCtrl implements Initializable {
 
     // method that stops showing preview when dragging is finished
     private void removePreview(final FlowPane board){
+        isDragging = false;
         board.setOnMouseDragged(null);
         board.getChildren().remove(board.getUserData());
         board.setUserData(null);
@@ -194,9 +197,7 @@ public class BoardOverviewCtrl implements Initializable {
             card.setList(finalList);
             server.addCard(card);
         }
-
         refresh();
-
     }
     // method that handles the drag event on the list
     private void setDragReleaseList(Node list){
@@ -249,6 +250,7 @@ public class BoardOverviewCtrl implements Initializable {
         {
             @Override
             public void handle(MouseEvent event) {
+                isDragging = true;
                 card.startFullDrag();
                 addPreview(mainBoard, card);
             }
@@ -283,7 +285,6 @@ public class BoardOverviewCtrl implements Initializable {
                     else
                         indexOfDropTarget = droppedCardsSection.getChildren().size();
                 }
-
                 adjustCards(indexOfInitialList, indexOfList,
                         indexOfDraggingNode, indexOfDropTarget);
                 event.consume();
@@ -296,6 +297,8 @@ public class BoardOverviewCtrl implements Initializable {
     // end of Drag&Drop
 
     public void refresh() {
+        //If we are dragging we don't want to recreate all cards
+        if(isDragging) return;
         board = server.getBoardByID(1);
         try {
             mainBoard.getChildren().clear();
