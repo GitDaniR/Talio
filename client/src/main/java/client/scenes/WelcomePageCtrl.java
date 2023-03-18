@@ -67,7 +67,6 @@ public class WelcomePageCtrl {
             isAdmin = checkAdminPassword();
             if (isAdmin) {
                 // TO-DO: Redirect to adminController
-                System.out.println("CORRECT PASSWORD");
             } else {
                 if(testUserID()) {
                     server.setServer("http://" + chosenServer.getText() + "/");
@@ -82,6 +81,11 @@ public class WelcomePageCtrl {
         }
     }
 
+    /**
+     * Method which compares the input inside the adminPassword field
+     * with the value inside the adminAccess.properties file.
+     * @return true if password matches, otherwise false.
+     */
     private boolean checkAdminPassword() {
         Properties prop = new Properties();
         InputStream stream = this.getClass().getResourceAsStream("/adminAccess.properties");
