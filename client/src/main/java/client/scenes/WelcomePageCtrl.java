@@ -60,13 +60,18 @@ public class WelcomePageCtrl {
     public void connectToChosenServer() {
         if(testServerConnection()) {
             connectionLabel.setText("");
+            userLabel.setText("");
+            adminErrorLabel.setText("");
             isAdmin = checkAdminPassword();
-            if(testUserID()) {
-                userLabel.setText("");
-                server.setServer("http://" + chosenServer.getText() + "/");
-                mainCtrl.showWorkspace(username.getText());
+            if (isAdmin) {
+                // TO-DO: Redirect to adminController
             } else {
-                userLabel.setText("Bad input: UserID consists of numbers only");
+                if(testUserID()) {
+                    server.setServer("http://" + chosenServer.getText() + "/");
+                    mainCtrl.showWorkspace(username.getText());
+                } else {
+                    userLabel.setText("Bad input: UserID consists of numbers only");
+                }
             }
         }
         else {
@@ -76,10 +81,8 @@ public class WelcomePageCtrl {
 
     private boolean checkAdminPassword() {
         String input = adminPasswordTxt.getText();
-        if (input.equals(adminPassword)) {
-            adminErrorLabel.setText("");
+        if (input.equals(adminPassword))
             return true;
-        }
         if (!input.isEmpty())
             adminErrorLabel.setText("Incorrect password.");
         return false;
