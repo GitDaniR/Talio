@@ -30,7 +30,8 @@ public class BoardWorkspaceCtrl implements Initializable {
 
     private User user;
 
-    public void setMainCtrlAndServer(MainCtrl mainCtrl, ServerUtils server, WorkspaceCtrl workspaceCtrl){
+    public void setMainCtrlAndServer(MainCtrl mainCtrl, ServerUtils server,
+                                     WorkspaceCtrl workspaceCtrl){
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.workspaceCtrl = workspaceCtrl;
@@ -46,12 +47,10 @@ public class BoardWorkspaceCtrl implements Initializable {
     }
     public void openBoard(){
         mainCtrl.showBoard(board);
-        System.out.println("Open board " + board.id);
     }
 
     public void leaveBoard(){
         server.removeBoardFromJoined(user.id, board.id);
-        System.out.println("Leave board " + board.id);
         this.workspaceCtrl.refresh();
     }
 
