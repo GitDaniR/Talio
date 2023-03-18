@@ -68,7 +68,7 @@ public class WelcomePageCtrl {
     }
 
     private boolean testUserID(){
-        if(username.equals(""))return false;
+        if(username.getText().equals("")) return false;
         return true;
     }
 
