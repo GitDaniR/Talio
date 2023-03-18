@@ -22,8 +22,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Properties;
 
 public class WelcomePageCtrl {
     private final ServerUtils server;
@@ -48,7 +50,7 @@ public class WelcomePageCtrl {
     private Label adminErrorLabel;
 
     private boolean isAdmin;
-    private final String adminPassword = "123";
+    private String adminPassword;
 
     @Inject
     public WelcomePageCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -65,6 +67,7 @@ public class WelcomePageCtrl {
             isAdmin = checkAdminPassword();
             if (isAdmin) {
                 // TO-DO: Redirect to adminController
+                System.out.println("CORRECT PASSWORD");
             } else {
                 if(testUserID()) {
                     server.setServer("http://" + chosenServer.getText() + "/");
@@ -80,6 +83,15 @@ public class WelcomePageCtrl {
     }
 
     private boolean checkAdminPassword() {
+        Properties prop = new Properties();
+        InputStream stream = this.getClass().getResourceAsStream("/adminAccess.properties");
+        try {
+            prop.load(stream);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        adminPassword = (String) prop.get("adminPassword");
+
         String input = adminPasswordTxt.getText();
         if (input.equals(adminPassword))
             return true;
