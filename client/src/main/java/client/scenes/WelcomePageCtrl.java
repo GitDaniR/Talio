@@ -47,6 +47,9 @@ public class WelcomePageCtrl {
     @FXML
     private Label adminErrorLabel;
 
+    private boolean isAdmin;
+    private final String adminPassword = "123";
+
     @Inject
     public WelcomePageCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
@@ -57,28 +60,35 @@ public class WelcomePageCtrl {
     public void connectToChosenServer() {
         if(testServerConnection()) {
             connectionLabel.setText("");
-            if(testUserID()){
+            isAdmin = checkAdminPassword();
+            if(testUserID()) {
                 userLabel.setText("");
                 server.setServer("http://" + chosenServer.getText() + "/");
                 mainCtrl.showWorkspace(username.getText());
-            }else{
+            } else {
                 userLabel.setText("Bad input: UserID consists of numbers only");
             }
-
         }
         else {
             connectionLabel.setText("Connection Failed: Server unreachable or wrong input format");
         }
+    }
 
-
+    private boolean checkAdminPassword() {
+        String input = adminPasswordTxt.getText();
+        if (input.equals(adminPassword)) {
+            adminErrorLabel.setText("");
+            return true;
+        }
+        if (!input.isEmpty())
+            adminErrorLabel.setText("Incorrect password.");
+        return false;
     }
 
     private boolean testUserID(){
         if(username.getText().equals("")) return false;
         return true;
     }
-
-
 
     // It checks if the server address the user inputs is reachable. If yes, then it returns true.
     public boolean testServerConnection() {
@@ -98,6 +108,4 @@ public class WelcomePageCtrl {
             return false;
         }
     }
-
-
 }
