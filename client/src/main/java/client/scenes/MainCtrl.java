@@ -57,6 +57,8 @@ public class MainCtrl {
     //Maintain the current running timer so se can stop it when changing views/exiting the app
     private Timer currentTimer;
 
+    private String username;
+
     //a const to easily manage the refresh rate of auto-sync
     public static final int REFRESH_RATE = 5000;
 
@@ -222,7 +224,14 @@ public class MainCtrl {
         primaryStage.setTitle("Workspace");
         primaryStage.setScene(workspace);
         workspaceCtrl.setUser(username);
+
+        this.username = username;
+
         workspaceCtrl.refresh();
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     public void deleteCard() {

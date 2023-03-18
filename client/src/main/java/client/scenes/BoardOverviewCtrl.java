@@ -340,7 +340,7 @@ public class BoardOverviewCtrl implements Initializable {
         }
     }
 
-    public void disconnectFromServer() {
-        mainCtrl.showWelcomePage();
+    public void back() {
+        mainCtrl.showWorkspace(mainCtrl.getUsername());
     }
 }
