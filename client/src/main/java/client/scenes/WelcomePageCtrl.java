@@ -41,6 +41,12 @@ public class WelcomePageCtrl {
     @FXML
     private Label userLabel;
 
+    @FXML
+    private TextField adminPasswordTxt;
+
+    @FXML
+    private Label adminErrorLabel;
+
     @Inject
     public WelcomePageCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
