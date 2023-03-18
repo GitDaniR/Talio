@@ -97,4 +97,16 @@ public class BoardController {
         }
         return deletedRecord;
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateTitleById(@PathVariable("id") Integer id,
+                                                  @RequestBody String title) {
+        String response;
+        try {
+            response = this.boardService.updateTitleById(id, title, repo);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(response);
+    }
 }
