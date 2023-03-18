@@ -15,6 +15,7 @@ import javax.inject.Inject;
 
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -37,6 +38,8 @@ public class WorkspaceCtrl implements Initializable {
     @FXML
     private Button joinBoard;
     @FXML
+    private TextField inputBoardToJoin;
+    @FXML
     private Button disconnectButton;
     @FXML
     private AnchorPane preview;
@@ -48,6 +51,21 @@ public class WorkspaceCtrl implements Initializable {
 
     public void createBoard(){
         mainCtrl.showNewBoard(this.user);
+    }
+
+    public void joinInputBoard() throws Exception {
+        // Take the ID out of inputBoardToJoin (integer after "#")
+        String[] boardToJoin = inputBoardToJoin.getText().split("#");
+        int boardToJoinId;
+
+        try {
+            boardToJoinId = Integer.parseInt(boardToJoin[1]);
+            Board chosenBoard = server.getBoardByID(boardToJoinId); // Take the board with that ID
+
+            mainCtrl.joinBoard(this.user, chosenBoard);
+        } catch(Exception e){
+            throw new Exception("Invalid input");
+        }
     }
 
     /**

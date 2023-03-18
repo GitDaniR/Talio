@@ -155,6 +155,20 @@ public class MainCtrl {
     }
 
     /**
+     * Method that sets the current board as the
+     * newly joined board and assigns it to the user
+     * @param user - user joining the board
+     * @param chosenBoard - board that the user is joining
+     */
+    public void joinBoard(User user, Board chosenBoard) {
+        primaryStage.setTitle(chosenBoard.title);
+        primaryStage.setScene(board);
+        boardOverviewCtrl.setBoard(chosenBoard);
+        boardOverviewCtrl.assignToUser(user);
+        boardOverviewCtrl.refresh();
+    }
+
+    /**
      * Method that starts the scene showing the board
      */
     public void showBoard() {
