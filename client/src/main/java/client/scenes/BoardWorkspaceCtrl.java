@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Board;
+import commons.User;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -23,11 +24,16 @@ public class BoardWorkspaceCtrl implements Initializable {
 
     private MainCtrl mainCtrl;
     private ServerUtils server;
+
+    private WorkspaceCtrl workspaceCtrl;
     private Board board;
 
-    public void setMainCtrlAndServer(MainCtrl mainCtrl, ServerUtils server){
+    private User user;
+
+    public void setMainCtrlAndServer(MainCtrl mainCtrl, ServerUtils server, WorkspaceCtrl workspaceCtrl){
         this.mainCtrl = mainCtrl;
         this.server = server;
+        this.workspaceCtrl = workspaceCtrl;
     }
 
     public void setBoard(Board board){
@@ -35,14 +41,18 @@ public class BoardWorkspaceCtrl implements Initializable {
         lblBoardName.setText(board.title);
     }
 
+    public void setUser(User user){
+        this.user = user;
+    }
     public void openBoard(){
-        //TODO make this actually open the board
+        mainCtrl.showBoard(board);
         System.out.println("Open board " + board.id);
     }
 
     public void leaveBoard(){
-        //TODO make this actually leave the board
+        server.removeBoardFromJoined(user.id, board.id);
         System.out.println("Leave board " + board.id);
+        this.workspaceCtrl.refresh();
     }
 
     @Override

@@ -49,7 +49,6 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     public void createBoard(){
-        //TODO pass the title to the new board
         mainCtrl.showNewBoard(this.user);
     }
 
@@ -85,10 +84,9 @@ public class WorkspaceCtrl implements Initializable {
         mainCtrl.showWelcomePage();
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
 
-    }
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {}
 
     /**
      * Method that sets controller for the javaFX object
@@ -99,8 +97,9 @@ public class WorkspaceCtrl implements Initializable {
      */
     private BoardWorkspaceCtrl setCtrl(FXMLLoader boardLoader, Board board){
         BoardWorkspaceCtrl ctrl = boardLoader.getController();
-        ctrl.setMainCtrlAndServer(mainCtrl, server);
+        ctrl.setMainCtrlAndServer(mainCtrl, server, this);
         ctrl.setBoard(board);
+        ctrl.setUser(this.user);
         return ctrl;
     }
 
@@ -125,8 +124,9 @@ public class WorkspaceCtrl implements Initializable {
                     getResource("BoardWorkspace.fxml"));
             try {
                 Node boardObject = boardWorkspaceLoader.load();
-                BoardWorkspaceCtrl boardCtrl = setCtrl(boardWorkspaceLoader, board);
+                setCtrl(boardWorkspaceLoader, board);
                 boardsDisplay.getChildren().add(boardObject);
+
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

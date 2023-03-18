@@ -173,11 +173,21 @@ public class MainCtrl {
     /**
      * Method that starts the scene showing the board
      */
-    public void showBoard() {
+    public void showBoard(Board showBoard) {
+        primaryStage.setTitle("Board Overview");
+        primaryStage.setScene(board);
+        boardOverviewCtrl.setBoard(showBoard);
+        boardOverviewCtrl.refresh();
+
+        cancelTimer();
+        currentTimer = boardOverviewCtrl.startTimer(REFRESH_RATE);
+
+    }
+
+    public void showBoard(){
         primaryStage.setTitle("Board Overview");
         primaryStage.setScene(board);
         boardOverviewCtrl.refresh();
-
         cancelTimer();
         currentTimer = boardOverviewCtrl.startTimer(REFRESH_RATE);
 
