@@ -67,7 +67,7 @@ public class WelcomePageCtrl {
             isAdmin = checkAdminPassword();
             if (isAdmin) {
                 // TO-DO: Redirect to adminController
-            } else {
+            } else if(adminPasswordTxt.getText().equals("")){
                 if(testUserID()) {
                     server.setServer("http://" + chosenServer.getText() + "/");
                     mainCtrl.showWorkspace(username.getText());
