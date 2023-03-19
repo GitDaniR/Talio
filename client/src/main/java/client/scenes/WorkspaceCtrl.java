@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import commons.Board;
 import commons.User;
+import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -13,9 +14,11 @@ import javax.inject.Inject;
 
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
@@ -41,6 +44,8 @@ public class WorkspaceCtrl implements Initializable {
     @FXML
     private VBox boardsDisplay;
     @FXML private TextField txtBoardName;
+    @FXML
+    private Label alreadyJoinedText;
 
     @Inject
     public WorkspaceCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -52,6 +57,16 @@ public class WorkspaceCtrl implements Initializable {
         mainCtrl.showNewBoard(this.user);
     }
 
+    public void displayAlreadyJoinedText(){
+        alreadyJoinedText.setText("Board already joined!");
+        // message gets deleted after 2 seconds
+        PauseTransition delay = new PauseTransition(Duration.seconds(2));
+        delay.setOnFinished(event -> {
+            alreadyJoinedText.setText("");
+        });
+        delay.play();
+    }
+
     public void joinInputBoard() throws Exception {
         // Take the ID out of inputBoardToJoin (integer after "#")
         String[] boardToJoin = inputBoardToJoin.getText().split("#");
@@ -60,8 +75,10 @@ public class WorkspaceCtrl implements Initializable {
         try {
             boardToJoinId = Integer.parseInt(boardToJoin[1]);
             Board chosenBoard = server.getBoardByID(boardToJoinId); // Take the board with that ID
-            System.out.println("Joining board " + inputBoardToJoin.getText());
-            mainCtrl.joinBoard(this.user, chosenBoard);
+            if(!user.hasBoardAlready(chosenBoard.id))
+                mainCtrl.joinBoard(this.user, chosenBoard);
+            else
+                displayAlreadyJoinedText();
         } catch (Exception e) {
             throw new Exception("Invalid input");
         }
