@@ -209,4 +209,9 @@ public class TestBoardRepository implements BoardRepository{
                                                  queryFunction) {
         return null;
     }
+
+    @Override
+    public void updateBoardById(Integer id, String title) {
+
+    }
 }
