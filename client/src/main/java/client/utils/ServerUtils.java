@@ -44,7 +44,7 @@ public class ServerUtils {
 
     public Board addBoard(Board board){
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(server).path("api/boards") //
+                .target(server).path("api/boards/") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(board, APPLICATION_JSON), Board.class);
