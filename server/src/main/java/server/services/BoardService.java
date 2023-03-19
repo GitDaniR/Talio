@@ -59,7 +59,7 @@ public class BoardService {
         if (id < 0 || !repo.existsById(id)) {
             throw new Exception("Invalid id");
         }
-        if (title == null) {
+        if (title == null || title.equals("") || title.contains("#")) {
             throw new Exception("Invalid title");
         }
         repo.updateBoardById(id, title);
