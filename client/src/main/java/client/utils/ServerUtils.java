@@ -110,7 +110,16 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(title, TEXT_PLAIN), String.class);
-        ///Need to edit to add id instead of list and also pass new title
+
+    }
+
+    public void updateBoardTitle(Integer id, String title){
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/boards/"+id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(title, TEXT_PLAIN), String.class);
+
     }
 
     public List<Card> getCards(int listId) {

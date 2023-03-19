@@ -47,6 +47,9 @@ public class MainCtrl {
     private WorkspaceCtrl workspaceCtrl;
     private Scene workspace;
 
+    private ChangeBoardTitleCtrl changeBoardTitleCtrl;
+    private Scene changeBoardTitle;
+
     private EditCardCtrl editCardCtrl;
     private Scene editCard;
 
@@ -70,7 +73,8 @@ public class MainCtrl {
                            Pair<EditListCtrl, Parent> editList,
 
                            Pair<WorkspaceCtrl, Parent> workspace,
-                           Pair<EditCardCtrl, Parent> editCard) {
+                           Pair<EditCardCtrl, Parent> editCard,
+                           Pair<ChangeBoardTitleCtrl, Parent> changeBoardTitle) {
 
 
         this.primaryStage = primaryStage;
@@ -92,6 +96,9 @@ public class MainCtrl {
 
         this.editListCtrl=editList.getKey();
         this.editList = new Scene(editList.getValue());
+
+        this.changeBoardTitleCtrl = changeBoardTitle.getKey();
+        this.changeBoardTitle = new Scene(changeBoardTitle.getValue());
 
         this.editCardCtrl = editCard.getKey();
         this.editCard = new Scene(editCard.getValue());
@@ -147,7 +154,7 @@ public class MainCtrl {
      * @param user - user creating the board
      */
     public void showNewBoard(User user){
-        primaryStage.setTitle("Board");
+        primaryStage.setTitle("Board Overview");
         primaryStage.setScene(board);
         Board newBoard = new Board("Board",generatePassword());
         boardOverviewCtrl.setBoard(newBoard);
@@ -157,15 +164,48 @@ public class MainCtrl {
     }
 
     /**
-     * Method that starts the scene showing the board
+     * Method that sets the current board as the
+     * newly joined board and assigns it to the user
+     * @param user - user joining the board
+     * @param chosenBoard - board that the user is joining
      */
-    public void showBoard() {
+    public void joinBoard(User user, Board chosenBoard) {
         primaryStage.setTitle("Board Overview");
         primaryStage.setScene(board);
+        boardOverviewCtrl.setBoard(chosenBoard);
+        boardOverviewCtrl.assignToUser(user);
+        boardOverviewCtrl.refresh();
+    }
+
+    /**
+     * Method that starts the scene showing the board
+     */
+    public void showBoard(Board showBoard) {
+        primaryStage.setTitle("Board Overview");
+        primaryStage.setScene(board);
+        boardOverviewCtrl.setBoard(showBoard);
         boardOverviewCtrl.refresh();
 
         cancelTimer();
         currentTimer = boardOverviewCtrl.startTimer(REFRESH_RATE);
+
+    }
+
+    public void showBoard(){
+        primaryStage.setTitle("Board overview");
+        primaryStage.setScene(board);
+        boardOverviewCtrl.refresh();
+        cancelTimer();
+        currentTimer = boardOverviewCtrl.startTimer(REFRESH_RATE);
+
+    }
+
+    public void showChangeTitle(Board board){
+        primaryStage.setTitle("Changing Board Title");
+        primaryStage.setScene(changeBoardTitle);
+        changeBoardTitleCtrl.setBoard(board);
+        cancelTimer();
+        currentTimer = changeBoardTitleCtrl.startTimer(REFRESH_RATE);
 
     }
 

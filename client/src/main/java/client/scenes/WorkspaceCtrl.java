@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import commons.Board;
 import commons.User;
+import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -13,8 +14,11 @@ import javax.inject.Inject;
 
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
@@ -34,10 +38,14 @@ public class WorkspaceCtrl implements Initializable {
     @FXML
     private Button joinBoard;
     @FXML
+    private TextField inputBoardToJoin;
+    @FXML
     private Button disconnectButton;
     @FXML
     private VBox boardsDisplay;
     @FXML private TextField txtBoardName;
+    @FXML
+    private Label alreadyJoinedText;
 
     @Inject
     public WorkspaceCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -46,14 +54,34 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     public void createBoard(){
-        //TODO pass the title to the new board
         mainCtrl.showNewBoard(this.user);
     }
 
-    public void joinBoard(){
-        //TODO make a call to the server that the board was joined
-        // and then switch to its scene
-        System.out.println("Joining board " + txtBoardName.getText());
+    public void displayAlreadyJoinedText(){
+        alreadyJoinedText.setText("Board already joined!");
+        // message gets deleted after 2 seconds
+        PauseTransition delay = new PauseTransition(Duration.seconds(2));
+        delay.setOnFinished(event -> {
+            alreadyJoinedText.setText("");
+        });
+        delay.play();
+    }
+
+    public void joinInputBoard() throws Exception {
+        // Take the ID out of inputBoardToJoin (integer after "#")
+        String[] boardToJoin = inputBoardToJoin.getText().split("#");
+        int boardToJoinId;
+
+        try {
+            boardToJoinId = Integer.parseInt(boardToJoin[1]);
+            Board chosenBoard = server.getBoardByID(boardToJoinId); // Take the board with that ID
+            if(!user.hasBoardAlready(chosenBoard.id))
+                mainCtrl.joinBoard(this.user, chosenBoard);
+            else
+                displayAlreadyJoinedText();
+        } catch (Exception e) {
+            throw new Exception("Invalid input");
+        }
     }
 
     /**
@@ -73,10 +101,9 @@ public class WorkspaceCtrl implements Initializable {
         mainCtrl.showWelcomePage();
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
 
-    }
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {}
 
     /**
      * Method that sets controller for the javaFX object
@@ -87,8 +114,9 @@ public class WorkspaceCtrl implements Initializable {
      */
     private BoardWorkspaceCtrl setCtrl(FXMLLoader boardLoader, Board board){
         BoardWorkspaceCtrl ctrl = boardLoader.getController();
-        ctrl.setMainCtrlAndServer(mainCtrl, server);
+        ctrl.setMainCtrlAndServer(mainCtrl, server, this);
         ctrl.setBoard(board);
+        ctrl.setUser(this.user);
         return ctrl;
     }
 
@@ -113,8 +141,9 @@ public class WorkspaceCtrl implements Initializable {
                     getResource("BoardWorkspace.fxml"));
             try {
                 Node boardObject = boardWorkspaceLoader.load();
-                BoardWorkspaceCtrl boardCtrl = setCtrl(boardWorkspaceLoader, board);
+                setCtrl(boardWorkspaceLoader, board);
                 boardsDisplay.getChildren().add(boardObject);
+
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

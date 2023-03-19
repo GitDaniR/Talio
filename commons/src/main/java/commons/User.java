@@ -32,6 +32,14 @@ public class User {
         this.username = username;
     }
 
+    public boolean hasBoardAlready(int id){
+        for(Board b : boards){
+            if(b.id==id)
+                return true;
+        }
+        return false;
+    }
+
     @Override
     public boolean equals(Object obj) {
         return EqualsBuilder.reflectionEquals(this, obj);

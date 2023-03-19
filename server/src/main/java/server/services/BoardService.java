@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import commons.Board;
+import org.springframework.transaction.annotation.Transactional;
 import server.database.BoardRepository;
 
 @Service
@@ -51,5 +52,17 @@ public class BoardService {
         ResponseEntity<Board> deletedRecord = ResponseEntity.ok(repo.findById(id).get());
         repo.deleteById(id);
         return deletedRecord;
+    }
+
+    @Transactional
+    public String updateTitleById(Integer id, String title, BoardRepository repo) throws Exception{
+        if (id < 0 || !repo.existsById(id)) {
+            throw new Exception("Invalid id");
+        }
+        if (title == null || title.equals("") || title.contains("#")) {
+            throw new Exception("Invalid title");
+        }
+        repo.updateBoardById(id, title);
+        return "Board title has been updated successfully.";
     }
 }

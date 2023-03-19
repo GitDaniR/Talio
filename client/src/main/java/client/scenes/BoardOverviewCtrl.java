@@ -2,12 +2,16 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.io.IOException;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.BoardList;
 import commons.Card;
 import commons.User;
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,12 +20,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 
 import java.net.URL;
@@ -45,6 +51,11 @@ public class BoardOverviewCtrl implements Initializable {
     @FXML
     private FlowPane mainBoard;
 
+    @FXML
+    private Label title;
+    @FXML
+    private Label copiedToClipboardMessage;
+
     @Inject
     public BoardOverviewCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
@@ -65,6 +76,14 @@ public class BoardOverviewCtrl implements Initializable {
 
     public void assignToUser(User user){
         server.assignBoardToUser(user.id, this.board.id);
+    }
+
+    public void setHandlerTitle(){
+        title.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                mainCtrl.showChangeTitle(this.board);
+            }
+        });
     }
 
     public void addList() {
@@ -309,10 +328,39 @@ public class BoardOverviewCtrl implements Initializable {
     }
     // end of Drag&Drop
 
+    /**
+     * Method that returns invite code to the user
+     * separate private method due to security
+     * @return
+     */
+    private String getInviteCode(){
+        String selection = board.title+"#"+board.id;
+        return selection;
+    }
+
+    /**
+     * Method that copies invite code to the clipboard
+     */
+    public void copyInvite(){
+        StringSelection selection = new StringSelection(getInviteCode());
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(selection, null);
+        copiedToClipboardMessage.setText("Copied to clipboard");
+
+        // message gets deleted after 2 seconds
+        PauseTransition delay = new PauseTransition(Duration.seconds(2));
+        delay.setOnFinished(event -> {
+            copiedToClipboardMessage.setText("");
+        });
+        delay.play();
+    }
+
     public void refresh() {
         //If we are dragging we don't want to recreate all cards
         if(isDragging) return;
         board = server.getBoardByID(board.id);
+        title.setText(board.title);
+        setHandlerTitle();
         try {
             mainBoard.getChildren().clear();
             var lists = board.lists;
