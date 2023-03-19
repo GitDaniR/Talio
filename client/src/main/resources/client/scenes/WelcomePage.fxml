@@ -7,38 +7,45 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.WelcomePageCtrl">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.WelcomePageCtrl">
 
    <children>
       <Button layoutX="286.0" layoutY="360.0" mnemonicParsing="false" onAction="#connectToChosenServer" text="Connect" />
-      <TextField fx:id="chosenServer" layoutX="233.0" layoutY="239.0" prefHeight="26.0" prefWidth="170.0" />
-      <Text layoutX="126.0" layoutY="257.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Server Address:">
+      <TextField fx:id="chosenServer" layoutX="231.0" layoutY="149.0" prefHeight="26.0" prefWidth="170.0" />
+      <Text layoutX="125.0" layoutY="168.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Server Address:">
          <font>
             <Font size="14.0" />
          </font>
       </Text>
-      <Text layoutX="251.0" layoutY="109.0" strokeType="OUTSIDE" strokeWidth="0.0" text="TALIO" textAlignment="CENTER">
+      <Text layoutX="252.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="TALIO" textAlignment="CENTER">
          <font>
             <Font size="36.0" />
          </font>
       </Text>
-      <Text layoutX="80.0" layoutY="223.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To get started, please input the desired Server Address and UserID below:">
+      <Text layoutX="63.0" layoutY="135.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To get started, please input the desired Server Address and Username below:">
          <font>
             <Font size="14.0" />
          </font>
       </Text>
-      <Text layoutX="166.0" layoutY="142.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Make your tasks tremble with fear.">
+      <Text layoutX="166.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Make your tasks tremble with fear.">
          <font>
             <Font name="System Italic" size="18.0" />
          </font>
       </Text>
-      <Label fx:id="connectionLabel" layoutX="126.0" layoutY="272.0" prefHeight="18.0" prefWidth="349.0" textFill="RED" />
-      <Text layoutX="129.0" layoutY="319.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username:">
+      <Label fx:id="connectionLabel" layoutX="124.0" layoutY="190.0" prefHeight="20.0" prefWidth="350.0" textAlignment="CENTER" textFill="RED" />
+      <Text layoutX="133.0" layoutY="232.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username:">
          <font>
             <Font size="14.0" />
          </font>
       </Text>
-      <TextField fx:id="username" layoutX="233.0" layoutY="301.0" prefHeight="26.0" prefWidth="170.0" />
-      <Label fx:id="userLabel" layoutX="126.0" layoutY="336.0" prefHeight="18.0" prefWidth="349.0" textFill="RED" />
+      <TextField fx:id="username" layoutX="231.0" layoutY="214.0" prefHeight="26.0" prefWidth="170.0" />
+      <Label fx:id="userLabel" layoutX="125.0" layoutY="249.0" prefHeight="20.0" prefWidth="350.0" textAlignment="CENTER" textFill="RED" />
+      <Text layoutX="113.0" layoutY="298.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Admin password:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+      <TextField fx:id="adminPasswordTxt" layoutX="231.0" layoutY="280.0" prefHeight="26.0" prefWidth="170.0" />
+      <Label fx:id="adminErrorLabel" layoutX="124.0" layoutY="317.0" prefHeight="20.0" prefWidth="350.0" textAlignment="CENTER" textFill="RED" />
    </children>
 </AnchorPane>
