@@ -1,14 +1,14 @@
 package server.api;
 
+import commons.Board;
+import commons.BoardList;
 import commons.Card;
 import org.apache.coyote.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import server.database.BoardListRepository;
-import server.database.TestBoardListRepository;
-import server.database.TestCardRepository;
+import server.database.*;
 import server.services.CardService;
 
 import java.util.ArrayList;
@@ -20,7 +20,11 @@ public class CardControllerTest {
 
     private TestCardRepository cardRepo;
     private TestBoardListRepository listRepo;
+
+    private TestBoardRepository boardRepo;
     private CardController sut;
+    private Board b1;
+    private BoardList l1;
     private Card c1, c2, c3;
     private List<Card> cards;
 
@@ -28,9 +32,14 @@ public class CardControllerTest {
     public void setup() {
         cardRepo = new TestCardRepository();
         listRepo = new TestBoardListRepository();
-        c1 = new Card(0, "a", "a", 0, null, 1);
-        c2 = new Card(1, "b", "b", 1, null, 1);
-        c3 = new Card(2, "c", "c", 2, null, 1);
+        boardRepo = new TestBoardRepository();
+        b1 = new Board(0, "Main Board", "123", new ArrayList<>());
+        boardRepo.save(b1);
+        l1 = new BoardList(0, "First", b1, 0);
+        listRepo.save(l1);
+        c1 = new Card(0, "a", "a", 0, l1, 0);
+        c2 = new Card(1, "b", "b", 1, l1, 0);
+        c3 = new Card(2, "c", "c", 2, l1, 0);
         cards = new ArrayList<>();
         cards.add(c1);
         cards.add(c2);
@@ -42,9 +51,9 @@ public class CardControllerTest {
     @Test
     public void testGetAllCards(){
         List<Card> expected = new ArrayList<>();
-        expected.add(new Card(0, "a", "a", 0, null, 1));
-        expected.add(new Card(1, "b", "b", 1, null, 1));
-        expected.add(new Card(2, "c", "c", 2, null, 1));
+        expected.add(new Card(0, "a", "a", 0, l1, 0));
+        expected.add(new Card(1, "b", "b", 1, l1, 0));
+        expected.add(new Card(2, "c", "c", 2, l1, 0));
         List<Card> res = sut.getAllCards();
         assertEquals(expected, res);
     }
@@ -53,7 +62,7 @@ public class CardControllerTest {
     public void testGetCardById(){
         ResponseEntity<Card> cardResponse = sut.getCardById(1);
         assertEquals(HttpStatus.OK, cardResponse.getStatusCode());
-        assertEquals(new Card(1, "b", "b", 1, null, 1), cardResponse.getBody());
+        assertEquals(new Card(1, "b", "b", 1, l1, 0), cardResponse.getBody());
     }
 
     @Test
@@ -63,30 +72,30 @@ public class CardControllerTest {
 
     @Test
     public void testAddCard(){
-        ResponseEntity<Card>  cardResponse = sut.addCard(new Card(3, "d", "d", 3, null, 1));
+        ResponseEntity<Card>  cardResponse = sut.addCard(new Card(3, "d", "d", 3, l1, 0));
         List<Card> expected = new ArrayList<>();
-        expected.add(new Card(0, "a", "a", 0, null, 1));
-        expected.add(new Card(1, "b", "b", 1, null, 1));
-        expected.add(new Card(2, "c", "c", 2, null, 1));
-        expected.add(new Card(3, "d", "d", 3, null, 1));
+        expected.add(new Card(0, "a", "a", 0, l1, 0));
+        expected.add(new Card(1, "b", "b", 1, l1, 0));
+        expected.add(new Card(2, "c", "c", 2, l1, 0));
+        expected.add(new Card(3, "d", "d", 3, l1, 0));
         assertEquals(HttpStatus.OK, cardResponse.getStatusCode());
-        assertEquals(new Card(3, "d", "d", 3, null, 1), cardResponse.getBody());
+        assertEquals(new Card(3, "d", "d", 3, l1, 0), cardResponse.getBody());
         assertEquals(expected, cardRepo.getCards());
     }
 
     @Test
     public void testAddCardBadRequest(){
-        assertEquals(HttpStatus.BAD_REQUEST, sut.addCard(new Card(2, "d", "d", 3, null, 1)).getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, sut.addCard(new Card(2, "d", "d", 3, l1, 0)).getStatusCode());
     }
 
     @Test
     public void testDeleteCard(){
         ResponseEntity<Card> cardResponse = sut.removeCard(1);
         List<Card> expected = new ArrayList<>();
-        expected.add(new Card(0, "a", "a", 0, null, 1));
-        expected.add(new Card(2, "c", "c", 1, null, 1));
+        expected.add(new Card(0, "a", "a", 0, l1, 0));
+        expected.add(new Card(2, "c", "c", 1, l1, 0));
         assertEquals(HttpStatus.OK, cardResponse.getStatusCode());
-        assertEquals(new Card(1, "b", "b", 1, null, 1), cardResponse.getBody());
+        assertEquals(new Card(1, "b", "b", 1, l1, 0), cardResponse.getBody());
         assertEquals(expected, cardRepo.getCards());
     }
 
@@ -97,18 +106,18 @@ public class CardControllerTest {
 
     @Test
     public void testEditCard(){
-        ResponseEntity<Card> cardResponse = sut.editCard(1, new Card(2, "d", "d", 3, null, 1));
+        ResponseEntity<Card> cardResponse = sut.editCard(1, new Card(2, "d", "d", 3, l1, 0));
         List<Card> expected = new ArrayList<>();
-        expected.add(new Card(0, "a", "a", 0, null, 1));
-        expected.add(new Card(2, "c", "c", 2, null, 1));
-        expected.add(new Card(1, "d", "d", 1, null, 1));
+        expected.add(new Card(0, "a", "a", 0, l1, 0));
+        expected.add(new Card(2, "c", "c", 2, l1, 0));
+        expected.add(new Card(1, "d", "d", 1, l1, 0));
         assertEquals(HttpStatus.OK, cardResponse.getStatusCode());
-        assertEquals(new Card(1, "d", "d", 1, null, 1), cardResponse.getBody());
+        assertEquals(new Card(1, "d", "d", 1, l1, 0), cardResponse.getBody());
         assertEquals(expected, cardRepo.getCards());
     }
 
     @Test
     public void testEditCardNotFound(){
-        assertEquals(HttpStatus.NOT_FOUND, sut.editCard(3, new Card(3, "d", "d", 3, null, 1)).getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, sut.editCard(3, new Card(3, "d", "d", 3, l1, 0)).getStatusCode());
     }
 }
