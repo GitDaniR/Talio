@@ -100,7 +100,7 @@ public class BoardController {
                                                   @RequestBody String title) {
         String response;
         try {
-            response = this.boardService.updateTitleById(id, title, repo);
+            response = this.boardService.updateTitleById(id, title);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
