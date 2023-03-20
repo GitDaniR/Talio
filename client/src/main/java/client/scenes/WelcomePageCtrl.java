@@ -68,7 +68,9 @@ public class WelcomePageCtrl {
             isAdmin = checkAdminPassword();
             if (isAdmin) {
                 mainCtrl.showAdminWorkspace(username.getText());
+                mainCtrl.setAdmin(true);
             } else if(adminPasswordTxt.getText().equals("")){
+                mainCtrl.setAdmin(false);
                 if(testUserID()) {
                     server.setServer("http://" + chosenServer.getText() + "/");
                     mainCtrl.showWorkspace(username.getText());

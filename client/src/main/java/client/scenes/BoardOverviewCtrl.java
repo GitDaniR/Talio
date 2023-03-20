@@ -89,6 +89,21 @@ public class BoardOverviewCtrl implements Initializable {
     public void addList() {
         mainCtrl.showAddList(board);
     }
+
+    public void deleteBoard() {
+        mainCtrl.deleteBoard();
+    }
+
+    /**
+     * Method that deletes the board from the server
+     * (We need to separate them to not cause errors
+     * and also not see the board for a fraction of
+     * a second after deleting it)
+     */
+    public void deleteBoardServerSide(){
+        server.deleteBoard(board.id);
+    }
+
     //A method to start the timer for auto-synchronization and return the instance
     //so that the caller can then control the timer
     public Timer startTimer(int refreshRate){

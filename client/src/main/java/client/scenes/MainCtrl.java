@@ -65,6 +65,8 @@ public class MainCtrl {
 
     private String username;
 
+    private boolean isAdmin = false;
+
     //a const to easily manage the refresh rate of auto-sync
     public static final int REFRESH_RATE = 1000;
 
@@ -111,6 +113,10 @@ public class MainCtrl {
 
         showWelcomePage();
         primaryStage.show();
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
     }
 
 
@@ -186,6 +192,32 @@ public class MainCtrl {
         boardOverviewCtrl.refresh();
         cancelTimer();
         currentTimer = boardOverviewCtrl.startTimer(REFRESH_RATE);
+    }
+
+    /**
+     * Method that returns to workspace and deletes the board
+     * it was on previously
+     */
+    public void deleteBoard(){
+        workspaceCtrl.clearJoinedBoards();
+
+        if(!isAdmin){
+            primaryStage.setTitle("Workspace");
+            primaryStage.setScene(workspace);
+
+            boardOverviewCtrl.deleteBoardServerSide();
+            workspaceCtrl.refresh();
+        } else {
+            primaryStage.setTitle("Admin Workspace");
+            primaryStage.setScene(workspaceAdmin);
+
+            boardOverviewCtrl.deleteBoardServerSide();
+            workspaceAdminCtrl.refresh();
+        }
+
+
+        cancelTimer();
+        currentTimer = workspaceCtrl.startTimer(REFRESH_RATE);
     }
 
     /**
