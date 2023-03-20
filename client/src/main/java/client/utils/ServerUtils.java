@@ -226,4 +226,13 @@ public class ServerUtils {
 
     }
 
+    public void deleteBoard(Integer boardId){
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/boards/"+boardId) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .delete();
+
+    }
+
 }
