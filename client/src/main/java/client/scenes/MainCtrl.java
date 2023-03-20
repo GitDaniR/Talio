@@ -47,6 +47,9 @@ public class MainCtrl {
     private WorkspaceCtrl workspaceCtrl;
     private Scene workspace;
 
+    private WorkspaceAdminCtrl workspaceAdminCtrl;
+    private Scene workspaceAdmin;
+
     private ChangeBoardTitleCtrl changeBoardTitleCtrl;
     private Scene changeBoardTitle;
 
@@ -71,8 +74,8 @@ public class MainCtrl {
                            Pair<BoardOverviewCtrl, Parent> board,
                            Pair<WelcomePageCtrl, Parent> welcomePage,
                            Pair<EditListCtrl, Parent> editList,
-
                            Pair<WorkspaceCtrl, Parent> workspace,
+                           Pair<WorkspaceAdminCtrl, Parent> workspaceAdmin,
                            Pair<EditCardCtrl, Parent> editCard,
                            Pair<ChangeBoardTitleCtrl, Parent> changeBoardTitle) {
 
@@ -93,6 +96,9 @@ public class MainCtrl {
 
         this.workspaceCtrl = workspace.getKey();
         this.workspace = new Scene(workspace.getValue());
+
+        this.workspaceAdminCtrl = workspaceAdmin.getKey();
+        this.workspaceAdmin = new Scene(workspaceAdmin.getValue());
 
         this.editListCtrl=editList.getKey();
         this.editList = new Scene(editList.getValue());
@@ -296,5 +302,13 @@ public class MainCtrl {
         currentTimer.cancel();
     }
 
-    
+    public void showAdminWorkspace(String text) {
+        primaryStage.setTitle("Admin Workspace");
+        primaryStage.setScene(workspaceAdmin);
+        workspaceAdminCtrl.setUser(username);
+        this.username = username;
+
+        workspaceAdminCtrl.refresh();
+    }
 }
+
