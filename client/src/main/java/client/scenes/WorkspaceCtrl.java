@@ -4,6 +4,7 @@ import client.utils.ServerUtils;
 import commons.Board;
 import commons.User;
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -24,6 +25,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class WorkspaceCtrl implements Initializable {
 
@@ -51,6 +54,19 @@ public class WorkspaceCtrl implements Initializable {
     public WorkspaceCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+    }
+
+    public Timer startTimer(int refreshRate){
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(()->{
+                    refresh();
+                });
+            }
+        }, 0, refreshRate);
+        return timer;
     }
 
     public void createBoard(){
