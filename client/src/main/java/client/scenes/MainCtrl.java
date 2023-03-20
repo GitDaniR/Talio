@@ -250,6 +250,7 @@ public class MainCtrl {
     public void showWelcomePage() {
         primaryStage.setTitle("Welcome Page");
         primaryStage.setScene(welcomePage);
+        welcomePageCtrl.clearPassword();
         cancelTimer();
 
     }
@@ -302,7 +303,7 @@ public class MainCtrl {
         currentTimer.cancel();
     }
 
-    public void showAdminWorkspace(String text) {
+    public void showAdminWorkspace(String username) {
         primaryStage.setTitle("Admin Workspace");
         primaryStage.setScene(workspaceAdmin);
         workspaceAdminCtrl.setUser(username);

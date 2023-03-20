@@ -19,6 +19,7 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 import java.io.IOException;
@@ -44,7 +45,7 @@ public class WelcomePageCtrl {
     private Label userLabel;
 
     @FXML
-    private TextField adminPasswordTxt;
+    private PasswordField adminPasswordTxt;
 
     @FXML
     private Label adminErrorLabel;
@@ -126,5 +127,9 @@ public class WelcomePageCtrl {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public void clearPassword(){
+        adminPasswordTxt.clear();
     }
 }
