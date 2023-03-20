@@ -260,6 +260,7 @@ public class MainCtrl {
 
         workspaceCtrl.refresh();
         cancelTimer();
+        currentTimer = workspaceCtrl.startTimer(REFRESH_RATE);
     }
 
     public String getUsername() {
