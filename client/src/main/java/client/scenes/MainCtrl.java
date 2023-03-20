@@ -292,15 +292,19 @@ public class MainCtrl {
      * @param username - username of the user
      */
     public void showWorkspace(String username) {
-        primaryStage.setTitle("Workspace");
-        primaryStage.setScene(workspace);
-        workspaceCtrl.setUser(username);
+        if(isAdmin)
+            showAdminWorkspace(username);
+        else {
+            primaryStage.setTitle("Workspace");
+            primaryStage.setScene(workspace);
+            workspaceCtrl.setUser(username);
 
-        this.username = username;
+            this.username = username;
 
-        workspaceCtrl.refresh();
-        cancelTimer();
-        currentTimer = workspaceCtrl.startTimer(REFRESH_RATE);
+            workspaceCtrl.refresh();
+            cancelTimer();
+            currentTimer = workspaceCtrl.startTimer(REFRESH_RATE);
+        }
     }
 
     public String getUsername() {
