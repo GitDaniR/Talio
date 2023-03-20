@@ -210,6 +210,7 @@ public class MainCtrl {
         primaryStage.setScene(changeBoardTitle);
         changeBoardTitleCtrl.setBoard(board);
         cancelTimer();
+        currentTimer = changeBoardTitleCtrl.startTimer(REFRESH_RATE);
 
     }
 
