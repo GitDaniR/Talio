@@ -37,7 +37,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        var addCard = FXML.load(AddCardCtrl.class, "client", "scenes", "AddCard.fxml");
         var addList = FXML.load(AddListCtrl.class, "client", "scenes", "AddList.fxml");
         var currentBoard = 
             FXML.load(BoardOverviewCtrl.class, "client", "scenes", "BoardOverview.fxml");
@@ -51,7 +50,7 @@ public class Main extends Application {
                 "scenes","ChangeBoardTitle.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, addCard, addList,
+        mainCtrl.initialize(primaryStage, addList,
                 currentBoard, welcomePage,editList, workspace, editCard, editBoard);
 
 

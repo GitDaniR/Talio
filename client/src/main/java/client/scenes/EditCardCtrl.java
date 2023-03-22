@@ -56,7 +56,6 @@ public class EditCardCtrl implements Initializable {
     public void ok() {
         try {
             server.editCard(cardToEdit.id, getUpdatedCard(cardToEdit));
-
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -79,7 +78,10 @@ public class EditCardCtrl implements Initializable {
         var t = title.getText();
         var d = description.getText();
 
-        return new Card(t, d, oldCard.index, oldCard.list, oldCard.listId);
+        oldCard.title = t;
+        oldCard.description = d;
+
+        return oldCard;
     }
 
     public void setCardToEdit(Card cardToEdit) {
