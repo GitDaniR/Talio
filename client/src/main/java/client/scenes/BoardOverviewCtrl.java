@@ -122,7 +122,7 @@ public class BoardOverviewCtrl implements Initializable {
         listObjectController.setServerAndCtrl(server,mainCtrl);
         //Setting the server and  ctrl because I have no idea how to inject it
         listObjectController.getListAddCardButton().
-                setOnAction(event -> mainCtrl.showAddCard(currentList));
+                setOnAction(event -> listObjectController.addDefaultCard());
         //Telling the button what to do
         return listObjectController;
     }
