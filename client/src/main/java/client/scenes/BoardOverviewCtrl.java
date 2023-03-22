@@ -89,6 +89,12 @@ public class BoardOverviewCtrl implements Initializable {
     public void addList() {
         mainCtrl.showAddList(board);
     }
+
+    public void deleteBoard() {
+        server.deleteBoard(board.id);
+        mainCtrl.deleteBoard();
+    }
+
     //A method to start the timer for auto-synchronization and return the instance
     //so that the caller can then control the timer
     public Timer startTimer(int refreshRate){
