@@ -264,7 +264,7 @@ public class MainCtrl {
         editCardCtrl.setCardToEdit(cardToEdit);
 
         cancelTimer();
-        editCardCtrl.startTimer(REFRESH_RATE);
+        currentTimer = editCardCtrl.startTimer(REFRESH_RATE);
     }
 
     public void refreshBoardOverview(){
