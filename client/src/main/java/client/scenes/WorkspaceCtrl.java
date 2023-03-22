@@ -140,7 +140,7 @@ public class WorkspaceCtrl implements Initializable {
      * Method that clears the preview and removes all boards
      * from the preview
      */
-    private void clearJoinedBoards(){
+    public void clearJoinedBoards(){
         boardsDisplay.getChildren().clear();
     }
 

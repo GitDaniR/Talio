@@ -45,6 +45,9 @@ public class MainCtrl {
     private WorkspaceCtrl workspaceCtrl;
     private Scene workspace;
 
+    private WorkspaceAdminCtrl workspaceAdminCtrl;
+    private Scene workspaceAdmin;
+
     private ChangeBoardTitleCtrl changeBoardTitleCtrl;
     private Scene changeBoardTitle;
 
@@ -60,6 +63,8 @@ public class MainCtrl {
 
     private String username;
 
+    private boolean isAdmin = false;
+
     //a const to easily manage the refresh rate of auto-sync
     public static final int REFRESH_RATE = 1000;
 
@@ -69,6 +74,7 @@ public class MainCtrl {
                            Pair<WelcomePageCtrl, Parent> welcomePage,
                            Pair<EditListCtrl, Parent> editList,
                            Pair<WorkspaceCtrl, Parent> workspace,
+                           Pair<WorkspaceAdminCtrl, Parent> workspaceAdmin,
                            Pair<EditCardCtrl, Parent> editCard,
                            Pair<ChangeBoardTitleCtrl, Parent> changeBoardTitle) {
 
@@ -87,6 +93,9 @@ public class MainCtrl {
         this.workspaceCtrl = workspace.getKey();
         this.workspace = new Scene(workspace.getValue());
 
+        this.workspaceAdminCtrl = workspaceAdmin.getKey();
+        this.workspaceAdmin = new Scene(workspaceAdmin.getValue());
+
         this.editListCtrl=editList.getKey();
         this.editList = new Scene(editList.getValue());
 
@@ -98,6 +107,10 @@ public class MainCtrl {
 
         showWelcomePage();
         primaryStage.show();
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
     }
 
 
@@ -165,6 +178,28 @@ public class MainCtrl {
     }
 
     /**
+     * Method that returns to workspace and deletes the board
+     * it was on previously
+     */
+    public void deleteBoard(){
+        workspaceCtrl.clearJoinedBoards();
+
+        if(!isAdmin){
+            primaryStage.setTitle("Workspace");
+            primaryStage.setScene(workspace);
+            workspaceCtrl.refresh();
+        } else {
+            primaryStage.setTitle("Admin Workspace");
+            primaryStage.setScene(workspaceAdmin);
+            workspaceAdminCtrl.refresh();
+        }
+
+
+        cancelTimer();
+        currentTimer = workspaceCtrl.startTimer(REFRESH_RATE);
+    }
+
+    /**
      * Method that starts the scene showing the board
      */
     public void showBoard(Board showBoard) {
@@ -226,6 +261,7 @@ public class MainCtrl {
     public void showWelcomePage() {
         primaryStage.setTitle("Welcome Page");
         primaryStage.setScene(welcomePage);
+        welcomePageCtrl.clearPassword();
         cancelTimer();
 
     }
@@ -235,15 +271,19 @@ public class MainCtrl {
      * @param username - username of the user
      */
     public void showWorkspace(String username) {
-        primaryStage.setTitle("Workspace");
-        primaryStage.setScene(workspace);
-        workspaceCtrl.setUser(username);
+        if(isAdmin)
+            showAdminWorkspace(username);
+        else {
+            primaryStage.setTitle("Workspace");
+            primaryStage.setScene(workspace);
+            workspaceCtrl.setUser(username);
 
-        this.username = username;
+            this.username = username;
 
-        workspaceCtrl.refresh();
-        cancelTimer();
-        currentTimer = workspaceCtrl.startTimer(REFRESH_RATE);
+            workspaceCtrl.refresh();
+            cancelTimer();
+            currentTimer = workspaceCtrl.startTimer(REFRESH_RATE);
+        }
     }
 
     public String getUsername() {
@@ -278,5 +318,13 @@ public class MainCtrl {
         currentTimer.cancel();
     }
 
-    
+    public void showAdminWorkspace(String username) {
+        primaryStage.setTitle("Admin Workspace");
+        primaryStage.setScene(workspaceAdmin);
+        workspaceAdminCtrl.setUser(username);
+        this.username = username;
+
+        workspaceAdminCtrl.refresh();
+    }
 }
+
