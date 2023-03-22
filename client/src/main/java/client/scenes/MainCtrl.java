@@ -204,14 +204,10 @@ public class MainCtrl {
         if(!isAdmin){
             primaryStage.setTitle("Workspace");
             primaryStage.setScene(workspace);
-
-            boardOverviewCtrl.deleteBoardServerSide();
             workspaceCtrl.refresh();
         } else {
             primaryStage.setTitle("Admin Workspace");
             primaryStage.setScene(workspaceAdmin);
-
-            boardOverviewCtrl.deleteBoardServerSide();
             workspaceAdminCtrl.refresh();
         }
 
