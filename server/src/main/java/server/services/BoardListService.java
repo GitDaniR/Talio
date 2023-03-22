@@ -2,7 +2,6 @@ package server.services;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import server.database.BoardListRepository;
@@ -41,13 +40,13 @@ public class BoardListService {
      * @return the saved list.
      * @throws Exception if title is not valid
      */
-    public ResponseEntity<BoardList> add(BoardList boardList) throws Exception {
+    public BoardList add(BoardList boardList) throws Exception {
         if (boardList.title == null) {
             throw new Exception("Invalid title");
         }
         Board board = this.boardRepository.findById(boardList.boardId).get();
         board.addBoardList(boardList);
-        return ResponseEntity.ok(this.boardListRepository.save(boardList));
+        return this.boardListRepository.save(boardList);
     }
 
     /**
@@ -56,12 +55,11 @@ public class BoardListService {
      * @return the deleted list.
      * @throws Exception if list does not exist.
      */
-    public ResponseEntity<BoardList> deleteById(Integer id) throws Exception {
+    public BoardList deleteById(Integer id) throws Exception {
         if (id < 0 || !this.boardListRepository.existsById(id)) {
             throw new Exception("Invalid id");
         }
-        ResponseEntity<BoardList> deletedRecord =
-                ResponseEntity.ok(this.boardListRepository.findById(id).get());
+        BoardList deletedRecord = this.boardListRepository.findById(id).get();
         this.boardListRepository.deleteById(id);
         return deletedRecord;
     }

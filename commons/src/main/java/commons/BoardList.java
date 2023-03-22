@@ -42,6 +42,11 @@ public class BoardList {
         this.boardId = boardId;
     }
 
+    public BoardList(Integer id, String title, Board board, int boardId) {
+        this(title, board, boardId);
+        this.id = id;
+    }
+
     public BoardList(String text) {
         this.title = text;
     }

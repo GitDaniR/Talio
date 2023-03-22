@@ -44,7 +44,7 @@ public class ServerUtils {
 
     public Board addBoard(Board board){
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(server).path("api/boards") //
+                .target(server).path("api/boards/") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(board, APPLICATION_JSON), Board.class);
@@ -110,7 +110,16 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(title, TEXT_PLAIN), String.class);
-        ///Need to edit to add id instead of list and also pass new title
+
+    }
+
+    public void updateBoardTitle(Integer id, String title){
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/boards/"+id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(title, TEXT_PLAIN), String.class);
+
     }
 
     public List<Card> getCards(int listId) {
@@ -211,6 +220,15 @@ public class ServerUtils {
     public void removeBoardFromJoined(Integer userId, Integer boardId){
         ClientBuilder.newClient(new ClientConfig()) //
                 .target(server).path("api/users/"+userId+"/boards/"+boardId) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .delete();
+
+    }
+
+    public void deleteBoard(Integer boardId){
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/boards/"+boardId) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .delete();

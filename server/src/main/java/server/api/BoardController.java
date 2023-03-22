@@ -21,80 +21,89 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import commons.Board;
-import server.database.BoardRepository;
 import server.services.BoardService;
 
 @RestController
 @RequestMapping("/api/boards")
 public class BoardController {
     private final BoardService boardService;
-    private final BoardRepository repo;
 
     /**
-     * Constructor for BoardController which uses BoardService and BoardRepository.
+     * Constructor for BoardController which uses BoardService.
      * @param boardService
-     * @param repo
      */
-    public BoardController(BoardService boardService, BoardRepository repo) {
+    public BoardController(BoardService boardService) {
         this.boardService = boardService;
-        this.repo = repo;
     }
 
     /**
-     * Method which returns all boards in repo.
+     * Method which returns all boards.
      * @return all boards
      */
-    @GetMapping(path = { "", "/" })
+    @GetMapping("/")
     public List<Board> getAll(){
-        return repo.findAll();
+        return this.boardService.findAll();
     }
 
     /**
-     * Method which returns a board by an id from repo.
+     * Method which returns a board by an id.
      * @param id
      * @return a board
      */
 
     @GetMapping("/{id}")
     public ResponseEntity<Board> getById(@PathVariable("id") Integer id) {
-        ResponseEntity<Board> found;
+        Board found;
         try {
-            found = this.boardService.getById(id, repo);
+            found = this.boardService.getById(id);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
-        return found;
+        return ResponseEntity.ok(found);
     }
 
-    /**git 
+    /**
+     * Method which adds a new board.
      * Method which adds a new board to repo.
      * @param board
      * @return the saved board or BAD_REQUEST
      */
-    @PostMapping(path = { "", "/" })
+    @PostMapping("/")
     public ResponseEntity<Board> add(@RequestBody Board board) {
-        ResponseEntity<Board> saved;
+        Board saved;
         try {
-            saved = this.boardService.add(board, repo);
+            saved = this.boardService.add(board);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
-        return saved;
+        return ResponseEntity.ok(saved);
     }
 
     /**
-     * Method which deletes a board by id from repo.
+     * Method which deletes a board by id.
      * @param id
      * @return the deleted board or BAD_REQUEST
      */
-    @DeleteMapping(path = { "", "/" })
+    @DeleteMapping("/{id}")
     public ResponseEntity<Board> deleteById(@PathVariable("id") Integer id) {
-        ResponseEntity<Board> deletedRecord;
+        Board deletedRecord;
         try {
-            deletedRecord = this.boardService.deleteById(id, repo);
+            deletedRecord = this.boardService.deleteById(id);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
-        return deletedRecord;
+        return ResponseEntity.ok(deletedRecord);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateTitleById(@PathVariable("id") Integer id,
+                                                  @RequestBody String title) {
+        String response;
+        try {
+            response = this.boardService.updateTitleById(id, title);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(response);
     }
 }

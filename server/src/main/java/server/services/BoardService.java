@@ -1,55 +1,83 @@
 package server.services;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import commons.Board;
+import org.springframework.transaction.annotation.Transactional;
 import server.database.BoardRepository;
+
+import java.util.List;
 
 @Service
 public class BoardService {
+    private final BoardRepository repo;
+
+    /**
+     * Constructor for BoardService which uses BoardRepository.
+     * @param repo
+     */
+    public BoardService(BoardRepository repo) {
+        this.repo = repo;
+    }
+
+    /**
+     * Method which returns all boards.
+     * @return
+     */
+    public List<Board> findAll() {
+        return this.repo.findAll();
+    }
 
     /**
      * Method which returns a board by id from repo.
      * @param id
-     * @param repo
      * @return board
      * @throws Exception if id is not in repo.
      */
-    public ResponseEntity<Board> getById(Integer id, BoardRepository repo) throws Exception {
-        if (id < 0 || !repo.existsById(id)) {
+    public Board getById(Integer id) throws Exception {
+        if (id < 0 || !this.repo.existsById(id)) {
             throw new Exception("Invalid id");
         }
-        return ResponseEntity.ok(repo.findById(id).get());
+        return this.repo.findById(id).get();
     }
 
     /**
      * Method which adds a new board to repo.
      * @param board
-     * @param repo
      * @return the saved board
      * @throws Exception if title is null.
      */
-    public ResponseEntity<Board> add(Board board, BoardRepository repo) throws Exception {
+    public Board add(Board board) throws Exception {
         if (board.title == null) {
             throw new Exception("Invalid title");
         }
-        return ResponseEntity.ok(repo.save(board));
+        return this.repo.save(board);
     }
 
     /**
      * Method which deletes a board by id from repo.
      * @param id
-     * @param repo
      * @return the deleted board
      * @throws Exception if id is not in repo.
      */
-    public ResponseEntity<Board> deleteById(Integer id, BoardRepository repo) throws Exception {
+    public Board deleteById(Integer id) throws Exception {
+        if (id < 0 || !this.repo.existsById(id)) {
+            throw new Exception("Invalid id");
+        }
+        Board deletedRecord = this.repo.findById(id).get();
+        this.repo.deleteById(id);
+        return deletedRecord;
+    }
+
+    @Transactional
+    public String updateTitleById(Integer id, String title) throws Exception{
         if (id < 0 || !repo.existsById(id)) {
             throw new Exception("Invalid id");
         }
-        ResponseEntity<Board> deletedRecord = ResponseEntity.ok(repo.findById(id).get());
-        repo.deleteById(id);
-        return deletedRecord;
+        if (title == null || title.equals("") || title.contains("#")) {
+            throw new Exception("Invalid title");
+        }
+        repo.updateBoardById(id, title);
+        return "Board title has been updated successfully.";
     }
 }

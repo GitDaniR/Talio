@@ -19,11 +19,14 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Properties;
 
 public class WelcomePageCtrl {
     private final ServerUtils server;
@@ -41,6 +44,15 @@ public class WelcomePageCtrl {
     @FXML
     private Label userLabel;
 
+    @FXML
+    private PasswordField adminPasswordTxt;
+
+    @FXML
+    private Label adminErrorLabel;
+
+    private boolean isAdmin;
+    private String adminPassword;
+
     @Inject
     public WelcomePageCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
@@ -51,28 +63,54 @@ public class WelcomePageCtrl {
     public void connectToChosenServer() {
         if(testServerConnection()) {
             connectionLabel.setText("");
-            if(testUserID()){
-                userLabel.setText("");
-                server.setServer("http://" + chosenServer.getText() + "/");
-                mainCtrl.showWorkspace(username.getText());
-            }else{
-                userLabel.setText("Bad input: UserID consists of numbers only");
+            userLabel.setText("");
+            adminErrorLabel.setText("");
+            isAdmin = checkAdminPassword();
+            if (isAdmin) {
+                mainCtrl.showAdminWorkspace(username.getText());
+                mainCtrl.setAdmin(true);
+            } else if(adminPasswordTxt.getText().equals("")){
+                mainCtrl.setAdmin(false);
+                if(testUserID()) {
+                    server.setServer("http://" + chosenServer.getText() + "/");
+                    mainCtrl.showWorkspace(username.getText());
+                } else {
+                    userLabel.setText("Bad input: UserID consists of numbers only");
+                }
             }
-
         }
         else {
             connectionLabel.setText("Connection Failed: Server unreachable or wrong input format");
         }
+    }
 
+    /**
+     * Method which compares the input inside the adminPassword field
+     * with the value inside the adminAccess.properties file.
+     * @return true if password matches, otherwise false.
+     */
+    private boolean checkAdminPassword() {
+        Properties prop = new Properties();
+        InputStream stream = this.getClass().getResourceAsStream("/adminAccess.properties");
+        try {
+            prop.load(stream);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        adminPassword = (String) prop.get("adminPassword");
 
+        String input = adminPasswordTxt.getText();
+        if (input.equals(adminPassword))
+            return true;
+        if (!input.isEmpty())
+            adminErrorLabel.setText("Incorrect password.");
+        return false;
     }
 
     private boolean testUserID(){
-        if(username.equals(""))return false;
+        if(username.getText().equals("")) return false;
         return true;
     }
-
-
 
     // It checks if the server address the user inputs is reachable. If yes, then it returns true.
     public boolean testServerConnection() {
@@ -93,5 +131,7 @@ public class WelcomePageCtrl {
         }
     }
 
-
+    public void clearPassword(){
+        adminPasswordTxt.clear();
+    }
 }
