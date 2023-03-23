@@ -41,8 +41,13 @@ public class SubtaskCell extends ListCell<Subtask> {
             }
             // get the Checkbox element from the scene
             CheckBox check = (CheckBox)((AnchorPane)subtask).getChildren().get(0);
+            check.setSelected(task.done);
             // get the text element from the scene
             Text text = (Text) ((AnchorPane)subtask).getChildren().get(1);
+            text.setText(task.title);
+            if(task.done){
+                text.setStyle("-fx-strikethrough: true");
+            }
             // set up the controller for the subtask
             SubtaskCtrl finalSubtaskCtrl = subtaskCtrl;
             // set the server and mainController of the subtask's controller
