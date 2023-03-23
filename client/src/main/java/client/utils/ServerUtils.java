@@ -20,10 +20,8 @@ import static jakarta.ws.rs.core.MediaType.TEXT_PLAIN;
 
 import java.util.List;
 
-import commons.Board;
-import commons.BoardList;
-import commons.Card;
-import commons.User;
+import client.scenes.SubtaskCtrl;
+import commons.*;
 import org.glassfish.jersey.client.ClientConfig;
 
 import jakarta.ws.rs.client.ClientBuilder;
@@ -233,6 +231,20 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON) //
                 .delete();
 
+    }
+
+    public Subtask addSubtask(Subtask subtask, Card card){
+        // TODO when endpoints are finished
+        return new Subtask(subtask.title, subtask.done, subtask.index, card);
+    }
+
+    public void removeSubtask(Integer id){
+        // TODO when endpoints are finished
+        return;
+    }
+    public void updateSubtaskStatus(Integer id, Boolean done){
+        // TODO when endpoints are finished
+        return;
     }
 
 }
