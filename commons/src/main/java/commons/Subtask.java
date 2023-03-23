@@ -21,13 +21,17 @@ public class Subtask {
     public int index;
     @ManyToOne
     @JsonIgnore
+    @JoinColumn(name = "cardId", insertable = false, updatable = false)
     public Card card;
+
+    public Integer cardId;
 
     public Subtask(String title, boolean done, int index, Card card) {
         this.done = done;
         this.title = title;
         this.index = index;
         this.card = card;
+        this.cardId = card.id;
     }
     public void setDone(boolean done) {
         this.done = done;
