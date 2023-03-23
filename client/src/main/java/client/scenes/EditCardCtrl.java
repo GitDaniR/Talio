@@ -48,7 +48,6 @@ public class EditCardCtrl implements Initializable {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {}
 
@@ -64,7 +63,7 @@ public class EditCardCtrl implements Initializable {
 
     public void ok() {
         try {
-            server.editCard(cardToEdit.id, getUpdatedCard(cardToEdit));
+            server.editCard(cardToEdit.id, getUpdatedCard());
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -80,17 +79,13 @@ public class EditCardCtrl implements Initializable {
 
     /**
      * Makes a card with updated title and description
-     * @param oldCard the old version
      * @return a new version of the card
      */
-    private Card getUpdatedCard(Card oldCard) {
+    private Card getUpdatedCard() {
         var t = title.getText();
         var d = description.getText();
 
-        oldCard.title = t;
-        oldCard.description = d;
-
-        return oldCard;
+        return new Card(t,d, cardToEdit.index, cardToEdit.list, cardToEdit.listId);
     }
 
     /**
@@ -101,7 +96,7 @@ public class EditCardCtrl implements Initializable {
     private Subtask getNewSubtask(){
         Subtask subtaskEntity = new Subtask(subtaskTitle.getText(), false,
                cardToEdit.subtasks.size(),cardToEdit);
-        return server.addSubtask(subtaskEntity, cardToEdit);
+        return server.addSubtask(subtaskEntity);
 
     }
 
@@ -112,16 +107,22 @@ public class EditCardCtrl implements Initializable {
         subtasksArray = FXCollections.observableArrayList(cardToEdit.subtasks);
         subtasks.setCellFactory(subtasks1 -> new SubtaskCell(server, mainCtrl));
         subtasks.setItems(subtasksArray);
+    }
 
-        addSubtask.setOnAction(event -> {
-            if(!subtaskTitle.textProperty().get().isEmpty()){
-                Subtask subtaskEntity = getNewSubtask();
-                subtasksArray.add(subtaskEntity);
-                subtaskTitle.textProperty().set("");
-            }
-        });
+    /**
+     * Method that adds Subtask when the add button
+     * for subtask is clicked
+     */
+    public void addSubtask(){
+        if(!subtaskTitle.textProperty().get().isEmpty()){
+            Subtask subtaskEntity = getNewSubtask();
+            subtasksArray.add(subtaskEntity);
+            subtaskTitle.textProperty().set("");
+        }
 
     }
+
+
 
     /**
      * Method that sets the card of the subtasks to be the given card,
@@ -153,8 +154,7 @@ public class EditCardCtrl implements Initializable {
             //fetch the card from the server
             cardToEdit = server.getCardById(id);
             // adjust Subtasks
-            //THIS SHOULD BE UNCOMMENTED WHEN WE HAVE ENDPOINTS
-            //setSubtasks();
+            setSubtasks();
             oldTitle.setText(cardToEdit.title);
             oldDescription.setText(cardToEdit.description);
         }catch(Exception e){

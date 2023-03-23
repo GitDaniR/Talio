@@ -5,7 +5,11 @@ import commons.Subtask;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
-import java.awt.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -15,10 +19,10 @@ public class SubtaskCtrl implements Initializable {
     private  MainCtrl mainCtrl;
 
     @FXML
-    TextField title;
+    private Text title;
 
     @FXML
-    Button check;
+    private CheckBox check;
 
     @FXML
     Button remove;
