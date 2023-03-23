@@ -229,21 +229,48 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .delete();
-
     }
 
-    public Subtask addSubtask(Subtask subtask, Card card){
-        // TODO when endpoints are finished
-        return new Subtask(subtask.title, subtask.done, subtask.index, card);
+    /**
+     * Method that sends request to the server to add Subtask
+     * @param subtask - Subtask entity to be added to the database
+     * @return
+     */
+    public Subtask addSubtask(Subtask subtask){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/subtasks") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(subtask, APPLICATION_JSON), Subtask.class);
     }
 
-    public void removeSubtask(Integer id){
-        // TODO when endpoints are finished
-        return;
+    /**
+     * Method that sends request to the server to
+     * delete the subtask with id -> subtaskId
+     * @param subtaskId - id of the subtask entity
+     *                  to be deleted
+     */
+    public void removeSubtask(Integer subtaskId){
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/subtasks/"+subtaskId) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .delete();
     }
-    public void updateSubtaskStatus(Integer id, Boolean done){
-        // TODO when endpoints are finished
-        return;
+
+    /**
+     * Method that sends request to the server to
+     * update the status of the subtask to status done
+     * @param subtaskId - id of the subtask entity
+     *                  in the database
+     * @param done - status of the subtask to be changed to
+     */
+    public void updateSubtaskStatus(Integer subtaskId, Boolean done){
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/subtasks/"+subtaskId) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(done, APPLICATION_JSON), Boolean.class);
     }
 
 }
