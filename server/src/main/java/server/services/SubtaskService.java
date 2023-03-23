@@ -1,6 +1,5 @@
 package server.services;
 
-import commons.Card;
 import commons.Subtask;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
