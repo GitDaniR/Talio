@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="27.0" prefWidth="525.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SubtaskCtrl">
+   <children>
+      <CheckBox layoutX="10.0" layoutY="5.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="20.0" />
+      <Text layoutX="33.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="168.21630859375" />
+      <Button onAction="#removeTask" graphicTextGap="1.0" layoutX="500.0" layoutY="6.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="X">
+         <font>
+            <Font size="7.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>
