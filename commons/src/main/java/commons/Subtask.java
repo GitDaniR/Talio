@@ -1,5 +1,6 @@
 package commons;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -14,7 +15,7 @@ public class Subtask {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Integer id;
-
+    @JsonProperty(value = "done")
     public boolean done;
 
     public String title;
@@ -45,6 +46,10 @@ public class Subtask {
     }
     public void setDone(boolean done) {
         this.done = done;
+    }
+    @JsonProperty("done")
+    public boolean getDone(){
+        return this.done;
     }
 
     @Override
