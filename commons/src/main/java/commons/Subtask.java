@@ -33,6 +33,14 @@ public class Subtask {
         this.card = card;
         this.cardId = card.id;
     }
+
+    public Subtask(String title, boolean done, int index, Card card, Integer cardId) {
+        this.done = done;
+        this.title = title;
+        this.index = index;
+        this.card = card;
+        this.cardId = cardId;
+    }
     public void setDone(boolean done) {
         this.done = done;
     }
