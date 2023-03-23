@@ -270,7 +270,7 @@ public class ServerUtils {
                 .target(server).path("api/subtasks/"+subtaskId) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .put(Entity.entity(done, APPLICATION_JSON), Boolean.class);
+                .put(Entity.entity(String.valueOf(done),APPLICATION_JSON), String.class);
     }
 
 }
