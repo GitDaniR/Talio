@@ -1,4 +1,5 @@
 package server.api;
+import commons.Card;
 import commons.Subtask;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -78,5 +79,18 @@ public class SubtaskController {
             return ResponseEntity.badRequest().build();
         }
         return deletedRecord;
+    }
+
+    //Put mapping to update subtask status
+    @PutMapping("/{id}")
+    public ResponseEntity<Subtask> updateSubtaskStatus(@PathVariable("id") Integer id,
+                                                       @RequestBody Boolean done){
+        try {
+            Subtask res = subtaskService.updateSubtaskStatus(id, done);
+            return ResponseEntity.ok(res);
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return ResponseEntity.notFound().build();
     }
 }

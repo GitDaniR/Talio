@@ -1,5 +1,6 @@
 package server.services;
 
+import commons.Card;
 import commons.Subtask;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -62,4 +63,11 @@ public class SubtaskService {
         return this.repo;
     }
 
+    public Subtask updateSubtaskStatus(Integer id, Boolean done) throws Exception {
+        Subtask res = repo.findById(id).orElseThrow(
+                ()->new Exception("Subtask with id: " + id +" not found")
+        );
+        res.done = done;
+        return repo.save(res);
+    }
 }
