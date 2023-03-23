@@ -83,7 +83,7 @@ public class SubtaskController {
     //Put mapping to update subtask status
     @PutMapping("/{id}")
     public ResponseEntity<Subtask> updateSubtaskStatus(@PathVariable("id") Integer id,
-                                                       @RequestBody Boolean done){
+                                                       @RequestBody String done){
         try {
             Subtask res = subtaskService.updateSubtaskStatus(id, done);
             return ResponseEntity.ok(res);
