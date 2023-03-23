@@ -307,10 +307,6 @@ public class MainCtrl {
         return username;
     }
 
-    public void deleteCard() {
-        boardOverviewCtrl.refresh();
-    }
-
     /**
      * Method that starts the editing scene for the card
      * @param cardToEdit - card to be edited
