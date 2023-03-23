@@ -35,7 +35,6 @@ public class Card {
         mappedBy = "card",
         cascade = CascadeType.PERSIST
     )
-    @JsonIgnore
     public List<Subtask> subtasks = new ArrayList<>();
     public int index;
     @ManyToOne
