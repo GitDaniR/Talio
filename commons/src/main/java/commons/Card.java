@@ -8,6 +8,9 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import javax.persistence.*;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 @Entity
@@ -21,19 +24,19 @@ public class Card {
 
     public String title;
     public String description;
-//    @ManyToMany(
-//        mappedBy = "cards",
-//        cascade = CascadeType.PERSIST
-//    )
-//    @JsonIgnore
-//    public List<Tag> tags = new ArrayList<>();
+    @ManyToMany(
+        mappedBy = "cards",
+        cascade = CascadeType.PERSIST
+    )
+    @JsonIgnore
+    public List<Tag> tags = new ArrayList<>();
 
-//    @OneToMany(
-//        mappedBy = "card",
-//        cascade = CascadeType.PERSIST
-//    )
-//    @JsonIgnore
-//    public List<Subtask> subtasks;
+    @OneToMany(
+        mappedBy = "card",
+        cascade = CascadeType.PERSIST
+    )
+    @JsonIgnore
+    public List<Subtask> subtasks = new ArrayList<>();
     public int index;
     @ManyToOne
     @JoinColumn(name = "listId", insertable = false, updatable = false)
