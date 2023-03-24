@@ -88,7 +88,7 @@ public class TagController {
      * @param newColor The new color of the tag
      * @return response
      */
-    @PutMapping("/{id}")
+    @PutMapping("/color/{id}")
     public ResponseEntity<Tag> updateColorById(@PathVariable("id") Integer id,
                                                        @RequestBody String newColor){
         try {
@@ -108,7 +108,7 @@ public class TagController {
      * @param newTitle The new title
      * @return response
      */
-    @PutMapping("/{id}")
+    @PutMapping("/title/{id}")
     public ResponseEntity<Tag> updateTitleById(@PathVariable("id") Integer id,
                                                @RequestBody String newTitle){
         try {
