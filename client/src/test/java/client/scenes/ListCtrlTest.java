@@ -15,27 +15,18 @@ import java.util.ResourceBundle;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ListCtrlTest implements Initializable {
+class ListCtrlTest {
 
     ListCtrl listObjectController;
     ListCtrlService listCtrlService;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-    }
-
     @BeforeEach
     public void setup() throws Exception{
+        Platform.setImplicitExit(false);
         Platform.startup(() -> {});
         BoardList currentList = new BoardList("title",new Board("blabla","password"),1);
         listCtrlService = new ListCtrlService(new ListCtrl());
         listCtrlService.inject();
-    }
-
-    @Test
-    public void test(){
-        System.out.print("Yay!");
     }
     @Test
     public void testAddCard(){
