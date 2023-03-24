@@ -98,4 +98,24 @@ public class SubtaskController {
         }
         return ResponseEntity.notFound().build();
     }
+
+
+    /**
+     * Method that updates the index of a subtask
+     *
+     * @param id Id of the subtask
+     * @param index New index of the card
+     * @return response
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<Subtask> updateIndexById(@PathVariable("id") Integer id,
+                                                       @RequestBody String index){
+        try {
+            Subtask res = subtaskService.updateIndexById(id, index);
+            return ResponseEntity.ok(res);
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return ResponseEntity.notFound().build();
+    }
 }
