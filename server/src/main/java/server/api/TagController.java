@@ -99,4 +99,24 @@ public class TagController {
         }
         return ResponseEntity.notFound().build();
     }
+
+
+    /**
+     * Method which updates the title of a tag
+     *
+     * @param id The id of the tag
+     * @param newTitle The new title
+     * @return response
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<Tag> updateTitleById(@PathVariable("id") Integer id,
+                                               @RequestBody String newTitle){
+        try {
+            Tag res = tagService.updateTitleById(id, newTitle);
+            return ResponseEntity.ok(res);
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return ResponseEntity.notFound().build();
+    }
 }

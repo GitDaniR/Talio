@@ -77,4 +77,20 @@ public class TagService {
         res.color = newColor;
         return repo.save(res);
     }
+
+
+    /**
+     * Method which changes the title of a tag
+     * @param id the id of the tag
+     * @param newTitle the new title of the tag
+     * @return the saved tag
+     * @throws Exception if id is not in repo.
+     */
+    public Tag updateTitleById(Integer id, String newTitle) throws Exception {
+        Tag res = repo.findById(id).orElseThrow(
+                ()->new Exception("Tag with id: " + id +" not found")
+        );
+        res.title = newTitle;
+        return repo.save(res);
+    }
 }
