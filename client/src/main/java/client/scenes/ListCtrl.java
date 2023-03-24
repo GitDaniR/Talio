@@ -83,4 +83,11 @@ public class ListCtrl extends AnchorPane implements Initializable{
     public Button getListAddCardButton() {
         return listAddCard;
     }
+
+    /**
+     * @return the id of the boardList it is representing
+     */
+    public int getListId(){
+        return boardList.id;
+    }
 }
