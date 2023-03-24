@@ -233,7 +233,7 @@ public class MainCtrl {
     public void showBoard(){
         primaryStage.setTitle("Board overview");
         primaryStage.setScene(board);
-        boardOverviewCtrl.refresh();
+        //boardOverviewCtrl.refresh();
         cancelTimer();
         currentTimer = boardOverviewCtrl.startTimer(REFRESH_RATE);
 
