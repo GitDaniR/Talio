@@ -70,7 +70,7 @@ public class TagService {
      * @return the saved tag
      * @throws Exception if id is not in repo.
      */
-    public Tag updateTagColor(Integer id, String newColor) throws Exception {
+    public Tag updateColorById(Integer id, String newColor) throws Exception {
         Tag res = repo.findById(id).orElseThrow(
                 ()->new Exception("Tag with id: " + id +" not found")
         );

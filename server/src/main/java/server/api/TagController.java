@@ -80,12 +80,19 @@ public class TagController {
         return deletedRecord;
     }
 
-    //Put mapping to update tag color
+
+    /**
+     * Method which updates a tag's color.
+     *
+     * @param id The id of the tag
+     * @param newColor The new color of the tag
+     * @return response
+     */
     @PutMapping("/{id}")
-    public ResponseEntity<Tag> updateTagColor(@PathVariable("id") Integer id,
+    public ResponseEntity<Tag> updateColorById(@PathVariable("id") Integer id,
                                                        @RequestBody String newColor){
         try {
-            Tag res = tagService.updateTagColor(id, newColor);
+            Tag res = tagService.updateColorById(id, newColor);
             return ResponseEntity.ok(res);
         }catch(Exception e){
             System.out.println(e.getMessage());
