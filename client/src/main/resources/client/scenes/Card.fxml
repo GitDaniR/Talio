@@ -4,9 +4,9 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox styleClass="card" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CardCtrl" style="-fx-border-color: black; -fx-border-width: 4; -fx-background-color: pink;">
+<HBox style="-fx-border-color: black; -fx-border-width: 4; -fx-background-color: pink;" styleClass="card" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CardCtrl">
    <children>
-      <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="234.0">
+      <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="220.0">
          <children>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
@@ -17,12 +17,12 @@
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <ImageView fitHeight="32.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="imgDescription" fitHeight="32.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../client.images/menu.png" />
                      </image>
                   </ImageView>
-                  <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefWidth="200.0" text="(2/3 Done)" textAlignment="RIGHT" />
+                  <Label fx:id="lblSubtasks" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefWidth="200.0" text="(2/3 Done)" textAlignment="RIGHT" />
                </children>
             </HBox>
          </children>

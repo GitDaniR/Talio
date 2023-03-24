@@ -151,14 +151,16 @@ public class BoardOverviewCtrl implements Initializable {
         CardCtrl cardObjectController = cardLoader.getController();
         //Instantiating a new card and its controller
         cardObjectController.setCard(currentCard);
-        ///Attaching the card to be represented to the cardCtrl
-        cardObjectController.setCardTitleText(currentCard.title);
         //Setting the title of the card
 
         cardObjectController.setServerAndCtrl(server,mainCtrl);
         //Just as done with lists
 
         listObjectController.addCardToList(cardObject);
+
+        ///Attaching the card to be represented to the cardCtrl
+        cardObjectController.setCardAttributes();
+
         //Adding the card to the list
         addDragAndDrop(listObjectController.getAmountOfCardsInList(),
                 (HBox) cardObject);
