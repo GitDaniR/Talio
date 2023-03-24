@@ -18,9 +18,8 @@ package server.api;
 import java.util.List;
 import commons.BoardList;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
@@ -102,6 +101,10 @@ public class BoardListController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
+
+        msgs.convertAndSend("/topic/lists/rename",new ImmutablePair<Integer,String>(id,title));
+        System.out.print("Uiteamajuns");
+
         return ResponseEntity.ok(response);
     }
 }

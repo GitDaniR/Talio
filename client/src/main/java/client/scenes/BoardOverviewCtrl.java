@@ -28,13 +28,11 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 
 import java.net.URL;
-import java.util.Collections;
-import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 
 public class BoardOverviewCtrl implements Initializable {
@@ -67,15 +65,28 @@ public class BoardOverviewCtrl implements Initializable {
         server.registerForMessages("/topic/lists", BoardList.class, list -> {
             Platform.runLater(() -> addListToBoard(list));
         });
+        server.registerForMessages("/topic/lists/rename", ImmutablePair.class, i -> {
+            Platform.runLater(() -> renameListById((Integer)i.getKey(),(String) i.getValue()));
+        });
         server.registerForMessages("/topic/lists", Integer.class, id -> {
-            System.out.println("Am ajuns aici!");
             Platform.runLater(() -> deleteListById(id));
         });
     }
 
+    private void renameListById(int id,String title){
+        mainBoard.getChildren().stream()
+                .filter(e -> ((ListCtrl)e.getUserData()).getListId()==id)
+                .findFirst()
+                .ifPresent(e -> ((ListCtrl) e.getUserData()).setListTitleText(title));
+        data.stream()
+                .filter(e -> e.getId().equals(id))
+                .findFirst()
+                .ifPresent(d -> d.title=title);
+    }
+
     private void deleteListById(int id){
         mainBoard.getChildren().stream()
-                .filter(e -> e.getUserData().equals(id))
+                .filter(e -> ((ListCtrl)e.getUserData()).getListId()==id)
                 .findFirst()
                 .ifPresent(mainBoard.getChildren()::remove);
         data.stream()
@@ -89,9 +100,9 @@ public class BoardOverviewCtrl implements Initializable {
         try{
             FXMLLoader listLoader = new FXMLLoader(getClass().getResource("List.fxml"));
             Node listObject = listLoader.load();
-            listObject.setUserData(list.id);
-            //setting the id so we can delete it by id with websockets
             ListCtrl listObjectController = createListObject(listLoader,list);
+            listObject.setUserData(listObjectController);
+            //setting the controller so we have access to it when iterating over nodes
             mainBoard.getChildren().add(listObject);
             setDragReleaseList(listObject);
         } catch (Exception e){
