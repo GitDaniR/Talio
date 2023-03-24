@@ -87,7 +87,7 @@ public class SubtaskController {
      * @param done New boolean value
      * @return response
      */
-    @PutMapping("/{id}")
+    @PutMapping("/status/{id}")
     public ResponseEntity<Subtask> updateSubtaskStatus(@PathVariable("id") Integer id,
                                                        @RequestBody String done){
         try {
@@ -107,7 +107,7 @@ public class SubtaskController {
      * @param index New index of the card
      * @return response
      */
-    @PutMapping("/{id}")
+    @PutMapping("/index/{id}")
     public ResponseEntity<Subtask> updateIndexById(@PathVariable("id") Integer id,
                                                        @RequestBody String index){
         try {
