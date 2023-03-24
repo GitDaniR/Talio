@@ -19,6 +19,9 @@ import java.util.List;
 import commons.BoardList;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import server.services.BoardListService;
@@ -27,13 +30,15 @@ import server.services.BoardListService;
 @RequestMapping("/api/lists")
 public class BoardListController {
     private final BoardListService boardListService;
+    private SimpMessagingTemplate msgs;
 
     /**
      * Constructor for BoardListController which uses boardListService.
      * @param boardListService
      */
-    public BoardListController(BoardListService boardListService) {
+    public BoardListController(BoardListService boardListService, SimpMessagingTemplate msgs) {
         this.boardListService = boardListService;
+        this.msgs=msgs;
     }
 
     /**
@@ -44,7 +49,6 @@ public class BoardListController {
     public List<BoardList> getAll() {
         return boardListService.findAll();
     }
-
     /**
      * Method which adds a new list to repo.
      * @param boardList
@@ -58,6 +62,9 @@ public class BoardListController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
+
+        msgs.convertAndSend("/topic/lists",boardList);
+
         return ResponseEntity.ok(saved);
     }
 
@@ -74,6 +81,9 @@ public class BoardListController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
+
+        msgs.convertAndSend("/topic/lists",id);
+
         return ResponseEntity.ok(deletedRecord);
     }
 

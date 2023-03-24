@@ -64,6 +64,39 @@ public class BoardOverviewCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        server.registerForMessages("/topic/lists", BoardList.class, list -> {
+            Platform.runLater(() -> addListToBoard(list));
+        });
+        server.registerForMessages("/topic/lists", Integer.class, id -> {
+            System.out.println("Am ajuns aici!");
+            Platform.runLater(() -> deleteListById(id));
+        });
+    }
+
+    private void deleteListById(int id){
+        mainBoard.getChildren().stream()
+                .filter(e -> e.getUserData().equals(id))
+                .findFirst()
+                .ifPresent(mainBoard.getChildren()::remove);
+        data.stream()
+            .filter(e -> e.getId().equals(id))
+            .findFirst()
+            .ifPresent(data::remove);
+    }
+
+    private void addListToBoard(BoardList list){
+        data.add(list);
+        try{
+            FXMLLoader listLoader = new FXMLLoader(getClass().getResource("List.fxml"));
+            Node listObject = listLoader.load();
+            listObject.setUserData(list.id);
+            //setting the id so we can delete it by id with websockets
+            ListCtrl listObjectController = createListObject(listLoader,list);
+            mainBoard.getChildren().add(listObject);
+            setDragReleaseList(listObject);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void setBoard(Board board) {
@@ -106,7 +139,7 @@ public class BoardOverviewCtrl implements Initializable {
                 //auto-synchronization needs to be done on the same Thread so we need to use
                 //Platform.runLater  It runs the specified task on the main thread when available
                 Platform.runLater(()->{
-                    refresh();
+                    //refresh();
                 });
             }
         }, 0, refreshRate);
@@ -362,6 +395,7 @@ public class BoardOverviewCtrl implements Initializable {
     }
 
     public void refresh() {
+        System.out.print("Refreshed!");
         //If we are dragging we don't want to recreate all cards
         if(isDragging) return;
         board = server.getBoardByID(board.id);
