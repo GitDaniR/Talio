@@ -80,7 +80,13 @@ public class SubtaskController {
         return deletedRecord;
     }
 
-    //Put mapping to update subtask status
+    /**
+     * Method that updates the "done" boolean field of a subtask
+     *
+     * @param id Id of the subtask
+     * @param done New boolean value
+     * @return response
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Subtask> updateSubtaskStatus(@PathVariable("id") Integer id,
                                                        @RequestBody String done){
