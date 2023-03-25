@@ -56,6 +56,15 @@ public class BoardOverviewCtrl implements Initializable {
         this.mainCtrl = mainCtrl;
     }
 
+    /** This method is used for web sockets - we are registering for messages
+     * In a way, subscribing to that location, every time the server sends something
+     * which matches our patter, we get it
+     *
+     * @param location  The location used to resolve relative paths for the root object, or
+     *                  {@code null} if the location is not known.
+     * @param resources The resources used to localize the root object, or {@code null} if
+     *                  the root object was not localized.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         server.registerForMessages("/topic/lists", BoardList.class, list -> {
@@ -76,10 +85,73 @@ public class BoardOverviewCtrl implements Initializable {
         server.registerForMessages("/topic/cards/rename", Card.class, card -> {
             Platform.runLater(() -> renameCardById(card.id,card.title));
         });
+        server.registerForMessages("/topic/boards/removed", Integer.class, id -> {
+            Platform.runLater(() -> { if(id== board.id) back(); });
+        });
+        server.registerForMessages("/topic/boards/rename", Board.class, newBoard -> {
+            Platform.runLater(() -> { if(board.id == newBoard.id) title.setText(newBoard.title); });
+        });
     }
 
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
+    public void saveBoardInDatabase(){
+        this.board = server.addBoard(this.board);
+    }
+
+    public void assignToUser(User user){
+        server.assignBoardToUser(user.id, this.board.id);
+    }
+
+    //region METHODS FOR BUTTONS
+
+    public void addList() {
+        mainCtrl.showAddList(board);
+    }
+
+    public void deleteBoard() {
+        server.deleteBoard(board.id);
+        mainCtrl.deleteBoard();
+    }
+
+    public void back() {
+        mainCtrl.showWorkspace(mainCtrl.getUsername());
+    }
+
+    /**
+     * Method that copies invite code to the clipboard
+     */
+    public void copyInvite(){
+        StringSelection selection = new StringSelection(getInviteCode());
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(selection, null);
+        copiedToClipboardMessage.setText("Copied to clipboard");
+
+        // message gets deleted after 2 seconds
+        PauseTransition delay = new PauseTransition(Duration.seconds(2));
+        delay.setOnFinished(event -> {
+            copiedToClipboardMessage.setText("");
+        });
+        delay.play();
+    }
+
+    /**
+     * Method that returns invite code to the user
+     * separate private method due to security
+     * @return
+     */
+    private String getInviteCode(){
+        String selection = board.title+"#"+board.id;
+        return selection;
+    }
+
+    //endregion
+
+    //region METHODS FOR SOCKETS
+
     private void addListToBoard(BoardList list){
-        data.add(list);
         try{
             FXMLLoader listLoader = new FXMLLoader(getClass().getResource("List.fxml"));
             Node listObject = listLoader.load();
@@ -98,10 +170,6 @@ public class BoardOverviewCtrl implements Initializable {
                 .filter(e -> ((ListCtrl)e.getUserData()).getListId()==id)
                 .findFirst()
                 .ifPresent(mainBoard.getChildren()::remove);
-        data.stream()
-                .filter(e -> e.getId().equals(id))
-                .findFirst()
-                .ifPresent(data::remove);
     }
 
     private void renameListById(int id,String title){
@@ -109,10 +177,6 @@ public class BoardOverviewCtrl implements Initializable {
                 .filter(e -> ((ListCtrl)e.getUserData()).getListId()==id)
                 .findFirst()
                 .ifPresent(e -> ((ListCtrl) e.getUserData()).setListTitleText(title));
-        data.stream()
-                .filter(e -> e.getId().equals(id))
-                .findFirst()
-                .ifPresent(d -> d.title=title);
     }
 
     private void addCardToBoard(Card card){
@@ -130,18 +194,12 @@ public class BoardOverviewCtrl implements Initializable {
                         e.printStackTrace();
                     }
                 });
-        data.stream()
-                .filter(e -> e.getId().equals(card.listId))
-                .findFirst()
-                .ifPresent(e -> e.addCard(card));
     }
 
     private void deleteCardById(int id){
         for(Node n : mainBoard.getChildren())
             ((ListCtrl) n.getUserData()).getCardBox().getChildren().
                 removeIf(e -> ((CardCtrl)e.getUserData()).getCardId()==id);
-        for(BoardList b: data)
-            b.cards.removeIf(e->e.id==id);
     }
 
     private void renameCardById(int id, String title){
@@ -149,60 +207,13 @@ public class BoardOverviewCtrl implements Initializable {
             for(Node c : ((ListCtrl) n.getUserData()).getCardBox().getChildren())
                 if(((CardCtrl)c.getUserData()).getCardId()==id)
                     ((CardCtrl)c.getUserData()).setCardTitleText(title);
-        for(BoardList b: data)
-            for(Card c: b.cards)
-                if(c.id==id)
-                    c.title=title;
     }
 
-    public void setBoard(Board board) {
-        this.board = board;
-    }
+    //endregion
 
-    public void saveBoardInDatabase(){
-        this.board = server.addBoard(this.board);
-    }
+    //region METHODS FOR REFRESH
 
-    public void assignToUser(User user){
-        server.assignBoardToUser(user.id, this.board.id);
-    }
-
-    public void setHandlerTitle(){
-        title.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) {
-                mainCtrl.showChangeTitle(this.board);
-            }
-        });
-    }
-
-    public void addList() {
-        mainCtrl.showAddList(board);
-    }
-
-    public void deleteBoard() {
-        server.deleteBoard(board.id);
-        mainCtrl.deleteBoard();
-    }
-
-    //A method to start the timer for auto-synchronization and return the instance
-    //so that the caller can then control the timer
-    public Timer startTimer(int refreshRate){
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                //Since apparently we can't add or remove JavaFX objects on another thread
-                //auto-synchronization needs to be done on the same Thread so we need to use
-                //Platform.runLater  It runs the specified task on the main thread when available
-                Platform.runLater(()->{
-                    //refresh();
-                });
-            }
-        }, 0, refreshRate);
-        return timer;
-    }
-
-    /**
+    /** Assigns boardlist to controller and also sets controller
      * @param listObjectController the controller of the list node
      * @param currentList the list to be associated to the controller
      * @return the list controller with the associated boardList
@@ -251,7 +262,57 @@ public class BoardOverviewCtrl implements Initializable {
         return cardObjectController;
     }
 
-    // Drag&Drop methods
+    /**
+     * Method for renaming upon double click
+     */
+    public void setHandlerTitle(){
+        title.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                mainCtrl.showChangeTitle(this.board);
+            }
+        });
+    }
+
+    public void refresh() {
+        //If we are dragging we don't want to recreate all cards
+        if(isDragging) return;
+        board = server.getBoardByID(board.id);
+        title.setText(board.title);
+        setHandlerTitle();
+        try {
+            mainBoard.getChildren().clear();
+            var lists = board.lists;
+            data = FXCollections.observableList(lists);
+            for (BoardList currentList : data) {
+                FXMLLoader listLoader = new FXMLLoader(getClass().getResource("List.fxml"));
+                Node listObject = listLoader.load();
+                ListCtrl listObjectController = listLoader.getController();
+                listObject.setUserData(listLoader.getController());
+                assignListToController(listObjectController,currentList);
+
+                //Adding the cards to the list
+                ObservableList<Card> cardsInList = FXCollections.observableList(currentList.cards);
+                Collections.sort(cardsInList, (s1, s2) -> { return s1.index-s2.index; });
+                currentList.setCards(cardsInList);
+                for (Card currentCard : cardsInList) {
+                    FXMLLoader cardLoader = new FXMLLoader((getClass().getResource("Card.fxml")));
+                    Node cardObject = cardLoader.load();
+                    cardObject.setUserData(cardLoader.getController());
+                    assignAndAddCard(cardObject,currentCard,listObjectController);
+                }
+
+                mainBoard.getChildren().add(listObject);
+                setDragReleaseList(listObject);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+            System.out.print(e.getMessage());
+        }
+    }
+
+    //endregion
+
+    //region DRAG AND DROP METHODS
 
     // method that activates snapshot image being available while dragging the card
     private void addPreview(final FlowPane board, final HBox card){
@@ -305,21 +366,18 @@ public class BoardOverviewCtrl implements Initializable {
             return;
         }
 
-        BoardList initialList = data.get(indexInitialList);
-        BoardList finalList = data.get(indexFinalList);
+        BoardList initialList = ((ListCtrl)mainBoard.getChildren().
+                get(indexInitialList).getUserData()).getBoardList();
+        BoardList finalList = ((ListCtrl)mainBoard.getChildren().
+                get(indexFinalList).getUserData()).getBoardList();
         Card card = initialList.getCardByIndex(indexCardDragged);
 
         server.deleteCard(card.getId());
         card.setIndex(indexCardsDropped);
-
-        if(indexInitialList == indexFinalList){
-            card.setList(initialList);
-            server.addCard(card);
-        }else{
-            card.setList(finalList);
-            server.addCard(card);
-        }
-        refresh();
+        initialList.cards.remove(card);
+        card.setList(indexInitialList==indexFinalList ?
+                initialList:finalList);
+        finalList.cards.add(server.addCard(card));
     }
     // method that handles the drag event on the list
     private void setDragReleaseList(Node list){
@@ -416,74 +474,5 @@ public class BoardOverviewCtrl implements Initializable {
         setDragReleaseBoard();
 
     }
-    // end of Drag&Drop
-
-    /**
-     * Method that returns invite code to the user
-     * separate private method due to security
-     * @return
-     */
-    private String getInviteCode(){
-        String selection = board.title+"#"+board.id;
-        return selection;
-    }
-
-    /**
-     * Method that copies invite code to the clipboard
-     */
-    public void copyInvite(){
-        StringSelection selection = new StringSelection(getInviteCode());
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        clipboard.setContents(selection, null);
-        copiedToClipboardMessage.setText("Copied to clipboard");
-
-        // message gets deleted after 2 seconds
-        PauseTransition delay = new PauseTransition(Duration.seconds(2));
-        delay.setOnFinished(event -> {
-            copiedToClipboardMessage.setText("");
-        });
-        delay.play();
-    }
-
-    public void refresh() {
-        System.out.print("Refreshed!");
-        //If we are dragging we don't want to recreate all cards
-        if(isDragging) return;
-        board = server.getBoardByID(board.id);
-        title.setText(board.title);
-        setHandlerTitle();
-        try {
-            mainBoard.getChildren().clear();
-            var lists = board.lists;
-            data = FXCollections.observableList(lists);
-            for (BoardList currentList : data) {
-                FXMLLoader listLoader = new FXMLLoader(getClass().getResource("List.fxml"));
-                Node listObject = listLoader.load();
-                ListCtrl listObjectController = listLoader.getController();
-                listObject.setUserData(listLoader.getController());
-                assignListToController(listObjectController,currentList);
-
-                //Adding the cards to the list
-                ObservableList<Card> cardsInList = FXCollections.observableList(currentList.cards);
-                Collections.sort(cardsInList, (s1, s2) -> { return s1.index-s2.index; });
-                currentList.setCards(cardsInList);
-                for (Card currentCard : cardsInList) {
-                    FXMLLoader cardLoader = new FXMLLoader((getClass().getResource("Card.fxml")));
-                    Node cardObject = cardLoader.load();
-                    cardObject.setUserData(cardLoader.getController());
-                    assignAndAddCard(cardObject,currentCard,listObjectController);
-                }
-
-                mainBoard.getChildren().add(listObject);
-                setDragReleaseList(listObject);
-            }
-        } catch (Exception e){
-            e.printStackTrace();
-            System.out.print(e.getMessage());
-        }
-    }
-
-    public void back() {
-        mainCtrl.showWorkspace(mainCtrl.getUsername());
-    }
+    //endregion
 }
