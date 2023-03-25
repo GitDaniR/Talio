@@ -200,7 +200,8 @@ public class BoardOverviewCtrl implements Initializable {
         card.setOnMouseDragEntered(new EventHandler<MouseDragEvent>() {
             @Override
             public void handle(MouseDragEvent event) {
-                card.setStyle("-fx-border-color: #ffffa0; -fx-border-width: 4; -fx-background-color: #ffffa0;");
+                card.setStyle("-fx-border-color: #ffffa0;" +
+                    " -fx-border-width: 4; -fx-background-color: #ffffa0;");
             }
         });
 

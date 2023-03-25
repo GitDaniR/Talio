@@ -45,7 +45,8 @@ public class CardCtrl extends AnchorPane implements Initializable{
             lblSubtasks.setVisible(false);
         }else{
             long total = card.subtasks.size();
-            long done = Stream.of(card.subtasks.toArray()).filter(subtask->((Subtask)subtask).done).count();
+            long done = Stream.of(card.subtasks.toArray()).
+                filter(subtask->((Subtask)subtask).done).count();
             lblSubtasks.setText("(" + done + "/" + total + "Done)");
         }
     }
