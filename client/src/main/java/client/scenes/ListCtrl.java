@@ -43,7 +43,6 @@ public class ListCtrl extends AnchorPane implements Initializable{
 
     public void deleteList(){
         server.deleteBoardList(boardList.id);
-        mainCtrl.refreshBoardOverview();
     }
 
     public void editList(){
@@ -67,6 +66,10 @@ public class ListCtrl extends AnchorPane implements Initializable{
      */
     public void setBoardList(BoardList boardList){
         this.boardList = boardList;
+    }
+
+    public BoardList getBoardList() {
+        return boardList;
     }
 
     public VBox getCardBox() {
