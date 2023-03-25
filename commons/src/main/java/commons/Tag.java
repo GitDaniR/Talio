@@ -27,6 +27,9 @@ public class Tag {
     @JsonIgnore
     public List<Card> cards = new ArrayList<>();
 
+    public Tag() {
+    }
+
     public Tag(String title, String color) {
         this.title = title;
         this.color = color;
