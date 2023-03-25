@@ -308,7 +308,7 @@ public class MainCtrl {
     }
 
     public void deleteCard() {
-        boardOverviewCtrl.refresh();
+        //boardOverviewCtrl.refresh();
     }
 
     /**
