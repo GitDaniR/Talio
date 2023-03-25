@@ -43,7 +43,6 @@ public class CardCtrl extends AnchorPane implements Initializable{
 
     public void deleteCard(){
         server.deleteCard(card.id);
-        mainCtrl.deleteCard();
     }
 
     public void editCard(){
