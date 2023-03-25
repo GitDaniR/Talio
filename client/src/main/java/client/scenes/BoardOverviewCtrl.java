@@ -189,6 +189,7 @@ public class BoardOverviewCtrl implements Initializable {
                                 new FXMLLoader((getClass().getResource("Card.fxml")));
                         Node cardObject = cardLoader.load();
                         cardObject.setUserData(cardLoader.getController());
+                        ((ListCtrl)list.getUserData()).getBoardList().cards.add(card);
                         assignAndAddCard(cardObject,card,(ListCtrl) list.getUserData());
                     } catch(Exception e){
                         e.printStackTrace();
