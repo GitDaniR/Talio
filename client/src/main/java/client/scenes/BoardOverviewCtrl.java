@@ -397,4 +397,8 @@ public class BoardOverviewCtrl implements Initializable {
     public void back() {
         mainCtrl.showWorkspace(mainCtrl.getUsername());
     }
+
+    public void showTags(){
+        mainCtrl.showTagOverview(this.board);
+    }
 }
