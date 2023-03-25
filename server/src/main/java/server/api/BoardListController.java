@@ -18,7 +18,6 @@ package server.api;
 import java.util.List;
 import commons.BoardList;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -62,7 +61,8 @@ public class BoardListController {
             return ResponseEntity.badRequest().build();
         }
 
-        msgs.convertAndSend("/topic/lists",boardList);
+        if(msgs!=null)
+            msgs.convertAndSend("/topic/lists",boardList);
 
         return ResponseEntity.ok(saved);
     }
@@ -81,7 +81,8 @@ public class BoardListController {
             return ResponseEntity.badRequest().build();
         }
 
-        msgs.convertAndSend("/topic/lists",id);
+        if(msgs!=null)
+            msgs.convertAndSend("/topic/lists",id);
 
         return ResponseEntity.ok(deletedRecord);
     }
@@ -102,8 +103,8 @@ public class BoardListController {
             return ResponseEntity.badRequest().build();
         }
 
-        msgs.convertAndSend("/topic/lists/rename",new ImmutablePair<Integer,String>(id,title));
-        System.out.print("Uiteamajuns");
+        if(msgs!=null)
+            msgs.convertAndSend("/topic/lists/rename",boardListService.findById(id));
 
         return ResponseEntity.ok(response);
     }

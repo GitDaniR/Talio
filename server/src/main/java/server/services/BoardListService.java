@@ -1,6 +1,7 @@
 package server.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +33,10 @@ public class BoardListService {
      */
     public List<BoardList> findAll() {
         return this.boardListRepository.findAll();
+    }
+
+    public BoardList findById(int id) {
+        return this.boardListRepository.findById(id).orElse(null);
     }
 
     /**
