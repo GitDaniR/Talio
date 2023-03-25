@@ -15,10 +15,7 @@
  */
 package client.scenes;
 
-import commons.Board;
-import commons.BoardList;
-import commons.Card;
-import commons.User;
+import commons.*;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -56,6 +53,12 @@ public class MainCtrl {
     private EditCardCtrl editCardCtrl;
     private Scene editCard;
 
+    private EditTagCtrl editTagCtrl;
+    private Scene editTag;
+    private AddTagCtrl addTagCtrl;
+    private Scene addTag;
+    private TagOverviewCtrl tagOverviewCtrl;
+    private Scene tagOverview;
 
     private double windowHeight;
     private double windowWidth;
@@ -71,7 +74,7 @@ public class MainCtrl {
     public static final int REFRESH_RATE = 1000;
 
     public void initialize(Stage primaryStage,
-            Pair<AddCardCtrl, Parent> addCard,
+                           Pair<AddCardCtrl, Parent> addCard,
                            Pair<AddListCtrl, Parent> addList,
                            Pair<BoardOverviewCtrl, Parent> board,
                            Pair<WelcomePageCtrl, Parent> welcomePage,
@@ -79,7 +82,10 @@ public class MainCtrl {
                            Pair<WorkspaceCtrl, Parent> workspace,
                            Pair<WorkspaceAdminCtrl, Parent> workspaceAdmin,
                            Pair<EditCardCtrl, Parent> editCard,
-                           Pair<ChangeBoardTitleCtrl, Parent> changeBoardTitle) {
+                           Pair<ChangeBoardTitleCtrl, Parent> changeBoardTitle,
+                           Pair<EditTagCtrl, Parent> editTag,
+                           Pair<AddTagCtrl, Parent> addTag,
+                           Pair<TagOverviewCtrl, Parent> tagOverview) {
 
 
         this.primaryStage = primaryStage;
@@ -110,6 +116,15 @@ public class MainCtrl {
 
         this.editCardCtrl = editCard.getKey();
         this.editCard = new Scene(editCard.getValue());
+
+        this.editTagCtrl = editTag.getKey();
+        this.editTag = new Scene(editTag.getValue());
+
+        this.addTagCtrl = addTag.getKey();
+        this.addTag = new Scene(addTag.getValue());
+
+        this.tagOverviewCtrl = tagOverview.getKey();
+        this.tagOverview = new Scene(tagOverview.getValue());
 
         showWelcomePage();
         primaryStage.show();
@@ -338,6 +353,31 @@ public class MainCtrl {
         this.username = username;
 
         workspaceAdminCtrl.refresh();
+    }
+
+    public void showTagOverview(Board board) {
+        primaryStage.setTitle("Tag Overview");
+        primaryStage.setScene(tagOverview);
+        tagOverviewCtrl.setBoard(board);
+
+        tagOverviewCtrl.refresh();
+        cancelTimer();
+    }
+
+    public void showAddTag(Board board) {
+        primaryStage.setTitle("Adding Tag");
+        primaryStage.setScene(addTag);
+        addTagCtrl.setBoard(board);
+
+        cancelTimer();
+    }
+
+    public void showEditTag(Tag tagToEdit) {
+        primaryStage.setTitle("Editing Tag");
+        primaryStage.setScene(editTag);
+        editTagCtrl.setTagToEdit(tagToEdit);
+
+        cancelTimer();
     }
 }
 

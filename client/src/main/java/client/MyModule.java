@@ -35,5 +35,8 @@ public class MyModule implements Module {
         binder.bind(WorkspaceCtrl.class).in(Scopes.SINGLETON);
         binder.bind(WorkspaceAdminCtrl.class).in(Scopes.SINGLETON);
         binder.bind(ChangeBoardTitleCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(EditTagCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(AddTagCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(TagOverviewCtrl.class).in(Scopes.SINGLETON);
     }
 }
