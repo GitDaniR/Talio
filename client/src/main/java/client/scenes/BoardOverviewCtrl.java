@@ -7,10 +7,7 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.io.IOException;
 import com.google.inject.Inject;
-import commons.Board;
-import commons.BoardList;
-import commons.Card;
-import commons.User;
+import commons.*;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -28,7 +25,6 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 
 
 import java.net.URL;
@@ -65,12 +61,47 @@ public class BoardOverviewCtrl implements Initializable {
         server.registerForMessages("/topic/lists", BoardList.class, list -> {
             Platform.runLater(() -> addListToBoard(list));
         });
-        server.registerForMessages("/topic/lists/rename", ImmutablePair.class, i -> {
-            Platform.runLater(() -> renameListById((Integer)i.getKey(),(String) i.getValue()));
+        server.registerForMessages("/topic/lists/rename", BoardList.class, newList -> {
+            Platform.runLater(() -> renameListById(newList.id, newList.title));
         });
         server.registerForMessages("/topic/lists", Integer.class, id -> {
             Platform.runLater(() -> deleteListById(id));
         });
+        server.registerForMessages("/topic/cards", Card.class, card -> {
+            Platform.runLater(() -> addCardToBoard(card));
+        });
+        server.registerForMessages("/topic/cards", Integer.class, id -> {
+            Platform.runLater(() -> deleteCardById(id));
+        });
+        server.registerForMessages("/topic/cards/rename", Card.class, card -> {
+            Platform.runLater(() -> renameCardById(card.id,card.title));
+        });
+    }
+
+    private void addListToBoard(BoardList list){
+        data.add(list);
+        try{
+            FXMLLoader listLoader = new FXMLLoader(getClass().getResource("List.fxml"));
+            Node listObject = listLoader.load();
+            ListCtrl listObjectController = listLoader.getController();
+            listObject.setUserData(listObjectController);
+            assignListToController(listObjectController,list);
+            mainBoard.getChildren().add(listObject);
+            setDragReleaseList(listObject);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private void deleteListById(int id){
+        mainBoard.getChildren().stream()
+                .filter(e -> ((ListCtrl)e.getUserData()).getListId()==id)
+                .findFirst()
+                .ifPresent(mainBoard.getChildren()::remove);
+        data.stream()
+                .filter(e -> e.getId().equals(id))
+                .findFirst()
+                .ifPresent(data::remove);
     }
 
     private void renameListById(int id,String title){
@@ -84,30 +115,44 @@ public class BoardOverviewCtrl implements Initializable {
                 .ifPresent(d -> d.title=title);
     }
 
-    private void deleteListById(int id){
+    private void addCardToBoard(Card card){
         mainBoard.getChildren().stream()
-                .filter(e -> ((ListCtrl)e.getUserData()).getListId()==id)
+                .filter(e -> ((ListCtrl)e.getUserData()).getListId()==card.listId)
                 .findFirst()
-                .ifPresent(mainBoard.getChildren()::remove);
+                .ifPresent(list -> {
+                    try{
+                        FXMLLoader cardLoader =
+                                new FXMLLoader((getClass().getResource("Card.fxml")));
+                        Node cardObject = cardLoader.load();
+                        cardObject.setUserData(cardLoader.getController());
+                        assignAndAddCard(cardObject,card,(ListCtrl) list.getUserData());
+                    } catch(Exception e){
+                        e.printStackTrace();
+                    }
+                });
         data.stream()
-            .filter(e -> e.getId().equals(id))
-            .findFirst()
-            .ifPresent(data::remove);
+                .filter(e -> e.getId().equals(card.listId))
+                .findFirst()
+                .ifPresent(e -> e.addCard(card));
     }
 
-    private void addListToBoard(BoardList list){
-        data.add(list);
-        try{
-            FXMLLoader listLoader = new FXMLLoader(getClass().getResource("List.fxml"));
-            Node listObject = listLoader.load();
-            ListCtrl listObjectController = createListObject(listLoader,list);
-            listObject.setUserData(listObjectController);
-            //setting the controller so we have access to it when iterating over nodes
-            mainBoard.getChildren().add(listObject);
-            setDragReleaseList(listObject);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+    private void deleteCardById(int id){
+        for(Node n : mainBoard.getChildren())
+            ((ListCtrl) n.getUserData()).getCardBox().getChildren().
+                removeIf(e -> ((CardCtrl)e.getUserData()).getCardId()==id);
+        for(BoardList b: data)
+            b.cards.removeIf(e->e.id==id);
+    }
+
+    private void renameCardById(int id, String title){
+        for(Node n : mainBoard.getChildren())
+            for(Node c : ((ListCtrl) n.getUserData()).getCardBox().getChildren())
+                if(((CardCtrl)c.getUserData()).getCardId()==id)
+                    ((CardCtrl)c.getUserData()).setCardTitleText(title);
+        for(BoardList b: data)
+            for(Card c: b.cards)
+                if(c.id==id)
+                    c.title=title;
     }
 
     public void setBoard(Board board) {
@@ -158,13 +203,11 @@ public class BoardOverviewCtrl implements Initializable {
     }
 
     /**
-     * @param listLoader the loader to load @FXML contents
+     * @param listObjectController the controller of the list node
      * @param currentList the list to be associated to the controller
      * @return the list controller with the associated boardList
      */
-    private ListCtrl createListObject(FXMLLoader listLoader, BoardList currentList){
-        ListCtrl listObjectController = listLoader.getController();
-        ///Instantiating a new list
+    private ListCtrl assignListToController(ListCtrl listObjectController, BoardList currentList){
         listObjectController.setBoardList(currentList);
         ///Attaching the boardList object to the listObjectController
         listObjectController.setListTitleText(currentList.title);
@@ -179,26 +222,23 @@ public class BoardOverviewCtrl implements Initializable {
 
 
     /** Method that instantiates and adds the card to the list
-     * @param cardLoader the card fxml loader
+     * @param cardObject the card node (with associated ctrl)
      * @param currentCard the card to represent
-     * @param listObject the list object to add drag and drop to
      * @param listObjectController the controller for adding objects
      * @return the controller of the card
      * @throws IOException related to the loader
      */
-    private CardCtrl createAndAddCardObject(
-            FXMLLoader cardLoader,
+    private CardCtrl assignAndAddCard(
+            Node cardObject,
             Card currentCard,
-            Node listObject, ListCtrl listObjectController) throws IOException {
+            ListCtrl listObjectController){
 
-        Node cardObject = cardLoader.load();
-        CardCtrl cardObjectController = cardLoader.getController();
-        //Instantiating a new card and its controller
+        CardCtrl cardObjectController = (CardCtrl) cardObject.getUserData();
+        //Getting the controller
         cardObjectController.setCard(currentCard);
         ///Attaching the card to be represented to the cardCtrl
         cardObjectController.setCardTitleText(currentCard.title);
         //Setting the title of the card
-
         cardObjectController.setServerAndCtrl(server,mainCtrl);
         //Just as done with lists
 
@@ -419,7 +459,9 @@ public class BoardOverviewCtrl implements Initializable {
             for (BoardList currentList : data) {
                 FXMLLoader listLoader = new FXMLLoader(getClass().getResource("List.fxml"));
                 Node listObject = listLoader.load();
-                ListCtrl listObjectController = createListObject(listLoader,currentList);
+                ListCtrl listObjectController = listLoader.getController();
+                listObject.setUserData(listLoader.getController());
+                assignListToController(listObjectController,currentList);
 
                 //Adding the cards to the list
                 ObservableList<Card> cardsInList = FXCollections.observableList(currentList.cards);
@@ -427,7 +469,9 @@ public class BoardOverviewCtrl implements Initializable {
                 currentList.setCards(cardsInList);
                 for (Card currentCard : cardsInList) {
                     FXMLLoader cardLoader = new FXMLLoader((getClass().getResource("Card.fxml")));
-                    createAndAddCardObject(cardLoader,currentCard,listObject,listObjectController);
+                    Node cardObject = cardLoader.load();
+                    cardObject.setUserData(cardLoader.getController());
+                    assignAndAddCard(cardObject,currentCard,listObjectController);
                 }
 
                 mainBoard.getChildren().add(listObject);
