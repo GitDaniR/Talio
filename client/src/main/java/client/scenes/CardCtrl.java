@@ -54,4 +54,8 @@ public class CardCtrl extends AnchorPane implements Initializable{
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
+
+    public int getCardId() {
+        return card.id;
+    }
 }
