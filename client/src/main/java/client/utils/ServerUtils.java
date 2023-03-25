@@ -20,10 +20,7 @@ import static jakarta.ws.rs.core.MediaType.TEXT_PLAIN;
 
 import java.util.List;
 
-import commons.Board;
-import commons.BoardList;
-import commons.Card;
-import commons.User;
+import commons.*;
 import org.glassfish.jersey.client.ClientConfig;
 
 import jakarta.ws.rs.client.ClientBuilder;
@@ -170,9 +167,9 @@ public class ServerUtils {
 
     /**
      * Server method to return the user based on userID
-     * @param userID - userID for the User table in databse
-     * @return - User object correcsponding to user
-     * havin id: userID
+     * @param userID - userID for the User table in database
+     * @return - User object corresponding to user
+     * having id: userID
      */
     public User getUserById(int userID){
         return ClientBuilder.newClient(new ClientConfig()) //
@@ -235,4 +232,43 @@ public class ServerUtils {
 
     }
 
+    public void deleteTag(Integer tagId) {
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/tags/"+tagId) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .delete();
+    }
+
+    public void editTagTitle(Integer tagId, String newTitle) {
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/tags/title/"+tagId) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(newTitle, APPLICATION_JSON), Tag.class);
+    }
+
+    public void editTagColor(Integer tagId, String newColor) {
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/tags/color/"+tagId) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(newColor, APPLICATION_JSON), Tag.class);
+    }
+
+    public Tag getTagById(Integer tagId) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/tags/"+tagId) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<Tag>() {});
+    }
+
+    public Tag addTag(Tag tag) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/tags") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(tag, APPLICATION_JSON), Tag.class);
+    }
 }
