@@ -1,6 +1,5 @@
 package server.api;
 
-import commons.BoardList;
 import commons.Card;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -50,7 +49,7 @@ public class CardController {
         }
 
         if(msgs!=null)
-            msgs.convertAndSend("/topic/cards",card);
+            msgs.convertAndSend("/topic/cards",saved);
 
         return ResponseEntity.ok(saved);
     }
