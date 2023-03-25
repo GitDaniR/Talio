@@ -18,6 +18,7 @@ public class Tag {
     public Integer id;
     public String title;
     public String color;
+
     @ManyToMany
     @JoinTable(
             name = "cards",
@@ -27,12 +28,21 @@ public class Tag {
     @JsonIgnore
     public List<Card> cards = new ArrayList<>();
 
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "boardId", insertable = false, updatable = false)
+    public Board board;
+
+    public Integer boardId;
+
     public Tag() {
     }
 
-    public Tag(String title, String color) {
+    public Tag(String title, String color, Board board, int boardId) {
         this.title = title;
         this.color = color;
+        this.board = board;
+        this.boardId = boardId;
     }
 
     public void addToCard(Card card){
