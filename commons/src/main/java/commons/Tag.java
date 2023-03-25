@@ -45,6 +45,11 @@ public class Tag {
         this.boardId = boardId;
     }
 
+    public Tag(String title, String color) {
+        this.title = title;
+        this.color = color;
+    }
+
     public void addToCard(Card card){
         cards.add(card);
     }

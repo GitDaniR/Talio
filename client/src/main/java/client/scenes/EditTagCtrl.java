@@ -4,15 +4,12 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Tag;
 import jakarta.ws.rs.WebApplicationException;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class EditTagCtrl implements Initializable {
 
