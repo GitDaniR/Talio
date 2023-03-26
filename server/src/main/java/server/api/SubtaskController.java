@@ -109,7 +109,7 @@ public class SubtaskController {
      */
     @PutMapping("/index/{id}")
     public ResponseEntity<Subtask> updateIndexById(@PathVariable("id") Integer id,
-                                                       @RequestBody String index){
+                                                       @RequestBody Integer index){
         try {
             Subtask res = subtaskService.updateIndexById(id, index);
             return ResponseEntity.ok(res);

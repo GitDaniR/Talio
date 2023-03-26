@@ -286,4 +286,18 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(title, APPLICATION_JSON), String.class);
     }
+
+    /**
+     * Method that sends PUT request to the server to
+     * update the index of the subtask.
+     * @param id - id of the subtask
+     * @param index - new index of the subtask
+     */
+    public void updateSubtaskIndex(Integer id, Integer index){
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/subtasks/index/" + id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(index, APPLICATION_JSON), Integer.class);
+    }
 }

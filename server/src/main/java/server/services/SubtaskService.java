@@ -87,11 +87,11 @@ public class SubtaskService {
      * @return changed subtask
      * @throws Exception if id not found in repository
      */
-    public Subtask updateIndexById(Integer id, String index) throws Exception {
+    public Subtask updateIndexById(Integer id, Integer index) throws Exception {
         Subtask res = repo.findById(id).orElseThrow(
                 ()->new Exception("Subtask with id: " + id +" not found")
         );
-        res.index = Integer.parseInt(index);
+        res.index = index;
         return repo.save(res);
     }
 
