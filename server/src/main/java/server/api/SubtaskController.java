@@ -118,4 +118,23 @@ public class SubtaskController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    /**
+     * Method that updates the title of a subtask
+     *
+     * @param id Id of the subtask
+     * @param title New title of the card
+     * @return response
+     */
+    @PutMapping("/title/{id}")
+    public ResponseEntity<Subtask> updateTitleById(@PathVariable("id") Integer id,
+                                                   @RequestBody String title){
+        try {
+            Subtask res = subtaskService.updateTitleById(id, title);
+            return ResponseEntity.ok(res);
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return ResponseEntity.notFound().build();
+    }
 }

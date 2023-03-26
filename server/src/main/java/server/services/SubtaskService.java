@@ -99,7 +99,7 @@ public class SubtaskService {
      * Method that updates the title of a subtask
      *
      * @param id Id of the subtask
-     * @param title new index of the subtask
+     * @param title new title of the subtask
      * @return changed subtask
      * @throws Exception if id not found in repository
      */
