@@ -39,6 +39,7 @@ public class SubtaskCell extends ListCell<Subtask> {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+            setEventHandlerTitle(subtaskCtrl.getTitle());
             // get the Checkbox element from the scene
             CheckBox check = (CheckBox)((AnchorPane)subtask).getChildren().get(0);
             check.setSelected(task.done);
@@ -67,9 +68,14 @@ public class SubtaskCell extends ListCell<Subtask> {
             });
             setText(null);
             setGraphic(subtask);
-
-
         }
+    }
 
+    public void setEventHandlerTitle(Text title){
+        title.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                System.out.println("Success");
+            }
+        });
     }
 }

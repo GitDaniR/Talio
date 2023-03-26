@@ -48,6 +48,9 @@ public class SubtaskCtrl implements Initializable {
     }
     public void setSubtask(Subtask subtask){
         this.subtask = subtask;
+    }
 
+    public Text getTitle() {
+        return this.title;
     }
 }
