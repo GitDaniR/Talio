@@ -31,10 +31,7 @@ import javafx.util.Duration;
 
 
 import java.net.URL;
-import java.util.Collections;
-import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 
 public class BoardOverviewCtrl implements Initializable {
@@ -233,16 +230,8 @@ public class BoardOverviewCtrl implements Initializable {
         BoardList finalList = data.get(indexFinalList);
         Card card = initialList.getCardByIndex(indexCardDragged);
 
-        server.deleteCard(card.getId());
-        card.setIndex(indexCardsDropped);
-
-        if(indexInitialList == indexFinalList){
-            card.setList(initialList);
-            server.addCard(card);
-        }else{
-            card.setList(finalList);
-            server.addCard(card);
-        }
+        //server.deleteCard(card.getId());
+        server.updateCardList(card, finalList.getId());
         refresh();
     }
     // method that handles the drag event on the list
