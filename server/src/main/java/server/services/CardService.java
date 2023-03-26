@@ -1,6 +1,5 @@
 package server.services;
 
-import commons.Board;
 import commons.BoardList;
 import commons.Card;
 import org.springframework.stereotype.Service;
@@ -72,7 +71,8 @@ public class CardService {
         Card res = cardRepo.findById(id).orElseThrow(
                 ()->new Exception("Card with id: " + id +" not found")
         );
-        BoardList list = listRepo.findById(listId).orElseThrow(()->new Exception("List with id: " + id +" not found"));
+        BoardList list = listRepo.findById(listId).orElseThrow(
+                ()->new Exception("List with id: " + id +" not found"));
         res.listId = listId;
         res.list = list;
         return cardRepo.save(res);
