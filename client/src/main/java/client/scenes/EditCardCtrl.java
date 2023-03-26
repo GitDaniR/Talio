@@ -3,17 +3,18 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Card;
+import commons.Subtask;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
 
 import java.net.URL;
-import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class EditCardCtrl implements Initializable {
 
@@ -34,12 +35,19 @@ public class EditCardCtrl implements Initializable {
     private Button cancel;
     private Card cardToEdit;
 
+    @FXML
+    private ListView<Subtask> subtasks;
+    @FXML
+    private TextField subtaskTitle;
+    @FXML
+    private Button addSubtask;
+    private ObservableList<Subtask> subtasksArray;
+
     @Inject
     public EditCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {}
 
@@ -55,8 +63,7 @@ public class EditCardCtrl implements Initializable {
 
     public void ok() {
         try {
-            server.editCard(cardToEdit.id, getUpdatedCard(cardToEdit));
-
+            server.editCard(cardToEdit.id, getUpdatedCard());
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -72,18 +79,60 @@ public class EditCardCtrl implements Initializable {
 
     /**
      * Makes a card with updated title and description
-     * @param oldCard the old version
      * @return a new version of the card
      */
-    private Card getUpdatedCard(Card oldCard) {
+    private Card getUpdatedCard() {
         var t = title.getText();
         var d = description.getText();
 
-        return new Card(t, d, oldCard.index, oldCard.list, oldCard.listId);
+        return new Card(t,d, cardToEdit.index, cardToEdit.list, cardToEdit.listId);
     }
 
+    /**
+     * Method that returns the subtask with the title from the text box
+     * which is added to the database through the server
+     * @return
+     */
+    private Subtask getNewSubtask(){
+        Subtask subtaskEntity = new Subtask(subtaskTitle.getText(), false,
+               cardToEdit.subtasks.size(),cardToEdit);
+        return server.addSubtask(subtaskEntity);
+
+    }
+
+    /**
+     * Method that sets subtasks to be the subtasks of the card
+     */
+    public void setSubtasks(){
+        subtasksArray = FXCollections.observableArrayList(cardToEdit.subtasks);
+        subtasks.setCellFactory(subtasks1 -> new SubtaskCell(server, mainCtrl));
+        subtasks.setItems(subtasksArray);
+    }
+
+    /**
+     * Method that adds Subtask when the add button
+     * for subtask is clicked
+     */
+    public void addSubtask(){
+        if(!subtaskTitle.textProperty().get().isEmpty()){
+            Subtask subtaskEntity = getNewSubtask();
+            subtasksArray.add(subtaskEntity);
+            subtaskTitle.textProperty().set("");
+        }
+
+    }
+
+
+
+    /**
+     * Method that sets the card of the subtasks to be the given card,
+     * it also sets the handler for the button to add the subtasks to its
+     * card through server calls
+     * @param cardToEdit - card that subtasks belongs to
+     */
     public void setCardToEdit(Card cardToEdit) {
         this.cardToEdit = cardToEdit;
+        setSubtasks();
     }
 
     public Timer startTimer(int refreshRate){
@@ -104,6 +153,8 @@ public class EditCardCtrl implements Initializable {
         try{
             //fetch the card from the server
             cardToEdit = server.getCardById(id);
+            // adjust Subtasks
+            setSubtasks();
             oldTitle.setText(cardToEdit.title);
             oldDescription.setText(cardToEdit.description);
         }catch(Exception e){

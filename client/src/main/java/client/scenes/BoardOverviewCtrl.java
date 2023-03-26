@@ -128,7 +128,7 @@ public class BoardOverviewCtrl implements Initializable {
         listObjectController.setServerAndCtrl(server,mainCtrl);
         //Setting the server and  ctrl because I have no idea how to inject it
         listObjectController.getListAddCardButton().
-                setOnAction(event -> mainCtrl.showAddCard(currentList));
+                setOnAction(event -> listObjectController.addDefaultCard());
         //Telling the button what to do
         return listObjectController;
     }
@@ -148,6 +148,7 @@ public class BoardOverviewCtrl implements Initializable {
             Node listObject, ListCtrl listObjectController) throws IOException {
 
         Node cardObject = cardLoader.load();
+
         CardCtrl cardObjectController = cardLoader.getController();
         //Instantiating a new card and its controller
         cardObjectController.setCard(currentCard);
@@ -157,6 +158,13 @@ public class BoardOverviewCtrl implements Initializable {
 
         cardObjectController.setServerAndCtrl(server,mainCtrl);
         //Just as done with lists
+
+        //if card is double-clicked editCard scene is shown
+        cardObject.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                cardObjectController.editCard();
+            }
+        });
 
         listObjectController.addCardToList(cardObject);
         //Adding the card to the list

@@ -20,10 +20,7 @@ import static jakarta.ws.rs.core.MediaType.TEXT_PLAIN;
 
 import java.util.List;
 
-import commons.Board;
-import commons.BoardList;
-import commons.Card;
-import commons.User;
+import commons.*;
 import org.glassfish.jersey.client.ClientConfig;
 
 import jakarta.ws.rs.client.ClientBuilder;
@@ -232,7 +229,48 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .delete();
+    }
 
+    /**
+     * Method that sends request to the server to add Subtask
+     * @param subtask - Subtask entity to be added to the database
+     * @return
+     */
+    public Subtask addSubtask(Subtask subtask){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/subtasks") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(subtask, APPLICATION_JSON), Subtask.class);
+    }
+
+    /**
+     * Method that sends request to the server to
+     * delete the subtask with id -> subtaskId
+     * @param subtaskId - id of the subtask entity
+     *                  to be deleted
+     */
+    public void removeSubtask(Integer subtaskId){
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/subtasks/"+subtaskId) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .delete();
+    }
+
+    /**
+     * Method that sends request to the server to
+     * update the status of the subtask to status done
+     * @param subtaskId - id of the subtask entity
+     *                  in the database
+     * @param done - status of the subtask to be changed to
+     */
+    public void updateSubtaskStatus(Integer subtaskId, Boolean done){
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/subtasks/"+subtaskId) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(String.valueOf(done),APPLICATION_JSON), String.class);
     }
 
 }
