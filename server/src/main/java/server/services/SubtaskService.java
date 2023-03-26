@@ -94,4 +94,20 @@ public class SubtaskService {
         res.index = Integer.parseInt(index);
         return repo.save(res);
     }
+
+    /**
+     * Method that updates the title of a subtask
+     *
+     * @param id Id of the subtask
+     * @param title new index of the subtask
+     * @return changed subtask
+     * @throws Exception if id not found in repository
+     */
+    public Subtask updateTitleById(Integer id, String title) throws Exception {
+        Subtask res = repo.findById(id).orElseThrow(
+                ()->new Exception("Subtask with id: " + id +" not found")
+        );
+        res.title = title;
+        return repo.save(res);
+    }
 }
