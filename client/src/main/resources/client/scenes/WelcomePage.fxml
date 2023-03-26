@@ -8,7 +8,7 @@
 
    <children>
       <Button layoutX="286.0" layoutY="360.0" mnemonicParsing="false" onAction="#connectToChosenServer" text="Connect" />
-      <TextField fx:id="chosenServer" layoutX="231.0" layoutY="149.0" prefHeight="26.0" prefWidth="170.0" text="localhost:8080" />
+      <TextField fx:id="chosenServer" layoutX="231.0" layoutY="149.0" prefHeight="26.0" prefWidth="170.0" promptText="localhost:8080" text="localhost:8080" />
       <Text layoutX="125.0" layoutY="168.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Server Address:">
          <font>
             <Font size="14.0" />
@@ -35,7 +35,7 @@
             <Font size="14.0" />
          </font>
       </Text>
-      <TextField fx:id="username" layoutX="231.0" layoutY="214.0" prefHeight="26.0" prefWidth="170.0" />
+      <TextField fx:id="username" layoutX="231.0" layoutY="214.0" prefHeight="26.0" prefWidth="170.0" text="test" />
       <Label fx:id="userLabel" layoutX="125.0" layoutY="249.0" prefHeight="20.0" prefWidth="350.0" textAlignment="CENTER" textFill="RED" />
       <Text layoutX="113.0" layoutY="298.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Admin password:">
          <font>

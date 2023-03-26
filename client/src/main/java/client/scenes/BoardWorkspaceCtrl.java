@@ -30,21 +30,13 @@ public class BoardWorkspaceCtrl implements Initializable {
 
     private User user;
 
-    public void setMainCtrlAndServer(MainCtrl mainCtrl, ServerUtils server,
-                                     WorkspaceCtrl workspaceCtrl){
-        this.mainCtrl = mainCtrl;
-        this.server = server;
-        this.workspaceCtrl = workspaceCtrl;
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
     }
 
-    public void setBoard(Board board){
-        this.board = board;
-        lblBoardName.setText(board.title);
-    }
+    //region Button methods
 
-    public void setUser(User user){
-        this.user = user;
-    }
     public void openBoard(){
         mainCtrl.showBoard(board);
     }
@@ -54,8 +46,30 @@ public class BoardWorkspaceCtrl implements Initializable {
         this.workspaceCtrl.refresh();
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    //endregion
 
+    //region Getters and setters
+
+    public void setMainCtrlAndServer(MainCtrl mainCtrl, ServerUtils server,
+                                     WorkspaceCtrl workspaceCtrl){
+        this.mainCtrl = mainCtrl;
+        this.server = server;
+        this.workspaceCtrl = workspaceCtrl;
     }
+
+    public Board getBoard(){
+        return board;
+    }
+
+    public Label getLblBoardName(){ return lblBoardName;}
+
+    public void setBoard(Board board){
+        this.board = board;
+        lblBoardName.setText(board.title);
+    }
+    public void setUser(User user){
+        this.user = user;
+    }
+
+    //endregion
 }

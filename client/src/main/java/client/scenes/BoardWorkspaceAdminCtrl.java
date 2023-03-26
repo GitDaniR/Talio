@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -30,6 +31,25 @@ public class BoardWorkspaceAdminCtrl implements Initializable {
 
     private User user;
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
+    }
+
+    //region Button methods
+
+    public void openBoard(){
+        mainCtrl.showBoard(board);
+    }
+    public void deleteBoard(){
+        server.deleteBoard(board.id);
+        this.workspaceAdminCtrl.refresh();
+    }
+
+    //endregion
+
+    //region Getters and setters
+
     public void setMainCtrlAndServer(MainCtrl mainCtrl, ServerUtils server,
                                      WorkspaceAdminCtrl workspaceAdminCtrl){
         this.mainCtrl = mainCtrl;
@@ -45,17 +65,15 @@ public class BoardWorkspaceAdminCtrl implements Initializable {
     public void setUser(User user){
         this.user = user;
     }
-    public void openBoard(){
-        mainCtrl.showBoard(board);
+
+
+    public Labeled getLblBoardName() {
+        return lblBoardName;
     }
 
-    public void deleteBoard(){
-        server.deleteBoard(board.id);
-        this.workspaceAdminCtrl.refresh();
+    public Board getBoard() {
+        return board;
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-    }
+    //endregion
 }
