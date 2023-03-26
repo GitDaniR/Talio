@@ -17,10 +17,12 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -59,12 +61,12 @@ public class WelcomePageCtrl {
         this.server = server;
     }
 
-    // Connects to the server the user inputs in the field "chosenServer"
+    /**
+     * Connects to the server the user inputs in the field "chosenServer"
+     */
     public void connectToChosenServer() {
+        clearLabels();
         if(testServerConnection()) {
-            connectionLabel.setText("");
-            userLabel.setText("");
-            adminErrorLabel.setText("");
             isAdmin = checkAdminPassword();
             if (isAdmin) {
                 mainCtrl.showAdminWorkspace(username.getText());
@@ -75,13 +77,37 @@ public class WelcomePageCtrl {
                     server.setServer("http://" + chosenServer.getText() + "/");
                     mainCtrl.showWorkspace(username.getText());
                 } else {
-                    userLabel.setText("Bad input: UserID consists of numbers only");
+                    setTextAndRemoveAfterDelay(userLabel,
+                            "Bad input: Username is empty.");
                 }
+            } else {
+                setTextAndRemoveAfterDelay(adminErrorLabel,
+                        "Wrong admin password.");
             }
         }
         else {
-            connectionLabel.setText("Connection Failed: Server unreachable or wrong input format");
+            setTextAndRemoveAfterDelay(connectionLabel,
+                    "Connection Failed: Server unreachable or wrong input format.");
         }
+    }
+
+    private void setTextAndRemoveAfterDelay(Label label,String text){
+        label.setText(text);
+        PauseTransition delay = new PauseTransition(Duration.seconds(2));
+        delay.setOnFinished(event -> {
+            label.setText("");
+        });
+        delay.play();
+    }
+
+    private void clearLabels(){
+        connectionLabel.setText("");
+        userLabel.setText("");
+        adminErrorLabel.setText("");
+    }
+
+    public void clearPassword(){
+        adminPasswordTxt.clear();
     }
 
     /**
@@ -98,21 +124,18 @@ public class WelcomePageCtrl {
             throw new RuntimeException(e);
         }
         adminPassword = (String) prop.get("adminPassword");
-
         String input = adminPasswordTxt.getText();
-        if (input.equals(adminPassword))
-            return true;
-        if (!input.isEmpty())
-            adminErrorLabel.setText("Incorrect password.");
-        return false;
+
+        return input.equals(adminPassword);
     }
 
     private boolean testUserID(){
-        if(username.getText().equals("")) return false;
-        return true;
+        return !username.getText().equals("");
     }
 
-    // It checks if the server address the user inputs is reachable. If yes, then it returns true.
+    /** checks if the server address the user inputs is reachable.
+     * @return  If yes, then it returns true.
+     */
     public boolean testServerConnection() {
         try {
             URL url = new URL("http://" + chosenServer.getText() + "/api/boards/");
@@ -126,12 +149,7 @@ public class WelcomePageCtrl {
             // If the responseCode == 200 => server is reachable
             return responseCode == HttpURLConnection.HTTP_OK;
         } catch (IOException e) {
-            e.printStackTrace();
             return false;
         }
-    }
-
-    public void clearPassword(){
-        adminPasswordTxt.clear();
     }
 }
