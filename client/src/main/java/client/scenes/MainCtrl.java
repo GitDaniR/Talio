@@ -60,9 +60,6 @@ public class MainCtrl {
     private double windowHeight;
     private double windowWidth;
 
-    //Maintain the current running timer so se can stop it when changing views/exiting the app
-    private Timer currentTimer;
-
     private String username;
 
     private boolean isAdmin = false;
@@ -217,8 +214,6 @@ public class MainCtrl {
     public void showBoard(){
         primaryStage.setTitle("Board overview");
         primaryStage.setScene(board);
-        boardOverviewCtrl.refresh();
-
     }
 
     public void showChangeTitle(Board board){
@@ -254,7 +249,6 @@ public class MainCtrl {
         primaryStage.setTitle("Welcome Page");
         primaryStage.setScene(welcomePage);
         welcomePageCtrl.clearPassword();
-
     }
 
     /**
@@ -277,10 +271,6 @@ public class MainCtrl {
 
     public String getUsername() {
         return username;
-    }
-
-    public void deleteCard() {
-        boardOverviewCtrl.refresh();
     }
 
     /**

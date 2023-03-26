@@ -2,6 +2,7 @@ package server.api;
 
 import commons.Card;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import server.services.CardService;
 
@@ -12,8 +13,11 @@ import java.util.List;
 public class CardController {
     private CardService cardService;
 
-    public CardController(CardService cardService){
+    private SimpMessagingTemplate msgs;
+
+    public CardController(CardService cardService,SimpMessagingTemplate msgs){
         this.cardService = cardService;
+        this.msgs = msgs;
     }
 
     //Get mapping to get all cards. Currently only intended for testing purposes
@@ -37,36 +41,50 @@ public class CardController {
     //Post mapping to add a card
     @PostMapping(path = { "", "/" })
     public ResponseEntity<Card> addCard(@RequestBody Card card){
+        Card saved;
         try {
-            return ResponseEntity.ok(cardService.addCard(card));
+            saved = cardService.addCard(card);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.badRequest().build();
+
+        if(msgs!=null)
+            msgs.convertAndSend("/topic/cards",saved);
+
+        return ResponseEntity.ok(saved);
     }
 
     //Delete mapping to delete a card
     @DeleteMapping("/{id}")
     public ResponseEntity<Card> removeCard(@PathVariable int id){
+        Card deletedRecord;
         try {
-            Card res = cardService.removeCardById(id);
-            return ResponseEntity.ok(res);
+            deletedRecord = cardService.removeCardById(id);
         }catch(Exception e){
-            System.out.println(e.getMessage());
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
+
+        if(msgs!=null)
+            msgs.convertAndSend("/topic/cards",id);
+
+        return ResponseEntity.ok(deletedRecord);
     }
 
     //Put mapping to update a card
     @PutMapping("/{id}")
     public ResponseEntity<Card> editCard(@PathVariable int id, @RequestBody Card card){
+        Card res;
         try {
-            Card res = cardService.editCardById(id, card);
-            return ResponseEntity.ok(res);
+            res = cardService.editCardById(id, card);
         }catch(Exception e){
-            System.out.println(e.getMessage());
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
+
+        if(msgs!=null)
+            msgs.convertAndSend("/topic/cards/rename",res);
+
+        return ResponseEntity.ok(res);
+
     }
 
 
