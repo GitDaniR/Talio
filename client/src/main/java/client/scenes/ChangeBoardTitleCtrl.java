@@ -4,7 +4,6 @@ import client.utils.ServerUtils;
 import commons.Board;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.animation.PauseTransition;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -12,9 +11,6 @@ import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import com.google.inject.Inject;
 import javafx.util.Duration;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class ChangeBoardTitleCtrl {
 
