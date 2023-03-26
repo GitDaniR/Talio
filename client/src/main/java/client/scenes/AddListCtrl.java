@@ -46,6 +46,7 @@ public class AddListCtrl {
      * @param boardToAddTo setting the board to add to
      */
     public void setBoardToAddTo(Board boardToAddTo){
+
         this.boardToAddTo=boardToAddTo;
     }
 
