@@ -1,5 +1,7 @@
 package server.services;
 
+import commons.Board;
+import commons.BoardList;
 import commons.Card;
 import org.springframework.stereotype.Service;
 import server.database.BoardListRepository;
@@ -63,6 +65,16 @@ public class CardService {
         );
         res.title = card.title;
         res.description = card.description;
+        return cardRepo.save(res);
+    }
+
+    public Card editCardByIdList(int id, int listId)throws Exception{
+        Card res = cardRepo.findById(id).orElseThrow(
+                ()->new Exception("Card with id: " + id +" not found")
+        );
+        BoardList list = listRepo.findById(listId).orElseThrow(()->new Exception("List with id: " + id +" not found"));
+        res.listId = listId;
+        res.list = list;
         return cardRepo.save(res);
     }
 }
