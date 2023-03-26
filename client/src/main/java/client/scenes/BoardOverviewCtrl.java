@@ -105,6 +105,13 @@ public class BoardOverviewCtrl implements Initializable {
         server.assignBoardToUser(user.id, this.board.id);
     }
 
+    public void underlineText(){
+        title.setUnderline(true);
+    }
+    public void undoUnderline(){
+        title.setUnderline(false);
+    }
+
     //region METHODS FOR BUTTONS
 
     public void addList() {
