@@ -279,9 +279,9 @@ public class ServerUtils {
      * @param id - id of the subtask
      * @param title - new title of the subtask
      */
-    public void updateSubtaskStatus(Integer id, String title){
+    public void updateSubtaskTitle(Integer id, String title){
         ClientBuilder.newClient(new ClientConfig()) //
-                .target(server).path("api/subtasks/title" + id) //
+                .target(server).path("api/subtasks/title/" + id) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(title, APPLICATION_JSON), String.class);

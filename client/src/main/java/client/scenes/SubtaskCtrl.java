@@ -66,7 +66,6 @@ public class SubtaskCtrl implements Initializable {
     @FXML
     public void onEnter(ActionEvent ae) {
         editableTitle.setVisible(false);
-        title.setText(editableTitle.getText());
-        System.out.println("Pressed enter");
+        server.updateSubtaskTitle(subtask.id, editableTitle.getText());
     }
 }
