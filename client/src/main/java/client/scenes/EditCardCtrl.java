@@ -94,10 +94,10 @@ public class EditCardCtrl implements Initializable {
      * @return
      */
     private Subtask getNewSubtask(){
+
         Subtask subtaskEntity = new Subtask(subtaskTitle.getText(), false,
                cardToEdit.subtasks.size(),cardToEdit);
         return server.addSubtask(subtaskEntity);
-
     }
 
     /**
@@ -119,10 +119,9 @@ public class EditCardCtrl implements Initializable {
             subtasksArray.add(subtaskEntity);
             subtaskTitle.textProperty().set("");
         }
+        cardToEdit = server.getCardById(cardToEdit.getId());
 
     }
-
-
 
     /**
      * Method that sets the card of the subtasks to be the given card,
