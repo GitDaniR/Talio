@@ -96,6 +96,7 @@ public class EditCardCtrl implements Initializable {
     private Subtask getNewSubtask(){
         Subtask subtaskEntity = new Subtask(subtaskTitle.getText(), false,
                cardToEdit.subtasks.size(),cardToEdit);
+        cardToEdit.subtasks.add(subtaskEntity);
         return server.addSubtask(subtaskEntity);
 
     }
