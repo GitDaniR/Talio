@@ -33,7 +33,7 @@ public class Card {
 
     @OneToMany(
         mappedBy = "card",
-        cascade = CascadeType.PERSIST
+        cascade = CascadeType.ALL
     )
     public List<Subtask> subtasks = new ArrayList<>();
     public int index;
