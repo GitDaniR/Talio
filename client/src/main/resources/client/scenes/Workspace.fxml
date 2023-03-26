@@ -6,14 +6,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="preview" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.WorkspaceCtrl">
+<AnchorPane fx:id="preview" prefHeight="540.0" prefWidth="860.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.WorkspaceCtrl">
    <children>
-      <Button fx:id="disconnectButton" layoutX="20.0" layoutY="366.0" mnemonicParsing="false" onAction="#disconnect" text="Disconnect" />
+      <Button fx:id="disconnectButton" layoutX="20.0" layoutY="495.0" mnemonicParsing="false" onAction="#disconnect" text="Disconnect" />
       <Button fx:id="createBoard" layoutX="20.0" layoutY="29.0" mnemonicParsing="false" onAction="#createBoard" text="Create board" />
-      <Button fx:id="joinBoard" layoutX="492.0" layoutY="29.0" mnemonicParsing="false" onAction="#joinInputBoard" text="Join Board" />
-      <VBox fx:id="boardsDisplay" layoutX="14.0" layoutY="100.0" prefHeight="266.0" prefWidth="571.0" />
-      <TextField fx:id="inputBoardToJoin" layoutX="329.0" layoutY="29.0" promptText="#BoardId" />
+      <Button fx:id="joinBoard" layoutX="748.0" layoutY="29.0" mnemonicParsing="false" onAction="#joinInputBoard" text="Join Board" />
+      <VBox fx:id="boardsDisplay" layoutX="14.0" layoutY="100.0" prefHeight="367.0" prefWidth="571.0" />
+      <TextField fx:id="inputBoardToJoin" layoutX="585.0" layoutY="29.0" promptText="#BoardId" />
       <Label layoutX="28.0" layoutY="82.0" text="My Boards:" />
-      <Label fx:id="alreadyJoinedText" layoutX="209.0" layoutY="33.0" textAlignment="RIGHT" />
+      <Label fx:id="alreadyJoinedText" layoutX="370.0" layoutY="33.0" prefHeight="17.0" prefWidth="209.0" textAlignment="RIGHT" />
    </children>
 </AnchorPane>
