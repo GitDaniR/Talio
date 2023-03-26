@@ -74,4 +74,8 @@ public class CardCtrl extends AnchorPane implements Initializable{
     public int getCardId() {
         return card.id;
     }
+
+    public void setCardTitleText(String title) {
+        cardTitle.setText(title);
+    }
 }
