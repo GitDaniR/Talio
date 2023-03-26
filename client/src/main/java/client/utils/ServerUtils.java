@@ -298,6 +298,6 @@ public class ServerUtils {
                 .target(server).path("api/subtasks/index/" + id) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .put(Entity.entity(index, APPLICATION_JSON), Integer.class);
+                .put(Entity.entity(String.valueOf(index), APPLICATION_JSON), String.class);
     }
 }
