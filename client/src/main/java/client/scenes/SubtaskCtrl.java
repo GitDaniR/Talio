@@ -2,11 +2,13 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Subtask;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
 import java.net.URL;
@@ -25,6 +27,9 @@ public class SubtaskCtrl implements Initializable {
 
     @FXML
     Button remove;
+
+    @FXML
+    private TextField editableTitle;
 
     private Subtask subtask;
     public void setServerAndCtrl(ServerUtils server, MainCtrl mainCtrl){
@@ -52,5 +57,16 @@ public class SubtaskCtrl implements Initializable {
 
     public Text getTitle() {
         return this.title;
+    }
+
+    public TextField getEditableTitle() {
+        return this.editableTitle;
+    }
+
+    @FXML
+    public void onEnter(ActionEvent ae) {
+        editableTitle.setVisible(false);
+        title.setText(editableTitle.getText());
+        System.out.println("Pressed enter");
     }
 }
