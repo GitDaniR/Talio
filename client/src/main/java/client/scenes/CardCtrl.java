@@ -2,14 +2,17 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Card;
+import commons.Subtask;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.fxml.Initializable;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.stream.Stream;
 
 public class CardCtrl extends AnchorPane implements Initializable{
     @FXML
@@ -18,6 +21,10 @@ public class CardCtrl extends AnchorPane implements Initializable{
     private Button cardEdit;
     @FXML
     private Button cardDelete;
+    @FXML
+    private ImageView imgDescription;
+    @FXML
+    private Label lblSubtasks;
 
     private Card card;
 
@@ -28,10 +35,20 @@ public class CardCtrl extends AnchorPane implements Initializable{
     public void initialize(URL location, ResourceBundle resources) {}
 
     /** Sets text of the title of the card
-     * @param text
      */
-    public void setCardTitleText(String text) {
-        cardTitle.setText(text);
+    public void setCardAttributes() {
+        cardTitle.setText(card.title);
+        if(card.description == null || card.description.isEmpty()) {
+            imgDescription.setVisible(false);
+        }
+        if(card.subtasks == null || card.subtasks.isEmpty()){
+            lblSubtasks.setVisible(false);
+        }else{
+            long total = card.subtasks.size();
+            long done = Stream.of(card.subtasks.toArray()).
+                filter(subtask->((Subtask)subtask).done).count();
+            lblSubtasks.setText("(" + done + "/" + total + "Done)");
+        }
     }
 
     /** This method associates a card to the controller for easy access
