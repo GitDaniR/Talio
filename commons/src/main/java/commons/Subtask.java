@@ -23,6 +23,8 @@ public class Subtask {
     @JsonIgnore
     public Card card;
 
+    public Subtask() {}
+
     public Subtask(String title, boolean done, int index, Card card) {
         this.done = done;
         this.title = title;
