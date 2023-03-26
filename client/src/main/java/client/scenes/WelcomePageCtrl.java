@@ -69,8 +69,12 @@ public class WelcomePageCtrl {
         if(testServerConnection()) {
             isAdmin = checkAdminPassword();
             if (isAdmin) {
-                mainCtrl.showAdminWorkspace(username.getText());
-                mainCtrl.setAdmin(true);
+                if(testUserID()){
+                    mainCtrl.showAdminWorkspace(username.getText());
+                    mainCtrl.setAdmin(true);
+                } else
+                    setTextAndRemoveAfterDelay(userLabel,
+                            "Bad input: Username is empty.");
             } else if(adminPasswordTxt.getText().equals("")){
                 mainCtrl.setAdmin(false);
                 if(testUserID()) {
