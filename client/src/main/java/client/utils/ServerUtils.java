@@ -137,10 +137,19 @@ public class ServerUtils {
 
     public Card addCard(Card card) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(server).path("api/cards") //
+                .target(server).path("api/cards/") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(card, APPLICATION_JSON), Card.class);
+    }
+
+    public Card updateCardList(Card card, Integer listID){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/cards/"+card.id+"/list/"+listID) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(listID, APPLICATION_JSON), Card.class);
+
     }
 
     public void editCard(Integer id, Card card) {
