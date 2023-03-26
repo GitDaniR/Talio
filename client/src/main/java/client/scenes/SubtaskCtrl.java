@@ -31,6 +31,12 @@ public class SubtaskCtrl implements Initializable {
     @FXML
     private TextField editableTitle;
 
+    @FXML
+    private Button moveUp;
+
+    @FXML
+    private Button moveDown;
+
     private Subtask subtask;
     public void setServerAndCtrl(ServerUtils server, MainCtrl mainCtrl){
         this.server = server;

@@ -17,5 +17,15 @@
          </font>
       </Button>
       <TextField fx:id="editableTitle" layoutX="33.0" onAction="#onEnter" prefHeight="28.0" prefWidth="354.0" visible="false" />
+      <Button fx:id="moveUp" graphicTextGap="1.0" layoutX="425.0" layoutY="5.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#removeTask" prefHeight="18.0" prefWidth="26.0" text="⯅" textAlignment="CENTER">
+         <font>
+            <Font size="11.0" />
+         </font>
+      </Button>
+      <Button fx:id="moveDown" graphicTextGap="1.0" layoutX="465.0" layoutY="5.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#removeTask" prefHeight="18.0" prefWidth="26.0" text="⯆" textAlignment="CENTER">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>
