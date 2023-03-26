@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import commons.Card;
 import commons.Subtask;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -73,5 +74,15 @@ public class SubtaskCtrl implements Initializable {
     public void onEnter(ActionEvent ae) {
         editableTitle.setVisible(false);
         server.updateSubtaskTitle(subtask.id, editableTitle.getText());
+    }
+
+    public void subtaskMoveUp() {
+        int currentIndex = subtask.index;
+        if (currentIndex >= 1) {
+            Card c = server.getCardById(subtask.cardId);
+            Subtask subtaskAbove = c.subtasks.get(currentIndex - 1);
+            server.updateSubtaskIndex(subtask.id, currentIndex - 1);
+            server.updateSubtaskIndex(subtaskAbove.id, currentIndex);
+        }
     }
 }
