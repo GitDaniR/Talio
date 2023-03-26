@@ -248,13 +248,15 @@ public class BoardOverviewCtrl implements Initializable {
         CardCtrl cardObjectController = (CardCtrl) cardObject.getUserData();
         //Getting the controller
         cardObjectController.setCard(currentCard);
-        ///Attaching the card to be represented to the cardCtrl
-        cardObjectController.setCardTitleText(currentCard.title);
         //Setting the title of the card
         cardObjectController.setServerAndCtrl(server,mainCtrl);
         //Just as done with lists
 
         listObjectController.addCardToList(cardObject);
+
+        ///Attaching the card to be represented to the cardCtrl
+        cardObjectController.setCardAttributes();
+
         //Adding the card to the list
         addDragAndDrop(listObjectController.getAmountOfCardsInList(),
                 (HBox) cardObject);
@@ -344,7 +346,8 @@ public class BoardOverviewCtrl implements Initializable {
         card.setOnMouseDragEntered(new EventHandler<MouseDragEvent>() {
             @Override
             public void handle(MouseDragEvent event) {
-                card.setStyle("-fx-background-color: #ffffa0;");
+                card.setStyle("-fx-border-color: #ffffa0;" +
+                    " -fx-border-width: 4; -fx-background-color: #ffffa0;");
             }
         });
 
