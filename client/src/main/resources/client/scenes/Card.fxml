@@ -25,7 +25,7 @@
                   <Label fx:id="lblSubtasks" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefWidth="200.0" text="(2/3 Done)" textAlignment="RIGHT" />
                </children>
             </HBox>
-            <FlowPane />
+            <FlowPane fx:id="paneTags" />
          </children>
       </VBox>
    </children>
