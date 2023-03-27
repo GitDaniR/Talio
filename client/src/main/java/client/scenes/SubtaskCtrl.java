@@ -52,6 +52,13 @@ public class SubtaskCtrl implements Initializable {
             System.out.println("Text changed from " + oldValue + " to " + newValue);
             server.updateSubtaskTitle(subtask.id, newValue);
         });
+        editableTitle.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                // Text field lost focus
+                System.out.println("Text field lost focus");
+                editableTitle.setVisible(false);
+            }
+        });
     }
 
     public void finishTask(){
