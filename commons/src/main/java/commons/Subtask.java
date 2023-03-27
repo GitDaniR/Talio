@@ -24,10 +24,12 @@ public class Subtask {
     @JsonIgnore
     @JoinColumn(name = "cardId", insertable = false, updatable = false)
     public Card card;
-
+    
     public Integer cardId;
 
     public Subtask(){}
+
+
 
     public Subtask(String title, boolean done, int index, Card card) {
         this.done = done;
