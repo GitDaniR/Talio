@@ -24,7 +24,7 @@ public class Subtask {
     @JsonIgnore
     @JoinColumn(name = "cardId", insertable = false, updatable = false)
     public Card card;
-    
+
     public Integer cardId;
 
     public Subtask(){}
