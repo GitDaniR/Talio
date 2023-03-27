@@ -16,13 +16,10 @@
 package client;
 
 import static com.google.inject.Guice.createInjector;
-
 import java.io.IOException;
 import java.net.URISyntaxException;
-
 import client.scenes.*;
 import com.google.inject.Injector;
-
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -37,7 +34,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        var addCard = FXML.load(AddCardCtrl.class, "client", "scenes", "AddCard.fxml");
         var addList = FXML.load(AddListCtrl.class, "client", "scenes", "AddList.fxml");
         var currentBoard = 
             FXML.load(BoardOverviewCtrl.class, "client", "scenes", "BoardOverview.fxml");
@@ -55,17 +51,10 @@ public class Main extends Application {
         var tagOverview = FXML.load(TagOverviewCtrl.class,"client","scenes","TagOverview.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, addCard, addList,
+
+        mainCtrl.initialize(primaryStage, addList,
                 currentBoard, welcomePage, editList, workspace, workspaceAdmin, editCard,
                 editBoard, editTag, addTag, tagOverview);
 
-
-    }
-
-    //Override the stop method of the application so that we can cancel any timer left running
-    //and allow the client to close properly
-    @Override
-    public void stop(){
-        INJECTOR.getInstance(MainCtrl.class).cancelTimer();
     }
 }

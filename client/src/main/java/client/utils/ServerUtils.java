@@ -18,7 +18,10 @@ package client.utils;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 import static jakarta.ws.rs.core.MediaType.TEXT_PLAIN;
 
+import java.lang.reflect.Type;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 
 import commons.*;
 import org.glassfish.jersey.client.ClientConfig;
@@ -26,6 +29,10 @@ import org.glassfish.jersey.client.ClientConfig;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
+import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.simp.stomp.*;
+import org.springframework.web.socket.client.standard.StandardWebSocketClient;
+import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 public class ServerUtils {
 
@@ -137,10 +144,19 @@ public class ServerUtils {
 
     public Card addCard(Card card) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(server).path("api/cards") //
+                .target(server).path("api/cards/") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(card, APPLICATION_JSON), Card.class);
+    }
+
+    public Card updateCardList(Card card, Integer listID){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/cards/"+card.id+"/list/"+listID) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(listID, APPLICATION_JSON), Card.class);
+
     }
 
     public void editCard(Integer id, Card card) {
@@ -229,15 +245,42 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .delete();
+    }
 
+    /**
+     * Method that sends request to the server to add Subtask
+     * @param subtask - Subtask entity to be added to the database
+     * @return
+     */
+    public Subtask addSubtask(Subtask subtask){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/subtasks") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(subtask, APPLICATION_JSON), Subtask.class);
+    }
+
+    /**
+     * Method that sends request to the server to
+     * delete the subtask with id -> subtaskId
+     * @param subtaskId - id of the subtask entity
+     *                  to be deleted
+     */
+    public void removeSubtask(Integer subtaskId){
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/subtasks/"+subtaskId) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .delete();
     }
 
     public void deleteTag(Integer tagId) {
         ClientBuilder.newClient(new ClientConfig()) //
-                .target(server).path("api/tags/"+tagId) //
+                .target(server).path("api/tags/" + tagId) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .delete();
+
     }
 
     public void editTagTitle(Integer tagId, String newTitle) {
@@ -271,4 +314,54 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(tag, APPLICATION_JSON), Tag.class);
     }
+
+    /**
+     * Method that sends request to the server to
+     * update the status of the subtask to status done
+     * @param subtaskId - id of the subtask entity
+     *                  in the database
+     * @param done - status of the subtask to be changed to
+     */
+    public void updateSubtaskStatus(Integer subtaskId, Boolean done){
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/subtasks/"+subtaskId) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(String.valueOf(done),APPLICATION_JSON), String.class);
+    }
+
+    private StompSession session = connect("ws://localhost:8080/websocket");
+
+    private StompSession connect(String url){
+        var client = new StandardWebSocketClient();
+        var stomp = new WebSocketStompClient(client);
+        stomp.setMessageConverter(new MappingJackson2MessageConverter());
+        try{
+            return stomp.connect(url, new StompSessionHandlerAdapter() {}).get();
+        } catch (InterruptedException e){
+            Thread.currentThread().interrupt();
+        } catch (ExecutionException e){
+            throw new RuntimeException();
+        }
+        throw new IllegalStateException();
+    }
+
+    public <T> void registerForMessages(String dest, Class<T> type, Consumer<T> consumer){
+        session.subscribe(dest, new StompFrameHandler() {
+
+            @Override
+            public Type getPayloadType(StompHeaders headers) {
+                return type;
+            }
+
+            @Override
+            public void handleFrame(StompHeaders headers, Object payload) {
+                consumer.accept((T) payload);
+            }
+        });
+    }
+
+//    public void send(String dest, Object o){
+//        session.send(dest,o);
+//    }
 }

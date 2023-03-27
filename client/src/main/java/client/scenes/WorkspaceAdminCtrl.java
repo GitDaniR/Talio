@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import commons.Board;
 import commons.User;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -41,8 +42,14 @@ public class WorkspaceAdminCtrl implements Initializable {
         this.mainCtrl = mainCtrl;
     }
 
-    public void createBoard(){
-        mainCtrl.showNewBoard(this.user);
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        server.registerForMessages("/topic/boards/removed", Integer.class, boardId -> {
+            Platform.runLater(() -> removeBoard(boardId));
+        });
+        server.registerForMessages("/topic/boards/rename", Board.class, newBoard -> {
+            Platform.runLater(() -> { renameBoard(newBoard.id,newBoard.title); });
+        });
     }
 
     /**
@@ -55,6 +62,32 @@ public class WorkspaceAdminCtrl implements Initializable {
             this.user = server.addUser(new User(username));
     }
 
+
+    //region SOCKET METHODS
+
+    private void renameBoard(int id, String title){
+        boardsDisplay.getChildren().stream()
+                .filter(e -> ((BoardWorkspaceAdminCtrl)e.getUserData()).getBoard().id==id)
+                .findFirst()
+                .ifPresent(e -> ((BoardWorkspaceAdminCtrl) e.getUserData())
+                        .getLblBoardName().setText(title));
+    }
+
+    private void removeBoard(int boardId){
+        if(user.hasBoardAlready(boardId))
+            boardsDisplay.getChildren().
+                    removeIf(e ->
+                            ((BoardWorkspaceCtrl)e.getUserData()).getBoard().id==boardId);
+    }
+
+    //endregion
+
+    //region Button methods
+
+    public void createBoard(){
+        mainCtrl.showNewBoard(this.user);
+    }
+
     /**
      * Method that disconnects the user and redirect to
      * welcome page
@@ -63,9 +96,9 @@ public class WorkspaceAdminCtrl implements Initializable {
         mainCtrl.showWelcomePage();
     }
 
+    //endregion
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {}
+    //region Refresh methods
 
     /**
      * Method that sets controller for the javaFX object
@@ -95,6 +128,7 @@ public class WorkspaceAdminCtrl implements Initializable {
                     getResource("BoardWorkspaceAdmin.fxml"));
             try {
                 Node boardObject = boardWorkspaceAdminLoader.load();
+                boardObject.setUserData(boardWorkspaceAdminLoader.getController());
                 setCtrl(boardWorkspaceAdminLoader, board);
                 boardsDisplay.getChildren().add(boardObject);
 
@@ -108,4 +142,7 @@ public class WorkspaceAdminCtrl implements Initializable {
     private void clearBoards(){
         boardsDisplay.getChildren().clear();
     }
+
+    //endregion
+
 }

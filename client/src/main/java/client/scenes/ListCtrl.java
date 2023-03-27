@@ -2,15 +2,19 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.BoardList;
+import commons.Card;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.fxml.Initializable;
 
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 
 
 import java.net.URL;
@@ -41,9 +45,22 @@ public class ListCtrl extends AnchorPane implements Initializable{
         cardBox.getChildren().add(card);
     }
 
+    public void addDefaultCard(){
+        try {
+            server.addCard(new Card("Task", "", boardList.cards.size(), boardList, boardList.id));
+        } catch (WebApplicationException e) {
+
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            return;
+        }
+        mainCtrl.showBoard();
+    }
+
     public void deleteList(){
         server.deleteBoardList(boardList.id);
-        mainCtrl.refreshBoardOverview();
     }
 
     public void editList(){
@@ -69,6 +86,10 @@ public class ListCtrl extends AnchorPane implements Initializable{
         this.boardList = boardList;
     }
 
+    public BoardList getBoardList() {
+        return boardList;
+    }
+
     public VBox getCardBox() {
         return cardBox;
     }
@@ -82,5 +103,12 @@ public class ListCtrl extends AnchorPane implements Initializable{
      */
     public Button getListAddCardButton() {
         return listAddCard;
+    }
+
+    /**
+     * @return the id of the boardList it is representing
+     */
+    public int getListId(){
+        return boardList.id;
     }
 }

@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.WelcomePageCtrl">
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.WelcomePageCtrl">
+
 
    <children>
       <Button layoutX="286.0" layoutY="360.0" mnemonicParsing="false" onAction="#connectToChosenServer" text="Connect" />
-      <TextField fx:id="chosenServer" layoutX="231.0" layoutY="149.0" prefHeight="26.0" prefWidth="170.0" />
+      <TextField fx:id="chosenServer" layoutX="231.0" layoutY="149.0" prefHeight="26.0" prefWidth="170.0" promptText="localhost:8080" text="localhost:8080" />
       <Text layoutX="125.0" layoutY="168.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Server Address:">
          <font>
             <Font size="14.0" />
@@ -39,7 +37,7 @@
             <Font size="14.0" />
          </font>
       </Text>
-      <TextField fx:id="username" layoutX="231.0" layoutY="214.0" prefHeight="26.0" prefWidth="170.0" />
+      <TextField fx:id="username" layoutX="231.0" layoutY="214.0" prefHeight="26.0" prefWidth="170.0" text="test" />
       <Label fx:id="userLabel" layoutX="125.0" layoutY="249.0" prefHeight="20.0" prefWidth="350.0" textAlignment="CENTER" textFill="RED" />
       <Text layoutX="113.0" layoutY="298.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Admin password:">
          <font>

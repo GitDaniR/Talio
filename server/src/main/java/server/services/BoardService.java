@@ -70,7 +70,7 @@ public class BoardService {
     }
 
     @Transactional
-    public String updateTitleById(Integer id, String title) throws Exception{
+    public Board updateTitleById(Integer id, String title) throws Exception{
         if (id < 0 || !repo.existsById(id)) {
             throw new Exception("Invalid id");
         }
@@ -78,6 +78,6 @@ public class BoardService {
             throw new Exception("Invalid title");
         }
         repo.updateBoardById(id, title);
-        return "Board title has been updated successfully.";
+        return getById(id);
     }
 }

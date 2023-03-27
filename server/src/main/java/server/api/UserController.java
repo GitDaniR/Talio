@@ -1,6 +1,7 @@
 package server.api;
 import commons.User;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import server.services.UserService;
 
@@ -11,13 +12,16 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
+    private SimpMessagingTemplate msgs;
+
     /**
      * Constructor for UserController which uses UserService and UserRepository.
      *
      * @param userService
      */
-    public UserController(UserService userService) {
+    public UserController(UserService userService, SimpMessagingTemplate msgs) {
         this.userService = userService;
+        this.msgs = msgs;
     }
 
     /**
@@ -101,13 +105,18 @@ public class UserController {
     @PutMapping(path = "{userId}/boards/{boardId}")
     public ResponseEntity<User> joinBoard(@PathVariable("userId") Integer userId,
                                           @PathVariable("boardId") Integer boardId){
+        ResponseEntity<User> res;
         try{
-            return this.userService.joinBoard(userId, boardId);
-
+            res =  this.userService.joinBoard(userId, boardId);
         }
         catch (Exception e){
             return ResponseEntity.badRequest().build();
         }
+
+        //if(msgs!=null)
+        //    msgs.convertAndSend("/topic/boards/join",));
+
+        return res;
     }
 
     @DeleteMapping(path = "{userId}/boards/{boardId}")

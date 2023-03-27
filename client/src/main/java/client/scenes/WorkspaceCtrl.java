@@ -10,23 +10,18 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-
-import javax.inject.Inject;
-
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
+import javax.inject.Inject;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class WorkspaceCtrl implements Initializable {
 
@@ -46,7 +41,8 @@ public class WorkspaceCtrl implements Initializable {
     private Button disconnectButton;
     @FXML
     private VBox boardsDisplay;
-    @FXML private TextField txtBoardName;
+    @FXML
+    private TextField txtBoardName;
     @FXML
     private Label alreadyJoinedText;
 
@@ -56,18 +52,45 @@ public class WorkspaceCtrl implements Initializable {
         this.mainCtrl = mainCtrl;
     }
 
-    public Timer startTimer(int refreshRate){
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                Platform.runLater(()->{
-                    refresh();
-                });
-            }
-        }, 0, refreshRate);
-        return timer;
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        server.registerForMessages("/topic/boards/removed", Integer.class, boardId -> {
+            Platform.runLater(() -> removeBoard(boardId));
+        });
+        server.registerForMessages("/topic/boards/rename", Board.class, newBoard -> {
+            Platform.runLater(() -> { renameBoard(newBoard.id,newBoard.title); });
+        });
     }
+
+    /**
+     * Method that sets the user for the workspace
+     * @param username - username of the user
+     */
+    public void setUser(String username){
+        this.user = server.getUserByUsername(username);
+        if(this.user == null)this.user = server.addUser(new User(username));
+    }
+
+    //region SOCKET METHODS
+
+    private void renameBoard(int id, String title){
+        boardsDisplay.getChildren().stream()
+                .filter(e -> ((BoardWorkspaceCtrl)e.getUserData()).getBoard().id==id)
+                .findFirst()
+                .ifPresent(e -> ((BoardWorkspaceCtrl) e.getUserData())
+                        .getLblBoardName().setText(title));
+    }
+
+    private void removeBoard(int boardId){
+        if(user.hasBoardAlready(boardId))
+            boardsDisplay.getChildren().
+                    removeIf(e ->
+                    ((BoardWorkspaceCtrl)e.getUserData()).getBoard().id==boardId);
+    }
+
+    //endregion
+
+    //region Button methods
 
     public void createBoard(){
         mainCtrl.showNewBoard(this.user);
@@ -101,15 +124,6 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     /**
-     * Method that sets the user for the workspace
-     * @param username - username of the user
-     */
-    public void setUser(String username){
-        this.user = server.getUserByUsername(username);
-        if(this.user == null)this.user = server.addUser(new User(username));
-    }
-
-    /**
      * Method that disconnects the user and redirect to
      * welcome page
      */
@@ -117,9 +131,9 @@ public class WorkspaceCtrl implements Initializable {
         mainCtrl.showWelcomePage();
     }
 
+    //endregion
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {}
+    //region Refresh methods
 
     /**
      * Method that sets controller for the javaFX object
@@ -157,6 +171,7 @@ public class WorkspaceCtrl implements Initializable {
                     getResource("BoardWorkspace.fxml"));
             try {
                 Node boardObject = boardWorkspaceLoader.load();
+                boardObject.setUserData(boardWorkspaceLoader.getController());
                 setCtrl(boardWorkspaceLoader, board);
                 boardsDisplay.getChildren().add(boardObject);
 
@@ -166,4 +181,5 @@ public class WorkspaceCtrl implements Initializable {
 
         }
     }
+    //endregion
 }

@@ -62,11 +62,36 @@ public class SubtaskService {
         return this.repo;
     }
 
+    /**
+     * Method that updates the "done" boolean field of a subtask
+     *
+     * @param id Id of the subtask
+     * @param done new boolean value
+     * @return changed subtask
+     * @throws Exception if id not found in repository
+     */
     public Subtask updateSubtaskStatus(Integer id, String done) throws Exception {
         Subtask res = repo.findById(id).orElseThrow(
                 ()->new Exception("Subtask with id: " + id +" not found")
         );
         res.done = Boolean.valueOf(done);
+        return repo.save(res);
+    }
+
+
+    /**
+     * Method that updates the index of a subtask
+     *
+     * @param id Id of the subtask
+     * @param index new index of the subtask
+     * @return changed subtask
+     * @throws Exception if id not found in repository
+     */
+    public Subtask updateIndexById(Integer id, String index) throws Exception {
+        Subtask res = repo.findById(id).orElseThrow(
+                ()->new Exception("Subtask with id: " + id +" not found")
+        );
+        res.index = Integer.parseInt(index);
         return repo.save(res);
     }
 }
