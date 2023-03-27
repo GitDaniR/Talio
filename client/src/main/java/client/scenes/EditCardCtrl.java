@@ -5,7 +5,6 @@ import com.google.inject.Inject;
 import commons.Card;
 import commons.Subtask;
 import jakarta.ws.rs.WebApplicationException;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -103,7 +102,10 @@ public class EditCardCtrl implements Initializable {
     /**
      * Method that sets subtasks to be the subtasks of the card
      */
-    public void setSubtasks(){
+    public void setSubtasksAndOldValues(){
+        oldTitle.setText(cardToEdit.title);
+        oldDescription.setText((cardToEdit.description));
+
         subtasksArray = FXCollections.observableArrayList(cardToEdit.subtasks);
         subtasks.setCellFactory(subtasks1 -> new SubtaskCell(server, mainCtrl));
         subtasks.setItems(subtasksArray);
@@ -131,36 +133,36 @@ public class EditCardCtrl implements Initializable {
      */
     public void setCardToEdit(Card cardToEdit) {
         this.cardToEdit = cardToEdit;
-        setSubtasks();
+        setSubtasksAndOldValues();
     }
 
-    public Timer startTimer(int refreshRate){
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                Platform.runLater(()->{
-                    refresh();
-                });
-            }
-        }, 0, refreshRate);
-        return timer;
-    }
-
-    public void refresh(){
-        int id = cardToEdit.id;
-        try{
-            //fetch the card from the server
-            cardToEdit = server.getCardById(id);
-            // adjust Subtasks
-            setSubtasks();
-            oldTitle.setText(cardToEdit.title);
-            oldDescription.setText(cardToEdit.description);
-        }catch(Exception e){
-            //if it doesn't exist someone probably deleted it while we were editing the card
-            //so we are returned to the board overview
-            e.printStackTrace();
-            mainCtrl.showBoard();
-        }
-    }
+//    public Timer startTimer(int refreshRate){
+//        Timer timer = new Timer();
+//        timer.scheduleAtFixedRate(new TimerTask() {
+//            @Override
+//            public void run() {
+//                Platform.runLater(()->{
+//                    refresh();
+//                });
+//            }
+//        }, 0, refreshRate);
+//        return timer;
+//    }
+//
+//    public void refresh(){
+//        int id = cardToEdit.id;
+//        try{
+//            //fetch the card from the server
+//            cardToEdit = server.getCardById(id);
+//            // adjust Subtasks
+//            setSubtasks();
+//            oldTitle.setText(cardToEdit.title);
+//            oldDescription.setText(cardToEdit.description);
+//        }catch(Exception e){
+//            //if it doesn't exist someone probably deleted it while we were editing the card
+//            //so we are returned to the board overview
+//            e.printStackTrace();
+//            mainCtrl.showBoard();
+//        }
+//    }
 }
