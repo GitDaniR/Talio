@@ -105,6 +105,7 @@ public class EditCardCtrl implements Initializable {
      * Method that sets subtasks to be the subtasks of the card
      */
     public void setSubtasks(){
+        Collections.sort(cardToEdit.subtasks, Comparator.comparingInt(s -> s.index));
         subtasksArray = FXCollections.observableArrayList(cardToEdit.subtasks);
         subtasks.setCellFactory(subtasks1 -> new SubtaskCell(server, mainCtrl));
         subtasks.setItems(subtasksArray);

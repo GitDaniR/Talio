@@ -13,6 +13,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
 import java.net.URL;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.ResourceBundle;
 
 public class SubtaskCtrl implements Initializable {
@@ -80,6 +82,7 @@ public class SubtaskCtrl implements Initializable {
         int currentIndex = subtask.index;
         if (currentIndex >= 1) {
             Card c = server.getCardById(subtask.cardId);
+            Collections.sort(c.subtasks, Comparator.comparingInt(s -> s.index));
             Subtask subtaskAbove = c.subtasks.get(currentIndex - 1);
             server.updateSubtaskIndex(subtask.id, currentIndex - 1);
             server.updateSubtaskIndex(subtaskAbove.id, currentIndex);
