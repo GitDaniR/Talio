@@ -5,7 +5,6 @@ import com.google.inject.Inject;
 import commons.Card;
 import commons.Subtask;
 import jakarta.ws.rs.WebApplicationException;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -94,17 +93,20 @@ public class EditCardCtrl implements Initializable {
      * @return
      */
     private Subtask getNewSubtask(){
+
         Subtask subtaskEntity = new Subtask(subtaskTitle.getText(), false,
                cardToEdit.subtasks.size(),cardToEdit);
         cardToEdit.subtasks.add(subtaskEntity);
         return server.addSubtask(subtaskEntity);
-
     }
 
     /**
      * Method that sets subtasks to be the subtasks of the card
      */
-    public void setSubtasks(){
+    public void setSubtasksAndOldValues() {
+        oldTitle.setText(cardToEdit.title);
+        oldDescription.setText((cardToEdit.description));
+
         Collections.sort(cardToEdit.subtasks, Comparator.comparingInt(s -> s.index));
         subtasksArray = FXCollections.observableArrayList(cardToEdit.subtasks);
         subtasks.setCellFactory(subtasks1 -> new SubtaskCell(server, mainCtrl));
@@ -121,10 +123,9 @@ public class EditCardCtrl implements Initializable {
             subtasksArray.add(subtaskEntity);
             subtaskTitle.textProperty().set("");
         }
+        cardToEdit = server.getCardById(cardToEdit.getId());
 
     }
-
-
 
     /**
      * Method that sets the card of the subtasks to be the given card,
@@ -134,36 +135,36 @@ public class EditCardCtrl implements Initializable {
      */
     public void setCardToEdit(Card cardToEdit) {
         this.cardToEdit = cardToEdit;
-        setSubtasks();
+        setSubtasksAndOldValues();
     }
 
-    public Timer startTimer(int refreshRate){
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                Platform.runLater(()->{
-                    refresh();
-                });
-            }
-        }, 0, refreshRate);
-        return timer;
-    }
-
-    public void refresh(){
-        int id = cardToEdit.id;
-        try{
-            //fetch the card from the server
-            cardToEdit = server.getCardById(id);
-            // adjust Subtasks
-            setSubtasks();
-            oldTitle.setText(cardToEdit.title);
-            oldDescription.setText(cardToEdit.description);
-        }catch(Exception e){
-            //if it doesn't exist someone probably deleted it while we were editing the card
-            //so we are returned to the board overview
-            e.printStackTrace();
-            mainCtrl.showBoard();
-        }
-    }
+//    public Timer startTimer(int refreshRate){
+//        Timer timer = new Timer();
+//        timer.scheduleAtFixedRate(new TimerTask() {
+//            @Override
+//            public void run() {
+//                Platform.runLater(()->{
+//                    refresh();
+//                });
+//            }
+//        }, 0, refreshRate);
+//        return timer;
+//    }
+//
+//    public void refresh(){
+//        int id = cardToEdit.id;
+//        try{
+//            //fetch the card from the server
+//            cardToEdit = server.getCardById(id);
+//            // adjust Subtasks
+//            setSubtasks();
+//            oldTitle.setText(cardToEdit.title);
+//            oldDescription.setText(cardToEdit.description);
+//        }catch(Exception e){
+//            //if it doesn't exist someone probably deleted it while we were editing the card
+//            //so we are returned to the board overview
+//            e.printStackTrace();
+//            mainCtrl.showBoard();
+//        }
+//    }
 }
