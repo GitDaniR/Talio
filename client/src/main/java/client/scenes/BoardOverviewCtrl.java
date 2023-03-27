@@ -207,7 +207,7 @@ public class BoardOverviewCtrl implements Initializable {
         for(Node n : mainBoard.getChildren())
             for(Node c : ((ListCtrl) n.getUserData()).getCardBox().getChildren())
                 if(((CardCtrl)c.getUserData()).getCardId()==id)
-                    ((CardCtrl)c.getUserData()).setCardTitleText(title);
+                    ((CardCtrl)c.getUserData()).setCardAndAttributes(server.getCardById(id));
     }
 
     //endregion
@@ -227,7 +227,7 @@ public class BoardOverviewCtrl implements Initializable {
         listObjectController.setServerAndCtrl(server,mainCtrl);
         //Setting the server and  ctrl because I have no idea how to inject it
         listObjectController.getListAddCardButton().
-                setOnAction(event -> mainCtrl.showAddCard(currentList));
+                setOnAction(event -> listObjectController.addDefaultCard());
         //Telling the button what to do
         return listObjectController;
     }
@@ -247,20 +247,24 @@ public class BoardOverviewCtrl implements Initializable {
 
         CardCtrl cardObjectController = (CardCtrl) cardObject.getUserData();
         //Getting the controller
-        cardObjectController.setCard(currentCard);
-        //Setting the title of the card
+        cardObjectController.setCardAndAttributes(currentCard);
+        //Setting the card to be represented and also changing the values accordingly
         cardObjectController.setServerAndCtrl(server,mainCtrl);
         //Just as done with lists
 
-        listObjectController.addCardToList(cardObject);
+        //if card is double-clicked editCard scene is shown
+        cardObject.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                cardObjectController.editCard();
+            }
+        });
 
-        ///Attaching the card to be represented to the cardCtrl
-        cardObjectController.setCardAttributes();
-
-        //Adding the card to the list
         addDragAndDrop(listObjectController.getAmountOfCardsInList(),
                 (HBox) cardObject);
         //Setting drag and drop property
+
+        listObjectController.addCardToList(cardObject);
+        //Adding the card to the list
 
         return cardObjectController;
     }
@@ -376,12 +380,10 @@ public class BoardOverviewCtrl implements Initializable {
                 get(indexFinalList).getUserData()).getBoardList();
         Card card = initialList.getCardByIndex(indexCardDragged);
 
-        server.deleteCard(card.getId());
-        card.setIndex(indexCardsDropped);
-        initialList.cards.remove(card);
-        card.setList(indexInitialList==indexFinalList ?
-                initialList:finalList);
-        finalList.cards.add(server.addCard(card));
+        //server.deleteCard(card.getId());
+        server.updateCardList(card, finalList.getId());
+        refresh();
+
     }
     // method that handles the drag event on the list
     private void setDragReleaseList(Node list){

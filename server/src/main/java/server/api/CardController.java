@@ -87,5 +87,16 @@ public class CardController {
 
     }
 
+    @PutMapping("/{id}/list/{listId}")
+    public ResponseEntity<Card> editCardList(@PathVariable int id, @PathVariable Integer listId){
+        try {
+            Card res = cardService.editCardByIdList(id, listId);
+            return ResponseEntity.ok(res);
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
 
 }
