@@ -47,7 +47,12 @@ public class SubtaskCtrl implements Initializable {
     }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {}
+    public void initialize(URL location, ResourceBundle resources) {
+        editableTitle.textProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println("Text changed from " + oldValue + " to " + newValue);
+            server.updateSubtaskTitle(subtask.id, newValue);
+        });
+    }
 
     public void finishTask(){
         server.updateSubtaskStatus(subtask.id, true);
@@ -75,7 +80,6 @@ public class SubtaskCtrl implements Initializable {
     @FXML
     public void onEnter(ActionEvent ae) {
         editableTitle.setVisible(false);
-        server.updateSubtaskTitle(subtask.id, editableTitle.getText());
     }
 
     public void subtaskMoveUp() {
