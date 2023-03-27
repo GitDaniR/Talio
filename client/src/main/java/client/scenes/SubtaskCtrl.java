@@ -88,4 +88,16 @@ public class SubtaskCtrl implements Initializable {
             server.updateSubtaskIndex(subtaskAbove.id, currentIndex);
         }
     }
+
+    public void subtaskMoveDown() {
+        int currentIndex = subtask.index;
+        Card c = server.getCardById(subtask.cardId);
+        int maxIndex = c.subtasks.size() - 1;
+        if (currentIndex < maxIndex) {
+            Collections.sort(c.subtasks, Comparator.comparingInt(s -> s.index));
+            Subtask subtaskBelow = c.subtasks.get(currentIndex + 1);
+            server.updateSubtaskIndex(subtask.id, currentIndex + 1);
+            server.updateSubtaskIndex(subtaskBelow.id, currentIndex);
+        }
+    }
 }

@@ -11,18 +11,18 @@
    <children>
       <CheckBox fx:id="check" layoutX="10.0" layoutY="5.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="20.0" />
       <Text fx:id="title" layoutX="33.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="353.8162841796875" />
-      <Button fx:id="remove" graphicTextGap="1.0" layoutX="500.0" layoutY="6.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#removeTask" prefHeight="17.0" prefWidth="20.0" text="X">
+      <Button fx:id="remove" graphicTextGap="1.0" layoutX="491.0" layoutY="5.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#removeTask" prefHeight="17.0" prefWidth="20.0" text="X">
          <font>
             <Font size="7.0" />
          </font>
       </Button>
       <TextField fx:id="editableTitle" layoutX="33.0" onAction="#onEnter" prefHeight="28.0" prefWidth="354.0" visible="false" />
-      <Button fx:id="moveUp" graphicTextGap="1.0" layoutX="425.0" layoutY="5.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#subtaskMoveUp" prefHeight="18.0" prefWidth="26.0" text="⯅" textAlignment="CENTER">
+      <Button fx:id="moveUp" graphicTextGap="1.0" layoutX="405.0" layoutY="5.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#subtaskMoveUp" prefHeight="18.0" prefWidth="26.0" text="⯅" textAlignment="CENTER">
          <font>
             <Font size="11.0" />
          </font>
       </Button>
-      <Button fx:id="moveDown" graphicTextGap="1.0" layoutX="465.0" layoutY="5.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#removeTask" prefHeight="18.0" prefWidth="26.0" text="⯆" textAlignment="CENTER">
+      <Button fx:id="moveDown" graphicTextGap="1.0" layoutX="446.0" layoutY="5.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#subtaskMoveDown" prefHeight="18.0" prefWidth="26.0" text="⯆" textAlignment="CENTER">
          <font>
             <Font size="10.0" />
          </font>
