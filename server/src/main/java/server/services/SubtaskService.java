@@ -3,6 +3,7 @@ package server.services;
 import commons.Subtask;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import server.database.SubtaskRepository;
 
 @Service
@@ -49,11 +50,14 @@ public class SubtaskService {
      * @return the deleted subtask
      * @throws Exception if id is not in repo.
      */
+    @Transactional
     public ResponseEntity<Subtask> deleteById(Integer id) throws Exception {
         if (id < 0 || !repo.existsById(id)) {
             throw new Exception("Invalid id");
         }
-        ResponseEntity<Subtask> deletedRecord = ResponseEntity.ok(repo.findById(id).get());
+        Subtask found = repo.findById(id).get();
+        ResponseEntity<Subtask> deletedRecord = ResponseEntity.ok(found);
+        repo.shiftSubtasksDown(found.index, found.cardId);
         repo.deleteById(id);
         return deletedRecord;
     }
