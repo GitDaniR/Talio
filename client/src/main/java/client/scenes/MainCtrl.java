@@ -156,9 +156,6 @@ public class MainCtrl {
         boardOverviewCtrl.saveBoardInDatabase();
         boardOverviewCtrl.assignToUser(user);
         boardOverviewCtrl.refresh();
-
-        cancelTimer();
-        currentTimer = boardOverviewCtrl.startTimer(REFRESH_RATE);
     }
 
     /**
@@ -173,8 +170,6 @@ public class MainCtrl {
         boardOverviewCtrl.setBoard(chosenBoard);
         boardOverviewCtrl.assignToUser(user);
         boardOverviewCtrl.refresh();
-        cancelTimer();
-        currentTimer = boardOverviewCtrl.startTimer(REFRESH_RATE);
     }
 
     /**
@@ -193,10 +188,6 @@ public class MainCtrl {
             primaryStage.setScene(workspaceAdmin);
             workspaceAdminCtrl.refresh();
         }
-
-
-        cancelTimer();
-        currentTimer = workspaceCtrl.startTimer(REFRESH_RATE);
     }
 
     /**
@@ -208,27 +199,17 @@ public class MainCtrl {
         boardOverviewCtrl.setBoard(showBoard);
         boardOverviewCtrl.refresh();
 
-        cancelTimer();
-        currentTimer = boardOverviewCtrl.startTimer(REFRESH_RATE);
-
     }
 
     public void showBoard(){
         primaryStage.setTitle("Board overview");
         primaryStage.setScene(board);
-        boardOverviewCtrl.refresh();
-        cancelTimer();
-        currentTimer = boardOverviewCtrl.startTimer(REFRESH_RATE);
-
     }
 
     public void showChangeTitle(Board board){
         primaryStage.setTitle("Changing Board Title");
         primaryStage.setScene(changeBoardTitle);
         changeBoardTitleCtrl.setBoard(board);
-        cancelTimer();
-        currentTimer = changeBoardTitleCtrl.startTimer(REFRESH_RATE);
-
     }
 
     /**
@@ -239,7 +220,6 @@ public class MainCtrl {
         primaryStage.setTitle("Adding List");
         primaryStage.setScene(addList);
         addListCtrl.setBoardToAddTo(boardToAddTo);
-        cancelTimer();
     }
 
     /**
@@ -250,9 +230,6 @@ public class MainCtrl {
         primaryStage.setTitle("Editing List");
         primaryStage.setScene(editList);
         editListCtrl.setBoardListToEdit(boardListToEdit);
-        cancelTimer();
-        currentTimer = editListCtrl.startTimer(REFRESH_RATE);
-
     }
 
     /**
@@ -262,8 +239,6 @@ public class MainCtrl {
         primaryStage.setTitle("Welcome Page");
         primaryStage.setScene(welcomePage);
         welcomePageCtrl.clearPassword();
-        cancelTimer();
-
     }
 
     /**
@@ -281,17 +256,11 @@ public class MainCtrl {
             this.username = username;
 
             workspaceCtrl.refresh();
-            cancelTimer();
-            currentTimer = workspaceCtrl.startTimer(REFRESH_RATE);
         }
     }
 
     public String getUsername() {
         return username;
-    }
-
-    public void deleteCard() {
-        boardOverviewCtrl.refresh();
     }
 
     /**
@@ -302,20 +271,6 @@ public class MainCtrl {
         primaryStage.setTitle("Editing Card");
         primaryStage.setScene(editCard);
         editCardCtrl.setCardToEdit(cardToEdit);
-
-        cancelTimer();
-        currentTimer = editCardCtrl.startTimer(REFRESH_RATE);
-    }
-
-    public void refreshBoardOverview(){
-        boardOverviewCtrl.refresh();
-    }
-
-    //Method to cancel any timer currently running
-    //We should cancel the timer any time we switch views
-    public void cancelTimer(){
-        if(currentTimer == null) return;
-        currentTimer.cancel();
     }
 
     public void showAdminWorkspace(String username) {
