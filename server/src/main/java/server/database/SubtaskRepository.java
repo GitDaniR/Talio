@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface SubtaskRepository extends JpaRepository<Subtask, Integer> {
     @Modifying
-    @Query("UPDATE Subtask t SET t.index = t.index - 1 WHERE t.index > :index AND t.cardId = :cardId")
+    @Query("UPDATE Subtask t SET t.index = t.index - 1 " +
+            "WHERE t.index > :index AND t.cardId = :cardId")
     void shiftSubtasksDown(int index, int cardId);
 }
