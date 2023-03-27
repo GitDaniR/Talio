@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.TagCtrl">
+   <padding>
+      <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+   </padding>
+   <children>
+      <Ellipse fx:id="background" fill="DODGERBLUE" radiusX="8.0" radiusY="8.0" stroke="BLACK" strokeType="INSIDE" />
+      <Text fx:id="txtLetter" strokeType="OUTSIDE" strokeWidth="0.0" text="S" />
+   </children>
+</StackPane>
