@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.fxml.Initializable;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -25,6 +26,8 @@ public class CardCtrl extends AnchorPane implements Initializable{
     private ImageView imgDescription;
     @FXML
     private Label lblSubtasks;
+    @FXML
+    private FlowPane paneTags;
 
     private Card card;
 
