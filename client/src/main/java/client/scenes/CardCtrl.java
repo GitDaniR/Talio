@@ -17,8 +17,7 @@ import java.util.stream.Stream;
 public class CardCtrl extends AnchorPane implements Initializable{
     @FXML
     private Label cardTitle;
-    @FXML
-    private Button cardEdit;
+
     @FXML
     private Button cardDelete;
     @FXML

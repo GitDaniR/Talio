@@ -324,7 +324,7 @@ public class ServerUtils {
      */
     public void updateSubtaskStatus(Integer subtaskId, Boolean done){
         ClientBuilder.newClient(new ClientConfig()) //
-                .target(server).path("api/subtasks/"+subtaskId) //
+                .target(server).path("api/subtasks/status/"+subtaskId) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(String.valueOf(done),APPLICATION_JSON), String.class);
