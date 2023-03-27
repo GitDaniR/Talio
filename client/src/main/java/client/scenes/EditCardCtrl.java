@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import commons.Card;
 import commons.Subtask;
 import jakarta.ws.rs.WebApplicationException;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -48,7 +49,18 @@ public class EditCardCtrl implements Initializable {
         this.mainCtrl = mainCtrl;
     }
     @Override
-    public void initialize(URL location, ResourceBundle resources) {}
+    public void initialize(URL location, ResourceBundle resources) {
+        server.registerForMessages("/topic/subtasks", Integer.class, cardId -> {
+            Platform.runLater(() -> overwriteSubtasks(server.getCardById(cardId).subtasks));
+        });
+    }
+
+    private void overwriteSubtasks(List<Subtask> t){
+        cardToEdit.subtasks=t;
+        Collections.sort(cardToEdit.subtasks, Comparator.comparingInt(s -> s.index));
+        subtasksArray = FXCollections.observableArrayList(t);
+        subtasks.setItems(subtasksArray);
+    }
 
     public void cancel(){
         clearFields();
@@ -90,10 +102,9 @@ public class EditCardCtrl implements Initializable {
     /**
      * Method that returns the subtask with the title from the text box
      * which is added to the database through the server
-     * @return
+     * @return generated subtask
      */
-    private Subtask getNewSubtask(){
-
+    private Subtask generateNewSubtask(){
         Subtask subtaskEntity = new Subtask(subtaskTitle.getText(), false,
                cardToEdit.subtasks.size(),cardToEdit);
         cardToEdit.subtasks.add(subtaskEntity);
@@ -101,7 +112,21 @@ public class EditCardCtrl implements Initializable {
     }
 
     /**
+     * Method that adds Subtask when the add button
+     * for subtask is clicked
+     */
+    public void addSubtask(){
+        if(!subtaskTitle.textProperty().get().isEmpty()){
+            generateNewSubtask();
+            subtaskTitle.textProperty().set("");
+        }
+        cardToEdit = server.getCardById(cardToEdit.getId());
+
+    }
+
+    /**
      * Method that sets subtasks to be the subtasks of the card
+     * (this is called when you first edit a card)
      */
     public void setSubtasksAndOldValues() {
         oldTitle.setText(cardToEdit.title);
@@ -114,20 +139,6 @@ public class EditCardCtrl implements Initializable {
     }
 
     /**
-     * Method that adds Subtask when the add button
-     * for subtask is clicked
-     */
-    public void addSubtask(){
-        if(!subtaskTitle.textProperty().get().isEmpty()){
-            Subtask subtaskEntity = getNewSubtask();
-            subtasksArray.add(subtaskEntity);
-            subtaskTitle.textProperty().set("");
-        }
-        cardToEdit = server.getCardById(cardToEdit.getId());
-
-    }
-
-    /**
      * Method that sets the card of the subtasks to be the given card,
      * it also sets the handler for the button to add the subtasks to its
      * card through server calls
@@ -137,34 +148,4 @@ public class EditCardCtrl implements Initializable {
         this.cardToEdit = cardToEdit;
         setSubtasksAndOldValues();
     }
-
-//    public Timer startTimer(int refreshRate){
-//        Timer timer = new Timer();
-//        timer.scheduleAtFixedRate(new TimerTask() {
-//            @Override
-//            public void run() {
-//                Platform.runLater(()->{
-//                    refresh();
-//                });
-//            }
-//        }, 0, refreshRate);
-//        return timer;
-//    }
-//
-//    public void refresh(){
-//        int id = cardToEdit.id;
-//        try{
-//            //fetch the card from the server
-//            cardToEdit = server.getCardById(id);
-//            // adjust Subtasks
-//            setSubtasks();
-//            oldTitle.setText(cardToEdit.title);
-//            oldDescription.setText(cardToEdit.description);
-//        }catch(Exception e){
-//            //if it doesn't exist someone probably deleted it while we were editing the card
-//            //so we are returned to the board overview
-//            e.printStackTrace();
-//            mainCtrl.showBoard();
-//        }
-//    }
 }
