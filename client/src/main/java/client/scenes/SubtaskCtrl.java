@@ -48,15 +48,16 @@ public class SubtaskCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        editableTitle.textProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("Text changed from " + oldValue + " to " + newValue);
-            server.updateSubtaskTitle(subtask.id, newValue);
-        });
+//        editableTitle.textProperty().addListener((observable, oldValue, newValue) -> {
+//            System.out.println("Text changed from " + oldValue + " to " + newValue);
+//            server.updateSubtaskTitle(subtask.id, newValue);
+//        });
         editableTitle.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue) {
                 // Text field lost focus
                 System.out.println("Text field lost focus");
                 editableTitle.setVisible(false);
+                server.updateSubtaskTitle(subtask.id, editableTitle.getText());
             }
         });
     }
