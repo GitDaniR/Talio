@@ -84,6 +84,7 @@ public class MainCtrl {
         this.boardOverviewCtrl = board.getKey();
         this.board = new Scene(board.getValue());
 
+
         this.addListCtrl = addList.getKey();
         this.addList = new Scene(addList.getValue());
 
@@ -197,6 +198,7 @@ public class MainCtrl {
         primaryStage.setTitle("Board Overview");
         primaryStage.setScene(board);
         boardOverviewCtrl.setBoard(showBoard);
+        boardOverviewCtrl.setScene(this.board);
         boardOverviewCtrl.refresh();
 
     }

@@ -23,6 +23,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
@@ -49,6 +50,8 @@ public class BoardOverviewCtrl implements Initializable {
     private ObservableList<BoardList> data;
 
     private Board board;
+
+    private Scene mainScene;
 
     private boolean isDragging = false;
 
@@ -91,21 +94,7 @@ public class BoardOverviewCtrl implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-        /*mainBoard.setOnMousePressed(event -> {
-            mainBoard.setUserData(event.getY());
-        });*/
-        everything.setOnMouseDragReleased(event -> {
-            System.out.println("MouseDragReleased -> everythign catched it");
-            isDragging = false;
-            scrolltimeline.stop();
-            removePreview(mainBoard);
-        });
         setupScrolling();
-
-
-
-
         server.registerForMessages("/topic/lists", BoardList.class, list -> {
             Platform.runLater(() -> addListToBoard(list));
         });
@@ -131,6 +120,16 @@ public class BoardOverviewCtrl implements Initializable {
             Platform.runLater(() -> { if(board.id == newBoard.id) title.setText(newBoard.title); });
         });
 
+    }
+
+    public void setScene(Scene mainScene){
+        this.mainScene = mainScene;
+        /*this.mainScene.setOnMouseDragExited(event -> {
+            System.out.println("unaaaaa");
+            scrolltimeline.stop();
+            removePreview(mainBoard);
+
+        });*/
     }
 
     public void setBoard(Board board) {
@@ -331,16 +330,23 @@ public class BoardOverviewCtrl implements Initializable {
                 scrolltimeline.stop();
                 removePreview(mainBoard);
                 System.out.println("MouseDragExited -> scene catched it, no, is Dragging: "+isDragging);
-                //removePreview(mainBoard);
             }
 
+        });
+
+        scene.setOnMouseReleased(event -> {
+            removePreview(mainBoard);
+            scrolltimeline.stop();
         });
         scene.setOnMouseDragEntered(event -> {
             System.out.println("Entered drag in scene");
             scrolltimeline.stop();
             isDragging = true;
         });
+
         scene.setOnMouseDragOver(event -> {
+
+            System.out.println("over");
             scrolltimeline.stop();
         });
 
@@ -440,11 +446,12 @@ public class BoardOverviewCtrl implements Initializable {
         ImageView imageView = new ImageView(card.snapshot(null, null));
         imageView.setManaged(false);
         imageView.setMouseTransparent(true);
+        imageView.setVisible(false);
         board.getChildren().add(imageView);
         board.setUserData(imageView);
-        board.setOnMouseDragged(event -> {
+        board.setOnMouseDragOver(event -> {
+            imageView.setVisible(true);
             imageView.relocate(event.getX(), event.getY());
-            System.out.println("MouseDragged - board cacthed it");
         });
     }
 
@@ -452,11 +459,15 @@ public class BoardOverviewCtrl implements Initializable {
     private void removePreview(final FlowPane board){
         isDragging = false;
         board.setOnMouseDragged(null);
-        if(board.getUserData()!=null)
-            board.getChildren().remove(board.getUserData());
+        board.getChildren().remove(board.getUserData());
         board.setUserData(null);
     }
-    // method that highlights the card when it is dragged and dropped
+
+
+    /**
+     * Method that highlights the card when its dragging starts,
+     * @param card - card to be highlighted
+     */
     private void setDragAndDropEffect(final HBox card){
         String initialStyle = card.getStyle();
         card.setOnMouseDragEntered(new EventHandler<MouseDragEvent>() {
@@ -467,15 +478,10 @@ public class BoardOverviewCtrl implements Initializable {
             }
         });
 
-        card.setOnMouseDragExited(new EventHandler<MouseDragEvent>() {
-            @Override
-            public void handle(MouseDragEvent event) {
-                card.setStyle(initialStyle);
-            }
-        });
-
+        card.setOnMouseDragExited(event -> {card.setStyle(initialStyle);});
     }
     // method that sends information to the server about card changes
+
     private void adjustCards(int indexInitialList, int indexFinalList,
                              int indexCardDragged, int indexCardsDropped){
         if(indexCardDragged ==-1)
@@ -549,7 +555,6 @@ public class BoardOverviewCtrl implements Initializable {
 
     // sets drag and drop feature to cards
     private void addDragAndDrop(int cardNumber, final HBox card){
-        //VBox cardsBox = (VBox) ((VBox)list).getChildren().get(2);
         card.setOnDragDetected(new EventHandler<MouseEvent>()
         {
             @Override
