@@ -1,5 +1,6 @@
 package commons;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -14,25 +15,42 @@ public class Subtask {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Integer id;
-
+    @JsonProperty(value = "done")
     public boolean done;
 
     public String title;
     public int index;
     @ManyToOne
     @JsonIgnore
+    @JoinColumn(name = "cardId", insertable = false, updatable = false)
     public Card card;
 
-    public Subtask() {}
+    public Integer cardId;
 
+    public Subtask(){
+
+    }
     public Subtask(String title, boolean done, int index, Card card) {
         this.done = done;
         this.title = title;
         this.index = index;
         this.card = card;
+        this.cardId = card.id;
+    }
+
+    public Subtask(String title, boolean done, int index, Card card, Integer cardId) {
+        this.done = done;
+        this.title = title;
+        this.index = index;
+        this.card = card;
+        this.cardId = cardId;
     }
     public void setDone(boolean done) {
         this.done = done;
+    }
+    @JsonProperty("done")
+    public boolean getDone(){
+        return this.done;
     }
 
     @Override

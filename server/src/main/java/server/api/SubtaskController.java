@@ -1,15 +1,19 @@
 package server.api;
 import commons.Subtask;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import server.services.SubtaskService;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/subtasks")
 public class SubtaskController {
     private final SubtaskService subtaskService;
+
+    private SimpMessagingTemplate msgs;
 
     /**
      * Constructor for SubtaskController which uses SubtaskService
@@ -17,8 +21,9 @@ public class SubtaskController {
      *
      * @param subtaskService
      */
-    public SubtaskController(SubtaskService subtaskService) {
+    public SubtaskController(SubtaskService subtaskService,SimpMessagingTemplate msgs) {
         this.subtaskService = subtaskService;
+        this.msgs=msgs;
     }
 
     /**
@@ -61,6 +66,10 @@ public class SubtaskController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
+
+        if(msgs!=null)
+            msgs.convertAndSend("/topic/subtasks",subtask.cardId);
+
         return saved;
     }
 
@@ -77,15 +86,77 @@ public class SubtaskController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
+
+        if(msgs!=null)
+            msgs.convertAndSend("/topic/subtasks",
+                    Objects.requireNonNull(deletedRecord.getBody()).cardId);
+
         return deletedRecord;
     }
 
-    //Put mapping to update subtask status
-    @PutMapping("/{id}")
+    /**
+     * Method that updates the "done" boolean field of a subtask
+     *
+     * @param id Id of the subtask
+     * @param done New boolean value
+     * @return response
+     */
+    @PutMapping("/status/{id}")
     public ResponseEntity<Subtask> updateSubtaskStatus(@PathVariable("id") Integer id,
                                                        @RequestBody String done){
         try {
             Subtask res = subtaskService.updateSubtaskStatus(id, done);
+
+            if(msgs!=null)
+                msgs.convertAndSend("/topic/subtasks", res.cardId);
+
+            return ResponseEntity.ok(res);
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+
+    /**
+     * Method that updates the index of a subtask
+     *
+     * @param id Id of the subtask
+     * @param index New index of the card
+     * @return response
+     */
+    @PutMapping("/index/{id}")
+    public ResponseEntity<Subtask> updateIndexById(@PathVariable("id") Integer id,
+                                                       @RequestBody String index){
+        try {
+            Subtask res = subtaskService.updateIndexById(id, index);
+
+            if(msgs!=null)
+                msgs.convertAndSend("/topic/subtasks", res.cardId);
+
+            return ResponseEntity.ok(res);
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    /**
+     * Method that updates the title of a subtask
+     *
+     * @param id Id of the subtask
+     * @param title New title of the card
+     * @return response
+     */
+    @PutMapping("/title/{id}")
+    public ResponseEntity<Subtask> updateTitleById(@PathVariable("id") Integer id,
+                                                   @RequestBody String title){
+        try {
+            Subtask res = subtaskService.updateTitleById(id, title);
+
+            if(msgs!=null)
+                msgs.convertAndSend("/topic/subtasks", res.cardId);
+
             return ResponseEntity.ok(res);
         }catch(Exception e){
             System.out.println(e.getMessage());

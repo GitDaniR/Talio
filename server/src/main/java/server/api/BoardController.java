@@ -18,6 +18,7 @@ package server.api;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import commons.Board;
@@ -27,13 +28,15 @@ import server.services.BoardService;
 @RequestMapping("/api/boards")
 public class BoardController {
     private final BoardService boardService;
+    private SimpMessagingTemplate msgs;
 
     /**
      * Constructor for BoardController which uses BoardService.
      * @param boardService
      */
-    public BoardController(BoardService boardService) {
+    public BoardController(BoardService boardService,SimpMessagingTemplate msgs) {
         this.boardService = boardService;
+        this.msgs = msgs;
     }
 
     /**
@@ -92,18 +95,26 @@ public class BoardController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
+
+        if(msgs!=null)
+            msgs.convertAndSend("/topic/boards/removed",id);
+
         return ResponseEntity.ok(deletedRecord);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateTitleById(@PathVariable("id") Integer id,
+    public ResponseEntity<Board> updateTitleById(@PathVariable("id") Integer id,
                                                   @RequestBody String title) {
-        String response;
+        Board response;
         try {
-            response = this.boardService.updateTitleById(id, title);
+            response = boardService.updateTitleById(id, title);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
+
+        if(msgs!=null)
+            msgs.convertAndSend("/topic/boards/rename",response);
+
         return ResponseEntity.ok(response);
     }
 }

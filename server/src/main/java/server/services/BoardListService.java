@@ -34,6 +34,10 @@ public class BoardListService {
         return this.boardListRepository.findAll();
     }
 
+    public BoardList findById(int id) {
+        return this.boardListRepository.findById(id).orElse(null);
+    }
+
     /**
      * Method which adds a new list to repo.
      * @param boardList
