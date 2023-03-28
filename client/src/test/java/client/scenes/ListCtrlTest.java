@@ -24,12 +24,12 @@ class ListCtrlTest {
         listCtrlService = new ListCtrlService(new ListCtrl());
         listCtrlService.inject();
     }
-//    @Test
-//    public void testAddCard(){
-//        listCtrlService.addCardToList(new Label());
-//        assertEquals(1,listCtrlService.listCtrl.
-//                getCardBox().getChildren().size());
-//    }
+    @Test
+    public void testAddCard(){
+        listCtrlService.addCardToList(new Label());
+        assertEquals(1,listCtrlService.listCtrl.
+                getCardBox().getChildren().size());
+    }
 
 
 }
