@@ -24,7 +24,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import java.util.Random;
-import java.util.Timer;
 
 public class MainCtrl {
 
