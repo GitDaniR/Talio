@@ -499,7 +499,7 @@ public class BoardOverviewCtrl implements Initializable {
         Card card = initialList.getCardByIndex(indexCardDragged);
 
         //server.deleteCard(card.getId());
-        server.updateCardList(card, finalList.getId());
+        server.updateCardList(card, finalList.getId(), indexCardsDropped);
         refresh();
 
     }
