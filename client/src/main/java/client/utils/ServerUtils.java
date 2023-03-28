@@ -361,6 +361,30 @@ public class ServerUtils {
         });
     }
 
+    public List<Tag> getTags(int boardId) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/tags/")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<List<Tag>>() {});
+    }
+
+    public void addCardToTag(Integer tagId, Card card) {
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/tags/cards/add/"+tagId) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(card, APPLICATION_JSON), Card.class);
+    }
+
+    public void removeCardFromTag(Integer tagId, Card card) {
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/tags/cards/remove/"+tagId) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(card, APPLICATION_JSON), Card.class);
+    }
+
 //    public void send(String dest, Object o){
 //        session.send(dest,o);
 //    }

@@ -46,8 +46,8 @@ public class TagOverviewCtrl implements Initializable {
         mainCtrl.showBoard(this.board);
     }
 
-    private TagDisplayCtrl setCtrl(FXMLLoader tagLoader, Tag tag){
-        TagDisplayCtrl ctrl = tagLoader.getController();
+    private TagCellForOverviewCtrl setCtrl(FXMLLoader tagLoader, Tag tag){
+        TagCellForOverviewCtrl ctrl = tagLoader.getController();
         ctrl.setMainCtrlAndServer(mainCtrl, server, this);
         ctrl.setTag(tag);
         return ctrl;
@@ -73,7 +73,7 @@ public class TagOverviewCtrl implements Initializable {
         for(Tag tag: tags){
             tag.board = board;
             FXMLLoader tagDisplayLoader = new FXMLLoader(getClass().
-                    getResource("TagDisplay.fxml"));
+                    getResource("TagCellForOverview.fxml"));
             try {
                 Node tagObject = tagDisplayLoader.load();
                 setCtrl(tagDisplayLoader, tag);

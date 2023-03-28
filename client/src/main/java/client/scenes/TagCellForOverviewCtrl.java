@@ -9,7 +9,7 @@ import javafx.scene.layout.HBox;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class TagDisplayCtrl implements Initializable {
+public class TagCellForOverviewCtrl implements Initializable {
 
     @FXML
     private Label lblTagName;
@@ -50,4 +50,5 @@ public class TagDisplayCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
     }
+
 }

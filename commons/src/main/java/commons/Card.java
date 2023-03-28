@@ -1,18 +1,17 @@
 package commons;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-
 import javax.persistence.*;
-
-
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 public class Card {
 
@@ -45,9 +44,6 @@ public class Card {
 
     public Integer listId;
 
-    private Card() {
-    }
-
     public Card(String title, String description, int index, BoardList list, Integer listId) {
         this.title = title;
         this.description = description;
@@ -65,7 +61,7 @@ public class Card {
         this.listId = listId;
     }
 
-
+    public Card() {}
 
     public Integer getId() {
         return id;
@@ -80,10 +76,13 @@ public class Card {
         this.listId = list.getId();
     }
 
-    //public void addTag(Tag tag) {
-    //    tags.add(tag);
-    //}
+    public void addTag(Tag tag) {
+        if(!tags.contains(tag)) tags.add(tag);
+    }
 
+    public void removeTag(Tag tag){
+        tags.remove(tag);
+    }
 
     @Override
     public boolean equals(Object obj) {

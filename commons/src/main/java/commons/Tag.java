@@ -51,7 +51,10 @@ public class Tag {
     }
 
     public void addToCard(Card card){
-        cards.add(card);
+        if(!cards.contains(card)) cards.add(card);
+    }
+    public void removeFromCard(Card card){
+        cards.remove(card);
     }
 
     @Override

@@ -1,4 +1,5 @@
 package server.api;
+import commons.Card;
 import commons.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -113,6 +114,44 @@ public class TagController {
                                                @RequestBody String newTitle){
         try {
             Tag res = tagService.updateTitleById(id, newTitle);
+            return ResponseEntity.ok(res);
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    /**
+     * Method which adds a card to a tag
+     *
+     * @param id The id of the tag
+     * @param card card to add
+     * @return response
+     */
+    @PutMapping("/cards/add/{id}")
+    public ResponseEntity<Tag> addCard(@PathVariable("id") Integer id,
+                                               @RequestBody Card card){
+        try {
+            Tag res = tagService.addCard(id, card);
+            return ResponseEntity.ok(res);
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    /**
+     * Method which removes a card from a tag
+     *
+     * @param id The id of the tag
+     * @param card card to remove
+     * @return response
+     */
+    @PutMapping("/cards/remove/{id}")
+    public ResponseEntity<Tag> removeCard(@PathVariable("id") Integer id,
+                                       @RequestBody Card card){
+        try {
+            Tag res = tagService.removeCard(id, card);
             return ResponseEntity.ok(res);
         }catch(Exception e){
             System.out.println(e.getMessage());

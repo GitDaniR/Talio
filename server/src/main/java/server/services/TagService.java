@@ -1,5 +1,6 @@
 package server.services;
 
+import commons.Card;
 import commons.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -91,6 +92,36 @@ public class TagService {
                 ()->new Exception("Tag with id: " + id +" not found")
         );
         res.title = newTitle;
+        return repo.save(res);
+    }
+
+    /**
+     * Method which adds a card to a tag
+     * @param id the id of the tag
+     * @param card the card
+     * @return the saved tag
+     * @throws Exception if id is not in repo.
+     */
+    public Tag addCard(Integer id, Card card) throws Exception {
+        Tag res = repo.findById(id).orElseThrow(
+                ()->new Exception("Tag with id: " + id +" not found")
+        );
+        if(!res.cards.contains(card)) res.cards.add(card);
+        return repo.save(res);
+    }
+
+    /**
+     * Method which removes a card from a tag
+     * @param id the id of the tag
+     * @param card the card
+     * @return the saved tag
+     * @throws Exception if id is not in repo.
+     */
+    public Tag removeCard(Integer id, Card card) throws Exception {
+        Tag res = repo.findById(id).orElseThrow(
+                ()->new Exception("Tag with id: " + id +" not found")
+        );
+        res.cards.remove(card);
         return repo.save(res);
     }
 }

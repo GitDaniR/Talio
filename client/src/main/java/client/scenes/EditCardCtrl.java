@@ -2,8 +2,7 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.Card;
-import commons.Subtask;
+import commons.*;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,7 +10,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
-
 import java.net.URL;
 import java.util.*;
 
@@ -42,6 +40,11 @@ public class EditCardCtrl implements Initializable {
     private Button addSubtask;
     private ObservableList<Subtask> subtasksArray;
 
+    @FXML
+    private ListView<Tag> tags;
+    private ObservableList<Tag> tagsArray;
+    private ObservableList<Tag> allTags;
+
     @Inject
     public EditCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
@@ -62,7 +65,7 @@ public class EditCardCtrl implements Initializable {
 
     public void ok() {
         try {
-            server.editCard(cardToEdit.id, getUpdatedCard());
+            server.editCard(cardToEdit.id, getUpdatedCard(cardToEdit));
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -80,11 +83,12 @@ public class EditCardCtrl implements Initializable {
      * Makes a card with updated title and description
      * @return a new version of the card
      */
-    private Card getUpdatedCard() {
-        var t = title.getText();
-        var d = description.getText();
+    private Card getUpdatedCard(Card card) {
+        card.title = title.getText();
+        card.description = description.getText();
+        card.tags = tagsArray;
 
-        return new Card(t,d, cardToEdit.index, cardToEdit.list, cardToEdit.listId);
+        return card;
     }
 
     /**
@@ -109,6 +113,12 @@ public class EditCardCtrl implements Initializable {
         subtasksArray = FXCollections.observableArrayList(cardToEdit.subtasks);
         subtasks.setCellFactory(subtasks1 -> new SubtaskCell(server, mainCtrl));
         subtasks.setItems(subtasksArray);
+
+        int boardId = server.getBoardListById(cardToEdit.listId).boardId;
+        allTags = FXCollections.observableArrayList(server.getTags(boardId));
+        tagsArray = FXCollections.observableArrayList(cardToEdit.tags);
+        tags.setCellFactory(tags1 -> new TagCellForEditCardCtrl(server, mainCtrl, this));
+        tags.setItems(allTags);
     }
 
     /**
@@ -136,33 +146,19 @@ public class EditCardCtrl implements Initializable {
         setSubtasksAndOldValues();
     }
 
-//    public Timer startTimer(int refreshRate){
-//        Timer timer = new Timer();
-//        timer.scheduleAtFixedRate(new TimerTask() {
-//            @Override
-//            public void run() {
-//                Platform.runLater(()->{
-//                    refresh();
-//                });
-//            }
-//        }, 0, refreshRate);
-//        return timer;
-//    }
-//
-//    public void refresh(){
-//        int id = cardToEdit.id;
-//        try{
-//            //fetch the card from the server
-//            cardToEdit = server.getCardById(id);
-//            // adjust Subtasks
-//            setSubtasks();
-//            oldTitle.setText(cardToEdit.title);
-//            oldDescription.setText(cardToEdit.description);
-//        }catch(Exception e){
-//            //if it doesn't exist someone probably deleted it while we were editing the card
-//            //so we are returned to the board overview
-//            e.printStackTrace();
-//            mainCtrl.showBoard();
-//        }
-//    }
+    public Card getCardToEdit(){
+        return cardToEdit;
+    }
+
+    public void addTag(Tag tag) {
+        if(!tagsArray.contains(tag)) tagsArray.add(tag);
+        tag = server.getTagById(tag.id);
+        cardToEdit.addTag(tag);
+    }
+
+    public void removeTag(Tag tag) {
+        tagsArray.remove(tag);
+        tag = server.getTagById(tag.id);
+        cardToEdit.removeTag(tag);
+    }
 }
