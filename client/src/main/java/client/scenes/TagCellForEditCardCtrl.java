@@ -16,13 +16,13 @@ public class TagCellForEditCardCtrl extends ListCell<Tag> {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
-    private EditCardCtrl editCardCtrl;
+    private AddRemoveTagsCtrl addRemoveTagsCtrl;
 
     @Inject
-    public TagCellForEditCardCtrl(ServerUtils server, MainCtrl mainCtrl, EditCardCtrl editCardCtrl) {
+    public TagCellForEditCardCtrl(ServerUtils server, MainCtrl mainCtrl, AddRemoveTagsCtrl addRemoveTagsCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
-        this.editCardCtrl = editCardCtrl;
+        this.addRemoveTagsCtrl = addRemoveTagsCtrl;
     }
 
     @Override
@@ -62,30 +62,20 @@ public class TagCellForEditCardCtrl extends ListCell<Tag> {
 
             check.selectedProperty().addListener(observable -> {
                 if(check.isSelected()){
-                    editCardCtrl.addTag(tagToSet);
-                    server.addCardToTag(tagToSet.id, editCardCtrl.getCardToEdit());
+                    addRemoveTagsCtrl.addTag(tagToSet);
 
                 }else{
-                    editCardCtrl.removeTag(tagToSet);
-                    server.removeCardFromTag(tagToSet.id, editCardCtrl.getCardToEdit());
+                    addRemoveTagsCtrl.removeTag(tagToSet);
                 }
             });
             setText(null);
             setGraphic(tag);
         }
     }
-    private boolean tagRelatedToCard(Tag tag1){
-        Card card = server.getCardById(editCardCtrl.getCardToEdit().id);
-        tag1 = server.getTagById(tag1.id);
+    private boolean tagRelatedToCard(Tag tagToBeChecked){
+        Card card = server.getCardById(addRemoveTagsCtrl.getCardToEdit().id);
+        tagToBeChecked = server.getTagById(tagToBeChecked.id);
 
-        for(Tag t: card.tags){
-            if(t.id == tag1.id) return true;
-        }
-
-        for(Card c: tag1.cards){
-            if(c.id == card.id) return true;
-        }
-
-        return false;
+        return card.tags.contains(tagToBeChecked);
     }
 }

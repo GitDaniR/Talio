@@ -160,7 +160,7 @@ public class ServerUtils {
     }
 
     public void editCard(Integer id, Card card) {
-        ClientBuilder.newClient(new ClientConfig()) //
+        Card saved = ClientBuilder.newClient(new ClientConfig()) //
                 .target(server).path("api/cards/"+id) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
@@ -397,20 +397,20 @@ public class ServerUtils {
                 .get(new GenericType<List<Tag>>() {});
     }
 
-    public void addCardToTag(Integer tagId, Card card) {
+    public void attachTag(Integer cardId, Tag tag) {
         ClientBuilder.newClient(new ClientConfig()) //
-                .target(server).path("api/tags/cards/add/"+tagId) //
+                .target(server).path("api/cards/tags/add/"+cardId) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .put(Entity.entity(card, APPLICATION_JSON), Card.class);
+                .put(Entity.entity(tag, APPLICATION_JSON), Tag.class);
     }
 
-    public void removeCardFromTag(Integer tagId, Card card) {
+    public void detachTag(Integer cardId, Tag tag) {
         ClientBuilder.newClient(new ClientConfig()) //
-                .target(server).path("api/tags/cards/remove/"+tagId) //
+                .target(server).path("api/cards/tags/remove/"+cardId) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .put(Entity.entity(card, APPLICATION_JSON), Card.class);
+                .put(Entity.entity(tag, APPLICATION_JSON), Tag.class);
     }
 
 //    public void send(String dest, Object o){

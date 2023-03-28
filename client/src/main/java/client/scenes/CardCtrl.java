@@ -61,6 +61,7 @@ public class CardCtrl extends AnchorPane implements Initializable{
             lblSubtasks.setText("(" + done + "/" + total + "Done)");
             lblSubtasks.setVisible(true);
         }
+        paneTags.getChildren().clear();
         if(card.tags != null){
             for(Tag tag: card.tags){
                 addTag(tag);

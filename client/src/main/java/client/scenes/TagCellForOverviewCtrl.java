@@ -21,6 +21,7 @@ public class TagCellForOverviewCtrl implements Initializable {
     private ServerUtils server;
 
     private TagOverviewCtrl tagOverviewCtrl;
+    private EditCardCtrl editCardCtrl;
     private Tag tag;
 
     public void setMainCtrlAndServer(MainCtrl mainCtrl, ServerUtils server,
@@ -28,6 +29,13 @@ public class TagCellForOverviewCtrl implements Initializable {
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.tagOverviewCtrl = tagOverviewCtrl;
+    }
+
+    public void setMainCtrlAndServer(MainCtrl mainCtrl, ServerUtils server,
+                                     EditCardCtrl editCardCtrl){
+        this.mainCtrl = mainCtrl;
+        this.server = server;
+        this.editCardCtrl = editCardCtrl;
     }
 
     public void setTag(Tag tagToBeSet){

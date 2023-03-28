@@ -1,6 +1,7 @@
 package server.api;
 
 import commons.Card;
+import commons.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -98,5 +99,42 @@ public class CardController {
         return ResponseEntity.notFound().build();
     }
 
+    /**
+     * Method which adds  a tag to a card
+     *
+     * @param id The id of the card
+     * @param tag tag to add
+     * @return response
+     */
+    @PutMapping("/tags/add/{id}")
+    public ResponseEntity<Card> addCard(@PathVariable("id") Integer id,
+                                       @RequestBody Tag tag){
+        try {
+            Card res = cardService.addTag(id, tag);
+            return ResponseEntity.ok(res);
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    /**
+     * Method which removes a tag from a card
+     *
+     * @param id The id of the card
+     * @param tag tag to remove
+     * @return response
+     */
+    @PutMapping("/tags/remove/{id}")
+    public ResponseEntity<Card> removeCard(@PathVariable("id") Integer id,
+                                          @RequestBody Tag tag){
+        try {
+            Card res = cardService.removeTag(id, tag);
+            return ResponseEntity.ok(res);
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return ResponseEntity.notFound().build();
+    }
 
 }

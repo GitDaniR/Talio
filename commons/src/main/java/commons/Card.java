@@ -1,7 +1,6 @@
 package commons;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -11,7 +10,6 @@ import java.util.List;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 public class Card {
 
@@ -19,15 +17,13 @@ public class Card {
     @GeneratedValue(strategy = GenerationType.AUTO)
 
     public Integer id;
-
-
     public String title;
     public String description;
+
     @ManyToMany(
         mappedBy = "cards",
         cascade = CascadeType.PERSIST
     )
-    @JsonIgnore
     public List<Tag> tags = new ArrayList<>();
 
     @OneToMany(

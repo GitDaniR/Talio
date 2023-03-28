@@ -58,6 +58,9 @@ public class MainCtrl {
     private TagOverviewCtrl tagOverviewCtrl;
     private Scene tagOverview;
 
+    private AddRemoveTagsCtrl addRemoveTagsCtrl;
+    private Scene addRemoveTags;
+
     private double windowHeight;
     private double windowWidth;
 
@@ -82,7 +85,8 @@ public class MainCtrl {
                            Pair<ChangeBoardTitleCtrl, Parent> changeBoardTitle,
                            Pair<EditTagCtrl, Parent> editTag,
                            Pair<AddTagCtrl, Parent> addTag,
-                           Pair<TagOverviewCtrl, Parent> tagOverview) {
+                           Pair<TagOverviewCtrl, Parent> tagOverview,
+                           Pair<AddRemoveTagsCtrl, Parent> addRemoveTags) {
 
         this.primaryStage = primaryStage;
 
@@ -118,6 +122,9 @@ public class MainCtrl {
 
         this.tagOverviewCtrl = tagOverview.getKey();
         this.tagOverview = new Scene(tagOverview.getValue());
+
+        this.addRemoveTagsCtrl = addRemoveTags.getKey();
+        this.addRemoveTags = new Scene(addRemoveTags.getValue());
 
         showWelcomePage();
         primaryStage.show();
@@ -313,6 +320,13 @@ public class MainCtrl {
         primaryStage.setTitle("Editing Tag");
         primaryStage.setScene(editTag);
         editTagCtrl.setTagToEdit(tagToEdit);
+    }
+
+    public void showAddRemoveTags(Card card) {
+        primaryStage.setTitle("Choosing Tags");
+        primaryStage.setScene(addRemoveTags);
+        addRemoveTagsCtrl.setCardToEdit(card);
+        addRemoveTagsCtrl.setTags();
     }
 }
 
