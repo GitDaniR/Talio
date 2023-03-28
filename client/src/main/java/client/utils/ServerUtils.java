@@ -150,9 +150,9 @@ public class ServerUtils {
                 .post(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
 
-    public Card updateCardList(Card card, Integer listID){
+    public Card updateCardList(Card card, Integer listID, Integer index){
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(server).path("api/cards/"+card.id+"/list/"+listID) //
+                .target(server).path("api/cards/"+card.id+"/list/"+listID+"/"+index) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(listID, APPLICATION_JSON), Card.class);
