@@ -27,10 +27,9 @@ public class Subtask {
 
     public Integer cardId;
 
-    public Subtask(){}
+    public Subtask(){
 
-
-
+    }
     public Subtask(String title, boolean done, int index, Card card) {
         this.done = done;
         this.title = title;

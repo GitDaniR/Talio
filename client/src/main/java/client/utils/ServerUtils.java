@@ -289,6 +289,34 @@ public class ServerUtils {
                 .put(Entity.entity(String.valueOf(done),APPLICATION_JSON), String.class);
     }
 
+    /**
+     * Method that sends PUT request to the server to
+     * update the title of the subtask.
+     * @param id - id of the subtask
+     * @param title - new title of the subtask
+     */
+    public void updateSubtaskTitle(Integer id, String title){
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/subtasks/title/" + id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(title, APPLICATION_JSON), String.class);
+    }
+
+    /**
+     * Method that sends PUT request to the server to
+     * update the index of the subtask.
+     * @param id - id of the subtask
+     * @param index - new index of the subtask
+     */
+    public void updateSubtaskIndex(Integer id, Integer index){
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/subtasks/index/" + id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(String.valueOf(index), APPLICATION_JSON), String.class);
+    }
+
     private StompSession session = connect("ws://localhost:8080/websocket");
 
     private StompSession connect(String url){
@@ -323,5 +351,4 @@ public class ServerUtils {
 //    public void send(String dest, Object o){
 //        session.send(dest,o);
 //    }
-
 }
