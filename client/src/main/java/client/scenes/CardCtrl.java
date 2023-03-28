@@ -17,8 +17,7 @@ import java.util.stream.Stream;
 public class CardCtrl extends AnchorPane implements Initializable{
     @FXML
     private Label cardTitle;
-    @FXML
-    private Button cardEdit;
+
     @FXML
     private Button cardDelete;
     @FXML
@@ -34,12 +33,17 @@ public class CardCtrl extends AnchorPane implements Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources) {}
 
-    /** Sets text of the title of the card
+    /**
+     * Sets the card to be represented (if it changed)
+     * the title and the description
      */
-    public void setCardAttributes() {
+    public void setCardAndAttributes(Card card) {
+        this.card = card;
         cardTitle.setText(card.title);
         if(card.description == null || card.description.isEmpty()) {
             imgDescription.setVisible(false);
+        } else{
+            imgDescription.setVisible(true);
         }
         if(card.subtasks == null || card.subtasks.isEmpty()){
             lblSubtasks.setVisible(false);
@@ -48,6 +52,7 @@ public class CardCtrl extends AnchorPane implements Initializable{
             long done = Stream.of(card.subtasks.toArray()).
                 filter(subtask->((Subtask)subtask).done).count();
             lblSubtasks.setText("(" + done + "/" + total + "Done)");
+            lblSubtasks.setVisible(true);
         }
     }
 
@@ -73,9 +78,5 @@ public class CardCtrl extends AnchorPane implements Initializable{
 
     public int getCardId() {
         return card.id;
-    }
-
-    public void setCardTitleText(String title) {
-        cardTitle.setText(title);
     }
 }

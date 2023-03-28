@@ -28,8 +28,6 @@ import java.util.Random;
 public class MainCtrl {
 
     private Stage primaryStage;
-    private Scene addCard;
-    private AddCardCtrl addCardCtrl;
 
     private BoardOverviewCtrl boardOverviewCtrl;
     private Scene board;
@@ -64,7 +62,6 @@ public class MainCtrl {
     private boolean isAdmin = false;
 
     public void initialize(Stage primaryStage,
-            Pair<AddCardCtrl, Parent> addCard,
                            Pair<AddListCtrl, Parent> addList,
                            Pair<BoardOverviewCtrl, Parent> board,
                            Pair<WelcomePageCtrl, Parent> welcomePage,
@@ -82,9 +79,6 @@ public class MainCtrl {
 
         this.addListCtrl = addList.getKey();
         this.addList = new Scene(addList.getValue());
-
-        this.addCardCtrl = addCard.getKey();
-        this.addCard = new Scene(addCard.getValue());
 
         this.welcomePageCtrl = welcomePage.getKey();
         this.welcomePage = new Scene(welcomePage.getValue());
@@ -141,16 +135,6 @@ public class MainCtrl {
     private void setWindowSize(){
         primaryStage.setHeight(windowHeight);
         primaryStage.setWidth(windowWidth);
-    }
-
-    /**
-     * Method that starts scene for adding cards to the BoardList
-     * @param list - BoardList to add cards to
-     */
-    public void showAddCard(BoardList list) {
-        primaryStage.setTitle("A new card");
-        addCardCtrl.setList(list);
-        primaryStage.setScene(addCard);
     }
 
     /**
