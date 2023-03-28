@@ -4,6 +4,7 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.*;
 import jakarta.ws.rs.WebApplicationException;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -51,7 +52,18 @@ public class EditCardCtrl implements Initializable {
         this.mainCtrl = mainCtrl;
     }
     @Override
-    public void initialize(URL location, ResourceBundle resources) {}
+    public void initialize(URL location, ResourceBundle resources) {
+        server.registerForMessages("/topic/subtasks", Integer.class, cardId -> {
+            Platform.runLater(() -> overwriteSubtasks(server.getCardById(cardId).subtasks));
+        });
+    }
+
+    private void overwriteSubtasks(List<Subtask> t){
+        cardToEdit.subtasks=t;
+        Collections.sort(cardToEdit.subtasks, Comparator.comparingInt(s -> s.index));
+        subtasksArray = FXCollections.observableArrayList(t);
+        subtasks.setItems(subtasksArray);
+    }
 
     public void cancel(){
         clearFields();
@@ -94,22 +106,38 @@ public class EditCardCtrl implements Initializable {
     /**
      * Method that returns the subtask with the title from the text box
      * which is added to the database through the server
-     * @return
+     * @return generated subtask
      */
-    private Subtask getNewSubtask(){
-
+    private Subtask generateNewSubtask(){
         Subtask subtaskEntity = new Subtask(subtaskTitle.getText(), false,
                cardToEdit.subtasks.size(),cardToEdit);
+        cardToEdit.subtasks.add(subtaskEntity);
         return server.addSubtask(subtaskEntity);
     }
 
     /**
-     * Method that sets subtasks to be the subtasks of the card
+     * Method that adds Subtask when the add button
+     * for subtask is clicked
      */
-    public void setSubtasksAndOldValues(){
+    public void addSubtask(){
+        if(!subtaskTitle.textProperty().get().isEmpty()){
+            generateNewSubtask();
+            subtaskTitle.textProperty().set("");
+        }
+        cardToEdit = server.getCardById(cardToEdit.getId());
+
+    }
+
+    /**
+     * Method that sets subtasks to be the subtasks of the card
+     * and fills in old values and tags
+     * (this is called when you first edit a card)
+     */
+    public void setSubtasksAndOldValues() {
         oldTitle.setText(cardToEdit.title);
         oldDescription.setText((cardToEdit.description));
 
+        Collections.sort(cardToEdit.subtasks, Comparator.comparingInt(s -> s.index));
         subtasksArray = FXCollections.observableArrayList(cardToEdit.subtasks);
         subtasks.setCellFactory(subtasks1 -> new SubtaskCell(server, mainCtrl));
         subtasks.setItems(subtasksArray);
@@ -119,20 +147,6 @@ public class EditCardCtrl implements Initializable {
         tagsArray = FXCollections.observableArrayList(cardToEdit.tags);
         tags.setCellFactory(tags1 -> new TagCellForEditCardCtrl(server, mainCtrl, this));
         tags.setItems(allTags);
-    }
-
-    /**
-     * Method that adds Subtask when the add button
-     * for subtask is clicked
-     */
-    public void addSubtask(){
-        if(!subtaskTitle.textProperty().get().isEmpty()){
-            Subtask subtaskEntity = getNewSubtask();
-            subtasksArray.add(subtaskEntity);
-            subtaskTitle.textProperty().set("");
-        }
-        cardToEdit = server.getCardById(cardToEdit.getId());
-
     }
 
     /**
@@ -162,3 +176,4 @@ public class EditCardCtrl implements Initializable {
         cardToEdit.removeTag(tag);
     }
 }
+

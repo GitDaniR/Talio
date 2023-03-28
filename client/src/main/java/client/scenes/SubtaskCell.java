@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListCell;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
@@ -39,6 +40,7 @@ public class SubtaskCell extends ListCell<Subtask> {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+            setEventHandlerTitle(subtaskCtrl);
             // get the Checkbox element from the scene
             CheckBox check = (CheckBox)((AnchorPane)subtask).getChildren().get(0);
             check.setSelected(task.done);
@@ -67,9 +69,17 @@ public class SubtaskCell extends ListCell<Subtask> {
             });
             setText(null);
             setGraphic(subtask);
-
-
         }
+    }
 
+    public void setEventHandlerTitle(SubtaskCtrl subtaskCtrl) {
+        Text title = subtaskCtrl.getTitle();
+        TextField editableTitle = subtaskCtrl.getEditableTitle();
+        title.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                editableTitle.setText(title.getText());
+                editableTitle.setVisible(true);
+            }
+        });
     }
 }
