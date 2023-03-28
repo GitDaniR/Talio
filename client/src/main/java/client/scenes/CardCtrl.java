@@ -99,10 +99,10 @@ public class CardCtrl extends AnchorPane implements Initializable{
         return card.id;
     }
     public void addTag(Tag tag){
-        FXMLLoader tagLoader = new FXMLLoader(getClass().getResource("Tag.fxml"));
+        FXMLLoader tagLoader = new FXMLLoader(getClass().getResource("TagIcon.fxml"));
         try {
             Node tagObject = tagLoader.load();
-            TagCtrl tagController = tagLoader.getController();
+            TagIconController tagController = tagLoader.getController();
             tagController.setTag(tag);
             paneTags.getChildren().add(tagObject);
         } catch (IOException e) {

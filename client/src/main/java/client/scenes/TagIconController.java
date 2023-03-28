@@ -10,7 +10,7 @@ import javafx.scene.text.Text;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class TagCtrl implements Initializable {
+public class TagIconController implements Initializable {
     @FXML
     private Text txtLetter;
     @FXML
