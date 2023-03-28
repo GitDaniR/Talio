@@ -95,9 +95,13 @@ public class WelcomePageCtrl {
         }
     }
 
+    private PauseTransition delay;
+
     private void setTextAndRemoveAfterDelay(Label label,String text){
         label.setText(text);
-        PauseTransition delay = new PauseTransition(Duration.seconds(2));
+        if(delay!=null)
+            delay.stop();//stop previous delay
+        delay = new PauseTransition(Duration.seconds(2));
         delay.setOnFinished(event -> {
             label.setText("");
         });

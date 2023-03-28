@@ -96,10 +96,14 @@ public class WorkspaceCtrl implements Initializable {
         mainCtrl.showNewBoard(this.user);
     }
 
+    private PauseTransition delay;
+
     public void displayText(String text){
         alreadyJoinedText.setText(text);
         // message gets deleted after 2 seconds
-        PauseTransition delay = new PauseTransition(Duration.seconds(2));
+        if(delay!=null)
+            delay.stop();//stop previous delay
+        delay = new PauseTransition(Duration.seconds(2));
         delay.setOnFinished(event -> {
             alreadyJoinedText.setText("");
         });

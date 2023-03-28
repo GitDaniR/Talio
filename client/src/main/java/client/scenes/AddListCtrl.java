@@ -20,11 +20,14 @@ import com.google.inject.Inject;
 
 import commons.Board;
 import jakarta.ws.rs.WebApplicationException;
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import commons.BoardList;
+import javafx.util.Duration;
 
 public class AddListCtrl {
 
@@ -35,6 +38,8 @@ public class AddListCtrl {
 
     @FXML
     private TextField title;
+    @FXML
+    private Label errorLabel;
 
     @Inject
     public AddListCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -50,7 +55,26 @@ public class AddListCtrl {
         this.boardToAddTo=boardToAddTo;
     }
 
+    private PauseTransition delay;
+
+    public void displayErrorText(String text){
+        errorLabel.setText(text);
+        // message gets deleted after 2 seconds
+        if(delay!=null)
+            delay.stop();//stop previous delay
+        delay = new PauseTransition(Duration.seconds(2));
+        delay.setOnFinished(event -> {
+            errorLabel.setText("");
+        });
+        delay.play();
+    }
+
     public void addList() {
+        if(getBoardList().title.equals("")){
+            displayErrorText("List title cannot be empty!");
+            return;
+        }
+
         try {
             server.addBoardList(getBoardList());
         } catch (WebApplicationException e) {
