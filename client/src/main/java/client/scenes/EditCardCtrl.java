@@ -24,10 +24,6 @@ public class EditCardCtrl implements Initializable {
     private TextField title;
     @FXML
     private TextArea description;
-    @FXML
-    private Label oldTitle;
-    @FXML
-    private Label oldDescription;
 
     @FXML
     private Button save;
@@ -129,8 +125,8 @@ public class EditCardCtrl implements Initializable {
      * (this is called when you first edit a card)
      */
     public void setSubtasksAndOldValues() {
-        oldTitle.setText(cardToEdit.title);
-        oldDescription.setText((cardToEdit.description));
+        title.setText(cardToEdit.title);
+        description.setText((cardToEdit.description));
 
         Collections.sort(cardToEdit.subtasks, Comparator.comparingInt(s -> s.index));
         subtasksArray = FXCollections.observableArrayList(cardToEdit.subtasks);

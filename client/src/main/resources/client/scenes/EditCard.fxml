@@ -2,28 +2,22 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane prefHeight="540.0" prefWidth="860.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditCardCtrl">
    <children>
-      <Label layoutX="31.0" layoutY="23.0" prefHeight="17.0" prefWidth="177.0" text="Enter the new title of your card" />
-      <TextField fx:id="title" disable="false" layoutX="31.0" layoutY="57.0" prefHeight="25.0" prefWidth="436.0" />
-      <TextArea fx:id="description" layoutX="31.0" layoutY="241.0" prefHeight="89.0" prefWidth="538.0" />
-      <Label layoutX="31.0" layoutY="199.0" text="Enter the new description of your card" />
-      <Button layoutX="421.0" layoutY="524.0" mnemonicParsing="false" onAction="#ok" text="Save the card" />
-      <Button layoutX="517.0" layoutY="524.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
-      <Label fx:id="oldTitle" layoutX="31.0" layoutY="40.0" prefHeight="17.0" prefWidth="177.0" />
-      <Label fx:id="oldDescription" layoutX="31.0" layoutY="91.0" prefHeight="80.0" prefWidth="538.0" />
-      <ListView fx:id="subtasks" layoutX="35.0" layoutY="362.0" prefHeight="89.0" prefWidth="538.0" />
-      <TextField fx:id="subtaskTitle" layoutX="31.0" layoutY="468.0" prefHeight="26.0" prefWidth="464.0" />
-      <Button fx:id="addSubtask" layoutX="517.0" layoutY="468.0" mnemonicParsing="false" onAction="#addSubtask" text="Add" />
+      <Label layoutX="31.0" layoutY="23.0" prefHeight="17.0" prefWidth="177.0" text="The title of your card:" />
+      <TextField fx:id="title" disable="false" layoutX="31.0" layoutY="57.0" prefHeight="25.0" prefWidth="538.0" />
+      <TextArea fx:id="description" layoutX="31.0" layoutY="128.0" prefHeight="89.0" prefWidth="538.0" />
+      <Label layoutX="31.0" layoutY="96.0" text="The description of your card:" />
+      <Button layoutX="758.0" layoutY="500.0" mnemonicParsing="false" onAction="#ok" text="Save the card" />
+      <Button layoutX="31.0" layoutY="500.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
+      <ListView fx:id="subtasks" layoutX="33.0" layoutY="261.0" prefHeight="145.0" prefWidth="538.0" />
+      <TextField fx:id="subtaskTitle" layoutX="31.0" layoutY="430.0" prefHeight="26.0" prefWidth="488.0" />
+      <Button fx:id="addSubtask" layoutX="533.0" layoutY="431.0" mnemonicParsing="false" onAction="#addSubtask" text="Add" />
+      <Label layoutX="29.0" layoutY="227.0" text="The subtasks of your card:" />
    </children>
 </AnchorPane>
