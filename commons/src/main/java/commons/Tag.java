@@ -21,12 +21,7 @@ public class Tag {
     public String title;
     public String color;
 
-    @ManyToMany
-    @JoinTable(
-            name = "cards",
-            joinColumns = @JoinColumn(name = "tag_id"),
-            inverseJoinColumns = @JoinColumn(name = "card_id")
-    )
+    @ManyToMany(mappedBy = "tags")
     @JsonIgnore
     public List<Card> cards = new ArrayList<>();
 

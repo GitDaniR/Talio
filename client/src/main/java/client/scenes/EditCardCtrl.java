@@ -154,7 +154,6 @@ public class EditCardCtrl implements Initializable {
     private void setTags(){
         tagsArray = FXCollections.observableArrayList(cardToEdit.tags);
         for(Tag tag: tagsArray){
-            Board board = cardToEdit.list.board;
             FXMLLoader tagDisplayLoader = new FXMLLoader(getClass().
                     getResource("TagCellForOverview.fxml"));
             try {

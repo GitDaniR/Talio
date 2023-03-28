@@ -20,9 +20,11 @@ public class Card {
     public String title;
     public String description;
 
-    @ManyToMany(
-        mappedBy = "cards",
-        cascade = CascadeType.PERSIST
+    @ManyToMany
+    @JoinTable(
+        name = "cardHasTag",
+        joinColumns = @JoinColumn(name = "card_id"),
+        inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
     public List<Tag> tags = new ArrayList<>();
 

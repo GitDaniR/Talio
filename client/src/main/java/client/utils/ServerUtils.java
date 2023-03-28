@@ -159,8 +159,8 @@ public class ServerUtils {
 
     }
 
-    public void editCard(Integer id, Card card) {
-        Card saved = ClientBuilder.newClient(new ClientConfig()) //
+    public Card editCard(Integer id, Card card) {
+        return ClientBuilder.newClient(new ClientConfig()) //
                 .target(server).path("api/cards/"+id) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //

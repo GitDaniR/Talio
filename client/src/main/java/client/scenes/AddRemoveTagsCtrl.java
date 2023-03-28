@@ -35,9 +35,7 @@ public class AddRemoveTagsCtrl implements Initializable {
 
     public void ok() {
         cardToEdit.tags = tagsArray;
-        server.editCard(cardToEdit.id, cardToEdit);
-        // this returns a non updated version??
-        Card toShow = server.getCardById(cardToEdit.id);
+        Card toShow = server.editCard(cardToEdit.id, cardToEdit);
         mainCtrl.showEditCard(toShow);
     }
 
