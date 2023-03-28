@@ -127,16 +127,6 @@ public class MainCtrl {
         return sb.toString();
     }
 
-    private void storeWindowSize(Scene current){
-        windowHeight = current.getHeight();
-        windowWidth = current.getWidth();
-    }
-
-    private void setWindowSize(){
-        primaryStage.setHeight(windowHeight);
-        primaryStage.setWidth(windowWidth);
-    }
-
     /**
      * Method that opens new(empty) board for the user
      * @param user - user creating the board
