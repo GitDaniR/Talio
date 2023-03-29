@@ -313,8 +313,8 @@ public class BoardOverviewCtrl implements Initializable {
 
     private void setupScrolling() {
         scrolltimeline.setCycleCount(Timeline.INDEFINITE);
-        scrolltimeline.getKeyFrames().add(new KeyFrame(Duration.millis(20), (ActionEvent) -> { dragScroll();}));
-
+        scrolltimeline.getKeyFrames().add(new KeyFrame(Duration.millis(20),
+                (actionEvent) -> { dragScroll();}));
         scene.setOnMouseDragExited(event -> {
             if (event.getY() > 0) {
                 scrollVelocity = 1.0 / speed;
@@ -322,17 +322,13 @@ public class BoardOverviewCtrl implements Initializable {
             else {
                 scrollVelocity = -1.0 / speed;
             }
-
             if (isDragging){
                 scrolltimeline.stop();
                 scrolltimeline.play();
-                System.out.println("MouseDragExited -> scene catched it, yes, is Dragging: "+isDragging);
             }else{
                 scrolltimeline.stop();
                 removePreview(mainBoard);
-                System.out.println("MouseDragExited -> scene catched it, no, is Dragging: "+isDragging);
             }
-
         });
 
         scene.setOnMouseReleased(event -> {
@@ -510,10 +506,7 @@ public class BoardOverviewCtrl implements Initializable {
             @Override
             public void handle(MouseDragEvent event) {
                 removePreview(mainBoard);
-
-                System.out.println("Mouse drag released -> list catched it");
                 double eventY = event.getY();
-
                 Node initial = (Node) event.getGestureSource();
                 Node initialCardsSection = initial.getParent();
                 Node initialList = initialCardsSection.getParent();
@@ -521,7 +514,6 @@ public class BoardOverviewCtrl implements Initializable {
                 Node targetList = (Node) event.getSource();
                 VBox targetCardsSection = (VBox) ((VBox)targetList ).getChildren().get(2);
                 int indexOfList = mainBoard.getChildren().indexOf(targetList);
-
                 HBox draggedCard = (HBox) initial;
                 VBox draggedCardsSection = (VBox) initialCardsSection;
                 int indexOfDraggingNode = draggedCardsSection.getChildren().indexOf(draggedCard);
@@ -536,13 +528,11 @@ public class BoardOverviewCtrl implements Initializable {
                     if(eventY<startY){
                         adjustCards(indexOfInitialList, indexOfList, indexOfDraggingNode, 0);
                     }else{
-                        adjustCards(indexOfInitialList, indexOfList, indexOfDraggingNode, targetCardsSection.getChildren().size()-1);
-                    }
-
+                        adjustCards(indexOfInitialList, indexOfList, indexOfDraggingNode,
+                                targetCardsSection.getChildren().size()-1);}
                 }
                 adjustCards(indexOfInitialList, indexOfList, indexOfDraggingNode,
                         targetCardsSection.getChildren().size());
-
             }
         });
         for(int i = 0;i<((VBox)list).getChildren().size();i++){
