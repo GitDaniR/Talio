@@ -81,6 +81,7 @@ public class CardService {
                 cardRepo.shiftCardsBetweenDown(index, res.index, listId);
             }
         }else{
+            cardRepo.shiftCardsLeft(res.index, res.listId);
             res.listId = listId;
             res.list = list;
             cardRepo.shiftCardsRight(index, listId);
