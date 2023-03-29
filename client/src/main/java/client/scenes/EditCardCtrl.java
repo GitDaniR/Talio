@@ -49,6 +49,20 @@ public class EditCardCtrl implements Initializable {
         server.registerForMessages("/topic/subtasks", Integer.class, cardId -> {
             Platform.runLater(() -> overwriteSubtasks(server.getCardById(cardId).subtasks));
         });
+        server.registerForMessages("/topic/cards/rename", Card.class, card -> {
+            if(Objects.equals(card.id, cardToEdit.id))
+                Platform.runLater(() -> updateCard(card));
+        });
+        title.setOnKeyTyped(e -> server.editCard(cardToEdit.id, getUpdatedCard()));
+        description.setOnKeyTyped(e -> server.editCard(cardToEdit.id, getUpdatedCard()));
+    }
+
+    private void updateCard(Card card){
+        cardToEdit=card;
+        if(!title.isFocused())
+            title.setText(card.title);
+        if(!description.isFocused())
+            description.setText(card.description);
     }
 
     private void overwriteSubtasks(List<Subtask> t){
@@ -61,11 +75,6 @@ public class EditCardCtrl implements Initializable {
     public void cancel(){
         clearFields();
         mainCtrl.showBoard();
-    }
-
-    private void clearFields() {
-        title.clear();
-        description.clear();
     }
 
     public void ok() {
@@ -82,6 +91,11 @@ public class EditCardCtrl implements Initializable {
 
         clearFields();
         mainCtrl.showBoard();
+    }
+
+    private void clearFields() {
+        title.clear();
+        description.clear();
     }
 
     /**
