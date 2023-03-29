@@ -328,7 +328,9 @@ public class BoardOverviewCtrl implements Initializable {
 
     //region DRAG AND DROP METHODS
 
-    // method that activates snapshot image being available while dragging the card
+    /**
+     * method that activates snapshot image being available while dragging the card
+     */
     private void addPreview(final FlowPane board, final HBox card){
         ImageView imageView = new ImageView(card.snapshot(null, null));
         imageView.setManaged(false);
@@ -339,18 +341,25 @@ public class BoardOverviewCtrl implements Initializable {
             @Override
             public void handle(MouseEvent event) {
                 imageView.relocate(event.getX(), event.getY());
+                System.out.print("Relocated to : "+ event.getX() +" and "+event.getY());
             }
         });
     }
 
-    // method that stops showing preview when dragging is finished
+
+    /**
+     *  method that stops showing preview when dragging is finished
+     */
     private void removePreview(final FlowPane board){
         isDragging = false;
         board.setOnMouseDragged(null);
         board.getChildren().remove(board.getUserData());
         board.setUserData(null);
     }
-    // method that highlights the card when it is dragged and dropped
+
+    /**
+     * method that highlights the card when it is dragged and dropped
+     */
     private void setDragAndDropEffect(final HBox card){
         String initialStyle = card.getStyle();
 
@@ -370,7 +379,10 @@ public class BoardOverviewCtrl implements Initializable {
         });
 
     }
-    // method that sends information to the server about card changes
+
+    /**
+     * method that sends information to the server about card changes
+     */
     private void adjustCards(int indexInitialList, int indexFinalList,
                              int indexCardDragged, int indexCardsDropped){
         if(indexCardDragged ==-1)
@@ -392,7 +404,10 @@ public class BoardOverviewCtrl implements Initializable {
         refresh();
 
     }
-    // method that handles the drag event on the list
+
+    /**
+     * method that handles the drag event on the list
+     */
     private void setDragReleaseList(Node list){
         list.setOnMouseDragReleased(new EventHandler<MouseDragEvent>() {
             @Override
@@ -401,10 +416,13 @@ public class BoardOverviewCtrl implements Initializable {
 
                 Node initial = (Node) event.getGestureSource();
                 Node initialCardsSection = initial.getParent();
-                Node initialList = initialCardsSection.getParent();
+                Node scrollPane = initialCardsSection.getParent();
+                Node scrollPaneSkin = scrollPane.getParent().getParent();
+                Node initialList = scrollPaneSkin.getParent();
                 int indexOfInitialList = mainBoard.getChildren().indexOf(initialList);
                 Node targetList = (Node) event.getSource();
-                VBox targetCardsSection = (VBox) ((VBox)targetList ).getChildren().get(2);
+                int targetCardsSection = ((ListCtrl)targetList.getUserData()).
+                        getAmountOfCardsInList();
                 int indexOfList = mainBoard.getChildren().indexOf(targetList);
 
                 HBox draggedCard = (HBox) initial;
@@ -412,8 +430,8 @@ public class BoardOverviewCtrl implements Initializable {
                 int indexOfDraggingNode = draggedCardsSection.getChildren().indexOf(draggedCard);
                 event.consume();
                 if(indexOfList == indexOfInitialList)return;
-                adjustCards(indexOfInitialList, indexOfList, indexOfDraggingNode,
-                        targetCardsSection.getChildren().size());
+                adjustCards(indexOfInitialList, indexOfList,
+                        indexOfDraggingNode, targetCardsSection);
             }
         });
         for(int i = 0;i<((VBox)list).getChildren().size();i++){
@@ -431,12 +449,17 @@ public class BoardOverviewCtrl implements Initializable {
         }
 
     }
-    // method that handles the drag event on the board
+
+    /**
+     * method that handles the drag event on the board
+     */
     private void setDragReleaseBoard(){
         mainBoard.setOnMouseDragReleased(event -> removePreview(mainBoard));
     }
 
-    // sets drag and drop feature to cards
+    /**
+     * sets drag and drop feature to cards
+     */
     private void addDragAndDrop(int cardNumber, final HBox card){
         //VBox cardsBox = (VBox) ((VBox)list).getChildren().get(2);
         card.setOnDragDetected(new EventHandler<MouseEvent>()
