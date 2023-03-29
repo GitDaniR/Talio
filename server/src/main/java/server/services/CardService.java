@@ -44,6 +44,7 @@ public class CardService {
             throw new Exception("Card with id: " + card.id +" already exists");
         cardRepo.shiftCardsRight(card.index, card.listId);
         return cardRepo.save(card);
+
     }
 
     @Transactional
@@ -52,6 +53,7 @@ public class CardService {
         Card res = cardRepo.findById(id).orElseThrow(
             ()->new Exception("Card with id: " + id +" not found")
         );
+
         cardRepo.shiftCardsLeft(res.index, res.listId);
         cardRepo.deleteById(id);
         return res;
@@ -64,7 +66,9 @@ public class CardService {
         );
         res.title = card.title;
         res.description = card.description;
+        System.out.println("edit card");
         return cardRepo.save(res);
+
     }
     @Transactional
     public Card editCardByIdList(int id, int listId, int index)throws Exception{
@@ -82,11 +86,10 @@ public class CardService {
             }
         }else{
             cardRepo.shiftCardsLeft(res.index, res.listId);
-            res.listId = listId;
-            res.list = list;
             cardRepo.shiftCardsRight(index, listId);
         }
         res.index = index;
+        res.listId = listId;
         return cardRepo.save(res);
 
     }
