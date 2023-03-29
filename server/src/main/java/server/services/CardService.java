@@ -6,10 +6,7 @@ import commons.Tag;
 import org.springframework.stereotype.Service;
 import server.database.BoardListRepository;
 import server.database.CardRepository;
-
-
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

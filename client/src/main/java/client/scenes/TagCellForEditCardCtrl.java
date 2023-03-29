@@ -19,7 +19,8 @@ public class TagCellForEditCardCtrl extends ListCell<Tag> {
     private AddRemoveTagsCtrl addRemoveTagsCtrl;
 
     @Inject
-    public TagCellForEditCardCtrl(ServerUtils server, MainCtrl mainCtrl, AddRemoveTagsCtrl addRemoveTagsCtrl) {
+    public TagCellForEditCardCtrl(ServerUtils server, MainCtrl mainCtrl,
+                                  AddRemoveTagsCtrl addRemoveTagsCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.addRemoveTagsCtrl = addRemoveTagsCtrl;

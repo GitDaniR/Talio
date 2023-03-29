@@ -49,7 +49,8 @@ public class Main extends Application {
         var editTag = FXML.load(EditTagCtrl.class,"client","scenes","EditTag.fxml");
         var addTag = FXML.load(AddTagCtrl.class,"client","scenes","AddTag.fxml");
         var tagOverview = FXML.load(TagOverviewCtrl.class,"client","scenes","TagOverview.fxml");
-        var addRemoveTags = FXML.load(AddRemoveTagsCtrl.class,"client","scenes","AddRemoveTags.fxml");
+        var addRemoveTags = FXML.load(AddRemoveTagsCtrl.class,"client","scenes",
+                "AddRemoveTags.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
 
