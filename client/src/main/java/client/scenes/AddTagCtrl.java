@@ -8,6 +8,7 @@ import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -19,7 +20,7 @@ public class AddTagCtrl implements Initializable {
     @FXML
     private TextField title;
     @FXML
-    private ColorPicker color;
+    private ColorPicker colorPicker;
 
     private Board boardToAddTo;
 
@@ -39,6 +40,7 @@ public class AddTagCtrl implements Initializable {
 
     private void clearFields() {
         title.clear();
+        colorPicker.setValue(Color.valueOf("0xffffff"));
     }
 
     public void ok() {
@@ -60,7 +62,7 @@ public class AddTagCtrl implements Initializable {
 
     private Tag getTag() {
         var t = title.getText();
-        var c = color.getValue().toString();
+        var c = colorPicker.getValue().toString();
 
         return new Tag(t, c, boardToAddTo, boardToAddTo.id);
     }
