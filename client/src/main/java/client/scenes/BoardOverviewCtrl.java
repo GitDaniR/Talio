@@ -134,7 +134,7 @@ public class BoardOverviewCtrl implements Initializable {
         StringSelection selection = new StringSelection(getInviteCode());
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(selection, null);
-        copiedToClipboardMessage.setText("Copied to clipboard");
+        copiedToClipboardMessage.setText("Copied invite code to clipboard: "+getInviteCode());
 
         // message gets deleted after 2 seconds
         PauseTransition delay = new PauseTransition(Duration.seconds(2));

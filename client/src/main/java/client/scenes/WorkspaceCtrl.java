@@ -110,6 +110,10 @@ public class WorkspaceCtrl implements Initializable {
         delay.play();
     }
 
+    public void clearInviteText(){
+        inputBoardToJoin.clear();
+    }
+
     public void joinInputBoard() throws Exception {
         // Take the ID out of inputBoardToJoin (integer after "#")
         String[] boardToJoin = inputBoardToJoin.getText().split("#");
