@@ -45,6 +45,14 @@ public class AddTagCtrl implements Initializable {
 
     public void ok() {
         try {
+            // does not allow a blank title
+            if(title.getText().isBlank()){
+                var alert = new Alert(Alert.AlertType.ERROR);
+                alert.initModality(Modality.APPLICATION_MODAL);
+                alert.setContentText("Title cannot be blank");
+                alert.showAndWait();
+                return;
+            }
             server.addTag(getTag());
 
         } catch (WebApplicationException e) {

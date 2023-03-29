@@ -9,7 +9,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+
 import javax.inject.Inject;
 import java.io.IOException;
 import java.net.URL;
@@ -39,7 +42,15 @@ public class TagOverviewCtrl implements Initializable {
     }
 
     public void createTag(){
-        mainCtrl.showAddTag(this.board);
+        // allow no more than 5 tags (a way to avoid dealing with visual overflow)
+        if(board.tags.size() >= 5) {
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText("A board can have at most 5 tags");
+            alert.showAndWait();
+            return;
+        }
+        else mainCtrl.showAddTag(this.board);
     }
 
     public void back() {
