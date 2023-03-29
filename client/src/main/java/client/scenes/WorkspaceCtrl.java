@@ -96,14 +96,22 @@ public class WorkspaceCtrl implements Initializable {
         mainCtrl.showNewBoard(this.user);
     }
 
-    public void displayAlreadyJoinedText(){
-        alreadyJoinedText.setText("Board already joined!");
+    private PauseTransition delay;
+
+    public void displayText(String text){
+        alreadyJoinedText.setText(text);
         // message gets deleted after 2 seconds
-        PauseTransition delay = new PauseTransition(Duration.seconds(2));
+        if(delay!=null)
+            delay.stop();//stop previous delay
+        delay = new PauseTransition(Duration.seconds(2));
         delay.setOnFinished(event -> {
             alreadyJoinedText.setText("");
         });
         delay.play();
+    }
+
+    public void clearInviteText(){
+        inputBoardToJoin.clear();
     }
 
     public void joinInputBoard() throws Exception {
@@ -111,15 +119,19 @@ public class WorkspaceCtrl implements Initializable {
         String[] boardToJoin = inputBoardToJoin.getText().split("#");
         int boardToJoinId;
 
+        if(inputBoardToJoin.getText().length()==0){
+            return;
+        }
+
         try {
-            boardToJoinId = Integer.parseInt(boardToJoin[1]);
+            boardToJoinId = Integer.parseInt(boardToJoin[boardToJoin.length-1]);
             Board chosenBoard = server.getBoardByID(boardToJoinId); // Take the board with that ID
             if(!user.hasBoardAlready(chosenBoard.id))
                 mainCtrl.joinBoard(this.user, chosenBoard);
             else
-                displayAlreadyJoinedText();
+                displayText("Board already joined!");
         } catch (Exception e) {
-            throw new Exception("Invalid input");
+            displayText("Invalid invite code!");
         }
     }
 

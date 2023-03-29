@@ -23,8 +23,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+
 import java.util.Random;
-import java.util.Timer;
 
 public class MainCtrl {
 
@@ -58,15 +58,11 @@ public class MainCtrl {
     private double windowHeight;
     private double windowWidth;
 
-    //Maintain the current running timer so se can stop it when changing views/exiting the app
-    private Timer currentTimer;
-
     private String username;
 
     private boolean isAdmin = false;
 
-    //a const to easily manage the refresh rate of auto-sync
-    public static final int REFRESH_RATE = 1000;
+    private final String stylePath = "/client.scenes.styles/Default_styles.css";
 
     public void initialize(Stage primaryStage,
                            Pair<AddListCtrl, Parent> addList,
@@ -83,27 +79,43 @@ public class MainCtrl {
 
         this.boardOverviewCtrl = board.getKey();
         this.board = new Scene(board.getValue());
+        board.getValue().getStylesheets().add(
+                this.getClass().getResource(stylePath).toExternalForm());
 
         this.addListCtrl = addList.getKey();
         this.addList = new Scene(addList.getValue());
+        addList.getValue().getStylesheets().add(
+                this.getClass().getResource(stylePath).toExternalForm());
 
         this.welcomePageCtrl = welcomePage.getKey();
         this.welcomePage = new Scene(welcomePage.getValue());
+        welcomePage.getValue().getStylesheets().add(
+                this.getClass().getResource(stylePath).toExternalForm());
 
         this.workspaceCtrl = workspace.getKey();
         this.workspace = new Scene(workspace.getValue());
+        workspace.getValue().getStylesheets().add(
+                this.getClass().getResource(stylePath).toExternalForm());
 
         this.workspaceAdminCtrl = workspaceAdmin.getKey();
         this.workspaceAdmin = new Scene(workspaceAdmin.getValue());
+        workspaceAdmin.getValue().getStylesheets().add(
+                this.getClass().getResource(stylePath).toExternalForm());
 
         this.editListCtrl=editList.getKey();
         this.editList = new Scene(editList.getValue());
+        editList.getValue().getStylesheets().add(
+                this.getClass().getResource(stylePath).toExternalForm());
 
         this.changeBoardTitleCtrl = changeBoardTitle.getKey();
         this.changeBoardTitle = new Scene(changeBoardTitle.getValue());
+        changeBoardTitle.getValue().getStylesheets().add(
+                this.getClass().getResource(stylePath).toExternalForm());
 
         this.editCardCtrl = editCard.getKey();
         this.editCard = new Scene(editCard.getValue());
+        editCard.getValue().getStylesheets().add(
+                this.getClass().getResource(stylePath).toExternalForm());
 
         showWelcomePage();
         primaryStage.show();
@@ -132,16 +144,6 @@ public class MainCtrl {
         }
 
         return sb.toString();
-    }
-
-    private void storeWindowSize(Scene current){
-        windowHeight = current.getHeight();
-        windowWidth = current.getWidth();
-    }
-
-    private void setWindowSize(){
-        primaryStage.setHeight(windowHeight);
-        primaryStage.setWidth(windowWidth);
     }
 
     /**
@@ -252,6 +254,7 @@ public class MainCtrl {
             primaryStage.setTitle("Workspace");
             primaryStage.setScene(workspace);
             workspaceCtrl.setUser(username);
+            workspaceCtrl.clearInviteText();
 
             this.username = username;
 
