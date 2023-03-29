@@ -67,12 +67,6 @@ public class CardCtrl extends AnchorPane implements Initializable{
                 addTag(tag);
             }
         }
-        //TODO
-        // these are here to verify that displaying tags
-        // works since we don't have the backend for it yet.
-        // Once it all works fine remove these sample tags.
-        addTag(new Tag("Client", "0x00FF80"));
-        addTag(new Tag("Server", "0xFF0000"));
     }
 
     /** This method associates a card to the controller for easy access

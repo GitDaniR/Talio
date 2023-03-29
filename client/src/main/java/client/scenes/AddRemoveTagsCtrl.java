@@ -33,6 +33,10 @@ public class AddRemoveTagsCtrl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {}
 
+    /**
+     * Method that updates the tag list of the card
+     * and comes back to editCard scene
+     */
     public void ok() {
         cardToEdit.tags = tagsArray;
         Card toShow = server.editCard(cardToEdit.id, cardToEdit);
@@ -40,9 +44,7 @@ public class AddRemoveTagsCtrl implements Initializable {
     }
 
     /**
-     * Method that sets subtasks to be the subtasks of the card
-     * and fills in old values and tags
-     * (this is called when you first edit a card)
+     * Method that sets tags to be the tags of the card
      */
     public void setTags(){
         BoardList list = server.getBoardListById(cardToEdit.listId);
@@ -66,14 +68,20 @@ public class AddRemoveTagsCtrl implements Initializable {
         return cardToEdit;
     }
 
+    /**
+     * Adds a tag to the list of tags the card has
+     * @param tag to be added
+     */
     public void addTag(Tag tag) {
         if(!tagsArray.contains(tag)) tagsArray.add(tag);
-        //server.attachTag(cardToEdit.id, tag);
     }
 
+    /**
+     * Removes a tag from the list of tags the card has
+     * @param tag to be removed
+     */
     public void removeTag(Tag tag) {
         tagsArray.remove(tag);
-        //server.detachTag(cardToEdit.id, tag);
     }
 }
 

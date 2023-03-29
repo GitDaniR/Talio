@@ -102,7 +102,6 @@ public class EditCardCtrl implements Initializable {
     private Card getUpdatedCard(Card card) {
         card.title = title.getText();
         card.description = description.getText();
-        card.tags = tagsArray;
 
         return card;
     }
@@ -152,8 +151,11 @@ public class EditCardCtrl implements Initializable {
      * Method that sets tags to be the tags of the card
      */
     private void setTags(){
+        tags.getChildren().clear();
         tagsArray = FXCollections.observableArrayList(cardToEdit.tags);
+
         for(Tag tag: tagsArray){
+            // reusing a scene from the overview
             FXMLLoader tagDisplayLoader = new FXMLLoader(getClass().
                     getResource("TagCellForOverview.fxml"));
             try {
@@ -166,6 +168,9 @@ public class EditCardCtrl implements Initializable {
         }
     }
 
+    /**
+     * Setting controller for a shown tag
+     */
     private TagCellForOverviewCtrl setCtrl(FXMLLoader tagLoader, Tag tag){
         TagCellForOverviewCtrl ctrl = tagLoader.getController();
         ctrl.setMainCtrlAndServer(mainCtrl, server, this);
@@ -184,6 +189,10 @@ public class EditCardCtrl implements Initializable {
         setSubtasksAndOldValues();
     }
 
+    /**
+     * A method to switch scenes to adding/removing tags
+     * called when a button is pressed
+     */
     public void addRemoveTags(){
         mainCtrl.showAddRemoveTags(cardToEdit);
     }
