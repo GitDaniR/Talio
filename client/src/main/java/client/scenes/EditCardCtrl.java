@@ -153,10 +153,14 @@ public class EditCardCtrl implements Initializable {
      * @return a new version of the card
      */
     private Card getUpdatedCard() {
-        var t = title.getText();
-        var d = description.getText();
+        Card newCard = new Card(title.getText(),
+                description.getText(),
+                cardToEdit.index,
+                cardToEdit.list,
+                cardToEdit.listId);
+        newCard.tags=cardToEdit.tags;
 
-        return new Card(t,d, cardToEdit.index, cardToEdit.list, cardToEdit.listId);
+        return newCard;
     }
 
     /**
