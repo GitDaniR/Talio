@@ -85,21 +85,6 @@ public class CardService {
     }
 
     /**
-     * Method which adds a tag to a card
-     * @param id the id of the card
-     * @param tag the tag
-     * @return the saved card
-     * @throws Exception if id is not in repo.
-     */
-    public Card addTag(Integer id, Tag tag) throws Exception {
-        Card res = cardRepo.findById(id).orElseThrow(
-                ()->new Exception("Card with id: " + id +" not found")
-        );
-        if(!res.tags.contains(tag)) res.tags.add(tag);
-        return cardRepo.save(res);
-    }
-
-    /**
      * Method which removes a tag from a card
      * @param id the id of the card
      * @param tag the tag
@@ -110,7 +95,16 @@ public class CardService {
         Card res = cardRepo.findById(id).orElseThrow(
                 ()->new Exception("Card with id: " + id +" not found")
         );
-        res.tags.remove(tag);
+
+        // check if the card has the tag and remove it
+        Tag toRemove = null;
+        for(Tag t: res.tags){
+            // I cannot expect that tag parameter is the same as the one
+            // in the card so I have to compare ids
+            if(t.id == tag.id) toRemove = t;
+        }
+        if(toRemove != null) res.tags.remove(toRemove);
+
         return cardRepo.save(res);
     }
 }

@@ -397,20 +397,20 @@ public class ServerUtils {
                 .get(new GenericType<List<Tag>>() {});
     }
 
-    public void attachTag(Integer cardId, Tag tag) {
-        ClientBuilder.newClient(new ClientConfig()) //
-                .target(server).path("api/cards/tags/add/"+cardId) //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .put(Entity.entity(tag, APPLICATION_JSON), Tag.class);
-    }
-
     public void detachTag(Integer cardId, Tag tag) {
         ClientBuilder.newClient(new ClientConfig()) //
                 .target(server).path("api/cards/tags/remove/"+cardId) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(tag, APPLICATION_JSON), Tag.class);
+    }
+
+    public List<Card> getAllCards() {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/cards/")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<List<Card>>() {});
     }
 
 //    public void send(String dest, Object o){

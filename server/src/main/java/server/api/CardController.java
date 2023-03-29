@@ -21,7 +21,7 @@ public class CardController {
         this.msgs = msgs;
     }
 
-    //Get mapping to get all cards. Currently only intended for testing purposes
+    //Get mapping to get all cards
     @GetMapping(path = { "", "/" })
     public List<Card> getAllCards(){
         return cardService.getAllCards();
@@ -92,25 +92,6 @@ public class CardController {
     public ResponseEntity<Card> editCardList(@PathVariable int id, @PathVariable Integer listId){
         try {
             Card res = cardService.editCardByIdList(id, listId);
-            return ResponseEntity.ok(res);
-        }catch(Exception e){
-            System.out.println(e.getMessage());
-        }
-        return ResponseEntity.notFound().build();
-    }
-
-    /**
-     * Method which adds  a tag to a card
-     *
-     * @param id The id of the card
-     * @param tag tag to add
-     * @return response
-     */
-    @PutMapping("/tags/add/{id}")
-    public ResponseEntity<Card> addCard(@PathVariable("id") Integer id,
-                                       @RequestBody Tag tag){
-        try {
-            Card res = cardService.addTag(id, tag);
             return ResponseEntity.ok(res);
         }catch(Exception e){
             System.out.println(e.getMessage());
