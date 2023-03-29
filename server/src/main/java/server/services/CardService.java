@@ -78,6 +78,7 @@ public class CardService {
         if(res.listId == listId){
             res.listId = listId;
             res.list = list;
+            cardRepo.shiftCardsBetweenUp(0, 2, listId);
 
             if(index>res.index){
                 cardRepo.shiftCardsBetweenUp(res.index, index, listId);

@@ -21,6 +21,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -511,6 +512,7 @@ public class BoardOverviewCtrl implements Initializable {
                 removePreview(mainBoard);
 
                 System.out.println("Mouse drag released -> list catched it");
+                double eventY = event.getY();
 
                 Node initial = (Node) event.getGestureSource();
                 Node initialCardsSection = initial.getParent();
@@ -524,7 +526,20 @@ public class BoardOverviewCtrl implements Initializable {
                 VBox draggedCardsSection = (VBox) initialCardsSection;
                 int indexOfDraggingNode = draggedCardsSection.getChildren().indexOf(draggedCard);
                 event.consume();
-                if(indexOfList == indexOfInitialList)return;
+                if(indexOfList == indexOfInitialList) {
+                    Bounds localBounds = targetCardsSection.getBoundsInLocal();
+                    Bounds parentBounds = targetCardsSection.localToParent(localBounds);
+                    double startY = parentBounds.getMinY();
+                    double endY = parentBounds.getMaxY();
+                    System.out.println(startY);
+                    System.out.println("EVENT"+eventY);
+                    if(eventY<startY){
+                        adjustCards(indexOfInitialList, indexOfList, indexOfDraggingNode, 0);
+                    }else{
+                        adjustCards(indexOfInitialList, indexOfList, indexOfDraggingNode, targetCardsSection.getChildren().size()-1);
+                    }
+
+                }
                 adjustCards(indexOfInitialList, indexOfList, indexOfDraggingNode,
                         targetCardsSection.getChildren().size());
 
