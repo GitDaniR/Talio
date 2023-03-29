@@ -1,6 +1,7 @@
 package commons;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -11,6 +12,7 @@ import java.util.List;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 public class Tag {
     @Id
@@ -18,14 +20,27 @@ public class Tag {
     public Integer id;
     public String title;
     public String color;
-    @ManyToMany
-    @JoinTable(
-            name = "cards",
-            joinColumns = @JoinColumn(name = "tag_id"),
-            inverseJoinColumns = @JoinColumn(name = "card_id")
-    )
+
+    @ManyToMany(mappedBy = "tags")
     @JsonIgnore
     public List<Card> cards = new ArrayList<>();
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "boardId", insertable = false, updatable = false)
+    public Board board;
+
+    public Integer boardId;
+
+    public Tag() {
+    }
+
+    public Tag(String title, String color, Board board, int boardId) {
+        this.title = title;
+        this.color = color;
+        this.board = board;
+        this.boardId = boardId;
+    }
 
     public Tag(String title, String color) {
         this.title = title;
@@ -33,7 +48,10 @@ public class Tag {
     }
 
     public void addToCard(Card card){
-        cards.add(card);
+        if(!cards.contains(card)) cards.add(card);
+    }
+    public void removeFromCard(Card card){
+        cards.remove(card);
     }
 
     @Override

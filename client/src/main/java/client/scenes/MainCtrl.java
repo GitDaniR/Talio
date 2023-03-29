@@ -15,10 +15,7 @@
  */
 package client.scenes;
 
-import commons.Board;
-import commons.BoardList;
-import commons.Card;
-import commons.User;
+import commons.*;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -54,6 +51,15 @@ public class MainCtrl {
     private EditCardCtrl editCardCtrl;
     private Scene editCard;
 
+    private EditTagCtrl editTagCtrl;
+    private Scene editTag;
+    private AddTagCtrl addTagCtrl;
+    private Scene addTag;
+    private TagOverviewCtrl tagOverviewCtrl;
+    private Scene tagOverview;
+
+    private AddRemoveTagsCtrl addRemoveTagsCtrl;
+    private Scene addRemoveTags;
 
     private double windowHeight;
     private double windowWidth;
@@ -72,8 +78,11 @@ public class MainCtrl {
                            Pair<WorkspaceCtrl, Parent> workspace,
                            Pair<WorkspaceAdminCtrl, Parent> workspaceAdmin,
                            Pair<EditCardCtrl, Parent> editCard,
-                           Pair<ChangeBoardTitleCtrl, Parent> changeBoardTitle) {
-
+                           Pair<ChangeBoardTitleCtrl, Parent> changeBoardTitle,
+                           Pair<EditTagCtrl, Parent> editTag,
+                           Pair<AddTagCtrl, Parent> addTag,
+                           Pair<TagOverviewCtrl, Parent> tagOverview,
+                           Pair<AddRemoveTagsCtrl, Parent> addRemoveTags) {
 
         this.primaryStage = primaryStage;
 
@@ -115,6 +124,26 @@ public class MainCtrl {
         this.editCardCtrl = editCard.getKey();
         this.editCard = new Scene(editCard.getValue());
         editCard.getValue().getStylesheets().add(
+                this.getClass().getResource(stylePath).toExternalForm());
+
+        this.editTagCtrl = editTag.getKey();
+        this.editTag = new Scene(editTag.getValue());
+        editTag.getValue().getStylesheets().add(
+                this.getClass().getResource(stylePath).toExternalForm());
+
+        this.addTagCtrl = addTag.getKey();
+        this.addTag = new Scene(addTag.getValue());
+        addTag.getValue().getStylesheets().add(
+                this.getClass().getResource(stylePath).toExternalForm());
+
+        this.tagOverviewCtrl = tagOverview.getKey();
+        this.tagOverview = new Scene(tagOverview.getValue());
+        tagOverview.getValue().getStylesheets().add(
+                this.getClass().getResource(stylePath).toExternalForm());
+
+        this.addRemoveTagsCtrl = addRemoveTags.getKey();
+        this.addRemoveTags = new Scene(addRemoveTags.getValue());
+        addRemoveTags.getValue().getStylesheets().add(
                 this.getClass().getResource(stylePath).toExternalForm());
 
         showWelcomePage();
@@ -257,7 +286,6 @@ public class MainCtrl {
             workspaceCtrl.clearInviteText();
 
             this.username = username;
-
             workspaceCtrl.refresh();
         }
     }
@@ -283,6 +311,34 @@ public class MainCtrl {
         this.username = username;
 
         workspaceAdminCtrl.refresh();
+    }
+
+    public void showTagOverview(Board board) {
+        primaryStage.setTitle("Tag Overview");
+        primaryStage.setScene(tagOverview);
+        tagOverviewCtrl.setBoard(board);
+
+        tagOverviewCtrl.refresh();
+    }
+
+    public void showAddTag(Board board) {
+        primaryStage.setTitle("Adding Tag");
+        primaryStage.setScene(addTag);
+        addTagCtrl.setBoard(board);
+    }
+
+    public void showEditTag(Tag tagToEdit) {
+        primaryStage.setTitle("Editing Tag");
+        primaryStage.setScene(editTag);
+        editTagCtrl.setTagToEdit(tagToEdit);
+        editTagCtrl.refresh();
+    }
+
+    public void showAddRemoveTags(Card card) {
+        primaryStage.setTitle("Choosing Tags");
+        primaryStage.setScene(addRemoveTags);
+        addRemoveTagsCtrl.setCardToEdit(card);
+        addRemoveTagsCtrl.setTags();
     }
 }
 

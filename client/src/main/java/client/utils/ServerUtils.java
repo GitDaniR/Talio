@@ -159,8 +159,8 @@ public class ServerUtils {
 
     }
 
-    public void editCard(Integer id, Card card) {
-        ClientBuilder.newClient(new ClientConfig()) //
+    public Card editCard(Integer id, Card card) {
+        return ClientBuilder.newClient(new ClientConfig()) //
                 .target(server).path("api/cards/"+id) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
@@ -183,9 +183,9 @@ public class ServerUtils {
 
     /**
      * Server method to return the user based on userID
-     * @param userID - userID for the User table in databse
-     * @return - User object correcsponding to user
-     * havin id: userID
+     * @param userID - userID for the User table in database
+     * @return - User object corresponding to user
+     * having id: userID
      */
     public User getUserById(int userID){
         return ClientBuilder.newClient(new ClientConfig()) //
@@ -274,6 +274,47 @@ public class ServerUtils {
                 .delete();
     }
 
+    public void deleteTag(Integer tagId) {
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/tags/" + tagId) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .delete();
+
+    }
+
+    public void editTagTitle(Integer tagId, String newTitle) {
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/tags/title/"+tagId) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(newTitle, APPLICATION_JSON), Tag.class);
+    }
+
+    public void editTagColor(Integer tagId, String newColor) {
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/tags/color/"+tagId) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(newColor, APPLICATION_JSON), Tag.class);
+    }
+
+    public Tag getTagById(Integer tagId) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/tags/"+tagId) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<Tag>() {});
+    }
+
+    public Tag addTag(Tag tag) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/tags") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(tag, APPLICATION_JSON), Tag.class);
+    }
+
     /**
      * Method that sends request to the server to
      * update the status of the subtask to status done
@@ -346,6 +387,30 @@ public class ServerUtils {
                 consumer.accept((T) payload);
             }
         });
+    }
+
+    public List<Tag> getTags(int boardId) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/tags/")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<List<Tag>>() {});
+    }
+
+    public void detachTag(Integer cardId, Tag tag) {
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/cards/tags/remove/"+cardId) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(tag, APPLICATION_JSON), Tag.class);
+    }
+
+    public List<Card> getAllCards() {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/cards/")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<List<Card>>() {});
     }
 
 //    public void send(String dest, Object o){
