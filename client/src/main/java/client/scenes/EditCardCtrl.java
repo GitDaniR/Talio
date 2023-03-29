@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import commons.Card;
 import commons.Subtask;
 import jakarta.ws.rs.WebApplicationException;
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
+import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.*;
@@ -24,6 +26,8 @@ public class EditCardCtrl implements Initializable {
     private TextField title;
     @FXML
     private TextArea description;
+    @FXML
+    private Label errorLabel;
 
     @FXML
     private Button save;
@@ -72,12 +76,35 @@ public class EditCardCtrl implements Initializable {
         subtasks.setItems(subtasksArray);
     }
 
+    private PauseTransition delay;
+
+    private void setTextAndRemoveAfterDelay(Label label,String text){
+        label.setText(text);
+        if(delay!=null)
+            delay.stop();//stop previous delay
+        delay = new PauseTransition(Duration.seconds(2));
+        delay.setOnFinished(event -> {
+            label.setText("");
+        });
+        delay.play();
+    }
+
     public void cancel(){
+        if(title.getText().equals("")){
+            setTextAndRemoveAfterDelay(errorLabel,"Warning: Card title cannot be left blank!");
+            return;
+        }
+
         clearFields();
         mainCtrl.showBoard();
     }
 
     public void ok() {
+        if(title.getText().equals("")){
+            setTextAndRemoveAfterDelay(errorLabel,"Warning: Card title cannot be left blank!");
+            return;
+        }
+
         try {
             server.editCard(cardToEdit.id, getUpdatedCard());
         } catch (WebApplicationException e) {
