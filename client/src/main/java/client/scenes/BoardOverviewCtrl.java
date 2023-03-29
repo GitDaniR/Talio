@@ -335,13 +335,14 @@ public class BoardOverviewCtrl implements Initializable {
         ImageView imageView = new ImageView(card.snapshot(null, null));
         imageView.setManaged(false);
         imageView.setMouseTransparent(true);
-        board.getChildren().add(imageView);
-        board.setUserData(imageView);
-        board.setOnMouseDragged(new EventHandler<MouseEvent>() {
+        imageView.setVisible(false);
+        mainBoard.getChildren().add(imageView);
+        mainBoard.setUserData(imageView);
+        mainBoard.setOnMouseDragOver(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                imageView.setVisible(true);
                 imageView.relocate(event.getX(), event.getY());
-                System.out.print("Relocated to : "+ event.getX() +" and "+event.getY());
             }
         });
     }
@@ -435,11 +436,11 @@ public class BoardOverviewCtrl implements Initializable {
             }
         });
         for(int i = 0;i<((VBox)list).getChildren().size();i++){
-            if(i!=0){
+            if(i!=0 && i!=2){
                 Node item = ((VBox)list).getChildren().get(i);
                 item.setOnMouseDragReleased(event -> removePreview(mainBoard));
             }
-            else{
+            else if(i==0){
                 HBox item = (HBox)((VBox)list).getChildren().get(i);
                 for(int j = 0;j<item.getChildren().size();j++){
                     Node itemChild = item.getChildren().get(j);
@@ -454,7 +455,9 @@ public class BoardOverviewCtrl implements Initializable {
      * method that handles the drag event on the board
      */
     private void setDragReleaseBoard(){
-        mainBoard.setOnMouseDragReleased(event -> removePreview(mainBoard));
+        mainBoard.setOnMouseDragReleased(event -> {
+            removePreview(mainBoard);
+        });
     }
 
     /**
