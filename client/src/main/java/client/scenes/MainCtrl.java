@@ -320,6 +320,7 @@ public class MainCtrl {
         primaryStage.setTitle("Editing Tag");
         primaryStage.setScene(editTag);
         editTagCtrl.setTagToEdit(tagToEdit);
+        editTagCtrl.refresh();
     }
 
     public void showAddRemoveTags(Card card) {

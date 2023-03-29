@@ -7,6 +7,7 @@ import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -18,7 +19,7 @@ public class EditTagCtrl implements Initializable {
     @FXML
     private TextField title;
     @FXML
-    private ColorPicker color;
+    private ColorPicker colorPicker;
     @FXML
     private Label oldTitle;
     @FXML
@@ -41,18 +42,30 @@ public class EditTagCtrl implements Initializable {
 
     public void cancel(){
         clearFields();
-        mainCtrl.showBoard();
+        mainCtrl.showTagOverview(server.getBoardByID(tagToEdit.boardId));
     }
 
     private void clearFields() {
         title.clear();
+        colorPicker.setValue(Color.valueOf("0xffffff"));
+        oldTitle.setText("");
+        oldColor.setText("");
     }
 
     public void ok() {
         try {
-            server.editTagTitle(tagToEdit.id, title.getText());
-            server.editTagColor(tagToEdit.id, color.getValue().toString());
-
+            // does not allow a blank title
+            if(title.getText().isBlank()) {
+                var alert = new Alert(Alert.AlertType.ERROR);
+                alert.initModality(Modality.APPLICATION_MODAL);
+                alert.setContentText("Title cannot be blank");
+                alert.showAndWait();
+                return;
+            }
+            else{
+                server.editTagTitle(tagToEdit.id, title.getText());
+                server.editTagColor(tagToEdit.id, colorPicker.getValue().toString());
+            }
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -63,7 +76,7 @@ public class EditTagCtrl implements Initializable {
         }
 
         clearFields();
-        mainCtrl.showTagOverview(tagToEdit.board);
+        mainCtrl.showTagOverview(server.getBoardByID(tagToEdit.boardId));
     }
 
     public void setTagToEdit(Tag tagToEdit) {
