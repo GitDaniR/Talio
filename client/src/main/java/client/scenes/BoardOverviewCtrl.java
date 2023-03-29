@@ -541,6 +541,10 @@ public class BoardOverviewCtrl implements Initializable {
                     }else{
                         adjustCards(indexOfInitialList, indexOfList, indexOfDraggingNode,
                                 targetCardsSection.getChildren().size()-1);}
+                }else{
+                    adjustCards(indexOfInitialList, indexOfList, indexOfDraggingNode,
+                            targetCardsSection.getChildren().size());
+
                 }
             }
         });
