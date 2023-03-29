@@ -167,7 +167,6 @@ public class MainCtrl {
      */
     public void joinBoard(User user, Board chosenBoard) {
         primaryStage.setTitle("Board Overview");
-        primaryStage.setScene(board);
         boardOverviewCtrl.setBoard(chosenBoard);
         boardOverviewCtrl.assignToUser(user);
         boardOverviewCtrl.refresh();
@@ -198,7 +197,6 @@ public class MainCtrl {
         primaryStage.setTitle("Board Overview");
         primaryStage.setScene(board);
         boardOverviewCtrl.setBoard(showBoard);
-        boardOverviewCtrl.setScene(this.board);
         boardOverviewCtrl.refresh();
 
     }
