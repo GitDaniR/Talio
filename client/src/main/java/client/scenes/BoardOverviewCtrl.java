@@ -67,15 +67,6 @@ public class BoardOverviewCtrl implements Initializable {
 
     private int speed = 50;
 
-    private EventHandler<MouseEvent> mousePressedHandler = event -> {
-        isDragging = true;
-    };
-
-    private EventHandler<MouseEvent> mouseReleasedHandler = event -> {
-        isDragging = true;
-        System.out.println("Mouse released -> everything catched it");
-    };
-
     @Inject
     public BoardOverviewCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
@@ -331,23 +322,18 @@ public class BoardOverviewCtrl implements Initializable {
             scrolltimeline.stop();
         });
         scene.setOnMouseDragEntered(event -> {
-            System.out.println("Entered drag in scene");
             scrolltimeline.stop();
             isDragging = true;
         });
 
         scene.setOnMouseDragOver(event -> {
-
-            System.out.println("over");
             scrolltimeline.stop();
         });
 
         scene.setOnMouseDragReleased(event->{
             scrolltimeline.stop();
-
             removePreview(mainBoard);
             isDragging = false;
-            System.out.println("MouseDragReleased -> scene catched it, is Dragging: "+isDragging);
         });
 
         scene.setOnScroll((ScrollEvent event)-> {
@@ -551,8 +537,6 @@ public class BoardOverviewCtrl implements Initializable {
                     Bounds parentBounds = targetCardsSection.localToParent(localBounds);
                     double startY = parentBounds.getMinY();
                     double endY = parentBounds.getMaxY();
-                    System.out.println(startY);
-                    System.out.println("EVENT"+eventY);
                     if(eventY<startY){
                         adjustCards(indexOfInitialList, indexOfList, indexOfDraggingNode, 0);
                     }else{
@@ -583,7 +567,6 @@ public class BoardOverviewCtrl implements Initializable {
      */
     private void setDragReleaseBoard(){
         mainBoard.setOnMouseDragReleased(event -> {
-            System.out.println("MouseDragReleased -> board catched it");
             removePreview(mainBoard);
         });
     }
@@ -609,7 +592,6 @@ public class BoardOverviewCtrl implements Initializable {
             @Override
             public void handle(MouseDragEvent event) {
                 card.setStyle("");
-                System.out.println("MouseDragReleased -> card catched it");
                 removePreview(mainBoard);
                 //getting the index of the list that holds the card being dragged
                 Node initial = (Node) event.getGestureSource();
