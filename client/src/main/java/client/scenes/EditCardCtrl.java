@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import commons.Card;
 import commons.Subtask;
 import jakarta.ws.rs.WebApplicationException;
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
+import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.*;
@@ -25,9 +27,7 @@ public class EditCardCtrl implements Initializable {
     @FXML
     private TextArea description;
     @FXML
-    private Label oldTitle;
-    @FXML
-    private Label oldDescription;
+    private Label errorLabel;
 
     @FXML
     private Button save;
@@ -53,6 +53,20 @@ public class EditCardCtrl implements Initializable {
         server.registerForMessages("/topic/subtasks", Integer.class, cardId -> {
             Platform.runLater(() -> overwriteSubtasks(server.getCardById(cardId).subtasks));
         });
+        server.registerForMessages("/topic/cards/rename", Card.class, card -> {
+            if(Objects.equals(card.id, cardToEdit.id))
+                Platform.runLater(() -> updateCard(card));
+        });
+        title.setOnKeyTyped(e -> server.editCard(cardToEdit.id, getUpdatedCard()));
+        description.setOnKeyTyped(e -> server.editCard(cardToEdit.id, getUpdatedCard()));
+    }
+
+    private void updateCard(Card card){
+        cardToEdit=card;
+        if(!title.isFocused())
+            title.setText(card.title);
+        if(!description.isFocused())
+            description.setText(card.description);
     }
 
     private void overwriteSubtasks(List<Subtask> t){
@@ -62,17 +76,35 @@ public class EditCardCtrl implements Initializable {
         subtasks.setItems(subtasksArray);
     }
 
+    private PauseTransition delay;
+
+    private void setTextAndRemoveAfterDelay(Label label,String text){
+        label.setText(text);
+        if(delay!=null)
+            delay.stop();//stop previous delay
+        delay = new PauseTransition(Duration.seconds(2));
+        delay.setOnFinished(event -> {
+            label.setText("");
+        });
+        delay.play();
+    }
+
     public void cancel(){
+        if(title.getText().equals("")){
+            setTextAndRemoveAfterDelay(errorLabel,"Warning: Card title cannot be left blank!");
+            return;
+        }
+
         clearFields();
         mainCtrl.showBoard();
     }
 
-    private void clearFields() {
-        title.clear();
-        description.clear();
-    }
-
     public void ok() {
+        if(title.getText().equals("")){
+            setTextAndRemoveAfterDelay(errorLabel,"Warning: Card title cannot be left blank!");
+            return;
+        }
+
         try {
             server.editCard(cardToEdit.id, getUpdatedCard());
         } catch (WebApplicationException e) {
@@ -86,6 +118,11 @@ public class EditCardCtrl implements Initializable {
 
         clearFields();
         mainCtrl.showBoard();
+    }
+
+    private void clearFields() {
+        title.clear();
+        description.clear();
     }
 
     /**
@@ -129,8 +166,8 @@ public class EditCardCtrl implements Initializable {
      * (this is called when you first edit a card)
      */
     public void setSubtasksAndOldValues() {
-        oldTitle.setText(cardToEdit.title);
-        oldDescription.setText((cardToEdit.description));
+        title.setText(cardToEdit.title);
+        description.setText((cardToEdit.description));
 
         Collections.sort(cardToEdit.subtasks, Comparator.comparingInt(s -> s.index));
         subtasksArray = FXCollections.observableArrayList(cardToEdit.subtasks);
