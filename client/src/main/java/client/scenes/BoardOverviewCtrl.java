@@ -52,8 +52,6 @@ public class BoardOverviewCtrl implements Initializable {
 
     private Board board;
 
-    private Scene mainScene;
-
     private boolean isDragging = false;
 
     @FXML
@@ -123,15 +121,6 @@ public class BoardOverviewCtrl implements Initializable {
 
     }
 
-    public void setScene(Scene mainScene){
-        this.mainScene = mainScene;
-        /*this.mainScene.setOnMouseDragExited(event -> {
-            System.out.println("unaaaaa");
-            scrolltimeline.stop();
-            removePreview(mainBoard);
-
-        });*/
-    }
 
     public void setBoard(Board board) {
         this.board = board;
@@ -311,6 +300,12 @@ public class BoardOverviewCtrl implements Initializable {
     }
 
 
+    // Drag&Drop methods
+
+    /**
+     * Method that sets up the animation
+     * for scrolling while drag and dropping the card
+     */
     private void setupScrolling() {
         scrolltimeline.setCycleCount(Timeline.INDEFINITE);
         scrolltimeline.getKeyFrames().add(new KeyFrame(Duration.millis(20),
@@ -361,6 +356,11 @@ public class BoardOverviewCtrl implements Initializable {
 
 
     }
+
+    /**
+     * Method that returns the scrollbar to be
+     * scrolled the right amount
+     */
     private void dragScroll() {
         ScrollBar sb = getVerticalScrollbar();
         if (sb != null) {
@@ -371,6 +371,11 @@ public class BoardOverviewCtrl implements Initializable {
         }
     }
 
+    /**
+     * Method that returns the scrollbar for the scrolling
+     * animation
+     * @return
+     */
     private ScrollBar getVerticalScrollbar() {
         ScrollBar result = null;
         for (Node n : scene.lookupAll(".scroll-bar")) {
@@ -383,8 +388,6 @@ public class BoardOverviewCtrl implements Initializable {
         }
         return result;
     }
-
-    // Drag&Drop methods
 
     /**
      * Method for renaming upon double click
@@ -438,7 +441,12 @@ public class BoardOverviewCtrl implements Initializable {
 
     //region DRAG AND DROP METHODS
 
-    // method that activates snapshot image being available while dragging the card
+    /**
+     * Method that makes the snapshot of card to be visible
+     * while drag&dropping the card
+     * @param board
+     * @param card
+     */
     private void addPreview(final FlowPane board, final HBox card){
         ImageView imageView = new ImageView(card.snapshot(null, null));
         imageView.setManaged(false);
@@ -452,7 +460,11 @@ public class BoardOverviewCtrl implements Initializable {
         });
     }
 
-    // method that stops showing preview when dragging is finished
+    /**
+     * Method that removes the snapsshot of the card
+     * when the card is dropped
+     * @param board - board containing the cards
+     */
     private void removePreview(final FlowPane board){
         isDragging = false;
         board.setOnMouseDragged(null);
@@ -479,6 +491,17 @@ public class BoardOverviewCtrl implements Initializable {
     }
     // method that sends information to the server about card changes
 
+
+    /**
+     * Method that adjusts the card according to the new index
+     * set up by the user's
+     * @param indexInitialList - index of the list that the card
+     *                         was being dragged of
+     * @param indexFinalList - index of the list on which the card
+     *                       was dropped
+     * @param indexCardDragged - index of the card inside the initial list
+     * @param indexCardsDropped - index on which card should be dropped
+     */
     private void adjustCards(int indexInitialList, int indexFinalList,
                              int indexCardDragged, int indexCardsDropped){
         if(indexCardDragged ==-1)
@@ -500,7 +523,12 @@ public class BoardOverviewCtrl implements Initializable {
         refresh();
 
     }
-    // method that handles the drag event on the list
+
+    /**
+     * Method that handles the event when the card
+     * is dropped on a list and not on a specific card
+     * @param list - list on which card was dropped
+     */
     private void setDragReleaseList(Node list){
         list.setOnMouseDragReleased(new EventHandler<MouseDragEvent>() {
             @Override
@@ -531,8 +559,6 @@ public class BoardOverviewCtrl implements Initializable {
                         adjustCards(indexOfInitialList, indexOfList, indexOfDraggingNode,
                                 targetCardsSection.getChildren().size()-1);}
                 }
-                adjustCards(indexOfInitialList, indexOfList, indexOfDraggingNode,
-                        targetCardsSection.getChildren().size());
             }
         });
         for(int i = 0;i<((VBox)list).getChildren().size();i++){
@@ -550,7 +576,11 @@ public class BoardOverviewCtrl implements Initializable {
         }
 
     }
-    // method that handles the drag event on the board
+
+    /**
+     * Method that handles the event when card is dropped on a board
+     * and not inside the list
+     */
     private void setDragReleaseBoard(){
         mainBoard.setOnMouseDragReleased(event -> {
             System.out.println("MouseDragReleased -> board catched it");
@@ -558,7 +588,11 @@ public class BoardOverviewCtrl implements Initializable {
         });
     }
 
-    // sets drag and drop feature to cards
+    /**
+     * Method that sets support for drag and dropping tha card
+     * @param cardNumber -  index of the card
+     * @param card - card to add drag&drop for
+     */
     private void addDragAndDrop(int cardNumber, final HBox card){
         card.setOnDragDetected(new EventHandler<MouseEvent>()
         {
