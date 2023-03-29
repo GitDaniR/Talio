@@ -179,6 +179,7 @@ public class BoardOverviewCtrl implements Initializable {
             assignListToController(listObjectController,list);
             mainBoard.getChildren().add(listObject);
             setDragReleaseList(listObject);
+            refresh();
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -189,6 +190,7 @@ public class BoardOverviewCtrl implements Initializable {
                 .filter(e -> ((ListCtrl)e.getUserData()).getListId()==id)
                 .findFirst()
                 .ifPresent(mainBoard.getChildren()::remove);
+        refresh();
     }
 
     private void renameListById(int id,String title){
@@ -196,6 +198,7 @@ public class BoardOverviewCtrl implements Initializable {
                 .filter(e -> ((ListCtrl)e.getUserData()).getListId()==id)
                 .findFirst()
                 .ifPresent(e -> ((ListCtrl) e.getUserData()).setListTitleText(title));
+        refresh();
     }
 
     private void addCardToBoard(Card card){
@@ -214,12 +217,14 @@ public class BoardOverviewCtrl implements Initializable {
                         e.printStackTrace();
                     }
                 });
+        refresh();
     }
 
     private void deleteCardById(int id){
         for(Node n : mainBoard.getChildren())
             ((ListCtrl) n.getUserData()).getCardBox().getChildren().
                 removeIf(e -> ((CardCtrl)e.getUserData()).getCardId()==id);
+        refresh();
     }
 
     private void renameCardById(int id, String title){
@@ -227,6 +232,7 @@ public class BoardOverviewCtrl implements Initializable {
             for(Node c : ((ListCtrl) n.getUserData()).getCardBox().getChildren())
                 if(((CardCtrl)c.getUserData()).getCardId()==id)
                     ((CardCtrl)c.getUserData()).setCardAndAttributes(server.getCardById(id));
+        refresh();
     }
 
     //endregion
@@ -387,7 +393,7 @@ public class BoardOverviewCtrl implements Initializable {
 
     public void refresh() {
         //If we are dragging we don't want to recreate all cards
-        if(isDragging) return;
+        //if(isDragging) return;
         board = server.getBoardByID(board.id);
         title.setText(board.title);
         setHandlerTitle();
@@ -489,6 +495,7 @@ public class BoardOverviewCtrl implements Initializable {
      */
     private void adjustCards(int indexInitialList, int indexFinalList,
                              int indexCardDragged, int indexCardsDropped){
+        System.out.println("Adjusting cards");
         if(indexCardDragged ==-1)
             return;
         // decided to leave the card as it was
@@ -496,16 +503,14 @@ public class BoardOverviewCtrl implements Initializable {
                 (indexInitialList == indexFinalList)){
             return;
         }
-
         BoardList initialList = ((ListCtrl)mainBoard.getChildren().
                 get(indexInitialList).getUserData()).getBoardList();
         BoardList finalList = ((ListCtrl)mainBoard.getChildren().
                 get(indexFinalList).getUserData()).getBoardList();
         Card card = initialList.getCardByIndex(indexCardDragged);
 
-        //server.deleteCard(card.getId());
-        server.updateCardList(card, finalList.getId(), indexCardsDropped);
-        refresh();
+       server.updateCardList(card, finalList.getId(), indexCardsDropped);
+       refresh();
 
     }
 
@@ -532,6 +537,7 @@ public class BoardOverviewCtrl implements Initializable {
                 int indexOfDraggingNode = draggedCardsSection.getChildren().indexOf(draggedCard);
                 event.consume();
                 if(indexOfList == indexOfInitialList) {
+
                     Bounds localBounds = targetCardsSection.getBoundsInLocal();
                     Bounds parentBounds = targetCardsSection.localToParent(localBounds);
                     double startY = parentBounds.getMinY();
@@ -610,12 +616,13 @@ public class BoardOverviewCtrl implements Initializable {
                 HBox draggedCard = (HBox) initial;
                 VBox draggedCardsSection = (VBox) initialCardsSection;
 
+
                 VBox droppedCardsSection = (VBox) targetCardsSection;
-                int indexOfDraggingNode = draggedCardsSection.getChildren().indexOf(draggedCard);
+                int indexOfDraggingNode = draggedCardsSection.getChildren().indexOf(initial);
                 int indexOfDropTarget = droppedCardsSection.getChildren().indexOf(target);
                 if(indexOfDropTarget == -1){
                     if(indexOfList == indexOfInitialList)
-                        indexOfDropTarget = Math.max(cardNumber-1,0);
+                        indexOfDropTarget = Math.max(indexOfDraggingNode,0);
                     else
                         indexOfDropTarget = droppedCardsSection.getChildren().size();
                 }
