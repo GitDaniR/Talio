@@ -4,12 +4,14 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.BoardList;
 import jakarta.ws.rs.WebApplicationException;
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
+import javafx.util.Duration;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -22,9 +24,10 @@ public class EditListCtrl {
 
     @FXML
     private TextField newTitle;
-
     @FXML
     private Label oldTitle;
+    @FXML
+    private Label errorLabel;
 
     @Inject
     public EditListCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -36,7 +39,24 @@ public class EditListCtrl {
         this.boardListToEdit=boardListToEdit;
     }
 
+    private PauseTransition delay;
+    public void displayErrorText(String text){
+        errorLabel.setText(text);
+        // message gets deleted after 2 seconds
+        if(delay!=null)
+            delay.stop();//stop previous delay
+        delay = new PauseTransition(Duration.seconds(2));
+        delay.setOnFinished(event -> {
+            errorLabel.setText("");
+        });
+        delay.play();
+    }
+
     public void editList() {
+        if(newTitle.getText().equals("")){
+            displayErrorText("List title cannot be empty!");
+            return;
+        }
         try {
             server.updateBoardListTitle(boardListToEdit.id, newTitle.getText());
         } catch (WebApplicationException e) {

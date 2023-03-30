@@ -19,5 +19,6 @@
       <Button layoutX="792.0" layoutY="10.0" mnemonicParsing="false" onAction="#copyInvite" text="Invite" />
       <Label fx:id="copiedToClipboardMessage" layoutX="625.0" layoutY="6.0" prefHeight="34.0" prefWidth="160.0" wrapText="true" />
       <Button layoutX="652.0" layoutY="495.0" mnemonicParsing="false" onAction="#deleteBoard" text="Remove Board" />
+      <Button layoutX="26.0" layoutY="10.0" mnemonicParsing="false" onAction="#showTags" text="View tags" />
    </children>
 </AnchorPane>
