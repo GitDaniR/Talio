@@ -53,19 +53,17 @@ public class MainCtrl {
 
     private EditTagCtrl editTagCtrl;
     private Scene editTag;
+
     private AddTagCtrl addTagCtrl;
     private Scene addTag;
+
     private TagOverviewCtrl tagOverviewCtrl;
     private Scene tagOverview;
 
     private AddRemoveTagsCtrl addRemoveTagsCtrl;
     private Scene addRemoveTags;
 
-    private double windowHeight;
-    private double windowWidth;
-
     private String username;
-
     private boolean isAdmin = false;
 
     private final String stylePath = "/client.scenes.styles/Default_styles.css";
@@ -85,69 +83,99 @@ public class MainCtrl {
                            Pair<AddRemoveTagsCtrl, Parent> addRemoveTags) {
 
         this.primaryStage = primaryStage;
+        setControllersAndScenes(addList, board, welcomePage, editList,
+                workspace, workspaceAdmin, editCard, changeBoardTitle,
+                editTag, addTag, tagOverview, addRemoveTags);
 
-        this.boardOverviewCtrl = board.getKey();
-        this.board = new Scene(board.getValue());
         board.getValue().getStylesheets().add(
                 this.getClass().getResource(stylePath).toExternalForm());
 
-        this.addListCtrl = addList.getKey();
-        this.addList = new Scene(addList.getValue());
         addList.getValue().getStylesheets().add(
                 this.getClass().getResource(stylePath).toExternalForm());
 
-        this.welcomePageCtrl = welcomePage.getKey();
-        this.welcomePage = new Scene(welcomePage.getValue());
         welcomePage.getValue().getStylesheets().add(
                 this.getClass().getResource(stylePath).toExternalForm());
 
-        this.workspaceCtrl = workspace.getKey();
-        this.workspace = new Scene(workspace.getValue());
         workspace.getValue().getStylesheets().add(
                 this.getClass().getResource(stylePath).toExternalForm());
 
-        this.workspaceAdminCtrl = workspaceAdmin.getKey();
-        this.workspaceAdmin = new Scene(workspaceAdmin.getValue());
         workspaceAdmin.getValue().getStylesheets().add(
                 this.getClass().getResource(stylePath).toExternalForm());
 
-        this.editListCtrl=editList.getKey();
-        this.editList = new Scene(editList.getValue());
         editList.getValue().getStylesheets().add(
                 this.getClass().getResource(stylePath).toExternalForm());
 
-        this.changeBoardTitleCtrl = changeBoardTitle.getKey();
-        this.changeBoardTitle = new Scene(changeBoardTitle.getValue());
         changeBoardTitle.getValue().getStylesheets().add(
                 this.getClass().getResource(stylePath).toExternalForm());
 
-        this.editCardCtrl = editCard.getKey();
-        this.editCard = new Scene(editCard.getValue());
         editCard.getValue().getStylesheets().add(
                 this.getClass().getResource(stylePath).toExternalForm());
 
-        this.editTagCtrl = editTag.getKey();
-        this.editTag = new Scene(editTag.getValue());
         editTag.getValue().getStylesheets().add(
                 this.getClass().getResource(stylePath).toExternalForm());
 
-        this.addTagCtrl = addTag.getKey();
-        this.addTag = new Scene(addTag.getValue());
         addTag.getValue().getStylesheets().add(
                 this.getClass().getResource(stylePath).toExternalForm());
 
-        this.tagOverviewCtrl = tagOverview.getKey();
-        this.tagOverview = new Scene(tagOverview.getValue());
         tagOverview.getValue().getStylesheets().add(
                 this.getClass().getResource(stylePath).toExternalForm());
 
-        this.addRemoveTagsCtrl = addRemoveTags.getKey();
-        this.addRemoveTags = new Scene(addRemoveTags.getValue());
         addRemoveTags.getValue().getStylesheets().add(
                 this.getClass().getResource(stylePath).toExternalForm());
 
         showWelcomePage();
         primaryStage.show();
+    }
+
+    private void setControllersAndScenes(
+                                         Pair<AddListCtrl, Parent> addList,
+                                         Pair<BoardOverviewCtrl, Parent> board,
+                                         Pair<WelcomePageCtrl, Parent> welcomePage,
+                                         Pair<EditListCtrl, Parent> editList,
+                                         Pair<WorkspaceCtrl, Parent> workspace,
+                                         Pair<WorkspaceAdminCtrl, Parent> workspaceAdmin,
+                                         Pair<EditCardCtrl, Parent> editCard,
+                                         Pair<ChangeBoardTitleCtrl, Parent> changeBoardTitle,
+                                         Pair<EditTagCtrl, Parent> editTag,
+                                         Pair<AddTagCtrl, Parent> addTag,
+                                         Pair<TagOverviewCtrl, Parent> tagOverview,
+                                         Pair<AddRemoveTagsCtrl, Parent> addRemoveTags){
+
+        this.boardOverviewCtrl = board.getKey();
+        this.board = new Scene(board.getValue());
+
+        this.addListCtrl = addList.getKey();
+        this.addList = new Scene(addList.getValue());
+
+        this.welcomePageCtrl = welcomePage.getKey();
+        this.welcomePage = new Scene(welcomePage.getValue());
+
+        this.workspaceCtrl = workspace.getKey();
+        this.workspace = new Scene(workspace.getValue());
+
+        this.workspaceAdminCtrl = workspaceAdmin.getKey();
+        this.workspaceAdmin = new Scene(workspaceAdmin.getValue());
+
+        this.editListCtrl=editList.getKey();
+        this.editList = new Scene(editList.getValue());
+
+        this.changeBoardTitleCtrl = changeBoardTitle.getKey();
+        this.changeBoardTitle = new Scene(changeBoardTitle.getValue());
+
+        this.editCardCtrl = editCard.getKey();
+        this.editCard = new Scene(editCard.getValue());
+
+        this.editTagCtrl = editTag.getKey();
+        this.editTag = new Scene(editTag.getValue());
+
+        this.addTagCtrl = addTag.getKey();
+        this.addTag = new Scene(addTag.getValue());
+
+        this.tagOverviewCtrl = tagOverview.getKey();
+        this.tagOverview = new Scene(tagOverview.getValue());
+
+        this.addRemoveTagsCtrl = addRemoveTags.getKey();
+        this.addRemoveTags = new Scene(addRemoveTags.getValue());
     }
 
     public void setAdmin(boolean admin) {

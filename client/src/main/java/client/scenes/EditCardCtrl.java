@@ -230,7 +230,7 @@ public class EditCardCtrl implements Initializable {
      */
     private TagCellForOverviewCtrl setCtrl(FXMLLoader tagLoader, Tag tag){
         TagCellForOverviewCtrl ctrl = tagLoader.getController();
-        ctrl.setMainCtrlAndServer(mainCtrl, server, this);
+        ctrl.setMainCtrlAndServer(mainCtrl, server);
         ctrl.setTag(tag);
         return ctrl;
     }

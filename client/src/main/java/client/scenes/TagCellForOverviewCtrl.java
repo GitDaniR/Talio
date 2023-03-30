@@ -27,7 +27,6 @@ public class TagCellForOverviewCtrl implements Initializable {
     private ServerUtils server;
 
     private TagOverviewCtrl tagOverviewCtrl;
-    private EditCardCtrl editCardCtrl;
     private boolean userCanEdit;
     private Tag tag;
 
@@ -39,11 +38,9 @@ public class TagCellForOverviewCtrl implements Initializable {
         this.userCanEdit = true;
     }
 
-    public void setMainCtrlAndServer(MainCtrl mainCtrl, ServerUtils server,
-                                     EditCardCtrl editCardCtrl){
+    public void setMainCtrlAndServer(MainCtrl mainCtrl, ServerUtils server){
         this.mainCtrl = mainCtrl;
         this.server = server;
-        this.editCardCtrl = editCardCtrl;
         this.userCanEdit = false;
     }
 

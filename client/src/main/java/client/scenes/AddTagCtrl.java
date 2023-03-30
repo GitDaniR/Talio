@@ -5,11 +5,13 @@ import com.google.inject.Inject;
 import commons.Board;
 import commons.Tag;
 import jakarta.ws.rs.WebApplicationException;
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
+import javafx.util.Duration;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -21,7 +23,8 @@ public class AddTagCtrl implements Initializable {
     private TextField title;
     @FXML
     private ColorPicker colorPicker;
-
+    @FXML
+    private Label errorLabel;
     private Board boardToAddTo;
 
     @Inject
@@ -43,16 +46,25 @@ public class AddTagCtrl implements Initializable {
         colorPicker.setValue(Color.valueOf("0xffffff"));
     }
 
+    private PauseTransition delay;
+    public void displayErrorText(String text){
+        errorLabel.setText(text);
+        // message gets deleted after 2 seconds
+        if(delay!=null)
+            delay.stop();//stop previous delay
+        delay = new PauseTransition(Duration.seconds(2));
+        delay.setOnFinished(event -> {
+            errorLabel.setText("");
+        });
+        delay.play();
+    }
+
     public void ok() {
+        if(title.getText().equals("")){
+            displayErrorText("Tag title cannot be empty!");
+            return;
+        }
         try {
-            // does not allow a blank title
-            if(title.getText().isBlank()){
-                var alert = new Alert(Alert.AlertType.ERROR);
-                alert.initModality(Modality.APPLICATION_MODAL);
-                alert.setContentText("Title cannot be blank");
-                alert.showAndWait();
-                return;
-            }
             server.addTag(getTag());
 
         } catch (WebApplicationException e) {
