@@ -1,6 +1,7 @@
 package server.api;
 
 import commons.Card;
+import commons.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class CardController {
         this.msgs = msgs;
     }
 
-    //Get mapping to get all cards. Currently only intended for testing purposes
+    //Get mapping to get all cards
     @GetMapping(path = { "", "/" })
     public List<Card> getAllCards(){
         return cardService.getAllCards();
@@ -99,5 +100,23 @@ public class CardController {
         return ResponseEntity.notFound().build();
     }
 
+    /**
+     * Method which removes a tag from a card
+     *
+     * @param id The id of the card
+     * @param tag tag to remove
+     * @return response
+     */
+    @PutMapping("/tags/remove/{id}")
+    public ResponseEntity<Card> removeCard(@PathVariable("id") Integer id,
+                                          @RequestBody Tag tag){
+        try {
+            Card res = cardService.removeTag(id, tag);
+            return ResponseEntity.ok(res);
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return ResponseEntity.notFound().build();
+    }
 
 }

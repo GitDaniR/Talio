@@ -108,9 +108,7 @@ public class BoardOverviewCtrl implements Initializable {
         server.registerForMessages("/topic/boards/rename", Board.class, newBoard -> {
             Platform.runLater(() -> { if(board.id == newBoard.id) title.setText(newBoard.title); });
         });
-
     }
-
 
     public void setBoard(Board board) {
         this.board = board;
@@ -122,6 +120,13 @@ public class BoardOverviewCtrl implements Initializable {
 
     public void assignToUser(User user){
         server.assignBoardToUser(user.id, this.board.id);
+    }
+
+    public void underlineText(){
+        title.setUnderline(true);
+    }
+    public void undoUnderline(){
+        title.setUnderline(false);
     }
 
     //region METHODS FOR BUTTONS
@@ -146,7 +151,7 @@ public class BoardOverviewCtrl implements Initializable {
         StringSelection selection = new StringSelection(getInviteCode());
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(selection, null);
-        copiedToClipboardMessage.setText("Copied to clipboard");
+        copiedToClipboardMessage.setText("Copied invite code to clipboard: "+getInviteCode());
 
         // message gets deleted after 2 seconds
         PauseTransition delay = new PauseTransition(Duration.seconds(2));
@@ -284,7 +289,6 @@ public class BoardOverviewCtrl implements Initializable {
             }
         });
 
-
         addDragAndDrop(listObjectController.getAmountOfCardsInList(),
                 (HBox) cardObject);
         //Setting drag and drop property
@@ -295,8 +299,57 @@ public class BoardOverviewCtrl implements Initializable {
         return cardObjectController;
     }
 
+    /**
+     * Method for renaming upon double click
+     */
+    public void setHandlerTitle(){
+        title.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                mainCtrl.showChangeTitle(this.board);
+            }
+        });
+    }
 
-    // Drag&Drop methods
+    public void refresh() {
+        //If we are dragging we don't want to recreate all cards
+        //if(isDragging) return;
+        board = server.getBoardByID(board.id);
+        title.setText(board.title);
+        setHandlerTitle();
+        try {
+            mainBoard.getChildren().clear();
+            var lists = board.lists;
+            data = FXCollections.observableList(lists);
+            for (BoardList currentList : data) {
+                FXMLLoader listLoader = new FXMLLoader(getClass().getResource("List.fxml"));
+                Node listObject = listLoader.load();
+                ListCtrl listObjectController = listLoader.getController();
+                listObject.setUserData(listLoader.getController());
+                assignListToController(listObjectController,currentList);
+
+                //Adding the cards to the list
+                ObservableList<Card> cardsInList = FXCollections.observableList(currentList.cards);
+                Collections.sort(cardsInList, (s1, s2) -> { return s1.index-s2.index; });
+                currentList.setCards(cardsInList);
+                for (Card currentCard : cardsInList) {
+                    FXMLLoader cardLoader = new FXMLLoader((getClass().getResource("Card.fxml")));
+                    Node cardObject = cardLoader.load();
+                    cardObject.setUserData(cardLoader.getController());
+                    assignAndAddCard(cardObject,currentCard,listObjectController);
+                }
+
+                mainBoard.getChildren().add(listObject);
+                setDragReleaseList(listObject);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+            System.out.print(e.getMessage());
+        }
+    }
+
+    //endregion
+
+    //region DRAG AND DROP METHODS
 
     /**
      * Method that sets up the animation
@@ -380,57 +433,6 @@ public class BoardOverviewCtrl implements Initializable {
         return result;
     }
 
-    /**
-     * Method for renaming upon double click
-     */
-    public void setHandlerTitle(){
-        title.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) {
-                mainCtrl.showChangeTitle(this.board);
-            }
-        });
-    }
-
-    public void refresh() {
-        //If we are dragging we don't want to recreate all cards
-        //if(isDragging) return;
-        board = server.getBoardByID(board.id);
-        title.setText(board.title);
-        setHandlerTitle();
-        try {
-            mainBoard.getChildren().clear();
-            var lists = board.lists;
-            data = FXCollections.observableList(lists);
-            for (BoardList currentList : data) {
-                FXMLLoader listLoader = new FXMLLoader(getClass().getResource("List.fxml"));
-                Node listObject = listLoader.load();
-                ListCtrl listObjectController = listLoader.getController();
-                listObject.setUserData(listLoader.getController());
-                assignListToController(listObjectController,currentList);
-
-                //Adding the cards to the list
-                ObservableList<Card> cardsInList = FXCollections.observableList(currentList.cards);
-                Collections.sort(cardsInList, (s1, s2) -> { return s1.index-s2.index; });
-                currentList.setCards(cardsInList);
-                for (Card currentCard : cardsInList) {
-                    FXMLLoader cardLoader = new FXMLLoader((getClass().getResource("Card.fxml")));
-                    Node cardObject = cardLoader.load();
-                    cardObject.setUserData(cardLoader.getController());
-                    assignAndAddCard(cardObject,currentCard,listObjectController);
-                }
-
-                mainBoard.getChildren().add(listObject);
-                setDragReleaseList(listObject);
-            }
-        } catch (Exception e){
-            e.printStackTrace();
-            System.out.print(e.getMessage());
-        }
-    }
-
-    //endregion
-
-    //region DRAG AND DROP METHODS
 
     /**
      * Method that makes the snapshot of card to be visible
@@ -480,8 +482,6 @@ public class BoardOverviewCtrl implements Initializable {
 
         card.setOnMouseDragExited(event -> {card.setStyle(initialStyle);});
     }
-    // method that sends information to the server about card changes
-
 
     /**
      * Method that adjusts the card according to the new index
@@ -495,7 +495,6 @@ public class BoardOverviewCtrl implements Initializable {
      */
     private void adjustCards(int indexInitialList, int indexFinalList,
                              int indexCardDragged, int indexCardsDropped){
-        System.out.println("Adjusting cards");
         if(indexCardDragged ==-1)
             return;
         // decided to leave the card as it was
@@ -509,9 +508,8 @@ public class BoardOverviewCtrl implements Initializable {
                 get(indexFinalList).getUserData()).getBoardList();
         Card card = initialList.getCardByIndex(indexCardDragged);
 
-       server.updateCardList(card, finalList.getId(), indexCardsDropped);
-       refresh();
-
+        server.updateCardList(card, finalList.getId(), indexCardsDropped);
+        refresh();
     }
 
     /**
@@ -527,17 +525,19 @@ public class BoardOverviewCtrl implements Initializable {
                 double eventY = event.getY();
                 Node initial = (Node) event.getGestureSource();
                 Node initialCardsSection = initial.getParent();
-                Node initialList = initialCardsSection.getParent();
+                Node scrollPane = initialCardsSection.getParent();
+                Node scrollPaneSkin = scrollPane.getParent().getParent();
+                Node initialList = scrollPaneSkin.getParent();
                 int indexOfInitialList = mainBoard.getChildren().indexOf(initialList);
                 Node targetList = (Node) event.getSource();
-                VBox targetCardsSection = (VBox) ((VBox)targetList ).getChildren().get(2);
+                ScrollPane targetScrollPane = (ScrollPane) ((VBox)targetList).getChildren().get(2);
+                VBox targetCardsSection = (VBox) targetScrollPane.getContent();
                 int indexOfList = mainBoard.getChildren().indexOf(targetList);
                 HBox draggedCard = (HBox) initial;
                 VBox draggedCardsSection = (VBox) initialCardsSection;
                 int indexOfDraggingNode = draggedCardsSection.getChildren().indexOf(draggedCard);
                 event.consume();
                 if(indexOfList == indexOfInitialList) {
-
                     Bounds localBounds = targetCardsSection.getBoundsInLocal();
                     Bounds parentBounds = targetCardsSection.localToParent(localBounds);
                     double startY = parentBounds.getMinY();
@@ -550,16 +550,15 @@ public class BoardOverviewCtrl implements Initializable {
                 }else{
                     adjustCards(indexOfInitialList, indexOfList, indexOfDraggingNode,
                             targetCardsSection.getChildren().size());
-
                 }
             }
         });
         for(int i = 0;i<((VBox)list).getChildren().size();i++){
-            if(i!=0){
+            if(i!=0 && i!=2){
                 Node item = ((VBox)list).getChildren().get(i);
                 item.setOnMouseDragReleased(event -> removePreview(mainBoard));
             }
-            else{
+            else if(i==0){
                 HBox item = (HBox)((VBox)list).getChildren().get(i);
                 for(int j = 0;j<item.getChildren().size();j++){
                     Node itemChild = item.getChildren().get(j);
@@ -567,7 +566,6 @@ public class BoardOverviewCtrl implements Initializable {
                 }
             }
         }
-
     }
 
     /**
@@ -635,6 +633,10 @@ public class BoardOverviewCtrl implements Initializable {
         setDragReleaseBoard();
 
     }
-
     //endregion
+
+    public void showTags(){
+        mainCtrl.showTagOverview(this.board);
+    }
+
 }

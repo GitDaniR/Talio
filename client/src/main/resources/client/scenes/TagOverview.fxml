@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane fx:id="preview" prefHeight="540.0" prefWidth="860.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.TagOverviewCtrl">
+   <children>
+      <Button layoutX="14.0" layoutY="495.0" mnemonicParsing="false" onAction="#back" text="Back" />
+      <Button layoutX="761.0" layoutY="14.0" mnemonicParsing="false" onAction="#createTag" text="Create tag" />
+      <VBox fx:id="tagDisplay" layoutX="14.0" layoutY="74.0" prefHeight="411.0" prefWidth="815.0" />
+      <Label layoutX="28.0" layoutY="36.0" text="This board's tags:" />
+   </children>
+</AnchorPane>

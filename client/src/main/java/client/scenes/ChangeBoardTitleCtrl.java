@@ -3,16 +3,14 @@ package client.scenes;
 import client.utils.ServerUtils;
 import commons.Board;
 import jakarta.ws.rs.WebApplicationException;
-import javafx.application.Platform;
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import com.google.inject.Inject;
-
-import java.util.Timer;
-import java.util.TimerTask;
+import javafx.util.Duration;
 
 public class ChangeBoardTitleCtrl {
 
@@ -23,6 +21,8 @@ public class ChangeBoardTitleCtrl {
     private TextField newTitle;
     @FXML
     private Label oldTitle;
+    @FXML
+    private Label errorLabel;
 
     @Inject
     public ChangeBoardTitleCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -31,6 +31,7 @@ public class ChangeBoardTitleCtrl {
     }
     public void setBoard(Board board){
         this.boardToEdit = board;
+        oldTitle.setText(board.title);
     }
     private void clearFields() {
         newTitle.clear();
@@ -39,8 +40,21 @@ public class ChangeBoardTitleCtrl {
         clearFields();
         mainCtrl.showBoard();
     }
+    private void displayError(){
+        errorLabel.setText("Title cannot be empty!");
+        // message gets deleted after 2 seconds
+        PauseTransition delay = new PauseTransition(Duration.seconds(2));
+        delay.setOnFinished(event -> {
+            errorLabel.setText("");
+        });
+        delay.play();
+    }
 
     public void editBoard() {
+        if(newTitle.getText().length()==0){
+            displayError();
+            return;
+        }
         try{
             server.updateBoardTitle(boardToEdit.id, newTitle.getText());
         } catch (WebApplicationException e) {
@@ -52,29 +66,5 @@ public class ChangeBoardTitleCtrl {
         }
         clearFields();
         mainCtrl.showBoard();
-    }
-
-    public Timer startTimer(int refreshRate){
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                Platform.runLater(()->{
-                    refresh();
-                });
-            }
-        }, 0, refreshRate);
-        return timer;
-    }
-    public void refresh(){
-        int id = boardToEdit.id;
-        try{
-            //fetch the board from the server
-            boardToEdit = server.getBoardByID(id);
-            oldTitle.setText(boardToEdit.title);
-        }catch(Exception e){
-            e.printStackTrace();
-            mainCtrl.showBoard();
-        }
     }
 }

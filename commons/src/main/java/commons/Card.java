@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-
 import javax.persistence.*;
-
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,15 +17,15 @@ public class Card {
     @GeneratedValue(strategy = GenerationType.AUTO)
 
     public Integer id;
-
-
     public String title;
     public String description;
-    @ManyToMany(
-        mappedBy = "cards",
-        cascade = CascadeType.PERSIST
+
+    @ManyToMany
+    @JoinTable(
+        name = "cardHasTag",
+        joinColumns = @JoinColumn(name = "card_id"),
+        inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
-    @JsonIgnore
     public List<Tag> tags = new ArrayList<>();
 
     @OneToMany(
@@ -44,9 +41,6 @@ public class Card {
     public BoardList list;
 
     public Integer listId;
-
-    private Card() {
-    }
 
     public Card(String title, String description, int index, BoardList list, Integer listId) {
         this.title = title;
@@ -65,7 +59,7 @@ public class Card {
         this.listId = listId;
     }
 
-
+    public Card() {}
 
     public Integer getId() {
         return id;
@@ -80,10 +74,13 @@ public class Card {
         this.listId = list.getId();
     }
 
-    //public void addTag(Tag tag) {
-    //    tags.add(tag);
-    //}
+    public void addTag(Tag tag) {
+        if(!tags.contains(tag)) tags.add(tag);
+    }
 
+    public void removeTag(Tag tag){
+        tags.remove(tag);
+    }
 
     @Override
     public boolean equals(Object obj) {

@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditListCtrl">
+<AnchorPane prefHeight="540.0" prefWidth="860.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditListCtrl">
    <children>
-      <Button layoutX="518.0" layoutY="347.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
-      <Button layoutX="448.0" layoutY="347.0" mnemonicParsing="false" onAction="#editList" text="Update" />
-      <TextField fx:id="newTitle" layoutX="226.0" layoutY="188.0" />
-      <Text layoutX="234.0" layoutY="169.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please Enter a New  Title:" wrappingWidth="132.2578125" />
-      <Label fx:id="oldTitle" layoutX="234.0" layoutY="116.0" prefHeight="33.0" prefWidth="132.0" />
+      <Button layoutX="24.0" layoutY="494.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
+      <Button layoutX="785.0" layoutY="494.0" mnemonicParsing="false" onAction="#editList" text="Update" />
+      <TextField fx:id="newTitle" layoutX="356.0" layoutY="268.0" />
+      <Text layoutX="364.0" layoutY="249.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please Enter a New  Title:" wrappingWidth="132.2578125" />
+      <Label fx:id="oldTitle" layoutX="364.0" layoutY="196.0" prefHeight="33.0" prefWidth="132.0" />
+      <Label fx:id="errorLabel" layoutX="362.0" layoutY="306.0" textFill="RED" />
    </children>
 </AnchorPane>

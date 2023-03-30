@@ -15,16 +15,13 @@
  */
 package client.scenes;
 
-import commons.Board;
-import commons.BoardList;
-import commons.Card;
-import commons.User;
+import commons.*;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+
 import java.util.Random;
-import java.util.Timer;
 
 public class MainCtrl {
 
@@ -54,19 +51,22 @@ public class MainCtrl {
     private EditCardCtrl editCardCtrl;
     private Scene editCard;
 
+    private EditTagCtrl editTagCtrl;
+    private Scene editTag;
 
-    private double windowHeight;
-    private double windowWidth;
+    private AddTagCtrl addTagCtrl;
+    private Scene addTag;
 
-    //Maintain the current running timer so se can stop it when changing views/exiting the app
-    private Timer currentTimer;
+    private TagOverviewCtrl tagOverviewCtrl;
+    private Scene tagOverview;
+
+    private AddRemoveTagsCtrl addRemoveTagsCtrl;
+    private Scene addRemoveTags;
 
     private String username;
-
     private boolean isAdmin = false;
 
-    //a const to easily manage the refresh rate of auto-sync
-    public static final int REFRESH_RATE = 1000;
+    private final String stylePath = "/client.scenes.styles/Default_styles.css";
 
     public void initialize(Stage primaryStage,
                            Pair<AddListCtrl, Parent> addList,
@@ -76,10 +76,70 @@ public class MainCtrl {
                            Pair<WorkspaceCtrl, Parent> workspace,
                            Pair<WorkspaceAdminCtrl, Parent> workspaceAdmin,
                            Pair<EditCardCtrl, Parent> editCard,
-                           Pair<ChangeBoardTitleCtrl, Parent> changeBoardTitle) {
-
+                           Pair<ChangeBoardTitleCtrl, Parent> changeBoardTitle,
+                           Pair<EditTagCtrl, Parent> editTag,
+                           Pair<AddTagCtrl, Parent> addTag,
+                           Pair<TagOverviewCtrl, Parent> tagOverview,
+                           Pair<AddRemoveTagsCtrl, Parent> addRemoveTags) {
 
         this.primaryStage = primaryStage;
+        setControllersAndScenes(addList, board, welcomePage, editList,
+                workspace, workspaceAdmin, editCard, changeBoardTitle,
+                editTag, addTag, tagOverview, addRemoveTags);
+
+        board.getValue().getStylesheets().add(
+                this.getClass().getResource(stylePath).toExternalForm());
+
+        addList.getValue().getStylesheets().add(
+                this.getClass().getResource(stylePath).toExternalForm());
+
+        welcomePage.getValue().getStylesheets().add(
+                this.getClass().getResource(stylePath).toExternalForm());
+
+        workspace.getValue().getStylesheets().add(
+                this.getClass().getResource(stylePath).toExternalForm());
+
+        workspaceAdmin.getValue().getStylesheets().add(
+                this.getClass().getResource(stylePath).toExternalForm());
+
+        editList.getValue().getStylesheets().add(
+                this.getClass().getResource(stylePath).toExternalForm());
+
+        changeBoardTitle.getValue().getStylesheets().add(
+                this.getClass().getResource(stylePath).toExternalForm());
+
+        editCard.getValue().getStylesheets().add(
+                this.getClass().getResource(stylePath).toExternalForm());
+
+        editTag.getValue().getStylesheets().add(
+                this.getClass().getResource(stylePath).toExternalForm());
+
+        addTag.getValue().getStylesheets().add(
+                this.getClass().getResource(stylePath).toExternalForm());
+
+        tagOverview.getValue().getStylesheets().add(
+                this.getClass().getResource(stylePath).toExternalForm());
+
+        addRemoveTags.getValue().getStylesheets().add(
+                this.getClass().getResource(stylePath).toExternalForm());
+
+        showWelcomePage();
+        primaryStage.show();
+    }
+
+    private void setControllersAndScenes(
+                                         Pair<AddListCtrl, Parent> addList,
+                                         Pair<BoardOverviewCtrl, Parent> board,
+                                         Pair<WelcomePageCtrl, Parent> welcomePage,
+                                         Pair<EditListCtrl, Parent> editList,
+                                         Pair<WorkspaceCtrl, Parent> workspace,
+                                         Pair<WorkspaceAdminCtrl, Parent> workspaceAdmin,
+                                         Pair<EditCardCtrl, Parent> editCard,
+                                         Pair<ChangeBoardTitleCtrl, Parent> changeBoardTitle,
+                                         Pair<EditTagCtrl, Parent> editTag,
+                                         Pair<AddTagCtrl, Parent> addTag,
+                                         Pair<TagOverviewCtrl, Parent> tagOverview,
+                                         Pair<AddRemoveTagsCtrl, Parent> addRemoveTags){
 
         this.boardOverviewCtrl = board.getKey();
         this.board = new Scene(board.getValue());
@@ -106,8 +166,17 @@ public class MainCtrl {
         this.editCardCtrl = editCard.getKey();
         this.editCard = new Scene(editCard.getValue());
 
-        showWelcomePage();
-        primaryStage.show();
+        this.editTagCtrl = editTag.getKey();
+        this.editTag = new Scene(editTag.getValue());
+
+        this.addTagCtrl = addTag.getKey();
+        this.addTag = new Scene(addTag.getValue());
+
+        this.tagOverviewCtrl = tagOverview.getKey();
+        this.tagOverview = new Scene(tagOverview.getValue());
+
+        this.addRemoveTagsCtrl = addRemoveTags.getKey();
+        this.addRemoveTags = new Scene(addRemoveTags.getValue());
     }
 
     public void setAdmin(boolean admin) {
@@ -133,16 +202,6 @@ public class MainCtrl {
         }
 
         return sb.toString();
-    }
-
-    private void storeWindowSize(Scene current){
-        windowHeight = current.getHeight();
-        windowWidth = current.getWidth();
-    }
-
-    private void setWindowSize(){
-        primaryStage.setHeight(windowHeight);
-        primaryStage.setWidth(windowWidth);
     }
 
     /**
@@ -252,9 +311,9 @@ public class MainCtrl {
             primaryStage.setTitle("Workspace");
             primaryStage.setScene(workspace);
             workspaceCtrl.setUser(username);
+            workspaceCtrl.clearInviteText();
 
             this.username = username;
-
             workspaceCtrl.refresh();
         }
     }
@@ -280,6 +339,34 @@ public class MainCtrl {
         this.username = username;
 
         workspaceAdminCtrl.refresh();
+    }
+
+    public void showTagOverview(Board board) {
+        primaryStage.setTitle("Tag Overview");
+        primaryStage.setScene(tagOverview);
+        tagOverviewCtrl.setBoard(board);
+
+        tagOverviewCtrl.refresh();
+    }
+
+    public void showAddTag(Board board) {
+        primaryStage.setTitle("Adding Tag");
+        primaryStage.setScene(addTag);
+        addTagCtrl.setBoard(board);
+    }
+
+    public void showEditTag(Tag tagToEdit) {
+        primaryStage.setTitle("Editing Tag");
+        primaryStage.setScene(editTag);
+        editTagCtrl.setTagToEdit(tagToEdit);
+        editTagCtrl.refresh();
+    }
+
+    public void showAddRemoveTags(Card card) {
+        primaryStage.setTitle("Choosing Tags");
+        primaryStage.setScene(addRemoveTags);
+        addRemoveTagsCtrl.setCardToEdit(card);
+        addRemoveTagsCtrl.setTags();
     }
 }
 
