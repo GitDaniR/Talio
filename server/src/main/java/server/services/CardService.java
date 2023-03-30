@@ -2,11 +2,10 @@ package server.services;
 
 import commons.BoardList;
 import commons.Card;
+import commons.Tag;
 import org.springframework.stereotype.Service;
 import server.database.BoardListRepository;
 import server.database.CardRepository;
-
-
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -57,14 +56,18 @@ public class CardService {
         return res;
     }
 
-    //Method to edit a card by listId
+    //Method to edit a card by id
+    @Transactional
     public Card editCardById(int id, Card card)throws Exception{
         Card res = cardRepo.findById(id).orElseThrow(
             ()->new Exception("Card with id: " + id +" not found")
         );
         res.title = card.title;
         res.description = card.description;
-        return cardRepo.save(res);
+        res.tags = card.tags;
+
+        Card saved = cardRepo.save(res);
+        return saved;
     }
 
     public Card editCardByIdList(int id, int listId)throws Exception{
@@ -75,6 +78,30 @@ public class CardService {
                 ()->new Exception("List with id: " + id +" not found"));
         res.listId = listId;
         res.list = list;
+        return cardRepo.save(res);
+    }
+
+    /**
+     * Method which removes a tag from a card
+     * @param id the id of the card
+     * @param tag the tag
+     * @return the saved card
+     * @throws Exception if id is not in repo.
+     */
+    public Card removeTag(Integer id, Tag tag) throws Exception {
+        Card res = cardRepo.findById(id).orElseThrow(
+                ()->new Exception("Card with id: " + id +" not found")
+        );
+
+        // check if the card has the tag and remove it
+        Tag toRemove = null;
+        for(Tag t: res.tags){
+            // I cannot expect that tag parameter is the same as the one
+            // in the card so I have to compare ids
+            if(t.id == tag.id) toRemove = t;
+        }
+        if(toRemove != null) res.tags.remove(toRemove);
+
         return cardRepo.save(res);
     }
 }

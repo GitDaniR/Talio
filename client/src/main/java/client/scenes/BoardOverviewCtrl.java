@@ -513,5 +513,12 @@ public class BoardOverviewCtrl implements Initializable {
         setDragReleaseBoard();
 
     }
+    // end of Drag&Drop
+
     //endregion
+
+    public void showTags(){
+        mainCtrl.showTagOverview(this.board);
+    }
+
 }
