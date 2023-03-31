@@ -513,6 +513,18 @@ public class BoardOverviewCtrl implements Initializable {
     }
 
     /**
+     * Method to get the list from a node that was gotten from a gesture
+     * @param root the node of the gesture
+     * @return
+     */
+    private Node getListFromGestureNode(Node root){
+        Node cardSelection = root.getParent();
+        Node scrollPane = cardSelection.getParent();
+        Node scrollPaneSkin = scrollPane.getParent().getParent();
+        return scrollPaneSkin.getParent();
+    }
+
+    /**
      * Method that handles the event when the card
      * is dropped on a list and not on a specific card
      * @param list - list on which card was dropped
@@ -525,9 +537,7 @@ public class BoardOverviewCtrl implements Initializable {
                 double eventY = event.getY();
                 Node initial = (Node) event.getGestureSource();
                 Node initialCardsSection = initial.getParent();
-                Node scrollPane = initialCardsSection.getParent();
-                Node scrollPaneSkin = scrollPane.getParent().getParent();
-                Node initialList = scrollPaneSkin.getParent();
+                Node initialList = getListFromGestureNode(initial);
                 int indexOfInitialList = mainBoard.getChildren().indexOf(initialList);
                 Node targetList = (Node) event.getSource();
                 ScrollPane targetScrollPane = (ScrollPane) ((VBox)targetList).getChildren().get(2);
@@ -603,17 +613,15 @@ public class BoardOverviewCtrl implements Initializable {
                 //getting the index of the list that holds the card being dragged
                 Node initial = (Node) event.getGestureSource();
                 Node initialCardsSection = initial.getParent();
-                Node initialList = initialCardsSection.getParent();
+                Node initialList = getListFromGestureNode(initial);
                 int indexOfInitialList = mainBoard.getChildren().indexOf(initialList);
                 // getting the index of the list that card is dropped on
                 Node target = (Node) event.getSource();
                 Node targetCardsSection = target.getParent();
-                Node targetList = targetCardsSection.getParent();
+                Node targetList = getListFromGestureNode(target);
                 int indexOfList = mainBoard.getChildren().indexOf(targetList);
 
-                HBox draggedCard = (HBox) initial;
                 VBox draggedCardsSection = (VBox) initialCardsSection;
-
 
                 VBox droppedCardsSection = (VBox) targetCardsSection;
                 int indexOfDraggingNode = draggedCardsSection.getChildren().indexOf(initial);
