@@ -30,5 +30,20 @@ public interface CardRepository extends JpaRepository<Card, Integer> {
     @Modifying
     @Query("UPDATE Card c SET c.index = c.index - 1 WHERE c.index > :index AND c.listId = :listId")
     void shiftCardsLeft(int index, int listId);
+
+    @Modifying
+    @Query("UPDATE Card c SET c.index = c.index + 1 WHERE c.index < :index2 " +
+            "AND c.index>= :index1 AND c.listId = :listId")
+    void shiftCardsBetweenDown(int index1,int index2,  int listId);
+
+    @Modifying
+    @Query("UPDATE Card c SET c.index = c.index - 1 WHERE c.index > :index1 " +
+            "AND c.index <= :index2 AND c.listId = :listId")
+    void shiftCardsBetweenUp(int index1,int index2,  int listId);
+
+
+
+
+
 }
 

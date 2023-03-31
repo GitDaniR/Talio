@@ -13,5 +13,6 @@
       <TextField fx:id="newTitle" layoutX="356.0" layoutY="268.0" />
       <Text layoutX="364.0" layoutY="249.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please Enter a New  Title:" wrappingWidth="132.2578125" />
       <Label fx:id="oldTitle" layoutX="364.0" layoutY="196.0" prefHeight="33.0" prefWidth="132.0" />
+      <Label fx:id="errorLabel" layoutX="362.0" layoutY="306.0" textFill="RED" />
    </children>
 </AnchorPane>

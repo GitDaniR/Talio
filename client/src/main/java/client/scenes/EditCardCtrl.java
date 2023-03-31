@@ -2,19 +2,22 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.Card;
-import commons.Subtask;
+import commons.*;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
@@ -43,6 +46,10 @@ public class EditCardCtrl implements Initializable {
     private Button addSubtask;
     private ObservableList<Subtask> subtasksArray;
 
+    @FXML
+    private FlowPane tags;
+    private ObservableList<Tag> tagsArray;
+
     @Inject
     public EditCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
@@ -57,11 +64,20 @@ public class EditCardCtrl implements Initializable {
             if(Objects.equals(card.id, cardToEdit.id))
                 Platform.runLater(() -> updateCard(card));
         });
+        server.registerForMessages("/topic/tags", Integer.class, boardId -> {
+            Platform.runLater(() -> overwriteTags(server.getBoardByID(boardId).tags));
+        });
         title.setOnKeyTyped(e -> server.editCard(cardToEdit.id, getUpdatedCard()));
         description.setOnKeyTyped(e -> server.editCard(cardToEdit.id, getUpdatedCard()));
     }
 
+
+
     private void updateCard(Card card){
+        if(!cardToEdit.tags.equals(card.tags)){
+            cardToEdit=card;
+            setTags();
+        }
         cardToEdit=card;
         if(!title.isFocused())
             title.setText(card.title);
@@ -74,6 +90,13 @@ public class EditCardCtrl implements Initializable {
         Collections.sort(cardToEdit.subtasks, Comparator.comparingInt(s -> s.index));
         subtasksArray = FXCollections.observableArrayList(t);
         subtasks.setItems(subtasksArray);
+    }
+
+    private void overwriteTags(List<Tag> tags) {
+        if(cardToEdit!=null){
+            cardToEdit.tags=tags;
+            setTags();
+        }
     }
 
     private PauseTransition delay;
@@ -130,10 +153,14 @@ public class EditCardCtrl implements Initializable {
      * @return a new version of the card
      */
     private Card getUpdatedCard() {
-        var t = title.getText();
-        var d = description.getText();
+        Card newCard = new Card(title.getText(),
+                description.getText(),
+                cardToEdit.index,
+                cardToEdit.list,
+                cardToEdit.listId);
+        newCard.tags=cardToEdit.tags;
 
-        return new Card(t,d, cardToEdit.index, cardToEdit.list, cardToEdit.listId);
+        return newCard;
     }
 
     /**
@@ -173,6 +200,39 @@ public class EditCardCtrl implements Initializable {
         subtasksArray = FXCollections.observableArrayList(cardToEdit.subtasks);
         subtasks.setCellFactory(subtasks1 -> new SubtaskCell(server, mainCtrl));
         subtasks.setItems(subtasksArray);
+
+        setTags();
+    }
+
+    /**
+     * Method that sets tags to be the tags of the card
+     */
+    private void setTags(){
+        tags.getChildren().clear();
+        tagsArray = FXCollections.observableArrayList(cardToEdit.tags);
+
+        for(Tag tag: tagsArray){
+            // reusing a scene from the overview
+            FXMLLoader tagDisplayLoader = new FXMLLoader(getClass().
+                    getResource("TagCellForOverview.fxml"));
+            try {
+                Node tagObject = tagDisplayLoader.load();
+                setCtrl(tagDisplayLoader, tag);
+                tags.getChildren().add(tagObject);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    /**
+     * Setting controller for a shown tag
+     */
+    private TagCellForOverviewCtrl setCtrl(FXMLLoader tagLoader, Tag tag){
+        TagCellForOverviewCtrl ctrl = tagLoader.getController();
+        ctrl.setMainCtrlAndServer(mainCtrl, server);
+        ctrl.setTag(tag);
+        return ctrl;
     }
 
     /**
@@ -185,4 +245,13 @@ public class EditCardCtrl implements Initializable {
         this.cardToEdit = cardToEdit;
         setSubtasksAndOldValues();
     }
+
+    /**
+     * A method to switch scenes to adding/removing tags
+     * called when a button is pressed
+     */
+    public void addRemoveTags(){
+        mainCtrl.showAddRemoveTags(cardToEdit);
+    }
 }
+

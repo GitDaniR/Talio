@@ -16,13 +16,10 @@
 package client;
 
 import static com.google.inject.Guice.createInjector;
-
 import java.io.IOException;
 import java.net.URISyntaxException;
-
 import client.scenes.*;
 import com.google.inject.Injector;
-
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -49,12 +46,17 @@ public class Main extends Application {
         var editCard = FXML.load(EditCardCtrl.class,"client","scenes","EditCard.fxml");
         var editBoard = FXML.load(ChangeBoardTitleCtrl.class, "client",
                 "scenes","ChangeBoardTitle.fxml");
+        var editTag = FXML.load(EditTagCtrl.class,"client","scenes","EditTag.fxml");
+        var addTag = FXML.load(AddTagCtrl.class,"client","scenes","AddTag.fxml");
+        var tagOverview = FXML.load(TagOverviewCtrl.class,"client","scenes","TagOverview.fxml");
+        var addRemoveTags = FXML.load(AddRemoveTagsCtrl.class,"client","scenes",
+                "AddRemoveTags.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, addList,
-                currentBoard, welcomePage,editList, workspace,
-                workspaceAdmin, editCard, editBoard);
 
+        mainCtrl.initialize(primaryStage, addList,
+                currentBoard, welcomePage, editList, workspace, workspaceAdmin, editCard,
+                editBoard, editTag, addTag, tagOverview, addRemoveTags);
 
     }
 }
