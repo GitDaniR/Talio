@@ -133,6 +133,7 @@ public class WorkspaceCtrl implements Initializable {
         } catch (Exception e) {
             displayText("Invalid invite code!");
         }
+        refresh();
     }
 
     /**
