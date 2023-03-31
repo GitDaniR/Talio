@@ -88,10 +88,15 @@ public class CardController {
 
     }
 
-    @PutMapping("/{id}/list/{listId}")
-    public ResponseEntity<Card> editCardList(@PathVariable int id, @PathVariable Integer listId){
+    @PutMapping("/{id}/list/{listId}/{index}")
+    public ResponseEntity<Card> editCardList(@PathVariable int id, @PathVariable Integer listId,
+                                             @PathVariable int index){
         try {
-            Card res = cardService.editCardByIdList(id, listId);
+            Card res = cardService.editCardByIdList(id, listId, index);
+            //This doesn't update the card positions properly but we call
+            //refresh anyway at the end so it doesn't matter
+            if(msgs!=null)
+                msgs.convertAndSend("/topic/cards/rename",res);
             return ResponseEntity.ok(res);
         }catch(Exception e){
             System.out.println(e.getMessage());

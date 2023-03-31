@@ -144,6 +144,7 @@ public class MainCtrl {
         this.boardOverviewCtrl = board.getKey();
         this.board = new Scene(board.getValue());
 
+
         this.addListCtrl = addList.getKey();
         this.addList = new Scene(addList.getValue());
 
@@ -225,7 +226,6 @@ public class MainCtrl {
      */
     public void joinBoard(User user, Board chosenBoard) {
         primaryStage.setTitle("Board Overview");
-        primaryStage.setScene(board);
         boardOverviewCtrl.setBoard(chosenBoard);
         boardOverviewCtrl.assignToUser(user);
         boardOverviewCtrl.refresh();

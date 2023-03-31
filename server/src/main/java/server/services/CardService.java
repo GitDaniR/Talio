@@ -70,12 +70,25 @@ public class CardService {
         return saved;
     }
 
-    public Card editCardByIdList(int id, int listId)throws Exception{
+    @Transactional
+    public Card editCardByIdList(int id, int listId, int index)throws Exception{
         Card res = cardRepo.findById(id).orElseThrow(
                 ()->new Exception("Card with id: " + id +" not found")
         );
         BoardList list = listRepo.findById(listId).orElseThrow(
                 ()->new Exception("List with id: " + id +" not found"));
+
+        if(res.listId == listId){
+            if(index>res.index){
+                cardRepo.shiftCardsBetweenUp(res.index, index, listId);
+            }else{
+                cardRepo.shiftCardsBetweenDown(index, res.index, listId);
+            }
+        }else{
+            cardRepo.shiftCardsLeft(res.index, res.listId);
+            cardRepo.shiftCardsRight(index, listId);
+        }
+        res.index = index;
         res.listId = listId;
         res.list = list;
         return cardRepo.save(res);
