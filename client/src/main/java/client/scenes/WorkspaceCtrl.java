@@ -11,12 +11,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
-
 import javax.inject.Inject;
 import java.io.IOException;
 import java.net.URL;
@@ -27,22 +25,12 @@ public class WorkspaceCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
-
     private User user;
-
     private ObservableList<Board> data;
-    @FXML
-    private Button createBoard;
-    @FXML
-    private Button joinBoard;
     @FXML
     private TextField inputBoardToJoin;
     @FXML
-    private Button disconnectButton;
-    @FXML
     private VBox boardsDisplay;
-    @FXML
-    private TextField txtBoardName;
     @FXML
     private Label alreadyJoinedText;
 
@@ -68,12 +56,12 @@ public class WorkspaceCtrl implements Initializable {
      */
     public void setUser(String username){
         this.user = server.getUserByUsername(username);
-        if(this.user == null)this.user = server.addUser(new User(username));
+        if(this.user == null) this.user = server.addUser(new User(username));
     }
 
     //region SOCKET METHODS
 
-    private void renameBoard(int id, String title){
+    public void renameBoard(int id, String title){
         boardsDisplay.getChildren().stream()
                 .filter(e -> ((BoardWorkspaceCtrl)e.getUserData()).getBoard().id==id)
                 .findFirst()
@@ -81,7 +69,7 @@ public class WorkspaceCtrl implements Initializable {
                         .getLblBoardName().setText(title));
     }
 
-    private void removeBoard(int boardId){
+    public void removeBoard(int boardId){
         if(user.hasBoardAlready(boardId))
             boardsDisplay.getChildren().
                     removeIf(e ->
@@ -174,7 +162,7 @@ public class WorkspaceCtrl implements Initializable {
      * Method that refreshes the preview
      */
     public void refresh(){
-        this.user = server.getUserByUsername(this.user.username);
+        this.user = server.getUserById(this.user.id);
         List<Board> boards = user.boards;
         data = FXCollections.observableList(boards);
         clearJoinedBoards();
@@ -193,5 +181,49 @@ public class WorkspaceCtrl implements Initializable {
 
         }
     }
+    //endregion
+
+    //region Getters and setters
+
+    public ServerUtils getServer() {
+        return server;
+    }
+
+    public MainCtrl getMainCtrl() {
+        return mainCtrl;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public TextField getInputBoardToJoin() {
+        return inputBoardToJoin;
+    }
+
+    public void setInputBoardToJoin(TextField inputBoardToJoin) {
+        this.inputBoardToJoin = inputBoardToJoin;
+    }
+
+    public Label getAlreadyJoinedText() {
+        return alreadyJoinedText;
+    }
+
+    public void setAlreadyJoinedText(Label alreadyJoinedText) {
+        this.alreadyJoinedText = alreadyJoinedText;
+    }
+
+    public VBox getBoardsDisplay() {
+        return boardsDisplay;
+    }
+
+    public void setBoardsDisplay(VBox boardsDisplay) {
+        this.boardsDisplay = boardsDisplay;
+    }
+
     //endregion
 }
