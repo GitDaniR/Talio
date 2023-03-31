@@ -277,9 +277,9 @@ public class BoardOverviewCtrl implements Initializable {
 
         CardCtrl cardObjectController = (CardCtrl) cardObject.getUserData();
         //Getting the controller
-        cardObjectController.setCardAndAttributes(currentCard);
         //Setting the card to be represented and also changing the values accordingly
         cardObjectController.setServerAndCtrl(server,mainCtrl);
+        cardObjectController.setCardAndAttributes(currentCard);
         //Just as done with lists
 
         //if card is double-clicked editCard scene is shown

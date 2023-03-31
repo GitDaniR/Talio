@@ -263,6 +263,7 @@ public class MainCtrl {
     public void showBoard(){
         primaryStage.setTitle("Board overview");
         primaryStage.setScene(board);
+        boardOverviewCtrl.refresh();
     }
 
     public void showChangeTitle(Board board){
