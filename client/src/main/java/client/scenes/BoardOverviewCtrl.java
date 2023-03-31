@@ -548,10 +548,8 @@ public class BoardOverviewCtrl implements Initializable {
                 int indexOfDraggingNode = draggedCardsSection.getChildren().indexOf(draggedCard);
                 event.consume();
                 if(indexOfList == indexOfInitialList) {
-                    Bounds localBounds = targetCardsSection.getBoundsInLocal();
-                    Bounds parentBounds = targetCardsSection.localToParent(localBounds);
+                    Bounds  parentBounds = targetScrollPane.getBoundsInParent();
                     double startY = parentBounds.getMinY();
-                    double endY = parentBounds.getMaxY();
                     if(eventY<startY){
                         adjustCards(indexOfInitialList, indexOfList, indexOfDraggingNode, 0);
                     }else{
