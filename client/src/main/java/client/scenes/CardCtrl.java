@@ -45,7 +45,7 @@ public class CardCtrl extends AnchorPane implements Initializable{
      * the title and the description
      */
     public void setCardAndAttributes(Card card) {
-        this.card = card;
+        this.card = server.getCardById(card.id);
         cardTitle.setText(card.title);
         if(card.description == null || card.description.isEmpty()) {
             imgDescription.setVisible(false);
