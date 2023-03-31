@@ -181,6 +181,7 @@ public class CardServiceTest {
     public void testEditCardByIdListOutside() throws Exception{
         List<String> expectedCalls = new ArrayList<>();
         expectedCalls.add(TestCardRepository.FIND_BY_ID);
+        expectedCalls.add(TestCardRepository.SHIFT_CARDS_LEFT);
         expectedCalls.add(TestCardRepository.SHIFT_CARDS_RIGHT);
         expectedCalls.add(TestCardRepository.SAVE);
         sut.editCardByIdList(0,1, 0);
