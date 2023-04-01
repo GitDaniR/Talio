@@ -114,4 +114,25 @@ public class SubtaskServiceTest {
     void getRepoTest(){
         assertEquals(repo, sut.getRepo());
     }
+
+    @Test
+    void updateStatusTest() throws Exception {
+        Subtask result = sut.updateSubtaskStatus(2, "true");
+
+        s2.done = true;
+
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestSubtaskRepository.FIND_BY_ID);
+        expectedCalls.add(TestSubtaskRepository.SAVE);
+
+
+        assertEquals(s2, result);
+        assertEquals(expectedCalls, repo.getCalls());
+    }
+
+    @Test
+    void updateStatusTest2(){
+        assertThrows(Exception.class, ()->{sut.updateSubtaskStatus(12, "false");});
+    }
+
 }
