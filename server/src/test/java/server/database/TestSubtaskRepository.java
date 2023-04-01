@@ -52,7 +52,7 @@ public class TestSubtaskRepository implements SubtaskRepository{
 
     @Override
     public List<Subtask> findAll() {
-        return null;
+        return subtasks;
     }
 
     @Override
