@@ -109,4 +109,9 @@ public class SubtaskServiceTest {
     void deleteTest2(){
         assertThrows(Exception.class, ()->{sut.deleteById(12);});
     }
+
+    @Test
+    void getRepoTest(){
+        assertEquals(repo, sut.getRepo());
+    }
 }
