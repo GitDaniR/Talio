@@ -115,4 +115,31 @@ public class SubtaskControllerTest {
         ResponseEntity<Subtask> result = sut.add(s4);
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
     }
+
+    @Test
+    void deleteTest(){
+        ResponseEntity<Subtask> result = sut.deleteById(2);
+
+        List<Subtask> expected = new ArrayList<>();
+        Subtask test1 = new Subtask("Subtask 1", false, 0, null, 0);
+        test1.id = 1;
+        Subtask test3 = new Subtask("Subtask 3", false, 1, null, 0);
+        test3.id = 3;
+        expected.add(test1);
+        expected.add(test3);
+        List<Subtask> res = sut.getAll();
+        assertEquals(ResponseEntity.ok(s2), result);
+        assertEquals(expected, res);
+
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add("/topic/subtasks");
+        assertEquals(expectedCalls, simp.getDestinations());
+    }
+
+    @Test
+    void deleteTest2(){
+        ResponseEntity<Subtask> result = sut.deleteById(12);
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+    }
+
 }
