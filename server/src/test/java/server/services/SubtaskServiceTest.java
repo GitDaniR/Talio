@@ -4,8 +4,6 @@ import commons.Subtask;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
-import server.database.SubtaskRepository;
-import server.database.TestCardRepository;
 import server.database.TestSubtaskRepository;
 
 import java.util.ArrayList;
@@ -47,8 +45,8 @@ public class SubtaskServiceTest {
         ResponseEntity<Subtask> expected = ResponseEntity.ok(s2);
         ResponseEntity<Subtask> result = sut.getById(2);
         List<String> expectedCalls = new ArrayList<>();
-        expectedCalls.add(TestCardRepository.EXISTS_BY_ID);
-        expectedCalls.add(TestCardRepository.FIND_BY_ID);
+        expectedCalls.add(TestSubtaskRepository.EXISTS_BY_ID);
+        expectedCalls.add(TestSubtaskRepository.FIND_BY_ID);
         assertEquals(expected, result);
         assertEquals(expectedCalls, repo.getCalls());
     }
@@ -67,7 +65,7 @@ public class SubtaskServiceTest {
         ResponseEntity<Subtask> result = sut.add(s4);
 
         List<String> expectedCalls = new ArrayList<>();
-        expectedCalls.add(TestCardRepository.SAVE);
+        expectedCalls.add(TestSubtaskRepository.SAVE);
 
         List<Subtask> updated = new ArrayList<>();
         updated.add(s1);
@@ -84,5 +82,31 @@ public class SubtaskServiceTest {
         Subtask s4 = new Subtask(null, false, 3, null, 0);
         s4.id = 2;
         assertThrows(Exception.class, ()->{sut.add(s4);});
+    }
+
+    @Test
+    void deleteTest() throws Exception {
+        ResponseEntity<Subtask> expected = ResponseEntity.ok(s2);
+
+        ResponseEntity<Subtask> result = sut.deleteById(2);
+
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestSubtaskRepository.EXISTS_BY_ID);
+        expectedCalls.add(TestSubtaskRepository.FIND_BY_ID);
+        expectedCalls.add(TestSubtaskRepository.SHIFT_DOWN);
+        expectedCalls.add(TestSubtaskRepository.DELETE_BY_ID);
+
+        List<Subtask> updated = new ArrayList<>();
+        updated.add(s1);
+        updated.add(s3);
+
+        assertEquals(expected, result);
+        assertEquals(expectedCalls, repo.getCalls());
+        assertEquals(updated, repo.getSubtasks());
+    }
+
+    @Test
+    void deleteTest2(){
+        assertThrows(Exception.class, ()->{sut.deleteById(12);});
     }
 }

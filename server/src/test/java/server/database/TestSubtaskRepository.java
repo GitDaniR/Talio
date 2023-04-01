@@ -17,6 +17,8 @@ public class TestSubtaskRepository implements SubtaskRepository{
     public static final String FIND_BY_ID = "Find By Id";
     public static final String EXISTS_BY_ID = "Exists By Id";
     public static final String SAVE = "Save";
+    public static final String DELETE_BY_ID = "Delete By Id";
+    public static final String SHIFT_DOWN = "Shift Down";
     private List<String> calls;
     private List<Subtask> subtasks;
 
@@ -43,7 +45,10 @@ public class TestSubtaskRepository implements SubtaskRepository{
 
     @Override
     public void shiftSubtasksDown(int index, int cardId) {
-
+        call(SHIFT_DOWN);
+        for(Subtask s: subtasks){
+            if(s.cardId == cardId && s.index > index) s.index--;
+        }
     }
 
     @Override
@@ -73,7 +78,10 @@ public class TestSubtaskRepository implements SubtaskRepository{
 
     @Override
     public void deleteById(Integer integer) {
-
+        call(DELETE_BY_ID);
+        for(Subtask s: subtasks){
+            if(s.id == integer) subtasks.remove(s);
+        }
     }
 
     @Override
