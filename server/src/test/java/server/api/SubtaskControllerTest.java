@@ -4,6 +4,8 @@ import commons.Card;
 import commons.Subtask;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import server.database.TestMessageChannel;
 import server.database.TestSimpMessagingTemplate;
 import server.database.TestSubtaskRepository;
@@ -61,5 +63,19 @@ public class SubtaskControllerTest {
         expected.add(test3);
         List<Subtask> res = sut.getAll();
         assertEquals(expected, res);
+    }
+
+    @Test
+    void getByIdTest(){
+        ResponseEntity<Subtask> result = sut.getById(2);
+        Subtask expected = new Subtask("Subtask 2", false, 1, null, 0);
+        expected.id = 2;
+        assertEquals(ResponseEntity.ok(expected), result);
+    }
+
+    @Test
+    void getByIdTest2(){
+        ResponseEntity<Subtask> result = sut.getById(12);
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
     }
 }
