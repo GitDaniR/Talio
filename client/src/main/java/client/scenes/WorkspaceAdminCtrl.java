@@ -10,8 +10,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javax.inject.Inject;
 import java.io.IOException;
@@ -23,18 +21,11 @@ public class WorkspaceAdminCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
-
     private User user;
-
     private ObservableList<Board> data;
     @FXML
-    private Button createBoard;
-
-    @FXML
-    private Button disconnectButton;
-    @FXML
     private VBox boardsDisplay;
-    @FXML private TextField txtBoardName;
+
 
     @Inject
     public WorkspaceAdminCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -140,10 +131,37 @@ public class WorkspaceAdminCtrl implements Initializable {
         }
     }
 
-    private void clearBoards(){
+    public void clearBoards(){
         boardsDisplay.getChildren().clear();
     }
 
     //endregion
 
+    //region Getters and setters
+
+    public ServerUtils getServer() {
+        return server;
+    }
+
+    public MainCtrl getMainCtrl() {
+        return mainCtrl;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public VBox getBoardsDisplay() {
+        return boardsDisplay;
+    }
+
+    public void setBoardsDisplay(VBox boardsDisplay) {
+        this.boardsDisplay = boardsDisplay;
+    }
+
+    //endregion
 }

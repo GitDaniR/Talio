@@ -102,6 +102,9 @@ public class WorkspaceCtrl implements Initializable {
         inputBoardToJoin.clear();
     }
 
+    /**
+     * Method to join a new board via invite link
+     */
     public void joinInputBoard() throws Exception {
         // Take the ID out of inputBoardToJoin (integer after "#")
         String[] boardToJoin = inputBoardToJoin.getText().split("#");
@@ -138,9 +141,6 @@ public class WorkspaceCtrl implements Initializable {
     /**
      * Method that sets controller for the javaFX object
      * that represent joined board
-     * @param boardLoader
-     * @param board
-     * @return
      */
     private BoardWorkspaceCtrl setCtrl(FXMLLoader boardLoader, Board board){
         BoardWorkspaceCtrl ctrl = boardLoader.getController();
@@ -161,8 +161,10 @@ public class WorkspaceCtrl implements Initializable {
     /**
      * Method that refreshes the preview
      */
-    public void refresh(){
+    public void refresh() {
         this.user = server.getUserById(this.user.id);
+        if(user == null) return;
+
         List<Board> boards = user.boards;
         data = FXCollections.observableList(boards);
         clearJoinedBoards();
@@ -223,6 +225,14 @@ public class WorkspaceCtrl implements Initializable {
 
     public void setBoardsDisplay(VBox boardsDisplay) {
         this.boardsDisplay = boardsDisplay;
+    }
+
+    public PauseTransition getDelay() {
+        return delay;
+    }
+
+    public void setDelay(PauseTransition delay) {
+        this.delay = delay;
     }
 
     //endregion

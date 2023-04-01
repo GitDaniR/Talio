@@ -5,6 +5,7 @@ import client.scenes.WorkspaceCtrl;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.User;
+import javafx.animation.PauseTransition;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
@@ -18,6 +19,7 @@ public class WorkspaceCtrlSut extends WorkspaceCtrl {
         this.setInputBoardToJoin(new TextField());
         this.setAlreadyJoinedText(new Label());
         this.setBoardsDisplay(new VBox());
+        this.setDelay(new PauseTransition());
 
     }
 }

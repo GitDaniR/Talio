@@ -3,27 +3,21 @@ package client.scenes;
 import client.utils.ServerUtils;
 import commons.Board;
 import commons.User;
-import javafx.animation.PauseTransition;
 import javafx.application.Platform;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import javafx.util.Duration;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mock;
-import suts.WorkspaceCtrlSut;
-
-import java.io.IOException;
+import suts.WorkspaceAdminCtrlSut;
 import java.util.ArrayList;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class WorkspaceCtrlTest {
+public class WorkspaceAdminCtrlTest {
 
     @Mock
     private ServerUtils server;
@@ -32,7 +26,7 @@ public class WorkspaceCtrlTest {
 
     private List<Board> data;
     private User user;
-    private WorkspaceCtrlSut sut;
+    private WorkspaceAdminCtrlSut sut;
 
     @BeforeAll
     public void setup(){
@@ -54,7 +48,7 @@ public class WorkspaceCtrlTest {
         user = new User("username");
         user.id = 1;
         user.boards = data;
-        sut = new WorkspaceCtrlSut(server, mainCtrl, user);
+        sut = new WorkspaceAdminCtrlSut(server, mainCtrl, user);
 
     }
 
@@ -68,11 +62,7 @@ public class WorkspaceCtrlTest {
         assertNotEquals(data, null);
         assertEquals(data.get(0), new Board("title1", "password1"));
         assertEquals(data.get(1), new Board("title2", "password2"));
-
-        assertEquals(sut.getInputBoardToJoin().getText(), "");
-        assertEquals(sut.getAlreadyJoinedText().getText(), "");
         assertNotNull(sut.getBoardsDisplay());
-        assertNotNull(sut.getDelay());
     }
 
     @Test
@@ -92,46 +82,25 @@ public class WorkspaceCtrlTest {
     }
 
     @Test
-    public void displayText(){
-        String text = "text";
-        sut.displayText(text);
-        assertEquals(sut.getAlreadyJoinedText().getText(), text);
-    }
-
-    @Test
-    public void clearInviteText(){
-        sut.setInputBoardToJoin(new TextField("myText"));
-        sut.clearInviteText();
-        assertEquals(sut.getInputBoardToJoin().getText(), "");
-    }
-
-    @Test
-    public void joinInputBoard() throws Exception {
-        sut.setInputBoardToJoin(new TextField("myText#3"));
-        sut.joinInputBoard();
-        verify(server, times(1)).getBoardByID(3);
-    }
-
-    @Test
     public void disconnect(){
         sut.disconnect();
         verify(mainCtrl, times(1)).showWelcomePage();
     }
 
     @Test
-    public void clearJoinedBoards(){
+    public void clearBoards(){
         VBox boardDisplay = new VBox();
         boardDisplay.getChildren().add(new VBox());
         sut.setBoardsDisplay(boardDisplay);
 
-        sut.clearJoinedBoards();
+        sut.clearBoards();
         assertEquals(0, sut.getBoardsDisplay().getChildren().size());
     }
 
     @Test
     public void refresh() {
         sut.refresh();
-        verify(server, times(1)).getUserById(1);
+        verify(server, times(1)).getBoards();
     }
 
     @Test
@@ -157,30 +126,6 @@ public class WorkspaceCtrlTest {
     }
 
     @Test
-    public void getInputBoardToJoin() {
-        assertEquals(sut.getInputBoardToJoin().getText(), "");
-    }
-
-    @Test
-    public void setInputBoardToJoin() {
-        TextField input = new TextField("test");
-        sut.setInputBoardToJoin(input);
-        assertEquals(sut.getInputBoardToJoin(), input);
-    }
-
-    @Test
-    public void getAlreadyJoinedText() {
-        assertEquals(sut.getAlreadyJoinedText().getText(), "");
-    }
-
-    @Test
-    public void setAlreadyJoinedText() {
-        Label input = new Label("test");
-        sut.setAlreadyJoinedText(input);
-        assertEquals(sut.getAlreadyJoinedText(), input);
-    }
-
-    @Test
     public void getBoardsDisplay() {
         assertNotNull(sut.getBoardsDisplay());
         assertEquals(sut.getBoardsDisplay().getChildren().size(), 0);
@@ -196,18 +141,5 @@ public class WorkspaceCtrlTest {
         assertNotNull(sut.getBoardsDisplay());
         assertEquals(sut.getBoardsDisplay().getChildren().get(0), child);
     }
-
-    @Test
-    public void getDelay() {
-        assertNotNull(sut.getDelay());
-    }
-
-    @Test
-    public void setDelay() {
-        PauseTransition delay = new PauseTransition();
-        sut.setDelay(delay);
-        assertEquals(sut.getDelay(), delay);
-    }
-
 
 }
