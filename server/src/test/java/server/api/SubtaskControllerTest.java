@@ -182,4 +182,24 @@ public class SubtaskControllerTest {
         assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
     }
 
+    @Test
+    void updateTitleTest(){
+        ResponseEntity<Subtask> result = sut.updateTitleById(2, "title");
+
+        Subtask expected = new Subtask("title", false, 1, null, 0);
+        expected.id = 2;
+
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add("/topic/subtasks");
+
+        assertEquals(ResponseEntity.ok(expected), result);
+        assertEquals(expectedCalls, simp.getDestinations());
+    }
+
+    @Test
+    void updateTitleTest2(){
+        ResponseEntity<Subtask> result = sut.updateTitleById(12, "title");
+        assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
+    }
+
 }
