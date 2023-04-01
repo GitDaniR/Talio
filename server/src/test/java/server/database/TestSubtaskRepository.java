@@ -16,6 +16,7 @@ import java.util.function.Function;
 public class TestSubtaskRepository implements SubtaskRepository{
     public static final String FIND_BY_ID = "Find By Id";
     public static final String EXISTS_BY_ID = "Exists By Id";
+    public static final String SAVE = "Save";
     private List<String> calls;
     private List<Subtask> subtasks;
 
@@ -26,6 +27,10 @@ public class TestSubtaskRepository implements SubtaskRepository{
 
     public void setSubtasks(List<Subtask> subtasks){
         this.subtasks = subtasks;
+    }
+
+    public List<Subtask> getSubtasks(){
+        return subtasks;
     }
 
     public void call(String method) {
@@ -93,7 +98,15 @@ public class TestSubtaskRepository implements SubtaskRepository{
 
     @Override
     public <S extends Subtask> S save(S entity) {
-        return null;
+        call(SAVE);
+        for(int i = 0; i < subtasks.size(); i++){
+            if(subtasks.get(i).id == entity.id){
+                subtasks.set(i, entity);
+                return (S) subtasks.get(i);
+            }
+        }
+        subtasks.add(entity);
+        return (S) subtasks.get(subtasks.size() - 1);
     }
 
     @Override

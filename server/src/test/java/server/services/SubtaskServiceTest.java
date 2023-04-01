@@ -57,4 +57,32 @@ public class SubtaskServiceTest {
     void getByIdTest2(){
         assertThrows(Exception.class, ()->{sut.getById(12);});
     }
+
+    @Test
+    void addTest() throws Exception {
+        Subtask s4 = new Subtask("Subtask 4", false, 3, null, 0);
+        s4.id = 2;
+        ResponseEntity<Subtask> expected = ResponseEntity.ok(s4);
+
+        ResponseEntity<Subtask> result = sut.add(s4);
+
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestCardRepository.SAVE);
+
+        List<Subtask> updated = new ArrayList<>();
+        updated.add(s1);
+        updated.add(s4);
+        updated.add(s3);
+
+        assertEquals(expected, result);
+        assertEquals(expectedCalls, repo.getCalls());
+        assertEquals(updated, repo.getSubtasks());
+    }
+
+    @Test
+    void addTest2(){
+        Subtask s4 = new Subtask(null, false, 3, null, 0);
+        s4.id = 2;
+        assertThrows(Exception.class, ()->{sut.add(s4);});
+    }
 }
