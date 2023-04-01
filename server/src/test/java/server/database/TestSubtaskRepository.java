@@ -1,6 +1,5 @@
 package server.database;
 
-import commons.BoardList;
 import commons.Subtask;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -212,7 +211,8 @@ public class TestSubtaskRepository implements SubtaskRepository{
 
     @Override
     public <S extends Subtask, R> R findBy(Example<S> example,
-                                           Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+                                           Function<FluentQuery.FetchableFluentQuery<S>,
+                                               R> queryFunction) {
         return null;
     }
 }
