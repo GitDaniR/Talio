@@ -157,4 +157,25 @@ public class SubtaskServiceTest {
         assertThrows(Exception.class, ()->{sut.updateIndexById(12, "18");});
     }
 
+    @Test
+    void updateTitle() throws Exception {
+        Subtask result = sut.updateTitleById(2, "title");
+
+        Subtask expected = new Subtask("title", false, 1, null, 0);
+        expected.id = 2;
+
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestSubtaskRepository.FIND_BY_ID);
+        expectedCalls.add(TestSubtaskRepository.SAVE);
+
+
+        assertEquals(expected, result);
+        assertEquals(expectedCalls, repo.getCalls());
+    }
+
+    @Test
+    void updateTitle2(){
+        assertThrows(Exception.class, ()->{sut.updateTitleById(12, "title");});
+    }
+
 }
