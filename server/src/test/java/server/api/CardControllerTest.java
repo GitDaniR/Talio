@@ -3,7 +3,6 @@ package server.api;
 import commons.Board;
 import commons.BoardList;
 import commons.Card;
-import org.apache.coyote.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -18,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CardControllerTest {
 
+    private TestSimpMessagingTemplate simp;
     private TestCardRepository cardRepo;
     private TestBoardListRepository listRepo;
 
@@ -30,6 +30,7 @@ public class CardControllerTest {
 
     @BeforeEach
     public void setup() {
+        simp = new TestSimpMessagingTemplate(new TestMessageChannel());
         cardRepo = new TestCardRepository();
         listRepo = new TestBoardListRepository();
         boardRepo = new TestBoardRepository();
@@ -45,7 +46,7 @@ public class CardControllerTest {
         cards.add(c2);
         cards.add(c3);
         cardRepo.setCards(cards);
-        sut = new CardController(new CardService(cardRepo, listRepo),null);
+        sut = new CardController(new CardService(cardRepo, listRepo), simp);
     }
 
     @Test
