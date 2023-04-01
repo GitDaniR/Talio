@@ -14,6 +14,8 @@ import java.util.Optional;
 import java.util.function.Function;
 
 public class TestSubtaskRepository implements SubtaskRepository{
+    public static final String FIND_BY_ID = "Find By Id";
+    public static final String EXISTS_BY_ID = "Exists By Id";
     private List<String> calls;
     private List<Subtask> subtasks;
 
@@ -28,6 +30,10 @@ public class TestSubtaskRepository implements SubtaskRepository{
 
     public void call(String method) {
         this.calls.add(method);
+    }
+
+    public List<String> getCalls(){
+        return calls;
     }
 
     @Override
@@ -97,11 +103,19 @@ public class TestSubtaskRepository implements SubtaskRepository{
 
     @Override
     public Optional<Subtask> findById(Integer integer) {
+        call(FIND_BY_ID);
+        for(Subtask s: subtasks){
+            if(s.id == integer) return Optional.of(s);
+        }
         return Optional.empty();
     }
 
     @Override
     public boolean existsById(Integer integer) {
+        call(EXISTS_BY_ID);
+        for(Subtask s: subtasks){
+            if(s.id == integer) return true;
+        }
         return false;
     }
 
