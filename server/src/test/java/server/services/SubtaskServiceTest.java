@@ -97,8 +97,13 @@ public class SubtaskServiceTest {
         expectedCalls.add(TestSubtaskRepository.DELETE_BY_ID);
 
         List<Subtask> updated = new ArrayList<>();
-        updated.add(s1);
-        updated.add(s3);
+
+        Subtask test1 = new Subtask("Subtask 1", false, 0, null, 0);
+        test1.id = 1;
+        Subtask test2 = new Subtask("Subtask 3", false, 1, null, 0);
+        test2.id = 3;
+        updated.add(test1);
+        updated.add(test2);
 
         assertEquals(expected, result);
         assertEquals(expectedCalls, repo.getCalls());
