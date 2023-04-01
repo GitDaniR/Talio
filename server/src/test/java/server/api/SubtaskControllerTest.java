@@ -11,6 +11,7 @@ import server.database.TestSimpMessagingTemplate;
 import server.database.TestSubtaskRepository;
 import server.services.SubtaskService;
 
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,6 +77,42 @@ public class SubtaskControllerTest {
     @Test
     void getByIdTest2(){
         ResponseEntity<Subtask> result = sut.getById(12);
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+    }
+
+    @Test
+    void addTest(){
+        Subtask s4 = new Subtask("Subtask 4", false, 3, null, 0);
+        s4.id = 4;
+        ResponseEntity<Subtask> result = sut.add(s4);
+
+        List<Subtask> expected = new ArrayList<>();
+        Subtask test1 = new Subtask("Subtask 1", false, 0, null, 0);
+        test1.id = 1;
+        Subtask test2 = new Subtask("Subtask 2", false, 1, null, 0);
+        test2.id = 2;
+        Subtask test3 = new Subtask("Subtask 3", false, 2, null, 0);
+        test3.id = 3;
+        Subtask test4 = new Subtask("Subtask 4", false, 3, null, 0);
+        test4.id = 4;
+        expected.add(test1);
+        expected.add(test2);
+        expected.add(test3);
+        expected.add(test4);
+        List<Subtask> res = sut.getAll();
+        assertEquals(ResponseEntity.ok(s4), result);
+        assertEquals(expected, res);
+
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add("/topic/subtasks");
+        assertEquals(expectedCalls, simp.getDestinations());
+    }
+
+    @Test
+    void addTest2(){
+        Subtask s4 = new Subtask(null, false, 3, null, 0);
+        s4.id = 4;
+        ResponseEntity<Subtask> result = sut.add(s4);
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
     }
 }
