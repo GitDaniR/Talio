@@ -175,7 +175,7 @@ public class TagControllerTest {
 
     @Test
     void updateTitleTest2(){
-        ResponseEntity<Tag> result = sut.updateColorById(12, "title");
+        ResponseEntity<Tag> result = sut.updateTitleById(12, "title");
         assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
     }
 
