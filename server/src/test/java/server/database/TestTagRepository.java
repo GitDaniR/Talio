@@ -93,8 +93,17 @@ public class TestTagRepository implements TagRepository{
 
     @Override
     public <S extends Tag> S save(S entity) {
-        return null;
+        call(SAVE);
+        for(int i = 0; i < tags.size(); i++){
+            if(tags.get(i).id == entity.id){
+                tags.set(i, entity);
+                return (S) tags.get(i);
+            }
+        }
+        tags.add(entity);
+        return (S) tags.get(tags.size() - 1);
     }
+
 
     @Override
     public <S extends Tag> List<S> saveAll(Iterable<S> entities) {
