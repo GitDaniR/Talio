@@ -61,6 +61,10 @@ public class WelcomePageCtrl {
         this.server = server;
     }
 
+    public void showHelpPage(){
+        mainCtrl.showHelp();
+    }
+
     /**
      * Connects to the server the user inputs in the field "chosenServer"
      */
