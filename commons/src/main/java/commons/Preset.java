@@ -22,12 +22,12 @@ public class Preset {
             mappedBy = "preset",
             cascade = CascadeType.PERSIST
     )
-    private List<Card> cards;
+    public List<Card> cards;
     @ManyToOne
     @JoinColumn(name = "boardId", insertable = false, updatable = false)
     @JsonIgnore
-    private Board board;
-    private int boardId;
+    public Board board;
+    public int boardId;
 
     public Preset(){}
 
