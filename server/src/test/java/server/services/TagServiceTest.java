@@ -114,6 +114,9 @@ public class TagServiceTest {
         assertThrows(Exception.class, ()->{sut.deleteById(12);});
     }
 
-
+    @Test
+    void getRepoTest(){
+        assertEquals(repo, sut.getRepo());
+    }
 
 }
