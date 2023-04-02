@@ -103,13 +103,23 @@ public class TestTagRepository implements TagRepository{
 
     @Override
     public Optional<Tag> findById(Integer integer) {
+        call(FIND_BY_ID);
+        for(Tag t: tags){
+            if(t.id == integer) return Optional.of(t);
+        }
         return Optional.empty();
     }
 
+
     @Override
     public boolean existsById(Integer integer) {
+        call(EXISTS_BY_ID);
+        for(Tag t: tags){
+            if(t.id == integer) return true;
+        }
         return false;
     }
+
 
     @Override
     public void flush() {

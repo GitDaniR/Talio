@@ -4,12 +4,13 @@ import commons.Subtask;
 import commons.Tag;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.ResponseEntity;
 import server.database.TestTagRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TagServiceTest {
     private TestTagRepository repo;
@@ -38,4 +39,21 @@ public class TagServiceTest {
     public void constructorTest(){
         assertNotNull(sut);
     }
+
+    @Test
+    void getByIdTest() throws Exception {
+        ResponseEntity<Tag> expected = ResponseEntity.ok(t2);
+        ResponseEntity<Tag> result = sut.getById(2);
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestTagRepository.EXISTS_BY_ID);
+        expectedCalls.add(TestTagRepository.FIND_BY_ID);
+        assertEquals(expected, result);
+        assertEquals(expectedCalls, repo.getCalls());
+    }
+
+    @Test
+    void getByIdTest2(){
+        assertThrows(Exception.class, ()->{sut.getById(12);});
+    }
+
 }
