@@ -77,4 +77,41 @@ public class TagControllerTest {
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
     }
 
+    @Test
+    void addTest(){
+        Tag t4 = new Tag("Tag 4", "0x777777", null, 0);
+        t4.id = 4;
+        ResponseEntity<Tag> result = sut.add(t4);
+
+        List<Tag> expected = new ArrayList<>();
+        Tag test1 = new Tag("Tag 1", "0xff0000", null, 0);
+        test1.id = 1;
+        Tag test2 = new Tag("Tag 2", "0x00ff00", null, 0);
+        test2.id = 2;
+        Tag test3 = new Tag("Tag 3", "0x0000ff", null, 0);
+        test3.id = 3;
+        Tag test4 = new Tag("Tag 4", "0x777777", null, 0);
+        test4.id = 4;
+        expected.add(test1);
+        expected.add(test2);
+        expected.add(test3);
+        expected.add(test4);
+        List<Tag> res = repo.getTags();
+        assertEquals(ResponseEntity.ok(t4), result);
+        assertEquals(expected, res);
+
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add("/topic/tags");
+        assertEquals(expectedCalls, simp.getDestinations());
+    }
+
+    @Test
+    void addTest2(){
+        Tag s4 = new Tag(null, "0x777777", null, 0);
+        s4.id = 4;
+        ResponseEntity<Tag> result = sut.add(s4);
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+    }
+
+
 }
