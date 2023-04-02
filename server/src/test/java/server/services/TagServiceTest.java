@@ -119,4 +119,26 @@ public class TagServiceTest {
         assertEquals(repo, sut.getRepo());
     }
 
+    @Test
+    void updateColorTest() throws Exception {
+        Tag result = sut.updateColorById(2, "0x777777");
+
+        Tag expected = new Tag("Tag 2", "0x777777", null, 0);
+        expected.id = 2;
+
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestTagRepository.FIND_BY_ID);
+        expectedCalls.add(TestTagRepository.SAVE);
+
+
+        assertEquals(expected, result);
+        assertEquals(expectedCalls, repo.getCalls());
+    }
+
+    @Test
+    void updateStatusTest2(){
+        assertThrows(Exception.class, ()->{sut.updateColorById(12, "0x777777");});
+    }
+
+
 }
