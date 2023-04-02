@@ -139,6 +139,25 @@ public class TagControllerTest {
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
     }
 
+    @Test
+    void updateColorTest(){
+        ResponseEntity<Tag> result = sut.updateColorById(2, "0x777777");
+
+        Tag expected = new Tag("Tag 2", "0x777777", null, 0);
+        expected.id = 2;
+
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add("/topic/tags");
+
+        assertEquals(ResponseEntity.ok(expected), result);
+        assertEquals(expectedCalls, simp.getDestinations());
+    }
+
+    @Test
+    void updateStatusTest2(){
+        ResponseEntity<Tag> result = sut.updateColorById(12, "0x777777");
+        assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
+    }
 
 
 }
