@@ -413,6 +413,39 @@ public class ServerUtils {
                 .get(new GenericType<List<Card>>() {});
     }
 
+    public void editColorBoardBackground(Integer boardId, String newColor) {
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/boards/"+boardId+"/colors/boardBackground") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(newColor, APPLICATION_JSON), Board.class);
+    }
+
+    public void editColorBoardFont(Integer boardId, String newColor) {
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/boards/"+boardId+"/colors/boardFont") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(newColor, APPLICATION_JSON), Board.class);
+    }
+
+    public void editColorListsBackground(Integer boardId, String newColor) {
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/boards/"+boardId+"/colors/listsBackground") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(newColor, APPLICATION_JSON), Board.class);
+    }
+
+    public void editColorListsFont(Integer boardId, String newColor) {
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/boards/"+boardId+"/colors/listsFont") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(newColor, APPLICATION_JSON), Board.class);
+    }
+
+
 //    public void send(String dest, Object o){
 //        session.send(dest,o);
 //    }

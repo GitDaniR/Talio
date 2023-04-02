@@ -1,5 +1,6 @@
 package server.services;
 
+import commons.Tag;
 import org.springframework.stereotype.Service;
 
 import commons.Board;
@@ -79,5 +80,37 @@ public class BoardService {
         }
         repo.updateBoardById(id, title);
         return getById(id);
+    }
+
+    public Board updateColorBoardBackground(Integer id, String color) throws Exception {
+        Board res = repo.findById(id).orElseThrow(
+                ()->new Exception("Tag with id: " + id +" not found")
+        );
+        res.colorBoardBackground = color;
+        return repo.save(res);
+    }
+
+    public Board updateColorBoardFont(Integer id, String color) throws Exception {
+        Board res = repo.findById(id).orElseThrow(
+                ()->new Exception("Tag with id: " + id +" not found")
+        );
+        res.colorBoardFont = color;
+        return repo.save(res);
+    }
+
+    public Board updateColorListsBackground(Integer id, String color) throws Exception {
+        Board res = repo.findById(id).orElseThrow(
+                ()->new Exception("Tag with id: " + id +" not found")
+        );
+        res.colorListsBackground = color;
+        return repo.save(res);
+    }
+
+    public Board updateColorListsFont(Integer id, String color) throws Exception {
+        Board res = repo.findById(id).orElseThrow(
+                ()->new Exception("Tag with id: " + id +" not found")
+        );
+        res.colorListsFont = color;
+        return repo.save(res);
     }
 }
