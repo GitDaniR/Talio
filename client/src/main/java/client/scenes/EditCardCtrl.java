@@ -58,7 +58,7 @@ public class EditCardCtrl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         server.registerForMessages("/topic/subtasks", Integer.class, cardId -> {
-            Platform.runLater(() -> overwriteSubtasks(server.getCardById(cardId).subtasks));
+            Platform.runLater(() -> setCardToEdit(server.getCardById(cardId)));
         });
         server.registerForMessages("/topic/cards/rename", Card.class, card -> {
             if(Objects.equals(card.id, cardToEdit.id))
@@ -127,7 +127,6 @@ public class EditCardCtrl implements Initializable {
             setTextAndRemoveAfterDelay(errorLabel,"Warning: Card title cannot be left blank!");
             return;
         }
-
         try {
             server.editCard(cardToEdit.id, getUpdatedCard());
         } catch (WebApplicationException e) {
@@ -168,10 +167,9 @@ public class EditCardCtrl implements Initializable {
      * which is added to the database through the server
      * @return generated subtask
      */
-    private Subtask generateNewSubtask(){
+    private Subtask saveNewSubtask(){
         Subtask subtaskEntity = new Subtask(subtaskTitle.getText(), false,
                cardToEdit.subtasks.size(),cardToEdit);
-        cardToEdit.subtasks.add(subtaskEntity);
         return server.addSubtask(subtaskEntity);
     }
 
@@ -181,10 +179,11 @@ public class EditCardCtrl implements Initializable {
      */
     public void addSubtask(){
         if(!subtaskTitle.textProperty().get().isEmpty()){
-            generateNewSubtask();
+            saveNewSubtask();
             subtaskTitle.textProperty().set("");
         }
-        cardToEdit = server.getCardById(cardToEdit.getId());
+        //cardToEdit = server.getCardById(cardToEdit.getId());
+        //setValues();
 
     }
 
@@ -192,16 +191,25 @@ public class EditCardCtrl implements Initializable {
      * Method that sets subtasks to be the subtasks of the card
      * (this is called when you first edit a card)
      */
-    public void setSubtasksAndOldValues() {
+    public void setValues() {
+        setOldValues();
+        setSubtasks();
+        setTags();
+    }
+
+    public void setOldValues(){
         title.setText(cardToEdit.title);
         description.setText((cardToEdit.description));
+
+    }
+
+    public void setSubtasks(){
 
         Collections.sort(cardToEdit.subtasks, Comparator.comparingInt(s -> s.index));
         subtasksArray = FXCollections.observableArrayList(cardToEdit.subtasks);
         subtasks.setCellFactory(subtasks1 -> new SubtaskCell(server, mainCtrl));
         subtasks.setItems(subtasksArray);
 
-        setTags();
     }
 
     /**
@@ -243,7 +251,7 @@ public class EditCardCtrl implements Initializable {
      */
     public void setCardToEdit(Card cardToEdit) {
         this.cardToEdit = cardToEdit;
-        setSubtasksAndOldValues();
+        setValues();
     }
 
     /**

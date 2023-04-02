@@ -88,11 +88,12 @@ public class CardController {
 
     }
 
-    @PutMapping("/{id}/list/{listId}")
-    public ResponseEntity<Card> editCardList(@PathVariable int id, @PathVariable Integer listId) {
-        Card res = null;
+    @PutMapping("/{id}/list/{listId}/{index}")
+    public ResponseEntity<Card> editCardList(@PathVariable int id, @PathVariable Integer listId,
+                                             @PathVariable int index) {
+        Card res;
         try {
-            res = cardService.editCardByIdList(id, listId);
+            res = cardService.editCardByIdList(id, listId, index);
         }catch(Exception e){
             return ResponseEntity.notFound().build();
         }

@@ -158,11 +158,11 @@ public class CardServiceTest {
 
     @Test
     public void testEditCardByIdList() throws Exception {
-        Card res = sut.editCardByIdList(0, 1);
+        Card res = sut.editCardByIdList(0, 1, 1);
         List<String> expectedCalls = new ArrayList<>();
         expectedCalls.add(TestCardRepository.FIND_BY_ID);
         expectedCalls.add(TestCardRepository.SAVE);
-        assertEquals(new Card(0, "a", "a", 0, l2, 1), res);
+        assertEquals(new Card(0, "a", "a", 1, l2, 1), res);
         assertEquals(expectedCalls, cardRepo.getCalls());
     }
 
@@ -170,7 +170,7 @@ public class CardServiceTest {
     public void testEditCardByIdListNotFoundCard() throws Exception {
         List<String> expectedCalls = new ArrayList<>();
         expectedCalls.add(TestCardRepository.FIND_BY_ID);
-        assertThrows(Exception.class, () -> sut.editCardByIdList(100, 1));
+        assertThrows(Exception.class, () -> sut.editCardByIdList(100, 1, 1));
         assertEquals(expectedCalls, cardRepo.getCalls());
     }
 
@@ -178,7 +178,7 @@ public class CardServiceTest {
     public void testEditCardByIdListNotFoundList() throws Exception {
         List<String> expectedCalls = new ArrayList<>();
         expectedCalls.add(TestCardRepository.FIND_BY_ID);
-        assertThrows(Exception.class, () -> sut.editCardByIdList(1, 100));
+        assertThrows(Exception.class, () -> sut.editCardByIdList(1, 100, 1));
         assertEquals(expectedCalls, cardRepo.getCalls());
     }
 
@@ -191,6 +191,38 @@ public class CardServiceTest {
         expectedCalls.add(TestCardRepository.FIND_BY_ID);
         expectedCalls.add(TestCardRepository.SAVE);
         assertEquals(new Card(0, "a", "a", 0, l1, 0), res);
+    }
+
+    @Test
+    public void testEditCardByIdListInsideUp() throws Exception{
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestCardRepository.FIND_BY_ID);
+        expectedCalls.add(TestCardRepository.MOVE_BETWEEN_UP);
+        expectedCalls.add(TestCardRepository.SAVE);
+        sut.editCardByIdList(0,0, 2);
+        assertEquals(expectedCalls, cardRepo.getCalls());
+
+    }
+
+    @Test
+    public void testEditCardByIdListInsideDown() throws Exception{
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestCardRepository.FIND_BY_ID);
+        expectedCalls.add(TestCardRepository.MOVE_BETWEEN_DOWN);
+        expectedCalls.add(TestCardRepository.SAVE);
+        sut.editCardByIdList(2,0, 0);
+        assertEquals(expectedCalls, cardRepo.getCalls());
+
+    }
+
+    @Test
+    public void testEditCardByIdListOutside() throws Exception{
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestCardRepository.FIND_BY_ID);
+        expectedCalls.add(TestCardRepository.SHIFT_CARDS_LEFT);
+        expectedCalls.add(TestCardRepository.SHIFT_CARDS_RIGHT);
+        expectedCalls.add(TestCardRepository.SAVE);
+        sut.editCardByIdList(0,1, 0);
         assertEquals(expectedCalls, cardRepo.getCalls());
     }
 
@@ -201,6 +233,22 @@ public class CardServiceTest {
         List<String> expectedCalls = new ArrayList<>();
         expectedCalls.add(TestCardRepository.FIND_BY_ID);
         assertThrows(Exception.class, () -> sut.removeTag(100, tag));
+        assertEquals(expectedCalls, cardRepo.getCalls());
+    }
+
+    @Test
+    public void testEditCardByIdListListNotFound() throws Exception{
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestCardRepository.FIND_BY_ID);
+        assertThrows(Exception.class,()->sut.editCardByIdList(0,4, 0));
+        assertEquals(expectedCalls, cardRepo.getCalls());
+    }
+
+    @Test
+    public void testEditCardByIdListCardNotFound() throws Exception{
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestCardRepository.FIND_BY_ID);
+        assertThrows(Exception.class,()->sut.editCardByIdList(0,4, 0));
         assertEquals(expectedCalls, cardRepo.getCalls());
     }
 }

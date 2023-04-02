@@ -148,7 +148,7 @@ public class CardControllerTest {
     public void testEditCardList() {
         BoardList l2 = new BoardList(1, "Second", b1, 0);
         listRepo.save(l2);
-        ResponseEntity<Card> cardResponse = sut.editCardList(1, 1);
+        ResponseEntity<Card> cardResponse = sut.editCardList(1, 1, 1);
         assertEquals(HttpStatus.OK, cardResponse.getStatusCode());
         assertEquals(new Card(1, "b", "b", 1, l2, 1), cardResponse.getBody());
         List<String> expectedCalls = new ArrayList<>();
@@ -158,7 +158,7 @@ public class CardControllerTest {
 
     @Test
     public void testEditCardListNotFound() {
-        ResponseEntity<Card> cardResponse = sut.editCardList(1, 2);
+        ResponseEntity<Card> cardResponse = sut.editCardList(1, 2, 1);
         assertEquals(HttpStatus.NOT_FOUND, cardResponse.getStatusCode());
         List<String> expectedCalls = new ArrayList<>();
         assertEquals(expectedCalls, simp.getDestinations());

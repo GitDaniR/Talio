@@ -74,7 +74,8 @@ public class WorkspaceAdminCtrl implements Initializable {
     }
 
     private void removeBoard(int boardId){
-        if(user.hasBoardAlready(boardId))
+        //This throws nullpointer exception cause user is null
+        if(user!=null && user.hasBoardAlready(boardId))
             boardsDisplay.getChildren().
                     removeIf(e ->
                             ((BoardWorkspaceCtrl)e.getUserData()).getBoard().id==boardId);
