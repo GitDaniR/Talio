@@ -358,7 +358,11 @@ public class ServerUtils {
                 .put(Entity.entity(String.valueOf(index), APPLICATION_JSON), String.class);
     }
 
-    private StompSession session = connect("ws://localhost:8080/websocket");
+    private StompSession session;
+
+    public void initializeStompSession(String url){
+        session = connect("ws://"+url+"/websocket");
+    }
 
     private StompSession connect(String url){
         var client = new StandardWebSocketClient();

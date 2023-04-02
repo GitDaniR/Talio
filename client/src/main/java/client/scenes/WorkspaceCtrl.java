@@ -54,6 +54,10 @@ public class WorkspaceCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+    }
+
+    public void subscribeForSocketsWorkspace(){
         server.registerForMessages("/topic/boards/removed", Integer.class, boardId -> {
             Platform.runLater(() -> removeBoard(boardId));
         });

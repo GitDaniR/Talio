@@ -369,5 +369,13 @@ public class MainCtrl {
         addRemoveTagsCtrl.setCardToEdit(card);
         addRemoveTagsCtrl.setTags();
     }
+
+    public void registerForAllSockets() {
+        editCardCtrl.subscribeToSocketsEditCardCtrl();
+        workspaceCtrl.subscribeForSocketsWorkspace();
+        workspaceAdminCtrl.subscribeForSocketsWorkspaceAdmin();
+        boardOverviewCtrl.subscribeToSocketsBoardOverview();
+        tagOverviewCtrl.subscribeForSocketsTagOverview();
+    }
 }
 
