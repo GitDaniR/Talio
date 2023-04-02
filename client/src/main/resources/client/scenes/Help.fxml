@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="860.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.HelpCtrl">
+   <children>
+      <Label layoutX="25.0" layoutY="27.0" prefHeight="35.0" prefWidth="209.0" text="Welcome to TALIO!">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="25.0" layoutY="340.0" text="Tip: double click on the board title while in the overview to change it!" />
+      <Text layoutX="25.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To get started, you need to input the following: - ip address (which is usually localhost:8080) of the server you wish to connect to (the server you choose will dictate what information is already available - if any and where your data will be saved)- username - this will represent who you are within the system - all the boards you have joined will be associated with your username- admin password - this is optional and is only required when you want to connect as a privileged user - you will be able to see all boards and have access to their password; contact the system administator to request itAfter connecting, you can create a new board to get started. Within boards, you can create lists, tasks and tags to assign to tasks. Once a task is made, it can be double clicked to open it.  From there, the title can be changed, a description and subtasks can be added and tags managed. Additional color customization is also avaialbe in the same menu" wrappingWidth="366.0" />
+      <Text layoutX="430.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Shortcut guide:" />
+      <Button layoutX="25.0" layoutY="484.0" mnemonicParsing="false" onAction="#back" text="Back" />
+   </children>
+</AnchorPane>
