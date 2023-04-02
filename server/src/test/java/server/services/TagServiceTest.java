@@ -84,5 +84,36 @@ public class TagServiceTest {
         assertThrows(Exception.class, ()->{sut.add(t4);});
     }
 
+    @Test
+    void deleteTest() throws Exception {
+        ResponseEntity<Tag> expected = ResponseEntity.ok(t2);
+
+        ResponseEntity<Tag> result = sut.deleteById(2);
+
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestTagRepository.EXISTS_BY_ID);
+        expectedCalls.add(TestTagRepository.FIND_BY_ID);
+        expectedCalls.add(TestTagRepository.DELETE_BY_ID);
+
+        List<Tag> updated = new ArrayList<>();
+
+        Tag test1 = new Tag("Tag 1", "0xff0000", null, 0);
+        test1.id = 1;
+        Tag test2 = new Tag("Tag 3", "0x0000ff", null, 0);;
+        test2.id = 3;
+        updated.add(test1);
+        updated.add(test2);
+
+        assertEquals(expected, result);
+        assertEquals(expectedCalls, repo.getCalls());
+        assertEquals(updated, repo.getTags());
+    }
+
+    @Test
+    void deleteTest2(){
+        assertThrows(Exception.class, ()->{sut.deleteById(12);});
+    }
+
+
 
 }
