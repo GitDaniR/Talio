@@ -161,6 +161,8 @@ public class CardServiceTest {
         Card res = sut.editCardByIdList(0, 1, 1);
         List<String> expectedCalls = new ArrayList<>();
         expectedCalls.add(TestCardRepository.FIND_BY_ID);
+        expectedCalls.add(TestCardRepository.SHIFT_CARDS_LEFT);
+        expectedCalls.add(TestCardRepository.SHIFT_CARDS_RIGHT);
         expectedCalls.add(TestCardRepository.SAVE);
         assertEquals(new Card(0, "a", "a", 1, l2, 1), res);
         assertEquals(expectedCalls, cardRepo.getCalls());
