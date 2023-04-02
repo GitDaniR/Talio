@@ -38,8 +38,8 @@ public class TestBoardListRepository implements BoardListRepository{
         return this.calls;
     }
 
-    public void setBoardLists(List<BoardList> cards){
-        this.boardLists = cards;
+    public void setBoardLists(List<BoardList> lists){
+        this.boardLists = lists;
     }
 
     public List<BoardList> getBoardLists(){
