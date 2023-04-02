@@ -1,12 +1,9 @@
 package server.services;
 
-import commons.Tag;
 import org.springframework.stereotype.Service;
-
 import commons.Board;
 import org.springframework.transaction.annotation.Transactional;
 import server.database.BoardRepository;
-
 import java.util.List;
 
 @Service
