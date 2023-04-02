@@ -113,5 +113,32 @@ public class TagControllerTest {
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
     }
 
+    @Test
+    void deleteTest(){
+        ResponseEntity<Tag> result = sut.deleteById(2);
+
+        List<Tag> expected = new ArrayList<>();
+        Tag test1 = new Tag("Tag 1", "0xff0000", null, 0);
+        test1.id = 1;
+        Tag test3 = new Tag("Tag 3", "0x0000ff", null, 0);
+        test3.id = 3;
+        expected.add(test1);
+        expected.add(test3);
+        List<Tag> res = sut.getAll();
+        assertEquals(ResponseEntity.ok(t2), result);
+        assertEquals(expected, res);
+
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add("/topic/tags");
+        assertEquals(expectedCalls, simp.getDestinations());
+    }
+
+    @Test
+    void deleteTest2(){
+        ResponseEntity<Tag> result = sut.deleteById(12);
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+    }
+
+
 
 }
