@@ -222,7 +222,7 @@ public class TestUserRepository implements UserRepository {
 
     @Override
     public <S extends User, R> R findBy(Example<S> example,
-                                        Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+        Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         return null;
     }
 }
