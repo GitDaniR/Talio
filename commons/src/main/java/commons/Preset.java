@@ -9,15 +9,14 @@ import javax.persistence.*;
 import java.util.List;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
+@Entity
 public class Preset {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Integer id;
-
-    private String backgroundColor;
-
-    private String font;
+    public String backgroundColor;
+    public String font;
 
     @OneToMany(
             mappedBy = "preset",
