@@ -154,10 +154,29 @@ public class TagControllerTest {
     }
 
     @Test
-    void updateStatusTest2(){
+    void updateColorTest2(){
         ResponseEntity<Tag> result = sut.updateColorById(12, "0x777777");
         assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
     }
 
+    @Test
+    void updateTitleTest(){
+        ResponseEntity<Tag> result = sut.updateTitleById(2, "title");
+
+        Tag expected = new Tag("title", "0x00ff00", null, 0);
+        expected.id = 2;
+
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add("/topic/tags");
+
+        assertEquals(ResponseEntity.ok(expected), result);
+        assertEquals(expectedCalls, simp.getDestinations());
+    }
+
+    @Test
+    void updateTitleTest2(){
+        ResponseEntity<Tag> result = sut.updateColorById(12, "title");
+        assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
+    }
 
 }
