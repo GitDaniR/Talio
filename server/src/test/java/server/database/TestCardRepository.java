@@ -22,6 +22,10 @@ public class TestCardRepository implements CardRepository{
     public static final String SAVE = "Save";
     public static final String DELETE_BY_ID = "Delete By Id";
 
+    public static final String MOVE_BETWEEN_UP = "Shift Cards Up between indexes";
+
+    public static final String MOVE_BETWEEN_DOWN = "Shift Cards Down between indexes";
+
     private List<String> calls;
     private List<Card> cards;
 
@@ -63,6 +67,27 @@ public class TestCardRepository implements CardRepository{
                 c.index --;
             }
         }
+    }
+
+    @Override
+    public void shiftCardsBetweenDown(int index1, int index2, int listId) {
+        call(MOVE_BETWEEN_DOWN);
+        for(Card c: cards){
+            if(c.listId == listId && c.index>=index1 && c.index<index2){
+                c.index++;
+            }
+        }
+    }
+
+    @Override
+    public void shiftCardsBetweenUp(int index1, int index2, int listId) {
+        call(MOVE_BETWEEN_UP);
+        for(Card c: cards){
+            if(c.listId == listId && c.index>index1 && c.index<=index2){
+                c.index--;
+            }
+        }
+
     }
 
     @Override

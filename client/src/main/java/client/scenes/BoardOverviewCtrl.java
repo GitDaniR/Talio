@@ -7,8 +7,13 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.io.IOException;
 import com.google.inject.Inject;
-import commons.*;
+import commons.Board;
+import commons.BoardList;
+import commons.Card;
+import commons.User;
+import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,11 +21,15 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
+import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollBar;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseDragEvent;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -35,6 +44,8 @@ public class BoardOverviewCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    public ScrollPane scene;
+    public AnchorPane everything;
 
     private ObservableList<BoardList> data;
 
@@ -49,6 +60,11 @@ public class BoardOverviewCtrl implements Initializable {
     private Label title;
     @FXML
     private Label copiedToClipboardMessage;
+
+    private Timeline scrolltimeline = new Timeline();
+    private double scrollVelocity = 0;
+
+    private int speed = 50;
 
     @Inject
     public BoardOverviewCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -67,6 +83,7 @@ public class BoardOverviewCtrl implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        setupScrolling();
         server.registerForMessages("/topic/lists", BoardList.class, list -> {
             Platform.runLater(() -> addListToBoard(list));
         });
@@ -90,6 +107,10 @@ public class BoardOverviewCtrl implements Initializable {
         });
         server.registerForMessages("/topic/boards/rename", Board.class, newBoard -> {
             Platform.runLater(() -> { if(board.id == newBoard.id) title.setText(newBoard.title); });
+        });
+        //Basically I just need to update the card
+        server.registerForMessages("/topic/subtasks", Integer.class, id -> {
+            Platform.runLater(() -> renameCardById(id, ""));
         });
     }
 
@@ -167,6 +188,7 @@ public class BoardOverviewCtrl implements Initializable {
             assignListToController(listObjectController,list);
             mainBoard.getChildren().add(listObject);
             setDragReleaseList(listObject);
+            refresh();
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -177,6 +199,7 @@ public class BoardOverviewCtrl implements Initializable {
                 .filter(e -> ((ListCtrl)e.getUserData()).getListId()==id)
                 .findFirst()
                 .ifPresent(mainBoard.getChildren()::remove);
+        refresh();
     }
 
     private void renameListById(int id,String title){
@@ -184,6 +207,7 @@ public class BoardOverviewCtrl implements Initializable {
                 .filter(e -> ((ListCtrl)e.getUserData()).getListId()==id)
                 .findFirst()
                 .ifPresent(e -> ((ListCtrl) e.getUserData()).setListTitleText(title));
+        refresh();
     }
 
     private void addCardToBoard(Card card){
@@ -202,12 +226,14 @@ public class BoardOverviewCtrl implements Initializable {
                         e.printStackTrace();
                     }
                 });
+        refresh();
     }
 
     private void deleteCardById(int id){
         for(Node n : mainBoard.getChildren())
             ((ListCtrl) n.getUserData()).getCardBox().getChildren().
                 removeIf(e -> ((CardCtrl)e.getUserData()).getCardId()==id);
+        refresh();
     }
 
     private void renameCardById(int id, String title){
@@ -215,8 +241,8 @@ public class BoardOverviewCtrl implements Initializable {
             for(Node c : ((ListCtrl) n.getUserData()).getCardBox().getChildren())
                 if(((CardCtrl)c.getUserData()).getCardId()==id)
                     ((CardCtrl)c.getUserData()).setCardAndAttributes(server.getCardById(id));
+        refresh();
     }
-
     //endregion
 
     //region METHODS FOR REFRESH
@@ -254,9 +280,9 @@ public class BoardOverviewCtrl implements Initializable {
 
         CardCtrl cardObjectController = (CardCtrl) cardObject.getUserData();
         //Getting the controller
-        cardObjectController.setCardAndAttributes(currentCard);
         //Setting the card to be represented and also changing the values accordingly
         cardObjectController.setServerAndCtrl(server,mainCtrl);
+        cardObjectController.setCardAndAttributes(currentCard);
         //Just as done with lists
 
         //if card is double-clicked editCard scene is shown
@@ -289,7 +315,7 @@ public class BoardOverviewCtrl implements Initializable {
 
     public void refresh() {
         //If we are dragging we don't want to recreate all cards
-        if(isDragging) return;
+        //if(isDragging) return;
         board = server.getBoardByID(board.id);
         title.setText(board.title);
         setHandlerTitle();
@@ -329,27 +355,111 @@ public class BoardOverviewCtrl implements Initializable {
     //region DRAG AND DROP METHODS
 
     /**
-     * method that activates snapshot image being available while dragging the card
+     * Method that sets up the animation
+     * for scrolling while drag and dropping the card
+     */
+    private void setupScrolling() {
+        scrolltimeline.setCycleCount(Timeline.INDEFINITE);
+        scrolltimeline.getKeyFrames().add(new KeyFrame(Duration.millis(20),
+                (actionEvent) -> { dragScroll();}));
+        scene.setOnMouseDragExited(event -> {
+            if (event.getY() > 0) {
+                scrollVelocity = 1.0 / speed;
+            }
+            else {
+                scrollVelocity = -1.0 / speed;
+            }
+            if (isDragging){
+                scrolltimeline.stop();
+                scrolltimeline.play();
+            }else{
+                scrolltimeline.stop();
+                removePreview(mainBoard);
+            }
+        });
+
+        scene.setOnMouseReleased(event -> {
+            removePreview(mainBoard);
+            scrolltimeline.stop();
+        });
+        scene.setOnMouseDragEntered(event -> {
+            scrolltimeline.stop();
+            isDragging = true;
+        });
+
+        scene.setOnMouseDragOver(event -> {
+            scrolltimeline.stop();
+        });
+
+        scene.setOnMouseDragReleased(event->{
+            scrolltimeline.stop();
+            removePreview(mainBoard);
+            isDragging = false;
+        });
+
+        scene.setOnScroll((ScrollEvent event)-> {
+            scrolltimeline.stop();
+        });
+
+
+    }
+
+    /**
+     * Method that returns the scrollbar to be
+     * scrolled the right amount
+     */
+    private void dragScroll() {
+        ScrollBar sb = getVerticalScrollbar();
+        if (sb != null) {
+            double newValue = sb.getValue() + scrollVelocity;
+            newValue = Math.min(newValue, 1.0);
+            newValue = Math.max(newValue, 0.0);
+            sb.setValue(newValue);
+        }
+    }
+
+    /**
+     * Method that returns the scrollbar for the scrolling
+     * animation
+     * @return
+     */
+    private ScrollBar getVerticalScrollbar() {
+        ScrollBar result = null;
+        for (Node n : scene.lookupAll(".scroll-bar")) {
+            if (n instanceof ScrollBar) {
+                ScrollBar bar = (ScrollBar) n;
+                if (bar.getOrientation().equals(Orientation.VERTICAL)) {
+                    result = bar;
+                }
+            }
+        }
+        return result;
+    }
+
+
+    /**
+     * Method that makes the snapshot of card to be visible
+     * while drag&dropping the card
+     * @param board
+     * @param card
      */
     private void addPreview(final FlowPane board, final HBox card){
         ImageView imageView = new ImageView(card.snapshot(null, null));
         imageView.setManaged(false);
         imageView.setMouseTransparent(true);
         imageView.setVisible(false);
-        mainBoard.getChildren().add(imageView);
-        mainBoard.setUserData(imageView);
-        mainBoard.setOnMouseDragOver(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                imageView.setVisible(true);
-                imageView.relocate(event.getX(), event.getY());
-            }
+        board.getChildren().add(imageView);
+        board.setUserData(imageView);
+        board.setOnMouseDragOver(event -> {
+            imageView.setVisible(true);
+            imageView.relocate(event.getX(), event.getY());
         });
     }
 
-
     /**
-     *  method that stops showing preview when dragging is finished
+     * Method that removes the snapsshot of the card
+     * when the card is dropped
+     * @param board - board containing the cards
      */
     private void removePreview(final FlowPane board){
         isDragging = false;
@@ -358,12 +468,13 @@ public class BoardOverviewCtrl implements Initializable {
         board.setUserData(null);
     }
 
+
     /**
-     * method that highlights the card when it is dragged and dropped
+     * Method that highlights the card when its dragging starts,
+     * @param card - card to be highlighted
      */
     private void setDragAndDropEffect(final HBox card){
         String initialStyle = card.getStyle();
-
         card.setOnMouseDragEntered(new EventHandler<MouseDragEvent>() {
             @Override
             public void handle(MouseDragEvent event) {
@@ -372,17 +483,18 @@ public class BoardOverviewCtrl implements Initializable {
             }
         });
 
-        card.setOnMouseDragExited(new EventHandler<MouseDragEvent>() {
-            @Override
-            public void handle(MouseDragEvent event) {
-                card.setStyle(initialStyle);
-            }
-        });
-
+        card.setOnMouseDragExited(event -> {card.setStyle(initialStyle);});
     }
 
     /**
-     * method that sends information to the server about card changes
+     * Method that adjusts the card according to the new index
+     * set up by the user's
+     * @param indexInitialList - index of the list that the card
+     *                         was being dragged of
+     * @param indexFinalList - index of the list on which the card
+     *                       was dropped
+     * @param indexCardDragged - index of the card inside the initial list
+     * @param indexCardsDropped - index on which card should be dropped
      */
     private void adjustCards(int indexInitialList, int indexFinalList,
                              int indexCardDragged, int indexCardsDropped){
@@ -393,46 +505,63 @@ public class BoardOverviewCtrl implements Initializable {
                 (indexInitialList == indexFinalList)){
             return;
         }
-
         BoardList initialList = ((ListCtrl)mainBoard.getChildren().
                 get(indexInitialList).getUserData()).getBoardList();
         BoardList finalList = ((ListCtrl)mainBoard.getChildren().
                 get(indexFinalList).getUserData()).getBoardList();
         Card card = initialList.getCardByIndex(indexCardDragged);
 
-        //server.deleteCard(card.getId());
-        server.updateCardList(card, finalList.getId());
+        server.updateCardList(card, finalList.getId(), indexCardsDropped);
         refresh();
-
     }
 
     /**
-     * method that handles the drag event on the list
+     * Method to get the list from a node that was gotten from a gesture
+     * @param root the node of the gesture
+     * @return
+     */
+    private Node getListFromGestureNode(Node root){
+        Node cardSelection = root.getParent();
+        Node scrollPane = cardSelection.getParent();
+        Node scrollPaneSkin = scrollPane.getParent().getParent();
+        return scrollPaneSkin.getParent();
+    }
+
+    /**
+     * Method that handles the event when the card
+     * is dropped on a list and not on a specific card
+     * @param list - list on which card was dropped
      */
     private void setDragReleaseList(Node list){
         list.setOnMouseDragReleased(new EventHandler<MouseDragEvent>() {
             @Override
             public void handle(MouseDragEvent event) {
                 removePreview(mainBoard);
-
+                double eventY = event.getY();
                 Node initial = (Node) event.getGestureSource();
                 Node initialCardsSection = initial.getParent();
-                Node scrollPane = initialCardsSection.getParent();
-                Node scrollPaneSkin = scrollPane.getParent().getParent();
-                Node initialList = scrollPaneSkin.getParent();
+                Node initialList = getListFromGestureNode(initial);
                 int indexOfInitialList = mainBoard.getChildren().indexOf(initialList);
                 Node targetList = (Node) event.getSource();
-                int targetCardsSection = ((ListCtrl)targetList.getUserData()).
-                        getAmountOfCardsInList();
+                ScrollPane targetScrollPane = (ScrollPane) ((VBox)targetList).getChildren().get(2);
+                VBox targetCardsSection = (VBox) targetScrollPane.getContent();
                 int indexOfList = mainBoard.getChildren().indexOf(targetList);
-
                 HBox draggedCard = (HBox) initial;
                 VBox draggedCardsSection = (VBox) initialCardsSection;
                 int indexOfDraggingNode = draggedCardsSection.getChildren().indexOf(draggedCard);
                 event.consume();
-                if(indexOfList == indexOfInitialList)return;
-                adjustCards(indexOfInitialList, indexOfList,
-                        indexOfDraggingNode, targetCardsSection);
+                if(indexOfList == indexOfInitialList) {
+                    Bounds  parentBounds = targetScrollPane.getBoundsInParent();
+                    double startY = parentBounds.getMinY();
+                    if(eventY<startY){
+                        adjustCards(indexOfInitialList, indexOfList, indexOfDraggingNode, 0);
+                    }else{
+                        adjustCards(indexOfInitialList, indexOfList, indexOfDraggingNode,
+                                targetCardsSection.getChildren().size()-1);}
+                }else{
+                    adjustCards(indexOfInitialList, indexOfList, indexOfDraggingNode,
+                            targetCardsSection.getChildren().size());
+                }
             }
         });
         for(int i = 0;i<((VBox)list).getChildren().size();i++){
@@ -448,11 +577,11 @@ public class BoardOverviewCtrl implements Initializable {
                 }
             }
         }
-
     }
 
     /**
-     * method that handles the drag event on the board
+     * Method that handles the event when card is dropped on a board
+     * and not inside the list
      */
     private void setDragReleaseBoard(){
         mainBoard.setOnMouseDragReleased(event -> {
@@ -461,10 +590,11 @@ public class BoardOverviewCtrl implements Initializable {
     }
 
     /**
-     * sets drag and drop feature to cards
+     * Method that sets support for drag and dropping tha card
+     * @param cardNumber -  index of the card
+     * @param card - card to add drag&drop for
      */
     private void addDragAndDrop(int cardNumber, final HBox card){
-        //VBox cardsBox = (VBox) ((VBox)list).getChildren().get(2);
         card.setOnDragDetected(new EventHandler<MouseEvent>()
         {
             @Override
@@ -484,23 +614,22 @@ public class BoardOverviewCtrl implements Initializable {
                 //getting the index of the list that holds the card being dragged
                 Node initial = (Node) event.getGestureSource();
                 Node initialCardsSection = initial.getParent();
-                Node initialList = initialCardsSection.getParent();
+                Node initialList = getListFromGestureNode(initial);
                 int indexOfInitialList = mainBoard.getChildren().indexOf(initialList);
                 // getting the index of the list that card is dropped on
                 Node target = (Node) event.getSource();
                 Node targetCardsSection = target.getParent();
-                Node targetList = targetCardsSection.getParent();
+                Node targetList = getListFromGestureNode(target);
                 int indexOfList = mainBoard.getChildren().indexOf(targetList);
 
-                HBox draggedCard = (HBox) initial;
                 VBox draggedCardsSection = (VBox) initialCardsSection;
 
                 VBox droppedCardsSection = (VBox) targetCardsSection;
-                int indexOfDraggingNode = draggedCardsSection.getChildren().indexOf(draggedCard);
+                int indexOfDraggingNode = draggedCardsSection.getChildren().indexOf(initial);
                 int indexOfDropTarget = droppedCardsSection.getChildren().indexOf(target);
                 if(indexOfDropTarget == -1){
                     if(indexOfList == indexOfInitialList)
-                        indexOfDropTarget = Math.max(cardNumber-1,0);
+                        indexOfDropTarget = Math.max(indexOfDraggingNode,0);
                     else
                         indexOfDropTarget = droppedCardsSection.getChildren().size();
                 }
@@ -514,4 +643,9 @@ public class BoardOverviewCtrl implements Initializable {
 
     }
     //endregion
+
+    public void showTags(){
+        mainCtrl.showTagOverview(this.board);
+    }
+
 }

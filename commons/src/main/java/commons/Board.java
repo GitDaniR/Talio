@@ -26,6 +26,13 @@ public class Board {
     )
     public List<BoardList> lists = new ArrayList<>();
 
+    @OneToMany(
+            mappedBy = "board",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    public List<Tag> tags = new ArrayList<>();
+
     @ManyToMany
     @JoinTable(
             name = "boardIsJoinedByUser",
