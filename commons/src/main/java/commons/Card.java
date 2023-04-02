@@ -41,6 +41,12 @@ public class Card {
     public BoardList list;
 
     public Integer listId;
+    @ManyToOne
+    @JoinColumn(name = "presetId", insertable = false, updatable = false)
+    @JsonIgnore
+    public Preset preset;
+    public Integer presetId;
+
 
     public Card(String title, String description, int index, BoardList list, Integer listId) {
         this.title = title;
@@ -72,6 +78,11 @@ public class Card {
     public void setList(BoardList list) {
         this.list = list;
         this.listId = list.getId();
+    }
+
+    public void setPreset(Preset preset) {
+        this.preset = preset;
+        this.presetId = preset.id;
     }
 
     public void addTag(Tag tag) {
