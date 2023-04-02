@@ -136,9 +136,10 @@ public class TagServiceTest {
     }
 
     @Test
-    void updateStatusTest2(){
+    void updateColorTest2(){
         assertThrows(Exception.class, ()->{sut.updateColorById(12, "0x777777");});
     }
+
 
 
 }
