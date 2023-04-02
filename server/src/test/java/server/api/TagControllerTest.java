@@ -3,6 +3,8 @@ package server.api;
 import commons.Tag;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import server.database.TestMessageChannel;
 import server.database.TestSimpMessagingTemplate;
 import server.database.TestTagRepository;
@@ -61,5 +63,18 @@ public class TagControllerTest {
         assertEquals(expected, res);
     }
 
+    @Test
+    void getByIdTest(){
+        ResponseEntity<Tag> result = sut.getById(2);
+        Tag expected = new Tag("Tag 2", "0x00ff00", null, 0);
+        expected.id = 2;
+        assertEquals(ResponseEntity.ok(expected), result);
+    }
+
+    @Test
+    void getByIdTest2(){
+        ResponseEntity<Tag> result = sut.getById(12);
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+    }
 
 }
