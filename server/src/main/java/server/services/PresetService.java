@@ -1,16 +1,15 @@
 package server.services;
 
 import commons.Board;
-import commons.Card;
 import commons.Preset;
-import server.api.PresetController;
+import org.springframework.stereotype.Service;
 import server.database.BoardRepository;
 import server.database.CardRepository;
 import server.database.PresetRepository;
 
 import javax.transaction.Transactional;
 import java.util.List;
-
+@Service
 public class PresetService {
     private PresetRepository presetRepo;
     private BoardRepository boardRepo;
@@ -29,7 +28,7 @@ public class PresetService {
         return this.presetRepo.findAll();
     }
 
-    public Preset getPresetById(int id) throws Exception{
+    public Preset getById(int id) throws Exception{
         Preset preset = presetRepo.findById(id)
                 .orElseThrow(
                         ()->new Exception("Preset with id: "+id+" does not exist")
@@ -38,7 +37,7 @@ public class PresetService {
     }
 
     @Transactional
-    public Preset addPreset(Preset preset) throws Exception{
+    public Preset add(Preset preset) throws Exception{
         if(!boardRepo.existsById(preset.boardId))
             throw new Exception("Board does not exist");
         if(preset.id!=null && presetRepo.existsById(preset.id))
@@ -49,7 +48,7 @@ public class PresetService {
     }
 
     @Transactional
-    public Preset removePresetById(int id)throws Exception{
+    public Preset deleteById(int id)throws Exception{
         Preset preset = presetRepo.findById(id)
                 .orElseThrow(
                         ()->new Exception("Preset with id: " + id +" not found")
