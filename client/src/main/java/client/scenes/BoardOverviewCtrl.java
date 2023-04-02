@@ -105,6 +105,10 @@ public class BoardOverviewCtrl implements Initializable {
         server.registerForMessages("/topic/boards/rename", Board.class, newBoard -> {
             Platform.runLater(() -> { if(board.id == newBoard.id) title.setText(newBoard.title); });
         });
+        //Basically I just need to update the card
+        server.registerForMessages("/topic/subtasks", Integer.class, id -> {
+            Platform.runLater(() -> renameCardById(id, ""));
+        });
     }
 
     public void setBoard(Board board) {
@@ -250,7 +254,6 @@ public class BoardOverviewCtrl implements Initializable {
                     ((CardCtrl)c.getUserData()).setCardAndAttributes(server.getCardById(id));
         refresh();
     }
-
     //endregion
 
     //region METHODS FOR REFRESH
