@@ -82,7 +82,7 @@ public class CardController {
         }
 
         if(msgs!=null)
-            msgs.convertAndSend("/topic/cards/rename",res);
+            msgs.convertAndSend("/topic/cards/rename", res);
 
         return ResponseEntity.ok(res);
 
@@ -90,18 +90,16 @@ public class CardController {
 
     @PutMapping("/{id}/list/{listId}/{index}")
     public ResponseEntity<Card> editCardList(@PathVariable int id, @PathVariable Integer listId,
-                                             @PathVariable int index){
+                                             @PathVariable int index) {
+        Card res;
         try {
-            Card res = cardService.editCardByIdList(id, listId, index);
-            //This doesn't update the card positions properly but we call
-            //refresh anyway at the end so it doesn't matter
-            if(msgs!=null)
-                msgs.convertAndSend("/topic/cards/rename",res);
-            return ResponseEntity.ok(res);
+            res = cardService.editCardByIdList(id, listId, index);
         }catch(Exception e){
-            System.out.println(e.getMessage());
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
+        if(msgs!=null)
+            msgs.convertAndSend("/topic/cards/edit", res);
+        return ResponseEntity.ok(res);
     }
 
     /**
@@ -112,15 +110,17 @@ public class CardController {
      * @return response
      */
     @PutMapping("/tags/remove/{id}")
-    public ResponseEntity<Card> removeCard(@PathVariable("id") Integer id,
-                                          @RequestBody Tag tag){
+    public ResponseEntity<Card> removeTagFromCard(@PathVariable("id") Integer id,
+                                                  @RequestBody Tag tag) {
+        Card res = null;
         try {
-            Card res = cardService.removeTag(id, tag);
-            return ResponseEntity.ok(res);
+            res = cardService.removeTag(id, tag);
         }catch(Exception e){
-            System.out.println(e.getMessage());
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
+        if(msgs!=null)
+            msgs.convertAndSend("/topic/cards/remove/tag", res);
+        return ResponseEntity.ok(res);
     }
 
 }

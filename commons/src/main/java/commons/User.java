@@ -31,6 +31,10 @@ public class User {
     public User(String username) {
         this.username = username;
     }
+    public User(Integer id, String username) {
+        this.id = id;
+        this.username = username;
+    }
 
     public boolean hasBoardAlready(int id){
         for(Board b : boards){
