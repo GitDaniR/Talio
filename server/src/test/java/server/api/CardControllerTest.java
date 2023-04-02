@@ -167,6 +167,7 @@ public class CardControllerTest {
     @Test
     public void testRemoveTagFromCard() {
         Tag tag = new Tag("title", null, b1,0);
+        c2.addTag(tag);
         ResponseEntity<Card> cardResponse = sut.removeTagFromCard(1, tag);
         assertEquals(HttpStatus.OK, cardResponse.getStatusCode());
         List<String> expectedCalls = new ArrayList<>();
