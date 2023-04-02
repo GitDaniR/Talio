@@ -84,6 +84,9 @@ public class BoardOverviewCtrl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setupScrolling();
+    }
+
+    public void subscribeToSocketsBoardOverview(){
         server.registerForMessages("/topic/lists", BoardList.class, list -> {
             Platform.runLater(() -> addListToBoard(list));
         });
