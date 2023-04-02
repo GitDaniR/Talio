@@ -43,7 +43,7 @@ public class TestTagRepository implements TagRepository{
 
     @Override
     public List<Tag> findAll() {
-        return null;
+        return tags;
     }
 
     @Override

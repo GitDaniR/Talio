@@ -11,6 +11,7 @@ import server.services.TagService;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class TagControllerTest {
@@ -43,5 +44,22 @@ public class TagControllerTest {
     public void constructorTest(){
         assertNotNull(sut);
     }
+
+    @Test
+    public void getAllTest(){
+        List<Tag> expected = new ArrayList<>();
+        Tag test1 = new Tag("Tag 1", "0xff0000", null, 0);
+        test1.id = 1;
+        Tag test2 = new Tag("Tag 2", "0x00ff00", null, 0);
+        test2.id = 2;
+        Tag test3 = new Tag("Tag 3", "0x0000ff", null, 0);
+        test3.id = 3;
+        expected.add(test1);
+        expected.add(test2);
+        expected.add(test3);
+        List<Tag> res = sut.getAll();
+        assertEquals(expected, res);
+    }
+
 
 }
