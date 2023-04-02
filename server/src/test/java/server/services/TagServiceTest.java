@@ -139,7 +139,25 @@ public class TagServiceTest {
     void updateColorTest2(){
         assertThrows(Exception.class, ()->{sut.updateColorById(12, "0x777777");});
     }
+    @Test
+    void updateTitleTest() throws Exception {
+        Tag result = sut.updateTitleById(2, "title");
+
+        Tag expected = new Tag("title", "0x00ff00", null, 0);
+        expected.id = 2;
+
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestTagRepository.FIND_BY_ID);
+        expectedCalls.add(TestTagRepository.SAVE);
 
 
+        assertEquals(expected, result);
+        assertEquals(expectedCalls, repo.getCalls());
+    }
+
+    @Test
+    void updateTitleTest2(){
+        assertThrows(Exception.class, ()->{sut.updateTitleById(12, "title");});
+    }
 
 }
