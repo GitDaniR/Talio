@@ -39,9 +39,9 @@ public class Board {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    public List<Preset> taskPresets = new ArrayList<>();
+    public List<Preset> cardPresets = new ArrayList<>();
     @OneToOne
-    public Preset defaultTaskPreset;
+    public Preset defaultCardPreset;
     @ManyToMany
     @JoinTable(
             name = "boardIsJoinedByUser",
@@ -81,7 +81,7 @@ public class Board {
         this.lists.add(boardList);
     }
 
-    public void addTaskPreset(Preset preset){this.taskPresets.add(preset);}
+    public void addCardPreset(Preset preset){this.cardPresets.add(preset);}
     @Override
     public boolean equals(Object obj) {
         return EqualsBuilder.reflectionEquals(this, obj);
