@@ -3,6 +3,7 @@ package server.api;
 import commons.Board;
 import commons.BoardList;
 import commons.Card;
+import commons.Tag;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -139,6 +140,44 @@ public class CardControllerTest {
     @Test
     public void testEditCardNotFound(){
         assertEquals(HttpStatus.NOT_FOUND, sut.editCard(3, new Card(3, "d", "d", 3, l1, 0)).getStatusCode());
+        List<String> expectedCalls = new ArrayList<>();
+        assertEquals(expectedCalls, simp.getDestinations());
+    }
+
+    @Test
+    public void testEditCardList() {
+        BoardList l2 = new BoardList(1, "Second", b1, 0);
+        listRepo.save(l2);
+        ResponseEntity<Card> cardResponse = sut.editCardList(1, 1);
+        assertEquals(HttpStatus.OK, cardResponse.getStatusCode());
+        assertEquals(new Card(1, "b", "b", 1, l2, 1), cardResponse.getBody());
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add("/topic/cards/edit");
+        assertEquals(expectedCalls, simp.getDestinations());
+    }
+
+    @Test
+    public void testEditCardListNotFound() {
+        ResponseEntity<Card> cardResponse = sut.editCardList(1, 2);
+        assertEquals(HttpStatus.NOT_FOUND, cardResponse.getStatusCode());
+        List<String> expectedCalls = new ArrayList<>();
+        assertEquals(expectedCalls, simp.getDestinations());
+    }
+
+    @Test
+    public void testRemoveTagFromCard() {
+        Tag tag = new Tag("title", null, b1,0);
+        ResponseEntity<Card> cardResponse = sut.removeTagFromCard(1, tag);
+        assertEquals(HttpStatus.OK, cardResponse.getStatusCode());
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add("/topic/cards/remove/tag");
+        assertEquals(expectedCalls, simp.getDestinations());
+    }
+
+    @Test
+    public void testRemoveTagFromCardNotFound() {
+        ResponseEntity<Card> cardResponse = sut.removeTagFromCard(4, null);
+        assertEquals(HttpStatus.NOT_FOUND, cardResponse.getStatusCode());
         List<String> expectedCalls = new ArrayList<>();
         assertEquals(expectedCalls, simp.getDestinations());
     }
