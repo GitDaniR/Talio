@@ -86,6 +86,9 @@ public class UserService {
      * @throws Exception
      */
     public ResponseEntity<User> joinBoard(Integer userId, Integer boardId) throws Exception {
+        if (userId < 0 || boardId < 0) {
+            throw new Exception("Invalid user or board id");
+        }
         Board board = boardRepository.getById(boardId);
         User user = repo.getById(userId);
         board.users.add(user);
@@ -102,6 +105,9 @@ public class UserService {
      * @throws Exception
      */
     public ResponseEntity<User> removeBoard(Integer userId, Integer boardId) throws Exception {
+        if (userId < 0 || boardId < 0) {
+            throw new Exception("Invalid user or board id");
+        }
         Board board = boardRepository.getById(boardId);
         User user = repo.getById(userId);
 

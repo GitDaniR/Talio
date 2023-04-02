@@ -113,7 +113,7 @@ class UserServiceTest {
     }
 
     @Test
-    void joinBoard() throws Exception {
+    void testJoinBoardSuccessful() throws Exception {
         ResponseEntity userResponse = sut.joinBoard(0, 0);
         assertTrue(b1.users.contains(userResponse.getBody()));
         List<String> expectedCalls = new ArrayList<>();
@@ -123,13 +123,28 @@ class UserServiceTest {
     }
 
     @Test
-    void removeBoard() throws Exception {
+    void testJoinBoardInvalidId() throws Exception {
+        List<String> expectedCalls = new ArrayList<>();
+        assertThrows(Exception.class, () -> sut.joinBoard(0, -1));
+        assertEquals(expectedCalls, userRepo.getCalls());
+    }
+
+    @Test
+    void testRemoveBoardSuccessful() throws Exception {
         b1.users.add(u1);
         ResponseEntity userResponse = sut.removeBoard(0, 0);
         assertTrue(!b1.users.contains(userResponse.getBody()));
         List<String> expectedCalls = new ArrayList<>();
         expectedCalls.add(userRepo.GET_BY_ID);
         expectedCalls.add(userRepo.GET_BY_ID);
+        assertEquals(expectedCalls, userRepo.getCalls());
+    }
+
+    @Test
+    void testRemoveBoardInvalidId() throws Exception {
+        b1.users.add(u1);
+        List<String> expectedCalls = new ArrayList<>();
+        assertThrows(Exception.class, () -> sut.removeBoard(0, -1));
         assertEquals(expectedCalls, userRepo.getCalls());
     }
 

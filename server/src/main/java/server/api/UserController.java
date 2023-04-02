@@ -56,7 +56,7 @@ public class UserController {
      * @return
      */
     @GetMapping("/username/{username}")
-    public ResponseEntity<User> getByUsername(@PathVariable("username") String username){
+    public ResponseEntity<User> getByUsername(@PathVariable("username") String username) {
         try {
             return this.userService.getByUsername(username);
         } catch(Exception e){
@@ -130,8 +130,5 @@ public class UserController {
         }
 
     }
-
-
-
 
 }
