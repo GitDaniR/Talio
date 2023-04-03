@@ -109,7 +109,7 @@ public class BoardOverviewCtrl implements Initializable {
             Platform.runLater(() -> renameCardById(card.id,card.title));
         });
         server.registerForMessages("/topic/boards/removed", Integer.class, id -> {
-            Platform.runLater(() -> { if(id== board.id) back(); });
+            Platform.runLater(() -> { if(board==null || id==board.id) back(); });
         });
         server.registerForMessages("/topic/boards/rename", Board.class, newBoard -> {
             Platform.runLater(() -> { if(board.id == newBoard.id) title.setText(newBoard.title); });
