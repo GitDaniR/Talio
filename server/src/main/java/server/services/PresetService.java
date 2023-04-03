@@ -59,23 +59,27 @@ public class PresetService {
     }
 
     @Transactional
-    public Preset editPresetBackgroundById(int id, String background) throws Exception{
-        Preset preset = presetRepo.findById(id)
-                .orElseThrow(
-                        ()->new Exception("Preset with id: " + id +" not found")
-                );
-        preset.backgroundColor= background;
-        return presetRepo.save(preset);
+    public String editPresetBackgroundById(int id, String background) throws Exception{
+        if(id<0 || !presetRepo.existsById(id)){
+            throw new Exception("Invalid id");
+        }
+        if(background == null){
+            throw new Exception("Invalid background");
+        }
+        presetRepo.updatePresetBackgroundById(id, background);
+        return "Preset font has been updated successfully.";
     }
 
     @Transactional
-    public Preset editPresetFontById(int id, String font) throws Exception{
-        Preset preset = presetRepo.findById(id)
-                .orElseThrow(
-                        ()->new Exception("Preset with id: " + id +" not found")
-                );
-        preset.font= font;
-        return presetRepo.save(preset);
+    public String editPresetFontById(int id, String font) throws Exception{
+        if(id<0 || !presetRepo.existsById(id)){
+            throw new Exception("Invalid id");
+        }
+        if(font == null){
+            throw new Exception("Invalid font");
+        }
+        presetRepo.updatePresetFontById(id, font);
+        return "Preset font has been updated successfully.";
     }
     @TransactionScoped
     public Preset setAsDefault(int id) throws Exception{

@@ -64,30 +64,26 @@ public class PresetController {
     }
 
     @PutMapping("/{id}/background/{background}")
-    public ResponseEntity<Preset> updateBackgroundById(@PathVariable("id") Integer id,
+    public ResponseEntity<String> updateBackgroundById(@PathVariable("id") Integer id,
                                                        @PathVariable("background") String
                                                                background){
-        Preset updatedPreset;
         try{
-            updatedPreset = this.presetService.editPresetBackgroundById(id, background);
+            return ResponseEntity.ok(this.presetService.editPresetBackgroundById(id, background));
         } catch (Exception e){
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(updatedPreset);
     }
     
     @PutMapping("/{id}/font/{font}")
-    public ResponseEntity<Preset> updateFontById(@PathVariable("id") Integer id,
+    public ResponseEntity<String> updateFontById(@PathVariable("id") Integer id,
                                                        @PathVariable("font") String font){
-        Preset updatedPreset;
         try{
-            updatedPreset = this.presetService.editPresetFontById(id, font);
+            return ResponseEntity.ok(this.presetService.editPresetFontById(id, font));
         } catch (Exception e){
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(updatedPreset);
     }
 
     @PutMapping("/{id}/default")
