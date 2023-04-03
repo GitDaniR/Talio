@@ -177,6 +177,8 @@ public class MainCtrl {
 
         this.addRemoveTagsCtrl = addRemoveTags.getKey();
         this.addRemoveTags = new Scene(addRemoveTags.getValue());
+
+        primaryStage.setOnCloseRequest(e -> workspace.getKey().stop());
     }
 
     public void setAdmin(boolean admin) {
@@ -372,7 +374,6 @@ public class MainCtrl {
 
     public void registerForAllSockets() {
         editCardCtrl.subscribeToSocketsEditCardCtrl();
-        workspaceCtrl.subscribeForSocketsWorkspace();
         workspaceAdminCtrl.subscribeForSocketsWorkspaceAdmin();
         boardOverviewCtrl.subscribeToSocketsBoardOverview();
         tagOverviewCtrl.subscribeForSocketsTagOverview();
