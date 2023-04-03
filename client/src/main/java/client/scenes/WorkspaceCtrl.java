@@ -54,7 +54,13 @@ public class WorkspaceCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        server.registerForUpdates(b -> {
+            data.add(b);
+        });
+    }
 
+    public void stop() {
+        server.stop();
     }
 
     public void subscribeForSocketsWorkspace(){
