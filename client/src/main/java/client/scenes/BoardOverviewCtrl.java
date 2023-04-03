@@ -87,6 +87,7 @@ public class BoardOverviewCtrl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setupScrolling();
+
     }
 
     public void subscribeToSocketsBoardOverview(){

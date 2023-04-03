@@ -19,6 +19,7 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -29,8 +30,9 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Properties;
+import java.util.ResourceBundle;
 
-public class WelcomePageCtrl {
+public class WelcomePageCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
@@ -166,5 +168,12 @@ public class WelcomePageCtrl {
         } catch (IOException e) {
             return false;
         }
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        mainCtrl.consumeQuestionMarkTextField(chosenServer);
+        mainCtrl.consumeQuestionMarkTextField(username);
+        mainCtrl.consumeQuestionMarkTextField(adminPasswordTxt);
     }
 }
