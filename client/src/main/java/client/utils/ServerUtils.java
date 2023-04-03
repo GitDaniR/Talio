@@ -299,6 +299,14 @@ public class ServerUtils {
                 .put(Entity.entity(newColor, APPLICATION_JSON), Tag.class);
     }
 
+    public void editTagFont(Integer tagId, String newColor) {
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/tags/font/"+tagId) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(newColor, APPLICATION_JSON), Tag.class);
+    }
+
     public Tag getTagById(Integer tagId) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(server).path("api/tags/"+tagId) //
@@ -395,7 +403,7 @@ public class ServerUtils {
 
     public List<Tag> getTags(int boardId) {
         return ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("api/tags/")
+                .target(server).path("api/tags/board/"+boardId)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get(new GenericType<List<Tag>>() {});

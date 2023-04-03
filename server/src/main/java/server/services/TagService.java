@@ -74,7 +74,22 @@ public class TagService {
         Tag res = repo.findById(id).orElseThrow(
                 ()->new Exception("Tag with id: " + id +" not found")
         );
-        res.color = newColor;
+        res.colorBackground = newColor;
+        return repo.save(res);
+    }
+
+    /**
+     * Method which changes the color of a tag's font
+     * @param id the id of the tag
+     * @param newColor the new color of the tag's font
+     * @return the saved tag
+     * @throws Exception if id is not in repo.
+     */
+    public Tag updateFontById(Integer id, String newColor) throws Exception {
+        Tag res = repo.findById(id).orElseThrow(
+                ()->new Exception("Tag with id: " + id +" not found")
+        );
+        res.colorFont = newColor;
         return repo.save(res);
     }
 
@@ -93,4 +108,5 @@ public class TagService {
         res.title = newTitle;
         return repo.save(res);
     }
+
 }

@@ -47,6 +47,7 @@ public class AddRemoveTagsCtrl implements Initializable {
      * Method that sets tags to be the tags of the card
      */
     public void setTags(){
+        tags.getItems().clear();
         BoardList list = server.getBoardListById(cardToEdit.listId);
         int boardId = list.boardId;
 
