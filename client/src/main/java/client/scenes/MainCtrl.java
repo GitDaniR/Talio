@@ -18,6 +18,7 @@ package client.scenes;
 import commons.*;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -87,10 +88,12 @@ public class MainCtrl {
                            Pair<HelpCtrl,Parent> help) {
 
         this.primaryStage = primaryStage;
+        primaryStage.getIcons().add(new Image(
+                this.getClass().getResource("/client.images/talioIcon.png").toExternalForm()
+        ));
         setControllersAndScenes(addList, board, welcomePage, editList,
                 workspace, workspaceAdmin, editCard, changeBoardTitle,
                 editTag, addTag, tagOverview, addRemoveTags,help);
-
         board.getValue().getStylesheets().add(
                 this.getClass().getResource(stylePath).toExternalForm());
 
