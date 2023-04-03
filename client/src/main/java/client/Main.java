@@ -51,12 +51,13 @@ public class Main extends Application {
         var tagOverview = FXML.load(TagOverviewCtrl.class,"client","scenes","TagOverview.fxml");
         var addRemoveTags = FXML.load(AddRemoveTagsCtrl.class,"client","scenes",
                 "AddRemoveTags.fxml");
+        var help = FXML.load(HelpCtrl.class,"client","scenes","Help.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
 
         mainCtrl.initialize(primaryStage, addList,
                 currentBoard, welcomePage, editList, workspace, workspaceAdmin, editCard,
-                editBoard, editTag, addTag, tagOverview, addRemoveTags);
+                editBoard, editTag, addTag, tagOverview, addRemoveTags,help);
 
     }
 }

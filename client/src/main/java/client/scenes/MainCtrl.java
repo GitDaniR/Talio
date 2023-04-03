@@ -18,6 +18,7 @@ package client.scenes;
 import commons.*;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -63,6 +64,9 @@ public class MainCtrl {
     private AddRemoveTagsCtrl addRemoveTagsCtrl;
     private Scene addRemoveTags;
 
+    private HelpCtrl helpCtrl;
+    private Scene help;
+
     private String username;
     private boolean isAdmin = false;
 
@@ -80,13 +84,16 @@ public class MainCtrl {
                            Pair<EditTagCtrl, Parent> editTag,
                            Pair<AddTagCtrl, Parent> addTag,
                            Pair<TagOverviewCtrl, Parent> tagOverview,
-                           Pair<AddRemoveTagsCtrl, Parent> addRemoveTags) {
+                           Pair<AddRemoveTagsCtrl, Parent> addRemoveTags,
+                           Pair<HelpCtrl,Parent> help) {
 
         this.primaryStage = primaryStage;
+        primaryStage.getIcons().add(new Image(
+                this.getClass().getResource("/client.images/talioIcon.png").toExternalForm()
+        ));
         setControllersAndScenes(addList, board, welcomePage, editList,
                 workspace, workspaceAdmin, editCard, changeBoardTitle,
-                editTag, addTag, tagOverview, addRemoveTags);
-
+                editTag, addTag, tagOverview, addRemoveTags,help);
         board.getValue().getStylesheets().add(
                 this.getClass().getResource(stylePath).toExternalForm());
 
@@ -122,6 +129,8 @@ public class MainCtrl {
 
         addRemoveTags.getValue().getStylesheets().add(
                 this.getClass().getResource(stylePath).toExternalForm());
+        help.getValue().getStylesheets().add(
+                this.getClass().getResource(stylePath).toExternalForm());
 
         showWelcomePage();
         primaryStage.show();
@@ -139,7 +148,8 @@ public class MainCtrl {
                                          Pair<EditTagCtrl, Parent> editTag,
                                          Pair<AddTagCtrl, Parent> addTag,
                                          Pair<TagOverviewCtrl, Parent> tagOverview,
-                                         Pair<AddRemoveTagsCtrl, Parent> addRemoveTags){
+                                         Pair<AddRemoveTagsCtrl, Parent> addRemoveTags,
+                                         Pair<HelpCtrl,Parent> help){
 
         this.boardOverviewCtrl = board.getKey();
         this.board = new Scene(board.getValue());
@@ -177,10 +187,18 @@ public class MainCtrl {
 
         this.addRemoveTagsCtrl = addRemoveTags.getKey();
         this.addRemoveTags = new Scene(addRemoveTags.getValue());
+
+        this.helpCtrl = help.getKey();
+        this.help = new Scene(help.getValue());
     }
 
     public void setAdmin(boolean admin) {
         isAdmin = admin;
+    }
+
+    public void showHelp(){
+        primaryStage.setTitle("Help");
+        primaryStage.setScene(help);
     }
 
 
