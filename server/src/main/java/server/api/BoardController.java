@@ -83,11 +83,11 @@ public class BoardController {
         Board saved;
         try {
             saved = this.boardService.add(board);
+            listeners.forEach((k, l) -> l.accept(board));
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
 
-        listeners.forEach((k, l) -> l.accept(board)); //????????????
         return ResponseEntity.ok(saved);
     }
 
