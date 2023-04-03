@@ -7,8 +7,10 @@ import commons.Tag;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import java.io.IOException;
 
@@ -51,8 +53,9 @@ public class TagCellForEditCardCtrl extends ListCell<Tag> {
             // get the text element from the scene
             Text text = (Text) ((AnchorPane)tag).getChildren().get(1);
             text.setText(tagToSet.title);
-            ((AnchorPane)tag).setStyle("-fx-background-color:"+tagToSet.color
+            ((AnchorPane)tag).setStyle("-fx-background-color:"+tagToSet.colorBackground
                     .replace("0x", "#"));
+            ((Text)((AnchorPane) tag).getChildren().get(1)).setFill(Paint.valueOf(tagToSet.colorFont));
 
             // set up the controller for the tag
             TagCtrl finalTagCtrl = tagCtrl;
