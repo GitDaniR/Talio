@@ -61,6 +61,8 @@ public class BoardOverviewCtrl implements Initializable {
     @FXML
     private Label copiedToClipboardMessage;
 
+    private Card hoveredCard;
+
     private Timeline scrolltimeline = new Timeline();
     private double scrollVelocity = 0;
 
@@ -301,6 +303,18 @@ public class BoardOverviewCtrl implements Initializable {
 
         listObjectController.addCardToList(cardObject);
         //Adding the card to the list
+
+
+
+        cardObject.setOnMouseEntered(e->{
+            cardObject.setStyle("-fx-background-color: rgba(217, 192, 31, 0.49)");
+            hoveredCard = currentCard;
+
+        });
+        cardObject.setOnMouseExited(e->{
+            cardObject.setStyle("-fx-background-color: pink");
+            hoveredCard = null;
+        });
 
         return cardObjectController;
     }
