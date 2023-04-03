@@ -58,6 +58,9 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     public void subscribeForSocketsWorkspace(){
+        server.registerForMessages("/topic/boards/joinLeave",User.class, user->{
+            Platform.runLater(this::refresh);
+        });
         server.registerForMessages("/topic/boards/removed", Integer.class, boardId -> {
             Platform.runLater(() -> removeBoard(boardId));
         });
