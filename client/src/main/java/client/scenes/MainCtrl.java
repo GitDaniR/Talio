@@ -385,6 +385,14 @@ public class MainCtrl {
         primaryStage.setScene(customization);
         customizationCtrl.setBoard(board);
         customizationCtrl.setValues();
+
+    }
+    public void registerForAllSockets() {
+        editCardCtrl.subscribeToSocketsEditCardCtrl();
+        workspaceCtrl.subscribeForSocketsWorkspace();
+        workspaceAdminCtrl.subscribeForSocketsWorkspaceAdmin();
+        boardOverviewCtrl.subscribeToSocketsBoardOverview();
+        tagOverviewCtrl.subscribeForSocketsTagOverview();
     }
 }
 

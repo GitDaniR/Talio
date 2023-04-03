@@ -71,6 +71,7 @@ public class WelcomePageCtrl {
             if (isAdmin) {
                 if(testUserID()){
                     mainCtrl.showAdminWorkspace(username.getText());
+                    server.initializeStompSession(chosenServer.getText());
                     mainCtrl.setAdmin(true);
                 } else
                     setTextAndRemoveAfterDelay(userLabel,
@@ -79,6 +80,8 @@ public class WelcomePageCtrl {
                 mainCtrl.setAdmin(false);
                 if(testUserID()) {
                     server.setServer("http://" + chosenServer.getText() + "/");
+                    server.initializeStompSession(chosenServer.getText());
+                    mainCtrl.registerForAllSockets();
                     mainCtrl.showWorkspace(username.getText());
                 } else {
                     setTextAndRemoveAfterDelay(userLabel,
