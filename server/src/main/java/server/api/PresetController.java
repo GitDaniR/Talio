@@ -1,7 +1,6 @@
 package server.api;
 
 import commons.Preset;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.services.PresetService;
@@ -51,44 +50,55 @@ public class PresetController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Preset> deleteById(@PathVariable("id") Integer id){
         Preset deletedPreset;
-       try{
-           deletedPreset = this.presetService.deleteById(id);
-       }catch (javax.persistence.PersistenceException e){
-           System.out.println("Preset can not be deleted, some cards" +
+        try{
+            deletedPreset = this.presetService.deleteById(id);
+        } catch (javax.persistence.PersistenceException e){
+            System.out.println("Preset can not be deleted, some cards" +
                    "posses this preset!");
-           return ResponseEntity.badRequest().build();
-       }catch (Exception e){
-           return ResponseEntity.badRequest().build();
-       }
-       return ResponseEntity.ok(deletedPreset);
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(deletedPreset);
 
     }
 
     @PutMapping("/{id}/background/{background}")
     public ResponseEntity<Preset> updateBackgroundById(@PathVariable("id") Integer id,
-                                                       @PathVariable("background") String background){
+                                                       @PathVariable("background") String
+                                                               background){
         Preset updatedPreset;
         try{
             updatedPreset = this.presetService.editPresetBackgroundById(id, background);
-        }catch (Exception e){
+        } catch (Exception e){
             return ResponseEntity.badRequest().build();
         }
 
         return ResponseEntity.ok(updatedPreset);
     }
     
-    @PutMapping("/id/font/{font}")
+    @PutMapping("/{id}/font/{font}")
     public ResponseEntity<Preset> updateFontById(@PathVariable("id") Integer id,
                                                        @PathVariable("font") String font){
         Preset updatedPreset;
         try{
             updatedPreset = this.presetService.editPresetFontById(id, font);
-        }catch (Exception e){
+        } catch (Exception e){
             return ResponseEntity.badRequest().build();
         }
 
         return ResponseEntity.ok(updatedPreset);
     }
 
-    
+    @PutMapping("/{id}/default")
+    public ResponseEntity<Preset> setDefault(@PathVariable("id") Integer id){
+        Preset defaultPreset;
+        try{
+            defaultPreset = this.presetService.setAsDefault(id);
+        } catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(defaultPreset);
+    }
+
 }
