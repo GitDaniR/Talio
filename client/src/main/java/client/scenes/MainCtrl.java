@@ -175,6 +175,16 @@ public class MainCtrl {
                 editList, workspace, workspaceAdmin, editCard, changeBoardTitle,
                 editTag, addTag, tagOverview, addRemoveTags, help);
 
+
+        board.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if(event.getCode()==KeyCode.DOWN){
+                    System.out.print("Pressed down!");
+                }
+                event.consume();
+            }
+        });
         for (Scene s : sceneArray) {
             s.getStylesheets().add(this.getClass().getResource(stylePath).toExternalForm());
             s.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler() {

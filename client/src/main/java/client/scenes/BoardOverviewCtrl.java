@@ -38,6 +38,7 @@ import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.*;
+import java.util.List;
 
 
 public class BoardOverviewCtrl implements Initializable {
@@ -64,8 +65,13 @@ public class BoardOverviewCtrl implements Initializable {
     private Card hoveredCard;
     private CardCtrl hoveredCardCtrl;
 
+    private int cardHighlightX = -1;
+    private int cardHighlightY = -1;
+
     private Timeline scrolltimeline = new Timeline();
     private double scrollVelocity = 0;
+
+    private List<List<HBox>> cardBoxes;
 
     private int speed = 50;
 
@@ -119,6 +125,7 @@ public class BoardOverviewCtrl implements Initializable {
         server.registerForMessages("/topic/subtasks", Integer.class, id -> {
             Platform.runLater(() -> renameCardById(id, ""));
         });
+
     }
 
     public void setBoard(Board board) {
@@ -309,18 +316,31 @@ public class BoardOverviewCtrl implements Initializable {
 
 
         cardObject.setOnMouseEntered(e->{
-            cardObject.setStyle("-fx-background-color: rgba(217, 192, 31, 0.49)");
+            setCardHighlight(cardObject,true);
             hoveredCard = currentCard;
             hoveredCardCtrl = cardObjectController;
+            cardHighlightX = -1;
+            cardHighlightY = -1;
 
         });
         cardObject.setOnMouseExited(e->{
-            cardObject.setStyle("-fx-background-color: pink");
+            setCardHighlight(cardObject,false);
             hoveredCard = null;
             hoveredCardCtrl = null;
         });
 
         return cardObjectController;
+    }
+
+    private void setCardHighlight(Node card,boolean value){
+        if(value)
+            card.setStyle("-fx-border-color: black; -fx-border-width: 4; " +
+                    "-fx-background-color: rgba(217, 192, 31, 0.49);" +
+                    " -fx-border-radius: 5 5 5 5; -fx-background-radius: 5 5 5 5;");
+        else
+            card.setStyle("-fx-border-color: black; -fx-border-width: 4; " +
+                    "-fx-background-color: pink; " +
+                    "-fx-border-radius: 5 5 5 5; -fx-background-radius: 5 5 5 5;");
     }
 
     /**
@@ -337,6 +357,7 @@ public class BoardOverviewCtrl implements Initializable {
     public void refresh() {
         //If we are dragging we don't want to recreate all cards
         //if(isDragging) return;
+        cardBoxes = new ArrayList<>();
         board = server.getBoardByID(board.id);
         title.setText(board.title);
         setHandlerTitle();
@@ -350,6 +371,7 @@ public class BoardOverviewCtrl implements Initializable {
                 ListCtrl listObjectController = listLoader.getController();
                 listObject.setUserData(listLoader.getController());
                 assignListToController(listObjectController,currentList);
+                cardBoxes.add(new ArrayList<>());
 
                 //Adding the cards to the list
                 ObservableList<Card> cardsInList = FXCollections.observableList(currentList.cards);
@@ -360,6 +382,7 @@ public class BoardOverviewCtrl implements Initializable {
                     Node cardObject = cardLoader.load();
                     cardObject.setUserData(cardLoader.getController());
                     assignAndAddCard(cardObject,currentCard,listObjectController);
+                    cardBoxes.get(cardBoxes.size()-1).add((HBox) cardObject);
                 }
 
                 mainBoard.getChildren().add(listObject);
