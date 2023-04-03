@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -18,6 +19,32 @@ public class TestPresetRepository implements PresetRepository{
     public static final String EXISTS_BY_ID = "Exists By Id";
     public static final String SAVE = "Save";
     public static final String DELETE_BY_ID = "Delete By Id";
+    public static final String UPDATE_BACKGROUND_BY_ID = "Delete By Id";
+    public static final String UPDATE_FONT_BY_ID = "Delete By Id";
+
+    public List<String> calls;
+
+    public void call(String method){
+        calls.add(method);
+    }
+
+    public List<String> getCalls(){
+        return calls;
+    }
+
+    public List<Preset> presets;
+
+    public List<Preset> getPresets() {
+        return presets;
+    }
+    public void setPresets(List<Preset> presets) {
+        this.presets = presets;
+    }
+
+    public TestPresetRepository(){
+        this.presets = new ArrayList<>();
+        this.calls = new ArrayList<>();
+    }
 
     @Override
     public void updatePresetBackgroundById(Integer id, String color) {
