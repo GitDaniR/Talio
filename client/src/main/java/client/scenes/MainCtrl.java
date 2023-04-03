@@ -374,6 +374,7 @@ public class MainCtrl {
 
     public void registerForAllSockets() {
         editCardCtrl.subscribeToSocketsEditCardCtrl();
+//        workspaceCtrl.subscribeForSocketsWorkspace();
         workspaceAdminCtrl.subscribeForSocketsWorkspaceAdmin();
         boardOverviewCtrl.subscribeToSocketsBoardOverview();
         tagOverviewCtrl.subscribeForSocketsTagOverview();
