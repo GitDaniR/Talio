@@ -48,17 +48,28 @@ public class TestPresetRepository implements PresetRepository{
 
     @Override
     public void updatePresetBackgroundById(Integer id, String color) {
+        call(UPDATE_BACKGROUND_BY_ID);
+        for(Preset p:presets){
+            if(p.id == id)
+                p.backgroundColor = color;
+        }
 
     }
 
     @Override
     public void updatePresetFontById(Integer id, String font) {
+        call(UPDATE_FONT_BY_ID);
+        for(Preset p: presets){
+            if(p.id == id)
+                p.font = font;
+        }
 
     }
 
     @Override
     public List<Preset> findAll() {
-        return null;
+        call(FIND_ALL);
+        return presets;
     }
 
     @Override
@@ -83,6 +94,13 @@ public class TestPresetRepository implements PresetRepository{
 
     @Override
     public void deleteById(Integer integer) {
+        call("DELETE_BY_ID");
+        for(Preset p:presets){
+            if(p.id == integer){
+                this.presets.remove(p);
+                return;
+            }
+        }
 
     }
 
