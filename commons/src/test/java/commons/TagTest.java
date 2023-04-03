@@ -12,7 +12,7 @@ public class TagTest {
     public void checkConstructor(){
         var tag = new Tag("Tag", "color");
         assertEquals(tag.title, "Tag");
-        assertEquals(tag.color, "color");
+        assertEquals(tag.colorBackground, "color");
         assertEquals(tag.cards, new ArrayList<Card>());
     }
 
