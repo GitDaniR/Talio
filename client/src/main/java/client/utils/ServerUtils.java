@@ -475,6 +475,22 @@ public class ServerUtils {
             .put(Entity.entity(newColor, APPLICATION_JSON), String.class);
     }
 
+    public void deletePreset(Integer presetId) {
+        ClientBuilder.newClient(new ClientConfig()) //
+            .target(server).path("api/presets/" + presetId) //
+            .request(APPLICATION_JSON) //
+            .accept(APPLICATION_JSON) //
+            .delete();
+    }
+
+    public void setDefaultPreset(Integer presetId) {
+        ClientBuilder.newClient(new ClientConfig()) //
+            .target(server).path("api/presets/"+presetId+"/default/") //
+            .request(APPLICATION_JSON) //
+            .accept(APPLICATION_JSON) //
+            .put(Entity.entity("", APPLICATION_JSON), String.class);
+    }
+
 
 //    public void send(String dest, Object o){
 //        session.send(dest,o);

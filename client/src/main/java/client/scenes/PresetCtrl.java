@@ -58,4 +58,12 @@ public class PresetCtrl implements Initializable {
         server.editPresetFont(preset.id, pickerForeground.getValue().toString());
     }
 
+    public void deletePreset(){
+        server.deletePreset(preset.id);
+    }
+
+    public void setDefaultPreset(){
+        server.setDefaultPreset(preset.id);
+    }
+
 }

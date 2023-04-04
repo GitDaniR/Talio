@@ -98,7 +98,7 @@ public class CustomizationCtrl implements Initializable {
     //TODO we currently dont have preset saving on server, so once we have itr this method might not be needed
     public int getDefaultPresetId(){
         if(board.defaultCardPreset == null) return 0;
-        return getDefaultPresetId();
+        return board.defaultCardPreset.id;
     }
 
     public void resetBoard(){
