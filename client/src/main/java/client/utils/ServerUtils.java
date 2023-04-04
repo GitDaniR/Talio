@@ -22,6 +22,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import commons.*;
 import org.glassfish.jersey.client.ClientConfig;
@@ -456,7 +457,46 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(newColor, APPLICATION_JSON), Board.class);
     }
+    public List<Preset> getAllBoardPresets(int boardId) {
+        return ClientBuilder.newClient(new ClientConfig())
+            .target(server).path("api/presets/")
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .get(new GenericType<List<Preset>>() {}).stream().
+            filter(preset->preset.boardId == boardId).
+            collect(Collectors.toList());
+    }
+    public void editPresetBackground(Integer presetId, String newColor) {
+        ClientBuilder.newClient(new ClientConfig()) //
+            .target(server).path("api/presets/"+presetId+"/background/" + newColor) //
+            .request(APPLICATION_JSON) //
+            .accept(APPLICATION_JSON) //
+            .put(Entity.entity(newColor, APPLICATION_JSON), String.class);
+    }
 
+    public void editPresetFont(Integer presetId, String newColor) {
+        ClientBuilder.newClient(new ClientConfig()) //
+            .target(server).path("api/presets/"+presetId+"/font/" + newColor) //
+            .request(APPLICATION_JSON) //
+            .accept(APPLICATION_JSON) //
+            .put(Entity.entity(newColor, APPLICATION_JSON), String.class);
+    }
+
+    public void deletePreset(Integer presetId) {
+        ClientBuilder.newClient(new ClientConfig()) //
+            .target(server).path("api/presets/" + presetId) //
+            .request(APPLICATION_JSON) //
+            .accept(APPLICATION_JSON) //
+            .delete();
+    }
+
+    public void setDefaultPreset(Integer presetId) {
+        ClientBuilder.newClient(new ClientConfig()) //
+            .target(server).path("api/presets/"+presetId+"/default/") //
+            .request(APPLICATION_JSON) //
+            .accept(APPLICATION_JSON) //
+            .put(Entity.entity("", APPLICATION_JSON), String.class);
+    }
 
 //    public void send(String dest, Object o){
 //        session.send(dest,o);

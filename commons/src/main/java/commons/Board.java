@@ -34,7 +34,14 @@ public class Board {
             orphanRemoval = true
     )
     public List<Tag> tags = new ArrayList<>();
-
+    @OneToMany(
+            mappedBy = "board",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    public List<Preset> cardPresets = new ArrayList<>();
+    @OneToOne
+    public Preset defaultCardPreset;
     @ManyToMany
     @JoinTable(
             name = "boardIsJoinedByUser",
@@ -74,6 +81,7 @@ public class Board {
         this.lists.add(boardList);
     }
 
+    public void addCardPreset(Preset preset){this.cardPresets.add(preset);}
     @Override
     public boolean equals(Object obj) {
         return EqualsBuilder.reflectionEquals(this, obj);

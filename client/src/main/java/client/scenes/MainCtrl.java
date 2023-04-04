@@ -387,6 +387,7 @@ public class MainCtrl {
         customizationCtrl.setValues();
 
     }
+
     public void registerForAllSockets() {
         editCardCtrl.subscribeToSocketsEditCardCtrl();
         workspaceCtrl.subscribeForSocketsWorkspace();
