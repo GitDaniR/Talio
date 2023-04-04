@@ -1,18 +1,13 @@
 package client.scenes;
 
-import client.Main;
 import client.utils.ServerUtils;
 import commons.Preset;
-import commons.Tag;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Ellipse;
-import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.ResourceBundle;
