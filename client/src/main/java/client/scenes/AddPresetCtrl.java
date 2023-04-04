@@ -3,7 +3,10 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.TextField;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -13,6 +16,12 @@ public class AddPresetCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private Board board;
+    @FXML
+    private TextField presetName;
+    @FXML
+    private ColorPicker backgroundColorPicker;
+    @FXML
+    private ColorPicker fontColorPicker;
 
     @Inject
     public AddPresetCtrl(ServerUtils server, MainCtrl mainCtrl) {
