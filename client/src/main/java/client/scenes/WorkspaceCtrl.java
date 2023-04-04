@@ -54,7 +54,10 @@ public class WorkspaceCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+    }
 
+    public void stop() {
+        server.stop();
     }
 
     public void subscribeForSocketsWorkspace(){
@@ -67,6 +70,9 @@ public class WorkspaceCtrl implements Initializable {
         });
         server.registerForMessages("/topic/boards/rename", Board.class, newBoard -> {
             Platform.runLater(() -> { renameBoard(newBoard.id,newBoard.title); });
+        });
+        server.registerForUpdates(b -> {
+            refresh();
         });
     }
 

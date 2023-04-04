@@ -49,34 +49,6 @@ public class ServerUtils {
                 .get(new GenericType<List<Board>>() {});
     }
 
-    private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
-
-    /**
-     * This method is used for long polling. Basically, we listen for updates in a non-blocking
-     * thread and if our res gets any response other than 204
-     * @param consumer consumer for boards
-     */
-    public void registerForUpdates(Consumer<Board> consumer){
-        EXEC.submit(()->{
-            while(!Thread.interrupted()){
-                var res = ClientBuilder.newClient(new ClientConfig())
-                        .target(server).path("api/boards/updates")
-                        .request(APPLICATION_JSON)
-                        .accept(APPLICATION_JSON)
-                        .get(Response.class);
-                if(res.getStatus() == 204){
-                    continue;
-                }
-                var b = res.readEntity(Board.class);
-                consumer.accept(b);
-            }
-        });
-    }
-
-    public void stop(){
-        EXEC.shutdownNow();
-    }
-
     public Board addBoard(Board board){
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(server).path("api/boards/") //
@@ -448,7 +420,26 @@ public class ServerUtils {
                 .get(new GenericType<List<Card>>() {});
     }
 
-//    public void send(String dest, Object o){
-//        session.send(dest,o);
-//    }
+    private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
+
+    public void registerForUpdates(Consumer<Board> consumer) {
+        EXEC.submit(() -> {
+            while(!Thread.interrupted()) {
+                var res = ClientBuilder.newClient(new ClientConfig())
+                        .target(server).path("api/boards/updates")
+                        .request(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
+                        .get(Response.class);
+
+                if(res.getStatus() == 204) continue;
+                var b = res.readEntity(Board.class);
+                consumer.accept(b); /**watch video at 27:00 for multiple consumers**/
+            }
+        });
+    }
+
+    public void stop() {
+        EXEC.shutdownNow();
+    }
+
 }

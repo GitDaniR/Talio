@@ -53,24 +53,6 @@ public class BoardController {
         return this.boardService.findAll();
     }
 
-    private Map<Object, Consumer<Board>> listeners = new HashMap<>();
-
-    @GetMapping("/updates")
-    public DeferredResult<ResponseEntity<Board>> getUpdates(){
-        var noContents = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        var res = new DeferredResult<ResponseEntity<Board>>(5000L,noContents);
-
-        var key = new Object();
-        listeners.put(key,b->{
-            res.setResult( ResponseEntity.ok(b));
-        });
-        res.onCompletion(()->{
-            listeners.remove(key);
-        });
-
-        return res;
-    }
-
     /**
      * Method which returns a board by an id.
      * @param id
@@ -88,6 +70,8 @@ public class BoardController {
         return ResponseEntity.ok(found);
     }
 
+    private Map<Object, Consumer<Board>> listeners = new HashMap<>();
+
     /**
      * Method which adds a new board.
      * Method which adds a new board to repo.
@@ -99,13 +83,28 @@ public class BoardController {
         Board saved;
         try {
             saved = this.boardService.add(board);
+            listeners.forEach((k, l) -> l.accept(board));
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
 
-        listeners.forEach((k,l) -> l.accept(board));
-
         return ResponseEntity.ok(saved);
+    }
+
+    @GetMapping("/updates")
+    public DeferredResult<ResponseEntity<Board>> getUpdates() {
+        var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        var res = new DeferredResult<ResponseEntity<Board>>(5000L, noContent);
+
+        var key = new Object();
+        listeners.put(key, b -> {
+            res.setResult(ResponseEntity.ok(b));
+        });
+        res.onCompletion(() -> {
+            listeners.remove(key);
+        });
+
+        return res;
     }
 
     /**

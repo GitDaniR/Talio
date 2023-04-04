@@ -177,6 +177,9 @@ public class MainCtrl {
 
         this.addRemoveTagsCtrl = addRemoveTags.getKey();
         this.addRemoveTags = new Scene(addRemoveTags.getValue());
+
+        primaryStage.setOnCloseRequest(e -> workspace.getKey().stop());
+        primaryStage.setOnCloseRequest(e -> workspaceAdmin.getKey().stop());
     }
 
     public void setAdmin(boolean admin) {
