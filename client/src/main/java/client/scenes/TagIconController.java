@@ -26,6 +26,7 @@ public class TagIconController implements Initializable {
         if(!tag.title.isEmpty()){
             txtLetter.setText(String.valueOf(tag.title.charAt(0)));
         }
-        background.setFill(Paint.valueOf(tag.color));
+        background.setFill(Paint.valueOf(tag.colorBackground));
+        txtLetter.setFill(Paint.valueOf(tag.colorFont));
     }
 }

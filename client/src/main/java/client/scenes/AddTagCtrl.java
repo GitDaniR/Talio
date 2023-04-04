@@ -22,7 +22,9 @@ public class AddTagCtrl implements Initializable {
     @FXML
     private TextField title;
     @FXML
-    private ColorPicker colorPicker;
+    private ColorPicker colorPickerBackground;
+    @FXML
+    private ColorPicker colorPickerFont;
     @FXML
     private Label errorLabel;
     private Board boardToAddTo;
@@ -43,7 +45,8 @@ public class AddTagCtrl implements Initializable {
 
     private void clearFields() {
         title.clear();
-        colorPicker.setValue(Color.valueOf("0xffffff"));
+        colorPickerBackground.setValue(Color.valueOf("0xffffff"));
+        colorPickerFont.setValue(Color.valueOf("0xffffff"));
     }
 
     private PauseTransition delay;
@@ -82,9 +85,10 @@ public class AddTagCtrl implements Initializable {
 
     private Tag getTag() {
         var t = title.getText();
-        var c = colorPicker.getValue().toString();
+        var cBackground = colorPickerBackground.getValue().toString();
+        var cFont = colorPickerFont.getValue().toString();
 
-        return new Tag(t, c, boardToAddTo, boardToAddTo.id);
+        return new Tag(t, cBackground, cFont, boardToAddTo, boardToAddTo.id);
     }
 
     public void setBoard(Board board){
