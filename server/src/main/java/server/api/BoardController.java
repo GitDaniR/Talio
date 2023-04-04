@@ -117,4 +117,52 @@ public class BoardController {
 
         return ResponseEntity.ok(response);
     }
+
+    @PutMapping("/{id}/colors/boardBackground")
+    public ResponseEntity<Board> updateColorBoardBackground(@PathVariable("id") Integer id,
+                                                 @RequestBody String color) {
+        Board response;
+        try {
+            response = boardService.updateColorBoardBackground(id, color);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(response);
+    }
+    @PutMapping("/{id}/colors/boardFont")
+    public ResponseEntity<Board> updateColorBoardFont(@PathVariable("id") Integer id,
+                                                            @RequestBody String color) {
+        Board response;
+        try {
+            response = boardService.updateColorBoardFont(id, color);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{id}/colors/listsBackground")
+    public ResponseEntity<Board> updateColorListsBackground(@PathVariable("id") Integer id,
+                                                            @RequestBody String color) {
+        Board response;
+        try {
+            response = boardService.updateColorListsBackground(id, color);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{id}/colors/listsFont")
+    public ResponseEntity<Board> updateColorListsFont(@PathVariable("id") Integer id,
+                                                            @RequestBody String color) {
+        Board response;
+        try {
+            response = boardService.updateColorListsFont(id, color);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(response);
+    }
+
 }

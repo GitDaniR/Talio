@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import server.database.TestBoardListRepository;
 import server.database.TestBoardRepository;
 import server.database.TestCardRepository;
+import server.database.TestPresetRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ public class CardServiceTest {
     private TestCardRepository cardRepo;
     private TestBoardListRepository listRepo;
     private TestBoardRepository boardRepo;
+    private TestPresetRepository presetRepo;
     private CardService sut;
     private Board b1;
     private BoardList l1, l2;
@@ -31,6 +33,8 @@ public class CardServiceTest {
         cardRepo = new TestCardRepository();
         listRepo = new TestBoardListRepository();
         boardRepo = new TestBoardRepository();
+        presetRepo = new TestPresetRepository();
+
         b1 = new Board(0, "Main Board", "123", new ArrayList<>());
         boardRepo.save(b1);
         l1 = new BoardList(0, "First", b1, 0);
@@ -45,7 +49,7 @@ public class CardServiceTest {
         cards.add(c2);
         cards.add(c3);
         cardRepo.setCards(cards);
-        sut = new CardService(cardRepo, listRepo);
+        sut = new CardService(cardRepo, listRepo, presetRepo);
     }
 
     @Test

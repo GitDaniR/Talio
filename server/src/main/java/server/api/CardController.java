@@ -123,4 +123,17 @@ public class CardController {
         return ResponseEntity.ok(res);
     }
 
+    @PutMapping(path = "{cardId}/preset/{presetId}")
+    public ResponseEntity<Card> assignPreset(@PathVariable("cardId") Integer cardId,
+                                          @PathVariable("presetId") Integer presetId){
+        Card res;
+        try{
+            res = this.cardService.assignPreset(cardId, presetId);
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(res);
+    }
+
 }

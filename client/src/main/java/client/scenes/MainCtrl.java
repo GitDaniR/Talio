@@ -63,6 +63,9 @@ public class MainCtrl {
     private AddRemoveTagsCtrl addRemoveTagsCtrl;
     private Scene addRemoveTags;
 
+    private CustomizationCtrl customizationCtrl;
+    private Scene customization;
+
     private String username;
     private boolean isAdmin = false;
 
@@ -80,12 +83,13 @@ public class MainCtrl {
                            Pair<EditTagCtrl, Parent> editTag,
                            Pair<AddTagCtrl, Parent> addTag,
                            Pair<TagOverviewCtrl, Parent> tagOverview,
-                           Pair<AddRemoveTagsCtrl, Parent> addRemoveTags) {
+                           Pair<AddRemoveTagsCtrl, Parent> addRemoveTags,
+                           Pair<CustomizationCtrl, Parent> customization) {
 
         this.primaryStage = primaryStage;
         setControllersAndScenes(addList, board, welcomePage, editList,
                 workspace, workspaceAdmin, editCard, changeBoardTitle,
-                editTag, addTag, tagOverview, addRemoveTags);
+                editTag, addTag, tagOverview, addRemoveTags, customization);
 
         board.getValue().getStylesheets().add(
                 this.getClass().getResource(stylePath).toExternalForm());
@@ -123,6 +127,9 @@ public class MainCtrl {
         addRemoveTags.getValue().getStylesheets().add(
                 this.getClass().getResource(stylePath).toExternalForm());
 
+        /*customization.getValue().getStylesheets().add(
+                this.getClass().getResource(stylePath).toExternalForm());*/
+
         showWelcomePage();
         primaryStage.show();
     }
@@ -139,11 +146,11 @@ public class MainCtrl {
                                          Pair<EditTagCtrl, Parent> editTag,
                                          Pair<AddTagCtrl, Parent> addTag,
                                          Pair<TagOverviewCtrl, Parent> tagOverview,
-                                         Pair<AddRemoveTagsCtrl, Parent> addRemoveTags){
+                                         Pair<AddRemoveTagsCtrl, Parent> addRemoveTags,
+                                         Pair<CustomizationCtrl, Parent> customization){
 
         this.boardOverviewCtrl = board.getKey();
         this.board = new Scene(board.getValue());
-
 
         this.addListCtrl = addList.getKey();
         this.addList = new Scene(addList.getValue());
@@ -177,6 +184,9 @@ public class MainCtrl {
 
         this.addRemoveTagsCtrl = addRemoveTags.getKey();
         this.addRemoveTags = new Scene(addRemoveTags.getValue());
+
+        this.customizationCtrl = customization.getKey();
+        this.customization = new Scene(customization.getValue());
     }
 
     public void setAdmin(boolean admin) {
@@ -368,6 +378,13 @@ public class MainCtrl {
         primaryStage.setScene(addRemoveTags);
         addRemoveTagsCtrl.setCardToEdit(card);
         addRemoveTagsCtrl.setTags();
+    }
+
+    public void showCustomization(Board board) {
+        primaryStage.setTitle("Customizing Board");
+        primaryStage.setScene(customization);
+        customizationCtrl.setBoard(board);
+        customizationCtrl.setValues();
     }
 }
 

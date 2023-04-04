@@ -1,7 +1,6 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
@@ -34,8 +33,6 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
-
-
 import java.net.URL;
 import java.util.*;
 
@@ -133,10 +130,24 @@ public class BoardOverviewCtrl implements Initializable {
         title.setUnderline(false);
     }
 
+    private void setColors(){
+        // our board has no text, so there is no need to set the font color, even though we could
+        mainBoard.setStyle("-fx-background-color: " +
+                board.colorBoardBackground.replace("0x", "#"));
+    }
+
     //region METHODS FOR BUTTONS
 
     public void addList() {
         mainCtrl.showAddList(board);
+    }
+
+    public void showTags(){
+        mainCtrl.showTagOverview(this.board);
+    }
+
+    public void showCustomization(){
+        mainCtrl.showCustomization(this.board);
     }
 
     public void deleteBoard() {
@@ -318,6 +329,7 @@ public class BoardOverviewCtrl implements Initializable {
         //if(isDragging) return;
         board = server.getBoardByID(board.id);
         title.setText(board.title);
+        setColors();
         setHandlerTitle();
         try {
             mainBoard.getChildren().clear();
@@ -329,6 +341,15 @@ public class BoardOverviewCtrl implements Initializable {
                 ListCtrl listObjectController = listLoader.getController();
                 listObject.setUserData(listLoader.getController());
                 assignListToController(listObjectController,currentList);
+                listObjectController.setServerAndCtrl(server, mainCtrl);
+                listObjectController.setFontColor();
+
+
+                // customization of lists
+                listObject.setStyle("-fx-background-color:"+
+                        board.colorListsBackground.replace("0x", "#") +
+                        "; -fx-border-color: black; -fx-border-width: 1");
+
 
                 //Adding the cards to the list
                 ObservableList<Card> cardsInList = FXCollections.observableList(currentList.cards);
@@ -643,9 +664,5 @@ public class BoardOverviewCtrl implements Initializable {
 
     }
     //endregion
-
-    public void showTags(){
-        mainCtrl.showTagOverview(this.board);
-    }
 
 }

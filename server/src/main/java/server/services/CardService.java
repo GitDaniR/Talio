@@ -2,10 +2,13 @@ package server.services;
 
 import commons.BoardList;
 import commons.Card;
+import commons.Preset;
 import commons.Tag;
 import org.springframework.stereotype.Service;
 import server.database.BoardListRepository;
 import server.database.CardRepository;
+import server.database.PresetRepository;
+
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -14,10 +17,14 @@ public class CardService {
     private CardRepository cardRepo;
     private BoardListRepository listRepo;
 
+    private PresetRepository presetRepo;
+
     //Constructor fit for dependency injection
-    public CardService(CardRepository cardRepo, BoardListRepository listRepo){
+    public CardService(CardRepository cardRepo, BoardListRepository listRepo,
+        PresetRepository presetRepo){
         this.cardRepo = cardRepo;
         this.listRepo = listRepo;
+        this.presetRepo = presetRepo;
     }
 
     //Method to get all saved cards (mainly intended for testing purposes)
@@ -116,5 +123,17 @@ public class CardService {
         if(toRemove != null) res.tags.remove(toRemove);
 
         return cardRepo.save(res);
+    }
+    @Transactional
+    public Card assignPreset(Integer id, Integer presetId) throws Exception{
+        Card card = cardRepo.findById(id).orElseThrow(
+                ()->new Exception("Card with id: " + id +" not found")
+        );
+        Preset preset = presetRepo.findById(presetId).orElseThrow(
+                ()->new Exception("Preset with id: " + id +" not found")
+        );
+        card.presetId = presetId;
+        card.preset = preset;
+        return cardRepo.save(card);
     }
 }
