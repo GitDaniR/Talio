@@ -21,9 +21,12 @@ import static jakarta.ws.rs.core.MediaType.TEXT_PLAIN;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 import commons.*;
+import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
 import jakarta.ws.rs.client.ClientBuilder;
@@ -44,6 +47,34 @@ public class ServerUtils {
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get(new GenericType<List<Board>>() {});
+    }
+
+    private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
+
+    /**
+     * This method is used for long polling. Basically, we listen for updates in a non-blocking
+     * thread and if our res gets any response other than 204
+     * @param consumer consumer for boards
+     */
+    public void registerForUpdates(Consumer<Board> consumer){
+        EXEC.submit(()->{
+            while(!Thread.interrupted()){
+                var res = ClientBuilder.newClient(new ClientConfig())
+                        .target(server).path("api/boards/updates")
+                        .request(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
+                        .get(Response.class);
+                if(res.getStatus() == 204){
+                    continue;
+                }
+                var b = res.readEntity(Board.class);
+                consumer.accept(b);
+            }
+        });
+    }
+
+    public void stop(){
+        EXEC.shutdownNow();
     }
 
     public Board addBoard(Board board){
