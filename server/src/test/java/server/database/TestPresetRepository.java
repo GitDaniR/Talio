@@ -19,8 +19,8 @@ public class TestPresetRepository implements PresetRepository{
     public static final String EXISTS_BY_ID = "Exists By Id";
     public static final String SAVE = "Save";
     public static final String DELETE_BY_ID = "Delete By Id";
-    public static final String UPDATE_BACKGROUND_BY_ID = "Delete By Id";
-    public static final String UPDATE_FONT_BY_ID = "Delete By Id";
+    public static final String UPDATE_BACKGROUND_BY_ID = "Update Background By Id";
+    public static final String UPDATE_FONT_BY_ID = "Update Font By Id";
 
     public List<String> calls;
 
@@ -45,6 +45,7 @@ public class TestPresetRepository implements PresetRepository{
         this.presets = new ArrayList<>();
         this.calls = new ArrayList<>();
     }
+
 
     @Override
     public void updatePresetBackgroundById(Integer id, String color) {
@@ -94,7 +95,7 @@ public class TestPresetRepository implements PresetRepository{
 
     @Override
     public void deleteById(Integer integer) {
-        call("DELETE_BY_ID");
+        call(DELETE_BY_ID);
         for(Preset p:presets){
             if(p.id == integer){
                 this.presets.remove(p);
@@ -126,7 +127,10 @@ public class TestPresetRepository implements PresetRepository{
 
     @Override
     public <S extends Preset> S save(S entity) {
-        return null;
+        call(SAVE);
+        entity.id = this.presets.size();
+        this.presets.add(entity);
+        return entity;
     }
 
     @Override
@@ -136,11 +140,20 @@ public class TestPresetRepository implements PresetRepository{
 
     @Override
     public Optional<Preset> findById(Integer integer) {
+        call(FIND_BY_ID);
+        for(Preset p:presets){
+            if(p.id == integer)
+                return Optional.of(p);
+        }
         return Optional.empty();
     }
 
     @Override
     public boolean existsById(Integer integer) {
+        call(EXISTS_BY_ID);
+        for(Preset p:presets){
+            if(p.id == integer)return true;
+        }
         return false;
     }
 
@@ -161,7 +174,6 @@ public class TestPresetRepository implements PresetRepository{
 
     @Override
     public void deleteAllInBatch(Iterable<Preset> entities) {
-
     }
 
     @Override

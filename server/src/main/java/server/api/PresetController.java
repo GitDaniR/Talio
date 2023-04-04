@@ -25,11 +25,10 @@ public class PresetController {
     public ResponseEntity<Preset> getById(
             @PathVariable("id") int id){
         Preset found;
-
         try {
             found = this.presetService.getById(id);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(found);
 
@@ -57,7 +56,7 @@ public class PresetController {
                    "posses this preset!");
             return ResponseEntity.badRequest().build();
         } catch (Exception e){
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(deletedPreset);
 
