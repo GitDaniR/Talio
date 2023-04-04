@@ -7,8 +7,8 @@
    <children>
       <Button layoutX="220.0" maxHeight="20.0" mnemonicParsing="false" prefHeight="20.0" text="X" />
       <Label fx:id="lblName" prefWidth="120.0" text="Label" />
-      <ColorPicker fx:id="pickerBackground" layoutX="120.0" layoutY="1.0" prefHeight="20.0" prefWidth="40.0" />
-      <ColorPicker fx:id="pickerForeground" layoutX="160.0" layoutY="1.0" prefHeight="20.0" prefWidth="40.0" />
+      <ColorPicker fx:id="pickerBackground" layoutX="120.0" layoutY="1.0" onAction="#setBackground" prefHeight="20.0" prefWidth="40.0" />
+      <ColorPicker fx:id="pickerForeground" layoutX="160.0" layoutY="1.0" onAction="#setForeground" prefHeight="20.0" prefWidth="40.0" />
       <Button fx:id="btnDefault" layoutX="275.0" mnemonicParsing="false" text="Set as default" />
    </children>
 </AnchorPane>

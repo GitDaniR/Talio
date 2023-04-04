@@ -87,6 +87,7 @@ public class CustomizationCtrl implements Initializable {
         try {
             Node presetObject = presetLoader.load();
             PresetCtrl presetController = presetLoader.getController();
+            presetController.setServerAndMainCtrl(server, mainCtrl);
             presetController.setPreset(preset, getDefaultPresetId());
             vboxPresets.getChildren().add(presetObject);
         } catch (IOException e) {

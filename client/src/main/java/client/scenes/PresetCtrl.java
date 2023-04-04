@@ -1,5 +1,7 @@
 package client.scenes;
 
+import client.Main;
+import client.utils.ServerUtils;
 import commons.Preset;
 import commons.Tag;
 import javafx.fxml.FXML;
@@ -16,6 +18,9 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class PresetCtrl implements Initializable {
+
+    private ServerUtils server;
+    private MainCtrl mainCtrl;
     @FXML
     private Label lblName;
     @FXML
@@ -30,6 +35,11 @@ public class PresetCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
     }
 
+    public void setServerAndMainCtrl(ServerUtils server, MainCtrl mainCtrl){
+        this.server = server;
+        this.mainCtrl = mainCtrl;
+    }
+
     public void setPreset(Preset preset, int idDefault){
         this.preset = preset;
         lblName.setText(preset.name);
@@ -38,6 +48,14 @@ public class PresetCtrl implements Initializable {
         if(preset.id == idDefault){
             btnDefault.setDisable(true);
         }
+    }
+
+    public void setBackground(){
+        server.editPresetBackground(preset.id, pickerBackground.getValue().toString());
+    }
+
+    public void setForeground(){
+        server.editPresetFont(preset.id, pickerForeground.getValue().toString());
     }
 
 }
