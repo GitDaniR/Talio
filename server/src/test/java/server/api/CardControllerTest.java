@@ -22,6 +22,8 @@ public class CardControllerTest {
     private TestBoardListRepository listRepo;
 
     private TestBoardRepository boardRepo;
+
+    private PresetRepository presetRepo;
     private CardController sut;
     private Board b1;
     private BoardList l1;
@@ -33,6 +35,7 @@ public class CardControllerTest {
         cardRepo = new TestCardRepository();
         listRepo = new TestBoardListRepository();
         boardRepo = new TestBoardRepository();
+        presetRepo = new TestPresetRepository();
         b1 = new Board(0, "Main Board", "123", new ArrayList<>());
         boardRepo.save(b1);
         l1 = new BoardList(0, "First", b1, 0);
@@ -45,7 +48,7 @@ public class CardControllerTest {
         cards.add(c2);
         cards.add(c3);
         cardRepo.setCards(cards);
-        sut = new CardController(new CardService(cardRepo, listRepo),null);
+        sut = new CardController(new CardService(cardRepo, listRepo, presetRepo),null);
     }
 
     @Test
