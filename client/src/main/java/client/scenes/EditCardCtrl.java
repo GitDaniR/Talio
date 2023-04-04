@@ -59,6 +59,9 @@ public class EditCardCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         title.setOnKeyTyped(e -> server.editCard(cardToEdit.id, getUpdatedCard()));
         description.setOnKeyTyped(e -> server.editCard(cardToEdit.id, getUpdatedCard()));
+        mainCtrl.consumeQuestionMarkTextField(title);
+        mainCtrl.consumeQuestionMarkTextField(description);
+        mainCtrl.consumeQuestionMarkTextField(subtaskTitle);
     }
 
     public void subscribeToSocketsEditCardCtrl(){

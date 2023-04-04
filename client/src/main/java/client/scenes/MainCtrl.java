@@ -16,11 +16,21 @@
 package client.scenes;
 
 import commons.*;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TextInputControl;
+import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 public class MainCtrl {
@@ -63,10 +73,14 @@ public class MainCtrl {
     private AddRemoveTagsCtrl addRemoveTagsCtrl;
     private Scene addRemoveTags;
 
+    private HelpCtrl helpCtrl;
+    private Scene help;
+
     private String username;
     private boolean isAdmin = false;
 
     private final String stylePath = "/client.scenes.styles/Default_styles.css";
+    List<Scene> sceneArray;
 
     public void initialize(Stage primaryStage,
                            Pair<AddListCtrl, Parent> addList,
@@ -80,70 +94,40 @@ public class MainCtrl {
                            Pair<EditTagCtrl, Parent> editTag,
                            Pair<AddTagCtrl, Parent> addTag,
                            Pair<TagOverviewCtrl, Parent> tagOverview,
-                           Pair<AddRemoveTagsCtrl, Parent> addRemoveTags) {
+                           Pair<AddRemoveTagsCtrl, Parent> addRemoveTags,
+                           Pair<HelpCtrl,Parent> help) {
 
         this.primaryStage = primaryStage;
+        primaryStage.getIcons().add(new Image(
+                this.getClass().getResource("/client.images/talioIcon.png").toExternalForm()
+        ));
+
         setControllersAndScenes(addList, board, welcomePage, editList,
                 workspace, workspaceAdmin, editCard, changeBoardTitle,
-                editTag, addTag, tagOverview, addRemoveTags);
-
-        board.getValue().getStylesheets().add(
-                this.getClass().getResource(stylePath).toExternalForm());
-
-        addList.getValue().getStylesheets().add(
-                this.getClass().getResource(stylePath).toExternalForm());
-
-        welcomePage.getValue().getStylesheets().add(
-                this.getClass().getResource(stylePath).toExternalForm());
-
-        workspace.getValue().getStylesheets().add(
-                this.getClass().getResource(stylePath).toExternalForm());
-
-        workspaceAdmin.getValue().getStylesheets().add(
-                this.getClass().getResource(stylePath).toExternalForm());
-
-        editList.getValue().getStylesheets().add(
-                this.getClass().getResource(stylePath).toExternalForm());
-
-        changeBoardTitle.getValue().getStylesheets().add(
-                this.getClass().getResource(stylePath).toExternalForm());
-
-        editCard.getValue().getStylesheets().add(
-                this.getClass().getResource(stylePath).toExternalForm());
-
-        editTag.getValue().getStylesheets().add(
-                this.getClass().getResource(stylePath).toExternalForm());
-
-        addTag.getValue().getStylesheets().add(
-                this.getClass().getResource(stylePath).toExternalForm());
-
-        tagOverview.getValue().getStylesheets().add(
-                this.getClass().getResource(stylePath).toExternalForm());
-
-        addRemoveTags.getValue().getStylesheets().add(
-                this.getClass().getResource(stylePath).toExternalForm());
+                editTag, addTag, tagOverview, addRemoveTags,help);
+        setStylesheetsAndShortcuts();
 
         showWelcomePage();
         primaryStage.show();
     }
 
     private void setControllersAndScenes(
-                                         Pair<AddListCtrl, Parent> addList,
-                                         Pair<BoardOverviewCtrl, Parent> board,
-                                         Pair<WelcomePageCtrl, Parent> welcomePage,
-                                         Pair<EditListCtrl, Parent> editList,
-                                         Pair<WorkspaceCtrl, Parent> workspace,
-                                         Pair<WorkspaceAdminCtrl, Parent> workspaceAdmin,
-                                         Pair<EditCardCtrl, Parent> editCard,
-                                         Pair<ChangeBoardTitleCtrl, Parent> changeBoardTitle,
-                                         Pair<EditTagCtrl, Parent> editTag,
-                                         Pair<AddTagCtrl, Parent> addTag,
-                                         Pair<TagOverviewCtrl, Parent> tagOverview,
-                                         Pair<AddRemoveTagsCtrl, Parent> addRemoveTags){
+            Pair<AddListCtrl, Parent> addList,
+            Pair<BoardOverviewCtrl, Parent> board,
+            Pair<WelcomePageCtrl, Parent> welcomePage,
+            Pair<EditListCtrl, Parent> editList,
+            Pair<WorkspaceCtrl, Parent> workspace,
+            Pair<WorkspaceAdminCtrl, Parent> workspaceAdmin,
+            Pair<EditCardCtrl, Parent> editCard,
+            Pair<ChangeBoardTitleCtrl, Parent> changeBoardTitle,
+            Pair<EditTagCtrl, Parent> editTag,
+            Pair<AddTagCtrl, Parent> addTag,
+            Pair<TagOverviewCtrl, Parent> tagOverview,
+            Pair<AddRemoveTagsCtrl, Parent> addRemoveTags,
+            Pair<HelpCtrl,Parent> help){
 
         this.boardOverviewCtrl = board.getKey();
         this.board = new Scene(board.getValue());
-
 
         this.addListCtrl = addList.getKey();
         this.addList = new Scene(addList.getValue());
@@ -177,10 +161,66 @@ public class MainCtrl {
 
         this.addRemoveTagsCtrl = addRemoveTags.getKey();
         this.addRemoveTags = new Scene(addRemoveTags.getValue());
+
+        this.helpCtrl = help.getKey();
+        this.help = new Scene(help.getValue());
+    }
+
+    final KeyCombination keyComb1 = new KeyCodeCombination(KeyCode.SLASH,
+            KeyCombination.SHIFT_DOWN);
+
+    private void setStylesheetsAndShortcuts() {
+
+        sceneArray = Arrays.asList(addList, board, welcomePage,
+                editList, workspace, workspaceAdmin, editCard, changeBoardTitle,
+                editTag, addTag, tagOverview, addRemoveTags, help);
+
+
+        board.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if(event.getCode()==KeyCode.DOWN){
+                    System.out.print("Pressed down!");
+                }
+                event.consume();
+            }
+        });
+        for (Scene s : sceneArray) {
+            s.getStylesheets().add(this.getClass().getResource(stylePath).toExternalForm());
+            s.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler() {
+                @Override
+                public void handle(Event event) {
+                    if(keyComb1.match((KeyEvent) event)){
+                        showHelp();
+                    }
+                }
+            });
+        }
+    }
+
+    /**
+     * This method consumes the question mark shortcut, so it doesn't
+     * get triggered while in a text box
+     * @param text the label to add the handler to
+     */
+    public void consumeQuestionMarkTextField(TextInputControl text){
+        text.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler() {
+            @Override
+            public void handle(Event event) {
+                if(keyComb1.match((KeyEvent) event)){
+                    event.consume();
+                }
+            }
+        });
     }
 
     public void setAdmin(boolean admin) {
         isAdmin = admin;
+    }
+
+    public void showHelp(){
+        primaryStage.setTitle("Help");
+        primaryStage.setScene(help);
     }
 
 
