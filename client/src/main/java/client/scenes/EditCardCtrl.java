@@ -49,6 +49,8 @@ public class EditCardCtrl implements Initializable {
     @FXML
     private FlowPane tags;
     private ObservableList<Tag> tagsArray;
+    @FXML
+    private ComboBox presetMenu;
 
     @Inject
     public EditCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -86,6 +88,7 @@ public class EditCardCtrl implements Initializable {
             title.setText(card.title);
         if(!description.isFocused())
             description.setText(card.description);
+        updatePresetMenu();
     }
 
     private void overwriteSubtasks(List<Subtask> t){
@@ -263,6 +266,13 @@ public class EditCardCtrl implements Initializable {
      */
     public void addRemoveTags(){
         mainCtrl.showAddRemoveTags(cardToEdit);
+    }
+
+    public void updatePresetMenu() {
+        // TO-DO: find easier way of retrieving presets for a board.
+        BoardList list = server.getBoardListById(cardToEdit.listId);
+        List<Preset> presets = server.getAllBoardPresets(list.boardId);
+        presetMenu.getItems().setAll(presets.stream().map(preset -> preset.name).toArray());
     }
 }
 

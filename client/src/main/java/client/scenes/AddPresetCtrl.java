@@ -53,7 +53,8 @@ public class AddPresetCtrl implements Initializable {
     public void save() {
         String bg = backgroundColorPicker.getValue().toString();
         String font = fontColorPicker.getValue().toString();
-        server.addPreset(new Preset(bg, font, new ArrayList<>(), board, board.id));
+        String name = presetName.getText();
+        server.addPreset(new Preset(bg, font, new ArrayList<>(), name, board, board.id));
         back();
     }
 }

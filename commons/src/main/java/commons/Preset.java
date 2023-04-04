@@ -65,6 +65,17 @@ public class Preset {
         this.boardId = boardId;
     }
 
+    public Preset(String backgroundColor, String font,
+                  List<Card> cards, String name,
+                  Board board, int boardId) {
+        this.backgroundColor = backgroundColor;
+        this.font = font;
+        this.cards = cards;
+        this.board = board;
+        this.name = name;
+        this.boardId = boardId;
+    }
+
     public Integer getId(){return this.id;}
 
     public void setBackgroundColor(String backgroundColor) {
