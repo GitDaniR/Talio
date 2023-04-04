@@ -83,6 +83,7 @@ public class WelcomePageCtrl implements Initializable {
                 if(testUserID()){
                     mainCtrl.showAdminWorkspace(username.getText());
                     server.initializeStompSession(chosenServer.getText());
+                    mainCtrl.registerForAllSockets();
                     mainCtrl.setAdmin(true);
                 } else
                     setTextAndRemoveAfterDelay(userLabel,

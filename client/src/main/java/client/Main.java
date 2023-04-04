@@ -59,5 +59,6 @@ public class Main extends Application {
                 currentBoard, welcomePage, editList, workspace, workspaceAdmin, editCard,
                 editBoard, editTag, addTag, tagOverview, addRemoveTags,help);
 
+
     }
 }
