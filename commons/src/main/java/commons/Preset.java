@@ -18,6 +18,8 @@ public class Preset {
     public Integer id;
     public String backgroundColor;
     public String font;
+    public String name;
+    public boolean isDefault;
 
     @OneToMany(
             mappedBy = "preset",
