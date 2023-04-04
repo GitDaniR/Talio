@@ -14,6 +14,7 @@ import javafx.fxml.Initializable;
 
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Paint;
 import javafx.stage.Modality;
 
 
@@ -72,6 +73,11 @@ public class ListCtrl extends AnchorPane implements Initializable{
      */
     public void setListTitleText(String text) {
         listTitle.setText(text);
+    }
+
+    public void setFontColor(){
+        String color = server.getBoardByID(boardList.boardId).colorListsFont;
+        listTitle.setTextFill(Paint.valueOf(color));
     }
 
     public void setServerAndCtrl(ServerUtils server,MainCtrl mainCtrl){
