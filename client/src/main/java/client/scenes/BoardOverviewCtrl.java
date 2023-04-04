@@ -74,6 +74,13 @@ public class BoardOverviewCtrl implements Initializable {
 
     private int speed = 50;
 
+    private boolean isShiftPressed = false;
+
+    private final KeyCombination shiftDownComb = new KeyCodeCombination(KeyCode.DOWN,
+            KeyCombination.SHIFT_DOWN);
+    private final KeyCombination shiftUpComb = new KeyCodeCombination(KeyCode.UP,
+            KeyCombination.SHIFT_DOWN);
+
     @Inject
     public BoardOverviewCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
@@ -111,16 +118,26 @@ public class BoardOverviewCtrl implements Initializable {
                 //mainCtrl.showCustomization();
                 keyEvent.consume();
             }
+            else if(keyEvent.getCode()==KeyCode.SHIFT)
+                isShiftPressed=true;
             else if(keyEvent.getCode()==KeyCode.LEFT)
                 moveHighlight(-1,0);
             else if(keyEvent.getCode()==KeyCode.RIGHT)
                 moveHighlight(1,0);
-            else if(keyEvent.getCode()==KeyCode.UP)
-                moveHighlight(0,1);
-            else if(keyEvent.getCode()==KeyCode.DOWN)
+            else if(!isShiftPressed && keyEvent.getCode()==KeyCode.UP)
                 moveHighlight(0,-1);
+            else if(!isShiftPressed && keyEvent.getCode()==KeyCode.DOWN)
+                moveHighlight(0,1);
 
             keyEvent.consume();
+        });
+        everything.addEventFilter(KeyEvent.KEY_RELEASED,(EventHandler<KeyEvent>) keyEvent -> {
+            if(shiftDownComb.match(keyEvent))
+                shiftHighlighted(1);
+            else if(shiftUpComb.match(keyEvent))
+                shiftHighlighted(-1);
+            else if(keyEvent.getCode()==KeyCode.SHIFT)
+                isShiftPressed=false;
         });
     }
 
@@ -146,6 +163,12 @@ public class BoardOverviewCtrl implements Initializable {
         cardHighlightY = Math.floorMod(cardHighlightY+amount,cardBoxes.get(cardHighlightX).size());
     }
 
+    /**
+     * This method moves the highlight of the card in any direction
+     * based on the values of x and y
+     * @param x change of direction in x
+     * @param y change of direction y
+     */
     private void moveHighlight(int x, int y) {
         if(cardHighlightX != -1 && cardHighlightY != -1){
             setCardHighlight(cardBoxes.get(cardHighlightX).get(cardHighlightY),false);
@@ -171,15 +194,48 @@ public class BoardOverviewCtrl implements Initializable {
                     //for next candidate to highlight
                 } else break;
             }
-            if(iterations>=cardBoxes.size())
+            if(iterations>cardBoxes.size())
                 return;//If no candidate was found
         } else
             incrementHoverVertically(y);
 
         setCardHighlight(cardBoxes.get(cardHighlightX).get(cardHighlightY),true);
-        hoveredCardCtrl = (CardCtrl) cardBoxes.get(cardHighlightX).get(cardHighlightY).getUserData();
+        hoveredCardCtrl = (CardCtrl)cardBoxes.get(cardHighlightX).get(cardHighlightY).getUserData();
     }
 
+    /**
+     * This method shifts card up or down
+     * @param dir the direction of the shifting
+     */
+    private void shiftHighlighted(int dir){
+        //if no card is highlighted
+        if(cardHighlightX==-1 || cardHighlightY==-1)
+            return;
+        Card highlightedCard = ((CardCtrl) cardBoxes.get(cardHighlightX).get(cardHighlightY)
+                .getUserData()).getCard();
+        server.updateCardList(highlightedCard,highlightedCard.listId,
+                Math.floorMod(highlightedCard.index+dir,cardBoxes.get(cardHighlightX).size()));
+        incrementHoverVertically(dir);
+    }
+
+    /**
+     * Takes a card and fiinds its coords in the board
+     * @param cardObject cardObject to fiind coords of
+     */
+    private void setCoordsOfCard(Node cardObject){
+        for(int i=0;i<cardBoxes.size();i++)
+            for(int j=0;j<cardBoxes.get(i).size();j++)
+                if(cardBoxes.get(i).get(j).equals(cardObject)){
+                    cardHighlightX = i;
+                    cardHighlightY = j;
+                    return;
+                }
+    }
+
+    /**
+     * This method sets the highlight property
+     * @param cardObject cardObject to add highligh to
+     */
     private void addHighlight(Node cardObject){
         cardObject.setOnMouseEntered(e->{
             if(cardHighlightX!=-1 && cardHighlightY!=-1)
@@ -187,13 +243,13 @@ public class BoardOverviewCtrl implements Initializable {
             //disabling previous highlight
             setCardHighlight(cardObject,true);
             hoveredCardCtrl = (CardCtrl) cardObject.getUserData();
-            cardHighlightX = -1;
-            cardHighlightY = -1;
-
+            setCoordsOfCard(cardObject);
         });
         cardObject.setOnMouseExited(e->{
             setCardHighlight(cardObject,false);
             hoveredCardCtrl = null;
+            cardHighlightX = -1;
+            cardHighlightY = -1;
         });
     }
 
@@ -339,16 +395,17 @@ public class BoardOverviewCtrl implements Initializable {
     private void deleteCardById(int id){
         for(Node n : mainBoard.getChildren())
             ((ListCtrl) n.getUserData()).getCardBox().getChildren().
-                removeIf(e -> ((CardCtrl)e.getUserData()).getCardId()==id);
+                removeIf(e -> ((CardCtrl)e.getUserData()).getCard().id==id);
         refresh();
     }
 
     private void renameCardById(int id, String title){
         for(Node n : mainBoard.getChildren())
             for(Node c : ((ListCtrl) n.getUserData()).getCardBox().getChildren())
-                if(((CardCtrl)c.getUserData()).getCardId()==id)
+                if(((CardCtrl)c.getUserData()).getCard().id==id)
                     ((CardCtrl)c.getUserData()).setCardAndAttributes(server.getCardById(id));
         refresh();
+        setCardHighlight(cardBoxes.get(cardHighlightX).get(cardHighlightY),true);
     }
     //endregion
 
