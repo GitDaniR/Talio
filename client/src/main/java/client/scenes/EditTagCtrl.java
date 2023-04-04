@@ -42,7 +42,9 @@ public class EditTagCtrl implements Initializable {
     }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {}
+    public void initialize(URL location, ResourceBundle resources) {
+        mainCtrl.consumeQuestionMarkTextField(title);
+    }
 
     public void cancel(){
         clearFields();
