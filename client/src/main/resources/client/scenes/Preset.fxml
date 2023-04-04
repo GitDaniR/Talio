@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="25.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.PresetCtrl">
+   <children>
+      <Button layoutX="220.0" maxHeight="20.0" mnemonicParsing="false" prefHeight="20.0" text="X" />
+      <Label prefWidth="120.0" text="Label" />
+      <ColorPicker layoutX="120.0" layoutY="1.0" prefHeight="20.0" prefWidth="40.0" />
+      <ColorPicker layoutX="160.0" layoutY="1.0" prefHeight="20.0" prefWidth="40.0" />
+      <Button layoutX="275.0" mnemonicParsing="false" text="Set as default" />
+   </children>
+</AnchorPane>
