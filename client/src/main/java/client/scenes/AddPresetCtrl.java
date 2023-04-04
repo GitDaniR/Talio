@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
+import commons.Preset;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ColorPicker;
@@ -10,6 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class AddPresetCtrl implements Initializable {
@@ -50,7 +52,9 @@ public class AddPresetCtrl implements Initializable {
 
     public void save() {
         clearFields();
-        // TO-DO: Save new preset
+        String bg = backgroundColorPicker.getValue().toString();
+        String font = fontColorPicker.getValue().toString();
+        server.addPreset(new Preset(bg, font, new ArrayList<>(), board, board.id));
         mainCtrl.showCustomization(board);
     }
 }

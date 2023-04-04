@@ -49,6 +49,6 @@
         <ColorPicker fx:id="colorListsBackground" layoutX="235.0" layoutY="219.0" />
         <ColorPicker fx:id="colorListsFont" layoutX="235.0" layoutY="252.0" />
         <Button layoutX="796.0" layoutY="495.0" mnemonicParsing="false" onAction="#save" text="Save" />
-      <Button layoutX="652.0" layoutY="495.0" mnemonicParsing="false" onAction="#showAddPreset" text="Add new Task Color" />
+      <Button layoutX="652.0" layoutY="495.0" mnemonicParsing="false" text="Add new Task Color" />
     </children>
 </AnchorPane>
