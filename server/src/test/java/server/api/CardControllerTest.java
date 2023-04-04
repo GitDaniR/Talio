@@ -51,7 +51,7 @@ public class CardControllerTest {
         cards.add(c3);
         cardRepo.setCards(cards);
 
-        sut = new CardController(new CardService(cardRepo, listRepo, presetRepo),null);
+        sut = new CardController(new CardService(cardRepo, listRepo, presetRepo),simp);
 
     }
 
