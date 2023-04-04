@@ -30,12 +30,12 @@ public class PresetCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
     }
 
-    public void setTag(Preset preset){
+    public void setPreset(Preset preset, int idDefault){
         this.preset = preset;
         lblName.setText(preset.name);
         pickerBackground.setValue(Color.valueOf(preset.backgroundColor));
         pickerForeground.setValue(Color.valueOf(preset.font));
-        if(preset.isDefault){
+        if(preset.id == idDefault){
             btnDefault.setDisable(true);
         }
     }

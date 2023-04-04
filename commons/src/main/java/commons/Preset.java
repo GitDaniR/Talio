@@ -19,7 +19,6 @@ public class Preset {
     public String backgroundColor;
     public String font;
     public String name;
-    public boolean isDefault;
 
     @OneToMany(
             mappedBy = "preset",
@@ -51,6 +50,18 @@ public class Preset {
         this.font = font;
         this.cards = cards;
         this.board = board;
+        this.boardId = boardId;
+    }
+
+    public Preset(Integer id, String backgroundColor,
+                  String font, List<Card> cards, String name, Board board,
+                  int boardId) {
+        this.id = id;
+        this.backgroundColor = backgroundColor;
+        this.font = font;
+        this.cards = cards;
+        this.board = board;
+        this.name = name;
         this.boardId = boardId;
     }
 
