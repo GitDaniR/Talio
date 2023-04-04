@@ -379,7 +379,13 @@ public class MainCtrl {
         addRemoveTagsCtrl.setCardToEdit(card);
         addRemoveTagsCtrl.setTags();
     }
-
+    public void registerForAllSockets() {
+        editCardCtrl.subscribeToSocketsEditCardCtrl();
+        workspaceCtrl.subscribeForSocketsWorkspace();
+        workspaceAdminCtrl.subscribeForSocketsWorkspaceAdmin();
+        boardOverviewCtrl.subscribeToSocketsBoardOverview();
+        tagOverviewCtrl.subscribeForSocketsTagOverview();
+    }
     public void showCustomization(Board board) {
         primaryStage.setTitle("Customizing Board");
         primaryStage.setScene(customization);

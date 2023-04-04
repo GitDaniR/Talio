@@ -113,8 +113,8 @@ public class UserController {
             return ResponseEntity.badRequest().build();
         }
 
-        //if(msgs!=null)
-        //    msgs.convertAndSend("/topic/boards/join",));
+        if(msgs!=null)
+            msgs.convertAndSend("/topic/boards/joinLeave",res);
 
         return res;
     }
@@ -122,8 +122,15 @@ public class UserController {
     @DeleteMapping(path = "{userId}/boards/{boardId}")
     public ResponseEntity<User> removeBoard(@PathVariable("userId") Integer userId,
                                             @PathVariable("boardId") Integer boardId){
+        ResponseEntity<User> res;
         try{
-            return this.userService.removeBoard(userId, boardId);
+            res = this.userService.removeBoard(userId, boardId);
+
+            if(msgs!=null)
+                msgs.convertAndSend("/topic/boards/joinLeave",
+                        userService.getById(userId));
+
+            return res;
         }
         catch (Exception e){
             return ResponseEntity.badRequest().build();

@@ -37,6 +37,10 @@ public class TagOverviewCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+    }
+
+    public void subscribeForSocketsTagOverview(){
         server.registerForMessages("/topic/tags", Integer.class, cardId -> {
             Platform.runLater(this::refresh);
         });

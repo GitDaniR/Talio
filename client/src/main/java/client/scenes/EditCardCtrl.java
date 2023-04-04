@@ -57,6 +57,11 @@ public class EditCardCtrl implements Initializable {
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        title.setOnKeyTyped(e -> server.editCard(cardToEdit.id, getUpdatedCard()));
+        description.setOnKeyTyped(e -> server.editCard(cardToEdit.id, getUpdatedCard()));
+    }
+
+    public void subscribeToSocketsEditCardCtrl(){
         server.registerForMessages("/topic/subtasks", Integer.class, cardId -> {
             Platform.runLater(() -> setCardToEdit(server.getCardById(cardId)));
         });
@@ -67,8 +72,6 @@ public class EditCardCtrl implements Initializable {
         server.registerForMessages("/topic/tags", Integer.class, boardId -> {
             Platform.runLater(() -> overwriteTags(server.getBoardByID(boardId).tags));
         });
-        title.setOnKeyTyped(e -> server.editCard(cardToEdit.id, getUpdatedCard()));
-        description.setOnKeyTyped(e -> server.editCard(cardToEdit.id, getUpdatedCard()));
     }
 
 
