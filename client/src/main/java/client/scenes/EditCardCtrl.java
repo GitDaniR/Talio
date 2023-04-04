@@ -8,11 +8,14 @@ import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
 import javafx.util.Duration;
@@ -26,26 +29,19 @@ public class EditCardCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     @FXML
+    public AnchorPane everything;
+    @FXML
     private TextField title;
     @FXML
     private TextArea description;
     @FXML
     private Label errorLabel;
-
-    @FXML
-    private Button save;
-    @FXML
-    private Button cancel;
     private Card cardToEdit;
-
     @FXML
     private ListView<Subtask> subtasks;
     @FXML
     private TextField subtaskTitle;
-    @FXML
-    private Button addSubtask;
     private ObservableList<Subtask> subtasksArray;
-
     @FXML
     private FlowPane tags;
     private ObservableList<Tag> tagsArray;
@@ -62,6 +58,19 @@ public class EditCardCtrl implements Initializable {
         mainCtrl.consumeQuestionMarkTextField(title);
         mainCtrl.consumeQuestionMarkTextField(description);
         mainCtrl.consumeQuestionMarkTextField(subtaskTitle);
+
+        // add keyboard shortcuts
+        everything.addEventFilter(KeyEvent.KEY_PRESSED, (EventHandler<KeyEvent>) keyEvent -> {
+            switch(keyEvent.getCode()){
+                case ESCAPE:
+                    cancel();
+                    keyEvent.consume();
+                    break;
+                default:
+                    keyEvent.consume();
+                    break;
+            }
+        });
     }
 
     public void subscribeToSocketsEditCardCtrl(){

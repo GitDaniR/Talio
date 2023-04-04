@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
 
-<AnchorPane prefHeight="540.0" prefWidth="860.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditCardCtrl">
+<AnchorPane fx:id="everything" prefHeight="540.0" prefWidth="860.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditCardCtrl">
    <children>
       <Label layoutX="31.0" layoutY="23.0" prefHeight="17.0" prefWidth="177.0" text="The title of your card:" />
       <TextField fx:id="title" disable="false" layoutX="31.0" layoutY="40.0" prefHeight="25.0" prefWidth="538.0" />
@@ -17,7 +17,7 @@
       <Button layoutX="31.0" layoutY="500.0" mnemonicParsing="false" onAction="#cancel" text="Back" />
       <ListView fx:id="subtasks" layoutX="33.0" layoutY="261.0" prefHeight="145.0" prefWidth="538.0" />
       <TextField fx:id="subtaskTitle" layoutX="31.0" layoutY="430.0" prefHeight="26.0" prefWidth="488.0" />
-      <Button fx:id="addSubtask" layoutX="533.0" layoutY="431.0" mnemonicParsing="false" onAction="#addSubtask" text="Add" />
+      <Button layoutX="533.0" layoutY="431.0" mnemonicParsing="false" onAction="#addSubtask" text="Add" />
       <Label layoutX="29.0" layoutY="227.0" text="The subtasks of your card:" />
       <Label fx:id="errorLabel" layoutX="29.0" layoutY="72.0" textFill="RED" />
       <Label layoutX="712.0" layoutY="64.0" text="Tags for this card" />

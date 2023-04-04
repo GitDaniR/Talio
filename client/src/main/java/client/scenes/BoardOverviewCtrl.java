@@ -1,7 +1,6 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
@@ -34,8 +33,6 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
-
-
 import java.net.URL;
 import java.util.*;
 import java.util.List;
@@ -72,7 +69,7 @@ public class BoardOverviewCtrl implements Initializable {
     private Timeline scrolltimeline = new Timeline();
     private double scrollVelocity = 0;
 
-    private List<List<HBox>> cardBoxes;
+    private List<List<AnchorPane>> cardBoxes;
 
     private int speed = 50;
 
@@ -94,26 +91,41 @@ public class BoardOverviewCtrl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setupScrolling();
+        addKeyboardShortcuts();
+    }
+    private void addKeyboardShortcuts(){
 
         everything.addEventFilter(KeyEvent.KEY_PRESSED, (EventHandler<KeyEvent>) keyEvent -> {
-            if (keyEvent.getCode() == KeyCode.DELETE ||
-                    keyEvent.getCode() == KeyCode.BACK_SPACE) {
-                hoveredCardCtrl.deleteCard();
-                keyEvent.consume();
-            }
-            else if (keyEvent.getCode() == KeyCode.ENTER) {
-                hoveredCardCtrl.editCard();
-                keyEvent.consume();
-            }
+            switch(keyEvent.getCode()){
+                case DELETE:
+                case BACK_SPACE:
+                    if(hoveredCardCtrl != null) hoveredCardCtrl.deleteCard();
+                    keyEvent.consume();
+                    break;
+                case ENTER:
+                    if(hoveredCardCtrl != null) hoveredCardCtrl.editCard();
+                    keyEvent.consume();
+                    break;
+                case T:
+                    mainCtrl.showAddTag(board);
+                    keyEvent.consume();
+                    break;
+                /*
+                Not merged with customization yet
 
-            else if (keyEvent.getCode() == KeyCode.T) {
-                mainCtrl.showTagOverview(board);
-                keyEvent.consume();
-            }
-            else if (keyEvent.getCode() == KeyCode.C) {
-                // not on this branch yet
-                //mainCtrl.showCustomization();
-                keyEvent.consume();
+                case C:
+                    mainCtrl.showCustomization();
+                    keyEvent.consume();
+                    break;*/
+                case E:
+                    keyEvent.consume();
+                    if(hoveredCardCtrl != null){
+                        hoveredCardCtrl.editTitle();
+                    }
+                    break;
+                default:
+                    keyEvent.consume();
+                    break;
             }
         });
     }
@@ -253,7 +265,7 @@ public class BoardOverviewCtrl implements Initializable {
                 .ifPresent(list -> {
                     try{
                         FXMLLoader cardLoader =
-                                new FXMLLoader((getClass().getResource("Card.fxml")));
+                                new FXMLLoader((getClass().getResource("CardNew.fxml")));
                         Node cardObject = cardLoader.load();
                         cardObject.setUserData(cardLoader.getController());
                         ((ListCtrl)list.getUserData()).getBoardList().cards.add(card);
@@ -329,7 +341,7 @@ public class BoardOverviewCtrl implements Initializable {
         });
 
         addDragAndDrop(listObjectController.getAmountOfCardsInList(),
-                (HBox) cardObject);
+                (AnchorPane) cardObject);
         //Setting drag and drop property
 
         listObjectController.addCardToList(cardObject);
@@ -400,11 +412,12 @@ public class BoardOverviewCtrl implements Initializable {
                 Collections.sort(cardsInList, (s1, s2) -> { return s1.index-s2.index; });
                 currentList.setCards(cardsInList);
                 for (Card currentCard : cardsInList) {
-                    FXMLLoader cardLoader = new FXMLLoader((getClass().getResource("Card.fxml")));
+                    FXMLLoader cardLoader = new FXMLLoader((getClass()
+                            .getResource("CardNew.fxml")));
                     Node cardObject = cardLoader.load();
                     cardObject.setUserData(cardLoader.getController());
                     assignAndAddCard(cardObject,currentCard,listObjectController);
-                    cardBoxes.get(cardBoxes.size()-1).add((HBox) cardObject);
+                    cardBoxes.get(cardBoxes.size()-1).add((AnchorPane) cardObject);
                 }
 
                 mainBoard.getChildren().add(listObject);
@@ -509,7 +522,7 @@ public class BoardOverviewCtrl implements Initializable {
      * @param board
      * @param card
      */
-    private void addPreview(final FlowPane board, final HBox card){
+    private void addPreview(final FlowPane board, final AnchorPane card){
         ImageView imageView = new ImageView(card.snapshot(null, null));
         imageView.setManaged(false);
         imageView.setMouseTransparent(true);
@@ -539,7 +552,7 @@ public class BoardOverviewCtrl implements Initializable {
      * Method that highlights the card when its dragging starts,
      * @param card - card to be highlighted
      */
-    private void setDragAndDropEffect(final HBox card){
+    private void setDragAndDropEffect(final AnchorPane card){
         String initialStyle = card.getStyle();
         card.setOnMouseDragEntered(new EventHandler<MouseDragEvent>() {
             @Override
@@ -660,7 +673,7 @@ public class BoardOverviewCtrl implements Initializable {
      * @param cardNumber -  index of the card
      * @param card - card to add drag&drop for
      */
-    private void addDragAndDrop(int cardNumber, final HBox card){
+    private void addDragAndDrop(int cardNumber, final AnchorPane card){
         card.setOnDragDetected(new EventHandler<MouseEvent>()
         {
             @Override

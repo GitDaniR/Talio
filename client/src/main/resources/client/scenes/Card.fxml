@@ -8,14 +8,14 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox style="-fx-border-color: black; -fx-border-width: 4; -fx-background-color: pink; -fx-border-radius: 5 5 5 5; -fx-background-radius: 5 5 5 5;" styleClass="card" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CardCtrl">
+<HBox fx:id="object" style="-fx-border-color: black; -fx-border-width: 4; -fx-background-color: pink; -fx-border-radius: 5 5 5 5; -fx-background-radius: 5 5 5 5;" styleClass="card" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CardCtrl">
    <children>
       <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="59.0" prefWidth="206.0">
          <children>
             <HBox alignment="TOP_RIGHT" prefWidth="200.0" style="-fx-alignment: BASELINE_RIGHT;">
                <children>
                   <Label fx:id="cardTitle" alignment="CENTER" prefHeight="42.0" prefWidth="202.0" text="Default Card Name" />
-                  <Button fx:id="cardDelete" mnemonicParsing="false" onAction="#deleteCard" text="x" />
+                  <Button mnemonicParsing="false" onAction="#deleteCard" text="x" />
                </children>
             </HBox>
             <HBox prefWidth="200.0">
