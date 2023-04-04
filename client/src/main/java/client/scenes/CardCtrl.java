@@ -89,8 +89,8 @@ public class CardCtrl extends AnchorPane implements Initializable{
         this.mainCtrl = mainCtrl;
     }
 
-    public int getCardId() {
-        return card.id;
+    public Card getCard() {
+        return card;
     }
     public void addTag(Tag tag){
         FXMLLoader tagLoader = new FXMLLoader(getClass().getResource("TagIcon.fxml"));
