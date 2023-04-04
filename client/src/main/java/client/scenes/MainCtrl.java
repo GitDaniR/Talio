@@ -405,9 +405,10 @@ public class MainCtrl {
         tagOverviewCtrl.subscribeForSocketsTagOverview();
     }
 
-    public void showAddPreset() {
+    public void showAddPreset(Board board) {
         primaryStage.setTitle("New Task Color");
         primaryStage.setScene(addPreset);
+        addPresetCtrl.setBoard(board);
     }
 }
 

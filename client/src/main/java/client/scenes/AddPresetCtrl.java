@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Board;
 import javafx.fxml.Initializable;
 
 import java.net.URL;
@@ -11,6 +12,7 @@ public class AddPresetCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private Board board;
 
     @Inject
     public AddPresetCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -21,12 +23,22 @@ public class AddPresetCtrl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {}
 
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
     public void clearFields() {
 
     }
 
-    public void cancel() {
+    public void back() {
         clearFields();
-        mainCtrl.showBoard();
+        mainCtrl.showCustomization(board);
+    }
+
+    public void save() {
+        clearFields();
+        // TO-DO: Save new preset
+        mainCtrl.showCustomization(board);
     }
 }
