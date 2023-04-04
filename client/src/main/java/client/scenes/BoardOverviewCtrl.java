@@ -62,8 +62,6 @@ public class BoardOverviewCtrl implements Initializable {
     private Label title;
     @FXML
     private Label copiedToClipboardMessage;
-
-    private Card hoveredCard;
     private CardCtrl hoveredCardCtrl;
 
     private int cardHighlightX = -1;
@@ -94,60 +92,36 @@ public class BoardOverviewCtrl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setupScrolling();
-
         everything.addEventFilter(KeyEvent.KEY_PRESSED, (EventHandler<KeyEvent>) keyEvent -> {
             if (keyEvent.getCode() == KeyCode.DELETE ||
                     keyEvent.getCode() == KeyCode.BACK_SPACE) {
                 hoveredCardCtrl.deleteCard();
-                keyEvent.consume();
+                hoveredCardCtrl = null;
+                cardHighlightX = -1;
+                cardHighlightY = -1;
             }
             else if (keyEvent.getCode() == KeyCode.ENTER) {
                 hoveredCardCtrl.editCard();
-                keyEvent.consume();
             }
-
             else if (keyEvent.getCode() == KeyCode.T) {
                 mainCtrl.showTagOverview(board);
-                keyEvent.consume();
             }
             else if (keyEvent.getCode() == KeyCode.C) {
                 // not on this branch yet
                 //mainCtrl.showCustomization();
                 keyEvent.consume();
             }
-        });
-    }
+            else if(keyEvent.getCode()==KeyCode.LEFT)
+                moveHighlight(-1,0);
+            else if(keyEvent.getCode()==KeyCode.RIGHT)
+                moveHighlight(1,0);
+            else if(keyEvent.getCode()==KeyCode.UP)
+                moveHighlight(0,1);
+            else if(keyEvent.getCode()==KeyCode.DOWN)
+                moveHighlight(0,-1);
 
-    public void subscribeToSocketsBoardOverview(){
-        server.registerForMessages("/topic/lists", BoardList.class, list -> {
-            Platform.runLater(() -> addListToBoard(list));
+            keyEvent.consume();
         });
-        server.registerForMessages("/topic/lists/rename", BoardList.class, newList -> {
-            Platform.runLater(() -> renameListById(newList.id, newList.title));
-        });
-        server.registerForMessages("/topic/lists", Integer.class, id -> {
-            Platform.runLater(() -> deleteListById(id));
-        });
-        server.registerForMessages("/topic/cards", Card.class, card -> {
-            Platform.runLater(() -> addCardToBoard(card));
-        });
-        server.registerForMessages("/topic/cards", Integer.class, id -> {
-            Platform.runLater(() -> deleteCardById(id));
-        });
-        server.registerForMessages("/topic/cards/rename", Card.class, card -> {
-            Platform.runLater(() -> renameCardById(card.id,card.title));
-        });
-        server.registerForMessages("/topic/boards/removed", Integer.class, id -> {
-            Platform.runLater(() -> { if(board==null || id==board.id) back(); });
-        });
-        server.registerForMessages("/topic/boards/rename", Board.class, newBoard -> {
-            Platform.runLater(() -> { if(board.id == newBoard.id) title.setText(newBoard.title); });
-        });
-        //Basically I just need to update the card
-        server.registerForMessages("/topic/subtasks", Integer.class, id -> {
-            Platform.runLater(() -> renameCardById(id, ""));
-        });
-
     }
 
     public void setBoard(Board board) {
@@ -162,15 +136,77 @@ public class BoardOverviewCtrl implements Initializable {
         server.assignBoardToUser(user.id, this.board.id);
     }
 
+    //region HIGHLIGHT METHODS
+
+    private void incrementHoverHorizontally(int amount){
+        cardHighlightX = Math.floorMod(cardHighlightX+amount,cardBoxes.size());
+    }
+
+    private void incrementHoverVertically(int amount){
+        cardHighlightY = Math.floorMod(cardHighlightY+amount,cardBoxes.get(cardHighlightX).size());
+    }
+
+    private void moveHighlight(int x, int y) {
+        if(cardHighlightX != -1 && cardHighlightY != -1){
+            setCardHighlight(cardBoxes.get(cardHighlightX).get(cardHighlightY),false);
+        }
+        if(cardHighlightX==-1 && cardHighlightY==-1){
+            x=1;
+            y=0;
+            cardHighlightY=0;
+            cardHighlightX=-x;
+        }
+
+        //if we are moving between lists
+        if(x!=0){
+            int iterations = 1;
+            cardHighlightY=0;
+            incrementHoverHorizontally(x);
+            //while to find the first non-empty list
+            while(iterations<cardBoxes.size()){
+                if(cardBoxes.get(cardHighlightX).isEmpty()){
+                    iterations++;
+                    incrementHoverHorizontally(x);
+                    //If list is empty we keep looking
+                    //for next candidate to highlight
+                } else break;
+            }
+            if(iterations>=cardBoxes.size())
+                return;//If no candidate was found
+        } else
+            incrementHoverVertically(y);
+
+        setCardHighlight(cardBoxes.get(cardHighlightX).get(cardHighlightY),true);
+        hoveredCardCtrl = (CardCtrl) cardBoxes.get(cardHighlightX).get(cardHighlightY).getUserData();
+    }
+
+    private void addHighlight(Node cardObject){
+        cardObject.setOnMouseEntered(e->{
+            if(cardHighlightX!=-1 && cardHighlightY!=-1)
+                setCardHighlight(cardObject,false);
+            //disabling previous highlight
+            setCardHighlight(cardObject,true);
+            hoveredCardCtrl = (CardCtrl) cardObject.getUserData();
+            cardHighlightX = -1;
+            cardHighlightY = -1;
+
+        });
+        cardObject.setOnMouseExited(e->{
+            setCardHighlight(cardObject,false);
+            hoveredCardCtrl = null;
+        });
+    }
+
+    //endregion
+
+    //region METHODS FOR BUTTONS
+
     public void underlineText(){
         title.setUnderline(true);
     }
     public void undoUnderline(){
         title.setUnderline(false);
     }
-
-    //region METHODS FOR BUTTONS
-
     public void addList() {
         mainCtrl.showAddList(board);
     }
@@ -211,9 +247,44 @@ public class BoardOverviewCtrl implements Initializable {
         return selection;
     }
 
+    public void showTags(){
+        mainCtrl.showTagOverview(this.board);
+    }
+
     //endregion
 
     //region METHODS FOR SOCKETS
+
+    public void subscribeToSocketsBoardOverview(){
+        server.registerForMessages("/topic/lists", BoardList.class, list -> {
+            Platform.runLater(() -> addListToBoard(list));
+        });
+        server.registerForMessages("/topic/lists/rename", BoardList.class, newList -> {
+            Platform.runLater(() -> renameListById(newList.id, newList.title));
+        });
+        server.registerForMessages("/topic/lists", Integer.class, id -> {
+            Platform.runLater(() -> deleteListById(id));
+        });
+        server.registerForMessages("/topic/cards", Card.class, card -> {
+            Platform.runLater(() -> addCardToBoard(card));
+        });
+        server.registerForMessages("/topic/cards", Integer.class, id -> {
+            Platform.runLater(() -> deleteCardById(id));
+        });
+        server.registerForMessages("/topic/cards/rename", Card.class, card -> {
+            Platform.runLater(() -> renameCardById(card.id,card.title));
+        });
+        server.registerForMessages("/topic/boards/removed", Integer.class, id -> {
+            Platform.runLater(() -> { if(board==null || id==board.id) back(); });
+        });
+        server.registerForMessages("/topic/boards/rename", Board.class, newBoard -> {
+            Platform.runLater(() -> { if(board.id == newBoard.id) title.setText(newBoard.title); });
+        });
+        //Basically I just need to update the card
+        server.registerForMessages("/topic/subtasks", Integer.class, id -> {
+            Platform.runLater(() -> renameCardById(id, ""));
+        });
+    }
 
     private void addListToBoard(BoardList list){
         try{
@@ -332,24 +403,11 @@ public class BoardOverviewCtrl implements Initializable {
                 (HBox) cardObject);
         //Setting drag and drop property
 
+        addHighlight(cardObject);
+        //setting Highlight
+
         listObjectController.addCardToList(cardObject);
         //Adding the card to the list
-
-
-
-        cardObject.setOnMouseEntered(e->{
-            setCardHighlight(cardObject,true);
-            hoveredCard = currentCard;
-            hoveredCardCtrl = cardObjectController;
-            cardHighlightX = -1;
-            cardHighlightY = -1;
-
-        });
-        cardObject.setOnMouseExited(e->{
-            setCardHighlight(cardObject,false);
-            hoveredCard = null;
-            hoveredCardCtrl = null;
-        });
 
         return cardObjectController;
     }
@@ -709,9 +767,5 @@ public class BoardOverviewCtrl implements Initializable {
 
     }
     //endregion
-
-    public void showTags(){
-        mainCtrl.showTagOverview(this.board);
-    }
 
 }
