@@ -94,6 +94,30 @@ public class BoardOverviewCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         setupScrolling();
 
+        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            public void handle(final KeyEvent keyEvent) {
+                if (keyEvent.getCode() == KeyCode.DELETE ||
+                    keyEvent.getCode() == KeyCode.BACK_SPACE) {
+                    hoveredCardCtrl.deleteCard();
+                    keyEvent.consume();
+                }
+
+                else if (keyEvent.getCode() == KeyCode.ENTER) {
+                    hoveredCardCtrl.editCard();
+                    keyEvent.consume();
+                }
+
+                else if (keyEvent.getCode() == KeyCode.T) {
+                    mainCtrl.showTagOverview(board);
+                    keyEvent.consume();
+                }
+                else if (keyEvent.getCode() == KeyCode.C) {
+                    // not on this branch yet
+                    //mainCtrl.showCustomization();
+                    keyEvent.consume();
+                }
+            }
+        });
     }
 
     public void subscribeToSocketsBoardOverview(){
@@ -116,7 +140,7 @@ public class BoardOverviewCtrl implements Initializable {
             Platform.runLater(() -> renameCardById(card.id,card.title));
         });
         server.registerForMessages("/topic/boards/removed", Integer.class, id -> {
-            Platform.runLater(() -> { if(id== board.id) back(); });
+            Platform.runLater(() -> { if(board==null || id==board.id) back(); });
         });
         server.registerForMessages("/topic/boards/rename", Board.class, newBoard -> {
             Platform.runLater(() -> { if(board.id == newBoard.id) title.setText(newBoard.title); });
