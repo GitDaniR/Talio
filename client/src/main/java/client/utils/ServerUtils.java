@@ -353,9 +353,10 @@ public class ServerUtils {
     public void updateSubtaskIndex(Integer id, Integer index){
         ClientBuilder.newClient(new ClientConfig()) //
                 .target(server).path("api/subtasks/index/" + id) //
+                .queryParam("index", index) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .put(Entity.entity(String.valueOf(index), APPLICATION_JSON), String.class);
+                .put(Entity.entity("", APPLICATION_JSON), String.class);
     }
 
     private StompSession session;
