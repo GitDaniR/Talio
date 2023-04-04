@@ -5,6 +5,7 @@ import commons.Board;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 import javax.inject.Inject;
@@ -25,6 +26,8 @@ public class CustomizationCtrl implements Initializable {
     private ColorPicker colorListsBackground;
     @FXML
     private ColorPicker colorListsFont;
+    @FXML
+    private VBox vboxPresets;
 
     @Inject
     public CustomizationCtrl(ServerUtils server, MainCtrl mainCtrl) {
