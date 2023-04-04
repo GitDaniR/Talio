@@ -449,7 +449,6 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(newColor, APPLICATION_JSON), Board.class);
     }
-
     public List<Preset> getAllBoardPresets(int boardId) {
         return ClientBuilder.newClient(new ClientConfig())
             .target(server).path("api/presets/")
@@ -490,7 +489,6 @@ public class ServerUtils {
             .accept(APPLICATION_JSON) //
             .put(Entity.entity("", APPLICATION_JSON), String.class);
     }
-
 
 //    public void send(String dest, Object o){
 //        session.send(dest,o);
