@@ -94,6 +94,30 @@ public class BoardOverviewCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         setupScrolling();
 
+        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            public void handle(final KeyEvent keyEvent) {
+                if (keyEvent.getCode() == KeyCode.DELETE ||
+                    keyEvent.getCode() == KeyCode.BACK_SPACE) {
+                    hoveredCardCtrl.deleteCard();
+                    keyEvent.consume();
+                }
+
+                else if (keyEvent.getCode() == KeyCode.ENTER) {
+                    hoveredCardCtrl.editCard();
+                    keyEvent.consume();
+                }
+
+                else if (keyEvent.getCode() == KeyCode.T) {
+                    mainCtrl.showTagOverview(board);
+                    keyEvent.consume();
+                }
+                else if (keyEvent.getCode() == KeyCode.C) {
+                    // not on this branch yet
+                    //mainCtrl.showCustomization();
+                    keyEvent.consume();
+                }
+            }
+        });
     }
 
     public void subscribeToSocketsBoardOverview(){
