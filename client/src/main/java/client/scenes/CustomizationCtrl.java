@@ -59,10 +59,8 @@ public class CustomizationCtrl implements Initializable {
 
     public void loadPresets(){
         //TODO actually load from server
-        List<Preset> presets = new ArrayList<>();
-        presets.add(new Preset(0, "0xff0000", "0x00ffff", null, "Preset 1", null, 0));
-        presets.add(new Preset(1, "0x00ff00", "0xff00ff", null, "Preset 2", null, 0));
-        presets.add(new Preset(2, "0x0000ff", "0xffff00", null, "Preset 3", null, 0));
+        List<Preset> presets = getPresets();
+
 
         vboxPresets.getChildren().clear();
         if(presets != null) {
@@ -70,6 +68,18 @@ public class CustomizationCtrl implements Initializable {
                 addPreset(p);
             }
         }
+    }
+
+    //Method to get all presets. If presets were not added (currently through postman) a default list is returned for testability
+    public List<Preset> getPresets(){
+        //TODO eventually remove dummy data once we have preset adding and default preset
+        List<Preset> result = server.getAllBoardPresets(board.id);
+        if(result.size() == 0){
+            result.add(new Preset(0, "0xff0000", "0x00ffff", null, "Preset 1", null, 0));
+            result.add(new Preset(1, "0x00ff00", "0xff00ff", null, "Preset 2", null, 0));
+            result.add(new Preset(2, "0x0000ff", "0xffff00", null, "Preset 3", null, 0));
+        }
+        return result;
     }
 
     public void addPreset(Preset preset){

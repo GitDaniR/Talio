@@ -22,6 +22,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import commons.*;
 import org.glassfish.jersey.client.ClientConfig;
@@ -447,6 +448,16 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(newColor, APPLICATION_JSON), Board.class);
+    }
+
+    public List<Preset> getAllBoardPresets(int boardId) {
+        return ClientBuilder.newClient(new ClientConfig())
+            .target(server).path("api/presets/")
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .get(new GenericType<List<Preset>>() {}).stream().
+            filter(preset->preset.boardId == boardId).
+            collect(Collectors.toList());
     }
 
 
