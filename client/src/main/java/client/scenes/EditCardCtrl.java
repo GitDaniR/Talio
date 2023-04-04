@@ -16,6 +16,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
 import javafx.util.Duration;
+import javafx.util.StringConverter;
 
 import java.io.IOException;
 import java.net.URL;
@@ -61,6 +62,31 @@ public class EditCardCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         title.setOnKeyTyped(e -> server.editCard(cardToEdit.id, getUpdatedCard()));
         description.setOnKeyTyped(e -> server.editCard(cardToEdit.id, getUpdatedCard()));
+
+        // Set presetMenu to convert from presetName to Preset, and back.
+        presetMenu.setConverter(new StringConverter<Preset>() {
+            @Override
+            public String toString(Preset object) {
+                if (object == null) return "null";
+                return object.getName();
+            }
+
+            @Override
+            public Preset fromString(String string) {
+                // TO-DO: don't allow users to create presets with the same name
+                return (Preset) presetMenu.getItems().stream().filter(p ->
+                        ((Preset) p).getName().equals(string)).findFirst().orElse(null);
+            }
+        });
+
+        // Add listener to presetMenu to detect when a Preset is selected.
+        presetMenu.valueProperty().addListener((obs, oldval, newval) -> {
+            Preset p = (Preset) newval;
+            if(p != null) {
+                cardToEdit.setPreset(p);
+                server.editCard(cardToEdit.id, cardToEdit);
+            }
+        });
     }
 
     public void subscribeToSocketsEditCardCtrl(){
@@ -206,7 +232,8 @@ public class EditCardCtrl implements Initializable {
     public void setOldValues(){
         title.setText(cardToEdit.title);
         description.setText((cardToEdit.description));
-
+        Preset p = server.getPresetById(cardToEdit.presetId); // TO-DO: create cleaner way of setting preset.
+        presetMenu.setValue(p);
     }
 
     public void setSubtasks(){
@@ -271,8 +298,9 @@ public class EditCardCtrl implements Initializable {
     public void updatePresetMenu() {
         // TO-DO: find easier way of retrieving presets for a board.
         BoardList list = server.getBoardListById(cardToEdit.listId);
-        List<Preset> presets = server.getAllBoardPresets(list.boardId);
-        presetMenu.getItems().setAll(presets.stream().map(preset -> preset.name).toArray());
+        ObservableList<Preset> presets = FXCollections.observableArrayList(); // Make ObservableList
+        presets.addAll(server.getAllBoardPresets(list.boardId));              // Fetch presets from DB and add to OL
+        presetMenu.setItems(presets);
     }
 }
 

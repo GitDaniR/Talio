@@ -78,6 +78,10 @@ public class Preset {
 
     public Integer getId(){return this.id;}
 
+    public String getName() {
+        return this.name;
+    }
+
     public void setBackgroundColor(String backgroundColor) {
         this.backgroundColor = backgroundColor;
     }

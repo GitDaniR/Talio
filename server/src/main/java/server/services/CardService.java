@@ -72,6 +72,7 @@ public class CardService {
         res.title = card.title;
         res.description = card.description;
         res.tags = card.tags;
+        res.presetId = card.presetId;
 
         Card saved = cardRepo.save(res);
         return saved;
