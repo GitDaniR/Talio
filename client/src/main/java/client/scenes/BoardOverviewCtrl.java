@@ -1,15 +1,8 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
-import java.io.IOException;
 import com.google.inject.Inject;
-import commons.Board;
-import commons.BoardList;
-import commons.Card;
-import commons.User;
+import commons.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
@@ -27,14 +20,23 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.*;
+import javafx.scene.input.MouseDragEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.ResourceBundle;
 
 
 public class BoardOverviewCtrl implements Initializable {
@@ -120,6 +122,8 @@ public class BoardOverviewCtrl implements Initializable {
 
     public void saveBoardInDatabase(){
         this.board = server.addBoard(this.board);
+        server.addPreset(new Preset("0xFFA500", "0x000000",
+                new ArrayList<>(), this.board, this.board.id));
     }
 
     public void assignToUser(User user){
