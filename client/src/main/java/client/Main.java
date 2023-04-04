@@ -15,13 +15,15 @@
  */
 package client;
 
-import static com.google.inject.Guice.createInjector;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import client.scenes.*;
 import com.google.inject.Injector;
 import javafx.application.Application;
 import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+
+import static com.google.inject.Guice.createInjector;
 
 public class Main extends Application {
 
@@ -53,12 +55,15 @@ public class Main extends Application {
                 "AddRemoveTags.fxml");
         var customization = FXML.load(CustomizationCtrl.class,"client","scenes",
                 "Customization.fxml");
+        var addPreset = FXML.load(AddPresetCtrl.class, "client", "scenes",
+                "AddPreset.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
 
         mainCtrl.initialize(primaryStage, addList,
                 currentBoard, welcomePage, editList, workspace, workspaceAdmin, editCard,
-                editBoard, editTag, addTag, tagOverview, addRemoveTags, customization);
+                editBoard, editTag, addTag, tagOverview, addRemoveTags, customization,
+                addPreset);
 
     }
 }

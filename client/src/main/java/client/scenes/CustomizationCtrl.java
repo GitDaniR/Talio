@@ -135,4 +135,8 @@ public class CustomizationCtrl implements Initializable {
 
         mainCtrl.showBoard(board);
     }
+
+    public void showAddPreset() {
+        mainCtrl.showAddPreset();
+    }
 }
