@@ -296,8 +296,10 @@ public class EditCardCtrl implements Initializable {
     public void updatePresetMenu() {
         // TO-DO: find easier way of retrieving presets for a board.
         BoardList list = server.getBoardListById(cardToEdit.listId);
-        ObservableList<Preset> presets = FXCollections.observableArrayList(); // Make ObservableList
-        presets.addAll(server.getAllBoardPresets(list.boardId));              // Fetch presets from DB and add to OL
+        // Make ObservableList for presets
+        ObservableList<Preset> presets = FXCollections.observableArrayList();
+        // Fetch presets from DB and add to OL
+        presets.addAll(server.getAllBoardPresets(list.boardId));
         presetMenu.setItems(presets);
     }
 }
