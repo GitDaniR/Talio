@@ -31,7 +31,8 @@ public class EditCardModel {
         server.registerForMessages("/topic/cards/rename", Card.class, card -> {
             Platform.runLater(() -> editCardCtrl.updateCard(card));});
         server.registerForMessages("/topic/tags", Integer.class, boardId -> {
-            Platform.runLater(() -> editCardCtrl.overwriteTags(server.getBoardByID(boardId).tags));});
+            Platform.runLater(() -> editCardCtrl.overwriteTags(server.getBoardByID(boardId).tags));
+        });
     }
 
     public Card editCard(int cardToUpdateId, Card newCard){
