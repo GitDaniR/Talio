@@ -55,9 +55,9 @@ public class EditCardCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         title.setOnKeyTyped(e -> server.editCard(cardToEdit.id, getUpdatedCard()));
         description.setOnKeyTyped(e -> server.editCard(cardToEdit.id, getUpdatedCard()));
-        mainCtrl.consumeQuestionMarkTextField(title);
-        mainCtrl.consumeQuestionMarkTextField(description);
-        mainCtrl.consumeQuestionMarkTextField(subtaskTitle);
+        mainCtrl.consumeShortcutsTextField(title);
+        mainCtrl.consumeShortcutsTextField(description);
+        mainCtrl.consumeShortcutsTextField(subtaskTitle);
 
         // add keyboard shortcuts
         everything.addEventFilter(KeyEvent.KEY_PRESSED, (EventHandler<KeyEvent>) keyEvent -> {

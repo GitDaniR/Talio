@@ -71,7 +71,7 @@ public class WorkspaceCtrl implements Initializable {
         server.registerForMessages("/topic/boards/rename", Board.class, newBoard -> {
             Platform.runLater(() -> { renameBoard(newBoard.id,newBoard.title); });
         });
-        mainCtrl.consumeQuestionMarkTextField(inputBoardToJoin);
+        mainCtrl.consumeShortcutsTextField(inputBoardToJoin);
         server.registerForUpdates(b -> {
             refresh();
         });

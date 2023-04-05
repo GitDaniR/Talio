@@ -178,9 +178,9 @@ public class WelcomePageCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        mainCtrl.consumeQuestionMarkTextField(chosenServer);
-        mainCtrl.consumeQuestionMarkTextField(username);
-        mainCtrl.consumeQuestionMarkTextField(adminPasswordTxt);
+        mainCtrl.consumeShortcutsTextField(chosenServer);
+        mainCtrl.consumeShortcutsTextField(username);
+        mainCtrl.consumeShortcutsTextField(adminPasswordTxt);
         Image test = new Image("/client.images/helpButton.png");
         helpButton.setGraphic(new ImageView(test));
     }

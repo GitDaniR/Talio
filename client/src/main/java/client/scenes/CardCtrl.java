@@ -99,6 +99,7 @@ public class CardCtrl extends AnchorPane implements Initializable{
     public void setServerAndCtrl(ServerUtils server, MainCtrl mainCtrl){
         this.server = server;
         this.mainCtrl = mainCtrl;
+        mainCtrl.consumeShortcutsTextField(editableTitle);
     }
 
     public int getCardId() {

@@ -206,12 +206,20 @@ public class MainCtrl {
      * get triggered while in a text box
      * @param text the label to add the handler to
      */
-    public void consumeQuestionMarkTextField(TextInputControl text){
-        text.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler() {
+    public void consumeShortcutsTextField(TextInputControl text){
+        text.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
             @Override
-            public void handle(Event event) {
-                if(keyComb1.match((KeyEvent) event)){
+            public void handle(KeyEvent event) {
+                if(keyComb1.match(event)){
                     event.consume();
+                }
+                switch(event.getCode()) {
+                    case DELETE:
+                    case T:
+                    case ENTER:
+                    case BACK_SPACE:
+                        event.consume();
+                        break;
                 }
             }
         });

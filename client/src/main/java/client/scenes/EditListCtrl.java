@@ -110,6 +110,6 @@ public class EditListCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        mainCtrl.consumeQuestionMarkTextField(newTitle);
+        mainCtrl.consumeShortcutsTextField(newTitle);
     }
 }

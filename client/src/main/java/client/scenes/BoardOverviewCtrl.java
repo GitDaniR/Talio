@@ -95,7 +95,7 @@ public class BoardOverviewCtrl implements Initializable {
     }
     private void addKeyboardShortcuts(){
 
-        everything.addEventFilter(KeyEvent.KEY_PRESSED, (EventHandler<KeyEvent>) keyEvent -> {
+        everything.addEventHandler(KeyEvent.KEY_PRESSED, (EventHandler<KeyEvent>) keyEvent -> {
             switch(keyEvent.getCode()){
                 case DELETE:
                 case BACK_SPACE:
@@ -389,8 +389,6 @@ public class BoardOverviewCtrl implements Initializable {
     }
 
     public void refresh() {
-        //If we are dragging we don't want to recreate all cards
-        //if(isDragging) return;
         cardBoxes = new ArrayList<>();
         board = server.getBoardByID(board.id);
         title.setText(board.title);

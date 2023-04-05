@@ -35,7 +35,7 @@ public class AddTagCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        mainCtrl.consumeQuestionMarkTextField(title);
+        mainCtrl.consumeShortcutsTextField(title);
     }
 
     public void cancel(){
