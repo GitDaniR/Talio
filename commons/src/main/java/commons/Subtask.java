@@ -27,9 +27,8 @@ public class Subtask {
 
     public Integer cardId;
 
-    public Subtask(){
+    public Subtask(){}
 
-    }
     public Subtask(String title, boolean done, int index, Card card) {
         this.done = done;
         this.title = title;
@@ -45,9 +44,11 @@ public class Subtask {
         this.card = card;
         this.cardId = cardId;
     }
+
     public void setDone(boolean done) {
         this.done = done;
     }
+
     @JsonProperty("done")
     public boolean getDone(){
         return this.done;

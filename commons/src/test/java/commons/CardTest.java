@@ -1,44 +1,96 @@
 package commons;
 //import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.sql.Array;
+import java.util.ArrayList;
 
-
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class CardTest {
 
+    public static Board board;
     public static BoardList list;
 
-//    @BeforeEach
-//    public void setup(){
-//        BoardList list = new BoardList("List", null);
-//    }
+
+    @BeforeEach
+    public void setup(){
+        board = new Board(1, "board", "password", new ArrayList<>());
+        list = new BoardList(1,"list", board, 1);
+        board.addBoardList(list);
+    }
 
     @Test
     public void checkConstructor(){
-        var card = new Card("card", "description", 0 ,list ,null);
+        var card = new Card("card", "description", 0 , list, list.getId());
         assertEquals(card.title, "card");
         assertEquals(card.description, "description");
         assertEquals(card.list, list);
-
-
     }
-//    @Test
-//    public void checkAddTag(){
-//        var tag = new Tag("tag", "colour");
-//        var listTags = new ArrayList<Tag>();
-//        listTags.add(tag);
-//        var card = new Card("card", "description", 0 ,list ,null);
-//        card.addTag(tag);
-//
-//        assertEquals(card.tags, listTags);
-//
-//    }
+
+    @Test
+    public void checkConstructor2() {
+        var card = new Card(1, "card", "description", 0, list, list.getId());
+        assertEquals(card.title, "card");
+        assertEquals(card.description, "description");
+        assertEquals(card.list, list);
+        assertEquals(card.listId, list.getId());
+        assertEquals(card.index, 0);
+    }
+
+    @Test
+    public void emptyConstructorTest() {
+        var card = new Card();
+        assertNotNull(card);
+    }
+
+    @Test
+    public void getIdTest() {
+        var card = new Card(1, "card", "description", 0, list, list.getId());
+        assertEquals(card.getId(), 1);
+    }
+
+    @Test
+    public void setIndexTest() {
+        var card = new Card(1, "card", "description", 0, list, list.getId());
+        card.setIndex(2);
+        assertEquals(card.index, 2);
+    }
+
+    @Test
+    public void setListTest() {
+        var card = new Card(1, "card", "description", 0, null, 0);
+        card.setList(list);
+        assertEquals(card.list, list);
+        assertEquals(card.listId, list.getId());
+    }
+
+    @Test
+    public void addTagTest() {
+        var card = new Card(1, "card", "description", 0, list, list.getId());
+        var tag = new Tag("tag", "color");
+        var listTags = new ArrayList<Tag>();
+        listTags.add(tag);
+        card.addTag(tag);
+        assertEquals(card.tags, listTags);
+    }
+
+    @Test
+    public void removeTagTest() {
+        var card = new Card(1, "card", "description", 0, list, list.getId());
+        var tag1 = new Tag("tag 1", "color");
+        var tag2 = new Tag("tag 2", "color");
+        var listTags = new ArrayList<Tag>();
+        listTags.add(tag1);
+        card.addTag(tag1);
+        card.addTag(tag2);
+        card.removeTag(tag2);
+        assertTrue(card.tags.size() == 1);
+        assertEquals(card.tags, listTags);
+    }
 
     @Test
     public void equalsHashCode(){
