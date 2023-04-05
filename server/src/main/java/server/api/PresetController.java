@@ -44,7 +44,7 @@ public class PresetController {
         try {
             saved = this.presetService.add(preset);
             if(msgs!=null)
-                msgs.convertAndSend("/topic/customization",1.0);
+                msgs.convertAndSend("/topic/customization/presets",1.0);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
@@ -58,7 +58,7 @@ public class PresetController {
         try{
             deletedPreset = this.presetService.deleteById(id);
             if(msgs!=null)
-                msgs.convertAndSend("/topic/customization",1.0);
+                msgs.convertAndSend("/topic/customization/presets",1.0);
         } catch (javax.persistence.PersistenceException e){
             System.out.println("Preset can not be deleted, some cards" +
                    "posses this preset!");
@@ -75,7 +75,10 @@ public class PresetController {
                                                        @PathVariable("background") String
                                                                background){
         try{
-            return ResponseEntity.ok(this.presetService.editPresetBackgroundById(id, background));
+            ResponseEntity response = ResponseEntity.ok(this.presetService.editPresetBackgroundById(id, background));
+            if(msgs!=null)
+                msgs.convertAndSend("/topic/customization/presets",1.0);
+            return response;
         } catch (Exception e){
             return ResponseEntity.badRequest().build();
         }
@@ -86,7 +89,10 @@ public class PresetController {
     public ResponseEntity<String> updateFontById(@PathVariable("id") Integer id,
                                                        @PathVariable("font") String font){
         try{
-            return ResponseEntity.ok(this.presetService.editPresetFontById(id, font));
+            ResponseEntity response = ResponseEntity.ok(this.presetService.editPresetFontById(id, font));
+            if(msgs!=null)
+                msgs.convertAndSend("/topic/customization/presets",1.0);
+            return response;
         } catch (Exception e){
             return ResponseEntity.badRequest().build();
         }

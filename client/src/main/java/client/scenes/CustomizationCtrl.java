@@ -45,7 +45,11 @@ public class CustomizationCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {}
 
     public void subscribeToWebsocketsCustomization(){
-        server.registerForMessages("/topic/customization",Double.class, dummy->
+        server.registerForMessages("/topic/customization/board",Double.class, dummy->
+                Platform.runLater(this::loadBoardColors));
+        server.registerForMessages("/topic/customization/list",Double.class, dummy->
+                Platform.runLater(this::loadListColors));
+        server.registerForMessages("/topic/customization/presets",Double.class, dummy->
                 Platform.runLater(this::loadPresets));
     }
 
@@ -54,17 +58,23 @@ public class CustomizationCtrl implements Initializable {
     }
 
     public void setValues(){
-        colorBoardBackground.setValue(Color.valueOf(board.colorBoardBackground));
-        colorBoardFont.setValue(Color.valueOf(board.colorBoardFont));
-        colorListsBackground.setValue(Color.valueOf(board.colorListsBackground));
-        colorListsFont.setValue(Color.valueOf(board.colorListsFont));
+        loadBoardColors();
+        loadListColors();
         loadPresets();
     }
 
-    public void loadPresets(){
-        //TODO actually load from server
-        List<Preset> presets = getPresets();
+    public void loadBoardColors() {
+        colorBoardBackground.setValue(Color.valueOf(board.colorBoardBackground));
+        colorBoardFont.setValue(Color.valueOf(board.colorBoardFont));
+    }
 
+    public void loadListColors() {
+        colorListsBackground.setValue(Color.valueOf(board.colorListsBackground));
+        colorListsFont.setValue(Color.valueOf(board.colorListsFont));
+    }
+
+    public void loadPresets() {
+        List<Preset> presets = getPresets();
 
         vboxPresets.getChildren().clear();
         if(presets != null) {
@@ -74,23 +84,11 @@ public class CustomizationCtrl implements Initializable {
         }
     }
 
-    //Method to get all presets. If presets were not added
-    // (currently through postman) a default list is returned for testability
+    /** Method to get all presets.
+     * @return list of all presets for the current board.
+     */
     public List<Preset> getPresets(){
-        //TODO eventually remove dummy data once we have preset adding and default preset
-        List<Preset> result = server.getAllBoardPresets(board.id);
-        if(result.size() == 0){
-            result.add(new Preset(0, "0xff0000",
-                "0x00ffff", null, "Preset 1",
-                null, 0));
-            result.add(new Preset(1, "0x00ff00",
-                "0xff00ff", null, "Preset 2",
-                null, 0));
-            result.add(new Preset(2, "0x0000ff",
-                "0xffff00", null, "Preset 3",
-                null, 0));
-        }
-        return result;
+        return server.getAllBoardPresets(board.id);
     }
 
     public void addPreset(Preset preset){
