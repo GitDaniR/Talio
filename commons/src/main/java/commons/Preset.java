@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class Preset {
     public Preset(){}
 
     public Preset(String backgroundColor, String font,
-                  List<Card> cards, Board board, int boardId) {
+                  List<Card> cards, Board board, Integer boardId) {
         this.backgroundColor = backgroundColor;
         this.font = font;
         this.cards = cards;
@@ -41,7 +42,7 @@ public class Preset {
         this.boardId = boardId;
     }
 
-    public Preset(int id, String backgroundColor, String font, Board board) {
+    public Preset(Integer id, String backgroundColor, String font, Board board) {
         this.id = id;
         this.backgroundColor = backgroundColor;
         this.font = font;

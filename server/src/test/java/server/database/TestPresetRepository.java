@@ -98,12 +98,12 @@ public class TestPresetRepository implements PresetRepository{
     public void deleteById(Integer integer) {
         call(DELETE_BY_ID);
         for(Preset p:presets){
-            if(p.id == integer){
-                if(!(p.cards.size()!=0)){
+            if (p.id == integer){
+                if (!(p.cards.size()!=0)){
                     this.presets.remove(p);
                     return;
                 }
-               throw new PersistenceException();
+                throw new PersistenceException();
             }
         }
 
