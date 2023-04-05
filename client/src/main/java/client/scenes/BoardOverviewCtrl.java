@@ -110,7 +110,7 @@ public class BoardOverviewCtrl implements Initializable {
                     if(hoveredCardCtrl != null) hoveredCardCtrl.editCard();
                     break;
                 case T:
-                    mainCtrl.showAddTag(board);
+                    if(hoveredCardCtrl != null) hoveredCardCtrl.quickAddTag();
                     break;
                 case C:
                     //mainCtrl.showCustomization();

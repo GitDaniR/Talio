@@ -4,12 +4,16 @@ import client.utils.ServerUtils;
 import commons.Card;
 import commons.Subtask;
 import commons.Tag;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -35,6 +39,10 @@ public class CardCtrl extends AnchorPane implements Initializable{
     private Label lblSubtasks;
     @FXML
     private FlowPane paneTags;
+    @FXML
+    private ComboBox quickSelectTags;
+    @FXML
+    private ComboBox quickSelectPreset;
 
     private Card card;
 
@@ -43,6 +51,11 @@ public class CardCtrl extends AnchorPane implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        handleEditableTitle();
+        handleQuickTags();
+    }
+
+    private void handleEditableTitle(){
         editableTitle.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue) {
                 Card newCard = card;
@@ -63,6 +76,37 @@ public class CardCtrl extends AnchorPane implements Initializable{
         });
     }
 
+    private void handleQuickTags(){
+        // Cell factory
+        quickSelectTags.setCellFactory(lv -> new ListCell<Tag>() {
+            @Override
+            public void updateItem(Tag item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    setText(item.toString());
+                    //setDisable(item.id == cardToEdit.presetId);
+                }
+            }
+        });
+
+        // Add listener to detect when a tag is selected.
+        quickSelectTags.valueProperty().addListener((obs, oldval, newval) -> {
+            if(newval != null) {
+                Tag t = (Tag) newval;
+                card.addTag(t);
+                server.editCard(card.id, card);
+                quickSelectTags.setVisible(false);
+            }
+        });
+
+        quickSelectTags.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) quickSelectTags.setVisible(false);
+        });
+    }
+
+
     /**
      * Sets the card to be represented (if it changed)
      * the title and the description
@@ -70,27 +114,9 @@ public class CardCtrl extends AnchorPane implements Initializable{
     public void setCardAndAttributes(Card card) {
         this.card = server.getCardById(card.id);
         cardTitle.setText(card.title);
-        editableTitle.setVisible(false);
-        if(card.description == null || card.description.isEmpty()) {
-            imgDescription.setVisible(false);
-        } else{
-            imgDescription.setVisible(true);
-        }
-        if(card.subtasks == null || card.subtasks.isEmpty()){
-            lblSubtasks.setVisible(false);
-        }else{
-            long total = card.subtasks.size();
-            long done = Stream.of(card.subtasks.toArray()).
-                filter(subtask->((Subtask)subtask).done).count();
-            lblSubtasks.setText("(" + done + "/" + total + "Done)");
-            lblSubtasks.setVisible(true);
-        }
-        paneTags.getChildren().clear();
-        if(card.tags != null){
-            for(Tag tag: card.tags){
-                addTag(tag);
-            }
-        }
+        hideNotNeeded();
+        setSmallIcons();
+        setQuickTags();
     }
 
     /** This method associates a card to the controller for easy access
@@ -133,5 +159,49 @@ public class CardCtrl extends AnchorPane implements Initializable{
         cardTitle.setVisible(false);
         editableTitle.setVisible(true);
         editableTitle.requestFocus();
+    }
+
+    public void quickAddTag(){
+        quickSelectTags.setVisible(true);
+        quickSelectTags.requestFocus();
+    }
+
+    private void hideNotNeeded(){
+        editableTitle.setVisible(false);
+        quickSelectTags.setVisible(false);
+        quickSelectPreset.setVisible(false);
+    }
+
+    private void setQuickTags(){
+        ObservableList<Tag> tags = FXCollections.observableArrayList();
+        int boardId = server.getBoardListById(card.listId).boardId;
+        tags.addAll(server.getTags(boardId));
+        quickSelectTags.setItems(tags);
+    }
+
+    private void setSmallIcons(){
+        // description
+        if(card.description == null || card.description.isEmpty()) {
+            imgDescription.setVisible(false);
+        } else{
+            imgDescription.setVisible(true);
+        }
+        // subtasks
+        if(card.subtasks == null || card.subtasks.isEmpty()){
+            lblSubtasks.setVisible(false);
+        }else{
+            long total = card.subtasks.size();
+            long done = Stream.of(card.subtasks.toArray()).
+                    filter(subtask->((Subtask)subtask).done).count();
+            lblSubtasks.setText("(" + done + "/" + total + "Done)");
+            lblSubtasks.setVisible(true);
+        }
+        // tags
+        paneTags.getChildren().clear();
+        if(card.tags != null){
+            for(Tag tag: card.tags){
+                addTag(tag);
+            }
+        }
     }
 }
