@@ -114,8 +114,8 @@ public class CardCtrl extends AnchorPane implements Initializable{
         mainCtrl.consumeShortcutsTextField(editableTitle);
     }
 
-    public int getCardId() {
-        return card.id;
+    public Card getCard() {
+        return card;
     }
     public void addTag(Tag tag){
         FXMLLoader tagLoader = new FXMLLoader(getClass().getResource("TagIcon.fxml"));
