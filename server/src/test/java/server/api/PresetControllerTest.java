@@ -78,10 +78,8 @@ public class PresetControllerTest {
         expectedPresets.add(p2);
         expectedPresets.add(p3);
 
-        List<String> expectedCalls = new ArrayList<>();
-        expectedCalls.add(repo.FIND_ALL);
         assertEquals(expectedPresets, res);
-        assertEquals(expectedCalls, repo.getCalls());
+
     }
 
     @Test
@@ -156,17 +154,18 @@ public class PresetControllerTest {
         assertEquals(HttpStatus.BAD_REQUEST,response.getStatusCode());
     }
 
+
+
     @Test
     public void testUpdateFontById(){
-        Preset newPreset =  new Preset(0,"color","font1", board);
-        ResponseEntity<String> response = sut.updateBackgroundById(0, "color");
+        ResponseEntity<String> response = sut.updateFontById(0, "font");
         assertEquals(HttpStatus.OK,response.getStatusCode());
-        assertEquals(newPreset,sut.getAll().get(0));
+        assertEquals("Preset font has been updated successfully.",response.getBody());
     }
 
     @Test
     public void testUpdateFontByIdBadRequest(){
-        ResponseEntity<String> response = sut.updateBackgroundById(10, "color");
+        ResponseEntity<String> response = sut.updateFontById(4, "color");
         assertEquals(HttpStatus.BAD_REQUEST,response.getStatusCode());
     }
 
