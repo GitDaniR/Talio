@@ -48,7 +48,7 @@ public class ListCtrl extends AnchorPane implements Initializable{
         try {
             Card newCard = new Card("Task", "", boardList.cards.size(), boardList, boardList.id);
             Board board = server.getBoardByID(boardList.boardId);
-            newCard.setPreset(board.cardPresets.get(0)); // TO-DO: Set index to defaultPresetId.
+            newCard.setPreset(board.defaultCardPreset);
             server.addCard(newCard);
         } catch (WebApplicationException e) {
 

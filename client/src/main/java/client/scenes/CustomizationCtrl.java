@@ -44,7 +44,9 @@ public class CustomizationCtrl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {}
 
-    public void subscribeToWebsocketsCustomization(){
+    public void subscribeToWebsocketsCustomization() {
+        server.registerForMessages("/topic/customization/board", Board.class, updatedBoard ->
+                Platform.runLater(() -> this.setBoard(updatedBoard)));
         server.registerForMessages("/topic/boards/colors", Double.class, dummy->
                 Platform.runLater(this::loadColorsForBoard));
         server.registerForMessages("/topic/customization/presets", Double.class, dummy->
@@ -101,8 +103,6 @@ public class CustomizationCtrl implements Initializable {
         }
     }
 
-    //TODO we currently dont have preset saving on
-    // server, so once we have itr this method might not be needed
     public int getDefaultPresetId(){
         if(board.defaultCardPreset == null) return 0;
         return board.defaultCardPreset.id;

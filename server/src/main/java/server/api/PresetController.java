@@ -101,11 +101,16 @@ public class PresetController {
 
     }
 
-    @PutMapping("/{id}/default")
+    @PutMapping("/{id}/default/")
     public ResponseEntity<Preset> setDefault(@PathVariable("id") Integer id){
         Preset defaultPreset;
         try{
             defaultPreset = this.presetService.setAsDefault(id);
+            if (msgs!=null) {
+                msgs.convertAndSend("/topic/customization/board", defaultPreset.board);
+                msgs.convertAndSend("/topic/customization/presets",1.0);
+            }
+
         } catch (Exception e){
             return ResponseEntity.badRequest().build();
         }
