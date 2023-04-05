@@ -1,10 +1,11 @@
 package client.scenes;
 
-import client.scenes.models.EditCardModel;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.*;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -13,6 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
+import javafx.stage.Modality;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -23,8 +25,6 @@ public class EditCardCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
-
-    private EditCardModel editCardModel;
     @FXML
     private TextField title;
     @FXML
@@ -54,21 +54,29 @@ public class EditCardCtrl implements Initializable {
     public EditCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
-        this.editCardModel = new EditCardModel(server,mainCtrl);
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        title.setOnKeyTyped(e -> editCardModel.editCard(cardToEdit.id, getUpdatedCard()));
-        description.setOnKeyTyped(e -> editCardModel.editCard(cardToEdit.id, getUpdatedCard()));
+        title.setOnKeyTyped(e -> server.editCard(cardToEdit.id, getUpdatedCard()));
+        description.setOnKeyTyped(e -> server.editCard(cardToEdit.id, getUpdatedCard()));
     }
 
     public void subscribeToSocketsEditCardCtrl(){
-        editCardModel.startWebSockets(this);
+        server.registerForMessages("/topic/subtasks", Integer.class, cardId -> {
+            Platform.runLater(() -> setCardToEdit(server.getCardById(cardId)));
+        });
+        server.registerForMessages("/topic/cards/rename", Card.class, card -> {
+            if(Objects.equals(card.id, cardToEdit.id))
+                Platform.runLater(() -> updateCard(card));
+        });
+        server.registerForMessages("/topic/tags", Integer.class, boardId -> {
+            Platform.runLater(() -> overwriteTags(server.getBoardByID(boardId).tags));
+        });
     }
 
-    public void updateCard(Card card){
-        if(cardToEdit!=null &&  cardToEdit.id!=card.id)
-            return;
+
+
+    private void updateCard(Card card){
         if(!cardToEdit.tags.equals(card.tags)){
             cardToEdit=card;
             setTags();
@@ -80,7 +88,14 @@ public class EditCardCtrl implements Initializable {
             description.setText(card.description);
     }
 
-    public void overwriteTags(List<Tag> tags) {
+    private void overwriteSubtasks(List<Subtask> t){
+        cardToEdit.subtasks=t;
+        Collections.sort(cardToEdit.subtasks, Comparator.comparingInt(s -> s.index));
+        subtasksArray = FXCollections.observableArrayList(t);
+        subtasks.setItems(subtasksArray);
+    }
+
+    private void overwriteTags(List<Tag> tags) {
         if(cardToEdit!=null){
             cardToEdit.tags=tags;
             setTags();
@@ -110,6 +125,26 @@ public class EditCardCtrl implements Initializable {
         mainCtrl.showBoard();
     }
 
+    public void ok() {
+        if(title.getText().equals("")){
+            setTextAndRemoveAfterDelay(errorLabel,"Warning: Card title cannot be left blank!");
+            return;
+        }
+        try {
+            server.editCard(cardToEdit.id, getUpdatedCard());
+        } catch (WebApplicationException e) {
+
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            return;
+        }
+
+        clearFields();
+        mainCtrl.showBoard();
+    }
+
     private void clearFields() {
         title.clear();
         description.clear();
@@ -131,14 +166,28 @@ public class EditCardCtrl implements Initializable {
     }
 
     /**
+     * Method that returns the subtask with the title from the text box
+     * which is added to the database through the server
+     * @return generated subtask
+     */
+    private Subtask saveNewSubtask(){
+        Subtask subtaskEntity = new Subtask(subtaskTitle.getText(), false,
+                cardToEdit.subtasks.size(),cardToEdit);
+        return server.addSubtask(subtaskEntity);
+    }
+
+    /**
      * Method that adds Subtask when the add button
      * for subtask is clicked
      */
     public void addSubtask(){
         if(!subtaskTitle.textProperty().get().isEmpty()){
-            editCardModel.saveNewSubtask(subtaskTitle.getText(),cardToEdit);
+            saveNewSubtask();
             subtaskTitle.textProperty().set("");
         }
+        //cardToEdit = server.getCardById(cardToEdit.getId());
+        //setValues();
+
     }
 
     /**
@@ -158,6 +207,7 @@ public class EditCardCtrl implements Initializable {
     }
 
     public void setSubtasks(){
+
         Collections.sort(cardToEdit.subtasks, Comparator.comparingInt(s -> s.index));
         subtasksArray = FXCollections.observableArrayList(cardToEdit.subtasks);
         subtasks.setCellFactory(subtasks1 -> new SubtaskCell(server, mainCtrl));
@@ -215,4 +265,3 @@ public class EditCardCtrl implements Initializable {
         mainCtrl.showAddRemoveTags(cardToEdit);
     }
 }
-
