@@ -16,7 +16,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
 import javafx.util.Duration;
-import javafx.util.StringConverter;
 
 import java.io.IOException;
 import java.net.URL;
@@ -63,28 +62,15 @@ public class EditCardCtrl implements Initializable {
         title.setOnKeyTyped(e -> server.editCard(cardToEdit.id, getUpdatedCard()));
         description.setOnKeyTyped(e -> server.editCard(cardToEdit.id, getUpdatedCard()));
 
-        // Set presetMenu to convert from presetName to Preset, and back.
-        presetMenu.setConverter(new StringConverter<Preset>() {
-            @Override
-            public String toString(Preset object) {
-                if (object == null) return "null";
-                return object.getName();
-            }
-
-            @Override
-            public Preset fromString(String string) {
-                // TO-DO: don't allow users to create presets with the same name
-                return (Preset) presetMenu.getItems().stream().filter(p ->
-                        ((Preset) p).getName().equals(string)).findFirst().orElse(null);
-            }
-        });
-
         // Add listener to presetMenu to detect when a Preset is selected.
         presetMenu.valueProperty().addListener((obs, oldval, newval) -> {
-            Preset p = (Preset) newval;
-            if(p != null) {
-                cardToEdit.setPreset(p);
-                server.editCard(cardToEdit.id, cardToEdit);
+            if(newval != null) {
+                Preset p = (Preset) newval;
+                if (p.id != cardToEdit.presetId) {
+                    cardToEdit.setPreset(p);
+                    server.editCard(cardToEdit.id, cardToEdit);
+                }
+                presetMenu.setValue(null);
             }
         });
     }
@@ -190,6 +176,7 @@ public class EditCardCtrl implements Initializable {
                 cardToEdit.list,
                 cardToEdit.listId);
         newCard.tags=cardToEdit.tags;
+        newCard.presetId = cardToEdit.presetId;
 
         return newCard;
     }
@@ -232,8 +219,6 @@ public class EditCardCtrl implements Initializable {
     public void setOldValues(){
         title.setText(cardToEdit.title);
         description.setText((cardToEdit.description));
-        Preset p = server.getPresetById(cardToEdit.presetId); // TO-DO: create cleaner way of setting preset.
-        presetMenu.setValue(p);
     }
 
     public void setSubtasks(){
