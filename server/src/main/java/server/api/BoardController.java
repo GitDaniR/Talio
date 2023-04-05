@@ -159,6 +159,9 @@ public class BoardController {
         Board response;
         try {
             response = boardService.updateColorListsFont(id, color);
+            if(msgs!=null){
+                msgs.convertAndSend("/topic/boards/colors",1.0);
+            }
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }

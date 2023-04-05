@@ -112,6 +112,9 @@ public class BoardOverviewCtrl implements Initializable {
         server.registerForMessages("/topic/subtasks", Integer.class, id -> {
             Platform.runLater(() -> renameCardById(id, ""));
         });
+        server.registerForMessages("/topic/boards/colors", Double.class, dummy ->{
+            Platform.runLater(this::refresh);
+        });
     }
 
     public void setBoard(Board board) {
