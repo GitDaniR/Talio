@@ -75,7 +75,8 @@ public class PresetController {
                                                        @PathVariable("background") String
                                                                background){
         try{
-            ResponseEntity response = ResponseEntity.ok(this.presetService.editPresetBackgroundById(id, background));
+            ResponseEntity response =
+                    ResponseEntity.ok(this.presetService.editPresetBackgroundById(id, background));
             if(msgs!=null)
                 msgs.convertAndSend("/topic/customization/presets",1.0);
             return response;
@@ -89,7 +90,8 @@ public class PresetController {
     public ResponseEntity<String> updateFontById(@PathVariable("id") Integer id,
                                                        @PathVariable("font") String font){
         try{
-            ResponseEntity response = ResponseEntity.ok(this.presetService.editPresetFontById(id, font));
+            ResponseEntity response =
+                    ResponseEntity.ok(this.presetService.editPresetFontById(id, font));
             if(msgs!=null)
                 msgs.convertAndSend("/topic/customization/presets",1.0);
             return response;
