@@ -2,6 +2,7 @@ package server.api;
 
 import commons.Preset;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import server.services.PresetService;
 
@@ -11,8 +12,10 @@ import java.util.List;
 @RequestMapping("/api/presets")
 public class PresetController {
     private final PresetService presetService;
+    private SimpMessagingTemplate msgs;
 
-    public PresetController(PresetService presetService){
+    public PresetController(PresetService presetService, SimpMessagingTemplate msgs){
+        this.msgs = msgs;
         this.presetService = presetService;
     }
 
@@ -40,6 +43,8 @@ public class PresetController {
         Preset saved;
         try {
             saved = this.presetService.add(preset);
+            if(msgs!=null)
+                msgs.convertAndSend("/topic/customization",1.0);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
@@ -52,6 +57,8 @@ public class PresetController {
         Preset deletedPreset;
         try{
             deletedPreset = this.presetService.deleteById(id);
+            if(msgs!=null)
+                msgs.convertAndSend("/topic/customization",1.0);
         } catch (javax.persistence.PersistenceException e){
             System.out.println("Preset can not be deleted, some cards" +
                    "posses this preset!");

@@ -403,6 +403,7 @@ public class MainCtrl {
         workspaceAdminCtrl.subscribeForSocketsWorkspaceAdmin();
         boardOverviewCtrl.subscribeToSocketsBoardOverview();
         tagOverviewCtrl.subscribeForSocketsTagOverview();
+        customizationCtrl.subscribeToWebsocketsCustomization();
     }
 
     public void showAddPreset(Board board) {

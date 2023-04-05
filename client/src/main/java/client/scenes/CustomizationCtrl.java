@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import commons.Board;
 import commons.Preset;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -42,6 +43,11 @@ public class CustomizationCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {}
+
+    public void subscribeToWebsocketsCustomization(){
+        server.registerForMessages("/topic/customization",Double.class, dummy->
+                Platform.runLater(this::loadPresets));
+    }
 
     public void setBoard(Board board){
         this.board = board;
