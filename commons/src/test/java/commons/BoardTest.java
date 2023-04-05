@@ -1,9 +1,10 @@
 package commons;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
 public class BoardTest {
 
     @Test
@@ -11,6 +12,34 @@ public class BoardTest {
         var board = new Board("Board", "password");
         assertEquals(board.title, "Board");
         assertEquals(board.password, "password");
+    }
+
+    @Test
+    public void checkConstructor2() {
+        List<BoardList> lists = new ArrayList<>();
+        var board = new Board(1, "Board", "password", lists);
+        assertNotNull(board);
+        assertEquals(board.id, 1);
+        assertEquals(board.title, "Board");
+        assertEquals(board.password, "password");
+        assertTrue(lists.equals(board.lists));
+    }
+
+    @Test
+    public void addBoardListTest() {
+        List<BoardList> lists = new ArrayList<>();
+        var board = new Board(1, "Board", "password", lists);
+        var boardList = new BoardList("List", board, 1);
+        board.addBoardList(boardList);
+        List<BoardList> expected = new ArrayList<>();
+        expected.add(boardList);
+        assertTrue(expected.equals(board.lists));
+    }
+
+    @Test
+    public void checkEmptyConstructor() {
+        var board = new Board();
+        assertNotNull(board);
     }
 
     @Test

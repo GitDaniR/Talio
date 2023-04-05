@@ -2,13 +2,14 @@ package server.api;
 import commons.Subtask;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import server.services.SubtaskService;
 
 import java.util.List;
 import java.util.Objects;
 
-@RestController
+@Controller
 @RequestMapping("/api/subtasks")
 public class SubtaskController {
     private final SubtaskService subtaskService;
@@ -31,6 +32,7 @@ public class SubtaskController {
      * @return all subtasks
      */
     @GetMapping(path = { "", "/" })
+    @ResponseBody
     public List<Subtask> getAll(){
         return subtaskService.getRepo().findAll();
     }
@@ -42,6 +44,7 @@ public class SubtaskController {
      */
 
     @GetMapping("/{id}")
+    @ResponseBody
     public ResponseEntity<Subtask> getById(@PathVariable("id") Integer id) {
         ResponseEntity<Subtask> found;
         try {
@@ -59,6 +62,7 @@ public class SubtaskController {
      * @return the saved subtask or BAD_REQUEST
      */
     @PostMapping(path = { "", "/" })
+    @ResponseBody
     public ResponseEntity<Subtask> add(@RequestBody Subtask subtask) {
         ResponseEntity<Subtask> saved;
         try {
@@ -79,6 +83,7 @@ public class SubtaskController {
      * @return the deleted subtask or BAD_REQUEST
      */
     @DeleteMapping(path = { "/{id}" })
+    @ResponseBody
     public ResponseEntity<Subtask> deleteById(@PathVariable("id") Integer id) {
         ResponseEntity<Subtask> deletedRecord;
         try {
@@ -102,6 +107,7 @@ public class SubtaskController {
      * @return response
      */
     @PutMapping("/status/{id}")
+    @ResponseBody
     public ResponseEntity<Subtask> updateSubtaskStatus(@PathVariable("id") Integer id,
                                                        @RequestBody String done){
         try {
@@ -126,8 +132,9 @@ public class SubtaskController {
      * @return response
      */
     @PutMapping("/index/{id}")
+    @ResponseBody
     public ResponseEntity<Subtask> updateIndexById(@PathVariable("id") Integer id,
-                                                       @RequestBody String index){
+                                                       @RequestParam("index") String index){
         try {
             Subtask res = subtaskService.updateIndexById(id, index);
 
@@ -149,6 +156,7 @@ public class SubtaskController {
      * @return response
      */
     @PutMapping("/title/{id}")
+    @ResponseBody
     public ResponseEntity<Subtask> updateTitleById(@PathVariable("id") Integer id,
                                                    @RequestBody String title){
         try {

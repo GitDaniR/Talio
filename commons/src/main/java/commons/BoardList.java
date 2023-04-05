@@ -34,7 +34,7 @@ public class BoardList {
     )
     public List<Card> cards = new ArrayList<>();
 
-    private BoardList(){}
+    public BoardList(){}
 
     public BoardList(String title, Board board, int boardId) {
         this.title = title;

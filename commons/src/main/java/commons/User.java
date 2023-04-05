@@ -33,10 +33,9 @@ public class User {
     }
 
     public boolean hasBoardAlready(int id){
-        for(Board b : boards){
+        for(Board b : boards)
             if(b.id==id)
                 return true;
-        }
         return false;
     }
 
