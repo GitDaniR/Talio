@@ -27,6 +27,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Paint;
 import javafx.util.Duration;
 
 import java.awt.*;
@@ -141,7 +142,7 @@ public class BoardOverviewCtrl implements Initializable {
     }
 
     private void setColors(){
-        // our board has no text, so there is no need to set the font color, even though we could
+        title.setTextFill(Paint.valueOf(board.colorBoardFont));
         mainBoard.setStyle("-fx-background-color: " +
                 board.colorBoardBackground.replace("0x", "#"));
     }
