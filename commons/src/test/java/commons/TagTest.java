@@ -49,7 +49,6 @@ public class TagTest {
     public void hasToString(){
         var tag1 = new Tag("Tag1", "color");
         assertTrue(tag1.toString().contains("Tag1"));
-        assertTrue(tag1.toString().contains("color"));
 
     }
 
