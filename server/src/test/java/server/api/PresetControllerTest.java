@@ -1,21 +1,24 @@
 package server.api;
 
 import commons.Board;
+import commons.BoardList;
 import commons.Card;
 import commons.Preset;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import server.database.TestBoardListRepository;
 import server.database.TestBoardRepository;
+import server.database.TestCardRepository;
 import server.database.TestPresetRepository;
+import server.services.CardService;
 import server.services.PresetService;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PresetControllerTest {
 
@@ -26,9 +29,13 @@ public class PresetControllerTest {
 
     private PresetController sut;
 
+    private List<Card> cards;
+
     @BeforeEach
     public void setup(){
+        TestCardRepository cardRepo;
         boardRepo = new TestBoardRepository();
+        cardRepo = new TestCardRepository();
         repo = new TestPresetRepository();
         List<Board> boards = new ArrayList<>();
         board = new Board(0, "Main Board", "123", new ArrayList<>());
@@ -44,6 +51,12 @@ public class PresetControllerTest {
         presets.add(p3);
 
         repo.setPresets(presets);
+        BoardList l1 = new BoardList(0, "First", board, 0);
+
+        cards = new ArrayList<>();
+        Card card1 = new Card(0, "a", "a", 0, l1, 0);
+        cards.add(card1);
+        cardRepo.setCards(cards);
 
         sut = new PresetController(new PresetService(repo, boardRepo));
     }
@@ -120,6 +133,15 @@ public class PresetControllerTest {
         assertEquals(HttpStatus.NOT_FOUND, sut.deleteById(4).getStatusCode());
     }
 
+
+    @Test
+    public void testDeletePresetPersistenceException() throws Exception {
+        Preset p4 = new Preset(3,"background1","font1", board);
+        p4.cards = cards;
+        sut.add(p4);
+        assertEquals(HttpStatus.BAD_REQUEST, sut.deleteById(p4.id).getStatusCode());
+
+    }
     @Test
     public void testUpdateBackgroundById(){
         Preset newPreset =  new Preset(0,"color","font1", board);

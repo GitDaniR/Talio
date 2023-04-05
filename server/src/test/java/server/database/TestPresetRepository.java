@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
 
+import javax.persistence.PersistenceException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -98,8 +99,11 @@ public class TestPresetRepository implements PresetRepository{
         call(DELETE_BY_ID);
         for(Preset p:presets){
             if(p.id == integer){
-                this.presets.remove(p);
-                return;
+                if(!(p.cards.size()!=0)){
+                    this.presets.remove(p);
+                    return;
+                }
+               throw new PersistenceException();
             }
         }
 
