@@ -2,11 +2,14 @@ package server.services;
 
 import commons.Board;
 import commons.BoardList;
+import commons.Card;
 import commons.Preset;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import server.database.TestBoardRepository;
 import server.database.TestPresetRepository;
+
+import javax.persistence.PersistenceException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,6 +111,22 @@ public class PresetServiceTest {
         assertEquals(expectedCalls, repo.getCalls());
         assertTrue(!repo.presets.contains(deleted));
 
+    }
+
+    @Test
+    public void testDeleteByIdNonValid() throws Exception {
+        Preset  p4 = new Preset(3,"background1","font1", board);
+        p4.cards.add(new Card());
+        sut.add(p4);
+        presets.add(p4);
+        assertThrows(PersistenceException.class, () -> sut.deleteById(3));
+        assertEquals(presets, sut.getAllPresets());
+    }
+
+    @Test
+    public void testDeleteByIdNotFound() throws Exception {
+        assertThrows(Exception.class, () -> sut.deleteById(10));
+        assertEquals(presets, sut.getAllPresets());
     }
 
     @Test
