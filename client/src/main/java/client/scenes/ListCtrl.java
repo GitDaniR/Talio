@@ -49,7 +49,6 @@ public class ListCtrl extends AnchorPane implements Initializable{
         try {
             server.addCard(new Card("Task", "", boardList.cards.size(), boardList, boardList.id));
         } catch (WebApplicationException e) {
-
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText(e.getMessage());
