@@ -50,6 +50,8 @@ public class EditCardCtrl implements Initializable {
     private FlowPane tags;
     private ObservableList<Tag> tagsArray;
     @FXML
+    private Label currentPreset;
+    @FXML
     private ComboBox presetMenu;
 
     @Inject
@@ -62,15 +64,26 @@ public class EditCardCtrl implements Initializable {
         title.setOnKeyTyped(e -> server.editCard(cardToEdit.id, getUpdatedCard()));
         description.setOnKeyTyped(e -> server.editCard(cardToEdit.id, getUpdatedCard()));
 
+        // Cell factory
+        presetMenu.setCellFactory(lv -> new ListCell<Preset>() {
+            @Override
+            public void updateItem(Preset item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    setText(item.toString());
+                    setDisable(item.getId() == cardToEdit.presetId);
+                }
+            }
+        });
+
         // Add listener to presetMenu to detect when a Preset is selected.
         presetMenu.valueProperty().addListener((obs, oldval, newval) -> {
             if(newval != null) {
                 Preset p = (Preset) newval;
-                if (p.id != cardToEdit.presetId) {
-                    cardToEdit.setPreset(p);
-                    server.editCard(cardToEdit.id, cardToEdit);
-                }
-                presetMenu.setValue(null);
+                cardToEdit.setPreset(p);
+                server.editCard(cardToEdit.id, cardToEdit);
             }
         });
     }

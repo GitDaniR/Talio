@@ -24,3 +24,8 @@
     -fx-background-color: #faebd7;
     -fx-background-radius: 0 10 10 0;
 }
+
+.combo-box-popup .list-cell:disabled  {
+    -fx-opacity: 0.4 ;
+    -fx-background-color: cyan;
+}
