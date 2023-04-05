@@ -350,6 +350,7 @@ public class BoardOverviewCtrl implements Initializable {
 
 
         cardObject.setOnMouseEntered(e->{
+            cardObject.requestFocus();
             setCardHighlight(cardObject,true);
             hoveredCard = currentCard;
             hoveredCardCtrl = cardObjectController;

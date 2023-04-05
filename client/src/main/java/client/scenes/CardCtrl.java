@@ -4,6 +4,7 @@ import client.utils.ServerUtils;
 import commons.Card;
 import commons.Subtask;
 import commons.Tag;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -11,6 +12,8 @@ import javafx.scene.control.Label;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import java.io.IOException;
@@ -47,6 +50,15 @@ public class CardCtrl extends AnchorPane implements Initializable{
                 this.card = server.editCard(card.id, newCard);
                 editableTitle.setVisible(false);
                 cardTitle.setVisible(true);
+            }
+        });
+        //When enter is pressed focus is taken away to another node so editing finished
+        //Also, event is consumed
+        editableTitle.addEventHandler(KeyEvent.KEY_PRESSED, (EventHandler<KeyEvent>) keyEvent -> {
+            if(keyEvent.getCode()== KeyCode.ENTER){
+                System.out.println("Pressed in text");
+                anchorPane.requestFocus();
+                keyEvent.consume();
             }
         });
     }
