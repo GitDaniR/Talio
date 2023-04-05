@@ -45,11 +45,9 @@ public class CustomizationCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {}
 
     public void subscribeToWebsocketsCustomization(){
-        server.registerForMessages("/topic/customization/board",Double.class, dummy->
-                Platform.runLater(this::loadBoardColors));
-        server.registerForMessages("/topic/customization/list",Double.class, dummy->
-                Platform.runLater(this::loadListColors));
-        server.registerForMessages("/topic/customization/presets",Double.class, dummy->
+        server.registerForMessages("/topic/boards/colors", Double.class, dummy->
+                Platform.runLater(this::loadColorsForBoard));
+        server.registerForMessages("/topic/customization/presets", Double.class, dummy->
                 Platform.runLater(this::loadPresets));
     }
 
@@ -58,17 +56,15 @@ public class CustomizationCtrl implements Initializable {
     }
 
     public void setValues(){
-        loadBoardColors();
-        loadListColors();
+        loadColorsForBoard();
         loadPresets();
     }
 
-    public void loadBoardColors() {
+    public void loadColorsForBoard() {
+        //TODO more efficient way of updating the board
+        if (board != null) setBoard(server.getBoardByID(board.id));
         colorBoardBackground.setValue(Color.valueOf(board.colorBoardBackground));
         colorBoardFont.setValue(Color.valueOf(board.colorBoardFont));
-    }
-
-    public void loadListColors() {
         colorListsBackground.setValue(Color.valueOf(board.colorListsBackground));
         colorListsFont.setValue(Color.valueOf(board.colorListsFont));
     }
@@ -87,7 +83,8 @@ public class CustomizationCtrl implements Initializable {
     /** Method to get all presets.
      * @return list of all presets for the current board.
      */
-    public List<Preset> getPresets(){
+    public List<Preset> getPresets() {
+        if (this.board == null) return null;
         return server.getAllBoardPresets(board.id);
     }
 

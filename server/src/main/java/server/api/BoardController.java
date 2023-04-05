@@ -15,14 +15,13 @@
  */
 package server.api;
 
-import java.util.List;
-
+import commons.Board;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
-
-import commons.Board;
 import server.services.BoardService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/boards")
@@ -124,6 +123,9 @@ public class BoardController {
         Board response;
         try {
             response = boardService.updateColorBoardBackground(id, color);
+            if(msgs!=null){
+                msgs.convertAndSend("/topic/boards/colors",1.0);
+            }
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
@@ -135,6 +137,9 @@ public class BoardController {
         Board response;
         try {
             response = boardService.updateColorBoardFont(id, color);
+            if(msgs!=null){
+                msgs.convertAndSend("/topic/boards/colors",1.0);
+            }
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
@@ -147,6 +152,9 @@ public class BoardController {
         Board response;
         try {
             response = boardService.updateColorListsBackground(id, color);
+            if(msgs!=null){
+                msgs.convertAndSend("/topic/boards/colors",1.0);
+            }
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
