@@ -3,7 +3,6 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.*;
-import jakarta.ws.rs.WebApplicationException;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -14,7 +13,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
-import javafx.stage.Modality;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -88,13 +86,6 @@ public class EditCardCtrl implements Initializable {
             description.setText(card.description);
     }
 
-    private void overwriteSubtasks(List<Subtask> t){
-        cardToEdit.subtasks=t;
-        Collections.sort(cardToEdit.subtasks, Comparator.comparingInt(s -> s.index));
-        subtasksArray = FXCollections.observableArrayList(t);
-        subtasks.setItems(subtasksArray);
-    }
-
     private void overwriteTags(List<Tag> tags) {
         if(cardToEdit!=null){
             cardToEdit.tags=tags;
@@ -118,26 +109,6 @@ public class EditCardCtrl implements Initializable {
     public void cancel(){
         if(title.getText().equals("")){
             setTextAndRemoveAfterDelay(errorLabel,"Warning: Card title cannot be left blank!");
-            return;
-        }
-
-        clearFields();
-        mainCtrl.showBoard();
-    }
-
-    public void ok() {
-        if(title.getText().equals("")){
-            setTextAndRemoveAfterDelay(errorLabel,"Warning: Card title cannot be left blank!");
-            return;
-        }
-        try {
-            server.editCard(cardToEdit.id, getUpdatedCard());
-        } catch (WebApplicationException e) {
-
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
             return;
         }
 
