@@ -126,8 +126,9 @@ public class BoardOverviewCtrl implements Initializable {
 
     public void saveBoardInDatabase(){
         this.board = server.addBoard(this.board);
-        server.addPreset(new Preset("0xFFA500", "0x000000",
-                new ArrayList<>(), this.board, this.board.id));
+        Preset resp = server.addPreset(new Preset("0xFFA500", "0x000000",
+                new ArrayList<>(), "Drukas Original", this.board, this.board.id));
+        server.setDefaultPreset(resp.id);
     }
 
     public void assignToUser(User user){
