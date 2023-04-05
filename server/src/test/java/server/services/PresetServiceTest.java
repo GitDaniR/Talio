@@ -55,7 +55,6 @@ public class PresetServiceTest {
         List<String> expectedCalls = new ArrayList<>();
         expectedCalls.add(TestPresetRepository.FIND_ALL);
         assertEquals(repo.getCalls(), expectedCalls);
-
         assertEquals(presets, results);
     }
 
@@ -69,7 +68,7 @@ public class PresetServiceTest {
 
     }
     @Test
-    public void testGetByIdException() throws Exception{
+    public void testGetByIdException() {
         assertThrows(Exception.class, () -> sut.getById(5));
         List<String> expectedCalls = new ArrayList<>();
         expectedCalls.add(repo.FIND_BY_ID);
@@ -79,17 +78,19 @@ public class PresetServiceTest {
     @Test
     public void  testAdd() throws Exception {
         Preset p4 = new Preset(3, "background4","font4", board);
-        sut.add(p4);
+        Preset p = sut.add(p4);
         List<String> expectedCals = new ArrayList<>();
         expectedCals.add(repo.EXISTS_BY_ID);
         expectedCals.add(repo.SAVE);
         assertEquals(expectedCals, repo.getCalls());
+        assertEquals(p, p4);
 
     }
 
     @Test
     public void testAddNonValidBoard() throws Exception{
-        Preset p4 = new Preset(3, "background4","font4", null);
+        Board b = new Board(20,"title", "jdksd", null);
+        Preset p4 = new Preset(3, "background4","font4", b);
         assertThrows(Exception.class, () -> sut.add(p4));
         List<String> expectedCals = new ArrayList<>();
         assertEquals(expectedCals, repo.getCalls());
@@ -102,6 +103,7 @@ public class PresetServiceTest {
         List<String> expectedCals = new ArrayList<>();
         assertEquals(expectedCals, repo.getCalls());
     }
+
     @Test
     public void testDeleteById() throws Exception {
         Preset deleted = sut.deleteById(0);
@@ -124,7 +126,7 @@ public class PresetServiceTest {
     }
 
     @Test
-    public void testDeleteByIdNotFound() throws Exception {
+    public void testDeleteByIdNotFound() {
         assertThrows(Exception.class, () -> sut.deleteById(10));
         assertEquals(presets, sut.getAllPresets());
     }
@@ -133,11 +135,14 @@ public class PresetServiceTest {
     public void testEditPresetBackgroundById() throws Exception {
         String color = "color";
         sut.editPresetBackgroundById(0, color);
+        Preset p = new Preset(0,"color","font1", board);
         List<String> expectedCalls = new ArrayList<>();
         expectedCalls.add(repo.EXISTS_BY_ID);
         expectedCalls.add(repo.UPDATE_BACKGROUND_BY_ID);
         assertEquals(expectedCalls, repo.getCalls());
-        assertEquals(color, sut.getById(0).backgroundColor);
+        assertEquals(p, sut.getById(0));
+
+
 
     }
 
@@ -162,22 +167,23 @@ public class PresetServiceTest {
 
     @Test
     public void testEditPresetBackgroundByIdNull(){
-        assertThrows( Exception.class, () -> sut.editPresetBackgroundById(8, null));
+        assertThrows( Exception.class, () -> sut.editPresetBackgroundById(0, null));
         List<String> expectedCalls = new ArrayList<>();
         expectedCalls.add(repo.EXISTS_BY_ID);
         assertEquals(expectedCalls, repo.getCalls());
-
     }
 
     @Test
     public void testFontById() throws Exception {
         String font = "font";
         sut.editPresetFontById(0, font);
+        Preset p  = new Preset(0,"background1","font", board);
+
         List<String> expectedCalls = new ArrayList<>();
         expectedCalls.add(repo.EXISTS_BY_ID);
         expectedCalls.add(repo.UPDATE_FONT_BY_ID);
         assertEquals(expectedCalls, repo.getCalls());
-        assertEquals(font, sut.getById(0).font);
+        assertEquals(p, sut.getById(0));
 
     }
 
@@ -202,7 +208,7 @@ public class PresetServiceTest {
 
     @Test
     public void testEditPresetFontByIdNull(){
-        assertThrows( Exception.class, () -> sut.editPresetFontById(8, null));
+        assertThrows( Exception.class, () -> sut.editPresetFontById(0, null));
         List<String> expectedCalls = new ArrayList<>();
         expectedCalls.add(repo.EXISTS_BY_ID);
         assertEquals(expectedCalls, repo.getCalls());
@@ -211,18 +217,12 @@ public class PresetServiceTest {
 
     @Test
     public void testSetAsDefault() throws Exception {
-        sut.setAsDefault(0);
+        Preset defaultPreset = sut.setAsDefault(0);
         List<String> expectedCalls = new ArrayList<>();
         expectedCalls.add(repo.FIND_BY_ID);
         expectedCalls.add(repo.SAVE);
         assertEquals(expectedCalls, repo.getCalls());
-
-        List<String> expectedCallsBoard = new ArrayList<>();
-        expectedCallsBoard.add(boardRepo.FIND_BY_ID);
-        expectedCallsBoard.add(boardRepo.SAVE);
-
-        assertEquals(expectedCallsBoard, boardRepo.getCalls());
-
+        assertEquals(presets.get(0), defaultPreset);
 
     }
 
@@ -232,9 +232,6 @@ public class PresetServiceTest {
         List<String> expectedCalls = new ArrayList<>();
         expectedCalls.add(repo.FIND_BY_ID);
         assertEquals(expectedCalls, repo.getCalls());
-
-        List<String> expectedCallsBoard = new ArrayList<>();
-        assertEquals(expectedCallsBoard, boardRepo.getCalls());
 
     }
 
