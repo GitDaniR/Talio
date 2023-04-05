@@ -227,6 +227,7 @@ public class EditCardCtrl implements Initializable {
         setOldValues();
         setSubtasks();
         setTags();
+        updatePresetMenu();
     }
 
     public void setOldValues(){
