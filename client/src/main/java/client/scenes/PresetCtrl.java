@@ -23,6 +23,8 @@ public class PresetCtrl implements Initializable {
     @FXML
     private ColorPicker pickerForeground;
     @FXML
+    private Button btnDelete;
+    @FXML
     private Button btnDefault;
     private Preset preset;
 
@@ -41,6 +43,7 @@ public class PresetCtrl implements Initializable {
         pickerBackground.setValue(Color.valueOf(preset.backgroundColor));
         pickerForeground.setValue(Color.valueOf(preset.font));
         if(preset.id == idDefault){
+            btnDelete.setDisable(true);
             btnDefault.setDisable(true);
         }
     }
@@ -53,7 +56,7 @@ public class PresetCtrl implements Initializable {
         server.editPresetFont(preset.id, pickerForeground.getValue().toString());
     }
 
-    public void deletePreset(){
+    public void deletePreset() {
         server.deletePreset(preset.id);
     }
 
