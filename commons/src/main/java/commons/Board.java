@@ -51,6 +51,24 @@ public class Board {
     @JsonIgnore
     public List<User> users = new ArrayList<>();
 
+    @ManyToMany
+    @JoinTable(
+            name = "boardIsJoinedByUserWrite",
+            joinColumns = @JoinColumn(name = "boardId"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    @JsonIgnore
+    public List<User> usersWrite = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "boardIsJoinedByUserRead",
+            joinColumns = @JoinColumn(name = "boardId"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    @JsonIgnore
+    public List<User> usersRead = new ArrayList<>();
+
     public Board(){}
 
     public Board(String title, String password) {

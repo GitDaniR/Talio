@@ -94,6 +94,10 @@ public class UserService {
         Board board = boardCtrl.getById(boardId).getBody();
         User user = getById(userId).getBody();
         board.users.add(user);
+        if(board.password.equals(""))
+            board.usersWrite.add(user);
+        else
+            board.usersRead.add(user);
         boardRepository.save(board);
         user = getById(userId).getBody();
         return ResponseEntity.ok(user);
