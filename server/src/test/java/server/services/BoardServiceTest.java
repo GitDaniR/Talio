@@ -119,4 +119,15 @@ class BoardServiceTest {
         assertThrows(Exception.class, () -> sut.deleteById(100));
         assertEquals(expectedCalls, repo.getCalls());
     }
+    @Test
+    public void testUpdatePasswordById() throws Exception{
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestBoardRepository.EXISTS_BY_ID);
+        expectedCalls.add(TestBoardRepository.UPDATE_PASSWORD_BY_ID);
+        sut.updatePasswordById(3,"DRUKAS");
+        expectedCalls.add(TestBoardRepository.EXISTS_BY_ID);
+        expectedCalls.add(TestBoardRepository.FIND_BY_ID);
+        assertEquals(expectedCalls,repo.getCalls());
+        assertEquals(sut.getById(3).password,"DRUKAS");
+    }
 }

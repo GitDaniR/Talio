@@ -19,6 +19,7 @@ public class TestBoardRepository implements BoardRepository{
     public static final String EXISTS_BY_ID = "Exists By Id";
     public static final String SAVE = "Save";
     public static final String DELETE_BY_ID = "Delete By Id";
+    public static final String UPDATE_PASSWORD_BY_ID = "Update password by Id";
 
     private List<String> calls;
     private List<Board> boards;
@@ -213,5 +214,14 @@ public class TestBoardRepository implements BoardRepository{
     @Override
     public void updateBoardById(Integer id, String title) {
 
+    }
+
+    @Override
+    public void updatePasswordById(Integer id, String password){
+        call(UPDATE_PASSWORD_BY_ID);
+        for(Board b : boards) {
+            if(b.id==id)
+                b.password=password;
+        }
     }
 }
