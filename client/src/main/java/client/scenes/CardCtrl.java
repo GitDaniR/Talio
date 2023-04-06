@@ -5,6 +5,7 @@ import commons.Card;
 import commons.Preset;
 import commons.Subtask;
 import commons.Tag;
+import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -22,6 +23,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Paint;
+import javafx.util.Duration;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -192,6 +195,11 @@ public class CardCtrl extends AnchorPane implements Initializable {
         cardTitle.setVisible(false);
         editableTitle.setVisible(true);
         editableTitle.requestFocus();
+        PauseTransition delay = new PauseTransition(Duration.seconds(0.01));
+        delay.setOnFinished(event -> {
+            editableTitle.setText("");
+        });
+        delay.play();
     }
 
     public void quickAddTag(){
