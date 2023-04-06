@@ -116,7 +116,9 @@ public class MainCtrl {
                 addPreset);
 
         showWelcomePage();
+        primaryStage.setResizable(false);
         primaryStage.show();
+        setStylesheetsAndShortcuts();
     }
 
     private void setControllersAndScenes(
