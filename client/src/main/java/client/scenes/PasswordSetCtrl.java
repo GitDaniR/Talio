@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Board;
+import commons.User;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -18,6 +19,7 @@ public class PasswordSetCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private Board boardToEdit;
+    private User viewingUser;
     @FXML
     private TextField newPassword;
 
@@ -26,7 +28,8 @@ public class PasswordSetCtrl implements Initializable {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
-    public void setBoard(Board board){
+    public void setBoardAndUser(User viewingUser, Board board){
+        this.viewingUser = viewingUser;
         this.boardToEdit = board;
     }
     private void clearFields() {
@@ -43,6 +46,7 @@ public class PasswordSetCtrl implements Initializable {
                 server.updateBoardPassword(boardToEdit.id,"NO_PASSWORD");
             else{
                 server.updateBoardPassword(boardToEdit.id, newPassword.getText());
+                server.assignBoardToUserWrite(viewingUser.id,boardToEdit.id);
             }
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);

@@ -320,10 +320,11 @@ public class MainCtrl {
     /**
      * Method that starts the scene showing the board
      */
-    public void showBoard(Board showBoard) {
+    public void showBoard(Board showBoard, User userViewing) {
         primaryStage.setTitle("Board Overview");
         primaryStage.setScene(board);
         boardOverviewCtrl.setBoard(showBoard);
+        boardOverviewCtrl.setUserViewing(userViewing);
         boardOverviewCtrl.refresh();
 
     }
@@ -452,10 +453,10 @@ public class MainCtrl {
         addPresetCtrl.setBoard(board);
     }
 
-    public void showSetPassword(Board board){
+    public void showSetPassword(User viewingUser, Board board){
         primaryStage.setTitle("Change/Set password");
         primaryStage.setScene(passwordSet);
-        passwordSetCtrl.setBoard(board);
+        passwordSetCtrl.setBoardAndUser(viewingUser,board);
     }
 
     public void registerForAllSockets() {
