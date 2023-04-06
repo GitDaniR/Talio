@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox style="-fx-border-color: black; -fx-border-width: 4; -fx-background-color: pink; -fx-border-radius: 5 5 5 5; -fx-background-radius: 5 5 5 5;" styleClass="card" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CardCtrl">
+<HBox fx:id="container" style="-fx-border-color: black; -fx-border-width: 4; -fx-background-color: pink; -fx-border-radius: 5 5 5 5; -fx-background-radius: 5 5 5 5;" styleClass="card" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CardCtrl">
    <children>
       <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="59.0" prefWidth="206.0">
          <children>

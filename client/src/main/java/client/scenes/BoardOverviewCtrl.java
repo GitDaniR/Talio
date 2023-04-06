@@ -1,15 +1,8 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
-import java.io.IOException;
 import com.google.inject.Inject;
-import commons.Board;
-import commons.BoardList;
-import commons.Card;
-import commons.User;
+import commons.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
@@ -27,14 +20,24 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.*;
+import javafx.scene.input.MouseDragEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Paint;
 import javafx.util.Duration;
+
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.ResourceBundle;
 
 
 public class BoardOverviewCtrl implements Initializable {
@@ -112,6 +115,9 @@ public class BoardOverviewCtrl implements Initializable {
         server.registerForMessages("/topic/subtasks", Integer.class, id -> {
             Platform.runLater(() -> renameCardById(id, ""));
         });
+        server.registerForMessages("/topic/boards/colors", Double.class, dummy ->{
+            Platform.runLater(this::refresh);
+        });
     }
 
     public void setBoard(Board board) {
@@ -120,6 +126,9 @@ public class BoardOverviewCtrl implements Initializable {
 
     public void saveBoardInDatabase(){
         this.board = server.addBoard(this.board);
+        Preset resp = server.addPreset(new Preset("0xFFA500", "0x000000",
+                new ArrayList<>(), "Drukas Original", this.board, this.board.id));
+        server.setDefaultPreset(resp.id);
     }
 
     public void assignToUser(User user){
@@ -134,7 +143,7 @@ public class BoardOverviewCtrl implements Initializable {
     }
 
     private void setColors(){
-        // our board has no text, so there is no need to set the font color, even though we could
+        title.setTextFill(Paint.valueOf(board.colorBoardFont));
         mainBoard.setStyle("-fx-background-color: " +
                 board.colorBoardBackground.replace("0x", "#"));
     }

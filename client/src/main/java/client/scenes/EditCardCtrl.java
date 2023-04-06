@@ -49,6 +49,10 @@ public class EditCardCtrl implements Initializable {
     @FXML
     private FlowPane tags;
     private ObservableList<Tag> tagsArray;
+    @FXML
+    private Label currentPreset;
+    @FXML
+    private ComboBox presetMenu;
 
     @Inject
     public EditCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -59,6 +63,29 @@ public class EditCardCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         title.setOnKeyTyped(e -> server.editCard(cardToEdit.id, getUpdatedCard()));
         description.setOnKeyTyped(e -> server.editCard(cardToEdit.id, getUpdatedCard()));
+
+        // Cell factory
+        presetMenu.setCellFactory(lv -> new ListCell<Preset>() {
+            @Override
+            public void updateItem(Preset item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    setText(item.toString());
+                    setDisable(item.getId() == cardToEdit.presetId);
+                }
+            }
+        });
+
+        // Add listener to presetMenu to detect when a Preset is selected.
+        presetMenu.valueProperty().addListener((obs, oldval, newval) -> {
+            if(newval != null) {
+                Preset p = (Preset) newval;
+                cardToEdit.setPreset(p);
+                server.editCard(cardToEdit.id, cardToEdit);
+            }
+        });
     }
 
     public void subscribeToSocketsEditCardCtrl(){
@@ -86,6 +113,7 @@ public class EditCardCtrl implements Initializable {
             title.setText(card.title);
         if(!description.isFocused())
             description.setText(card.description);
+        updatePresetMenu();
     }
 
     private void overwriteSubtasks(List<Subtask> t){
@@ -161,6 +189,7 @@ public class EditCardCtrl implements Initializable {
                 cardToEdit.list,
                 cardToEdit.listId);
         newCard.tags=cardToEdit.tags;
+        newCard.presetId = cardToEdit.presetId;
 
         return newCard;
     }
@@ -198,12 +227,12 @@ public class EditCardCtrl implements Initializable {
         setOldValues();
         setSubtasks();
         setTags();
+        updatePresetMenu();
     }
 
     public void setOldValues(){
         title.setText(cardToEdit.title);
         description.setText((cardToEdit.description));
-
     }
 
     public void setSubtasks(){
@@ -263,6 +292,16 @@ public class EditCardCtrl implements Initializable {
      */
     public void addRemoveTags(){
         mainCtrl.showAddRemoveTags(cardToEdit);
+    }
+
+    public void updatePresetMenu() {
+        // TO-DO: find easier way of retrieving presets for a board.
+        BoardList list = server.getBoardListById(cardToEdit.listId);
+        // Make ObservableList for presets
+        ObservableList<Preset> presets = FXCollections.observableArrayList();
+        // Fetch presets from DB and add to OL
+        presets.addAll(server.getAllBoardPresets(list.boardId));
+        presetMenu.setItems(presets);
     }
 }
 

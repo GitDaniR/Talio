@@ -3,31 +3,52 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="preview" prefHeight="540.0" prefWidth="860.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CustomizationCtrl">
-   <children>
-      <Button layoutX="20.0" layoutY="495.0" mnemonicParsing="false" onAction="#back" text="Back" />
-      <Label layoutX="26.0" layoutY="50.0" text="Board colors:">
-         <font>
-            <Font size="18.0" />
-         </font></Label>
-      <Label layoutX="26.0" layoutY="178.0" text="List colors:">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
-      <Label layoutX="24.0" layoutY="93.0" text="Backgroud" />
-      <Label layoutX="25.0" layoutY="223.0" text="Backgroud" />
-      <Label layoutX="27.0" layoutY="118.0" text="Font:" />
-      <Label layoutX="27.0" layoutY="256.0" text="Font:" />
-      <Button layoutX="235.0" layoutY="51.0" mnemonicParsing="false" onAction="#resetBoard" text="Reset" />
-      <Button layoutX="235.0" layoutY="179.0" mnemonicParsing="false" onAction="#resetLists" text="Reset" />
-      <ColorPicker fx:id="colorBoardBackground" layoutX="235.0" layoutY="89.0" />
-      <ColorPicker fx:id="colorBoardFont" layoutX="235.0" layoutY="123.0" />
-      <ColorPicker fx:id="colorListsBackground" layoutX="235.0" layoutY="219.0" />
-      <ColorPicker fx:id="colorListsFont" layoutX="235.0" layoutY="252.0" />
-      <Button layoutX="796.0" layoutY="495.0" mnemonicParsing="false" onAction="#save" text="Save" />
-   </children>
+    <children>
+        <Label layoutX="200.0" layoutY="290.0" text="F">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+        <Label layoutX="160.0" layoutY="290.0" text="B">
+            <font>
+                <Font size="18.0" />
+            </font></Label>
+        <ScrollPane fx:id="panePresets" layoutX="30.0" layoutY="320.0" prefHeight="130.0" prefWidth="800.0">
+            <content>
+                <VBox fx:id="vboxPresets" />
+            </content>
+        </ScrollPane>
+        <Label layoutX="30.0" layoutY="290.0" text="Task Colors">
+            <font>
+                <Font size="18.0" />
+            </font></Label>
+        <Button layoutX="20.0" layoutY="495.0" mnemonicParsing="false" onAction="#back" text="Back" />
+        <Label layoutX="26.0" layoutY="50.0" text="Board colors:">
+            <font>
+                <Font size="18.0" />
+            </font></Label>
+        <Label layoutX="26.0" layoutY="178.0" text="List colors:">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+        <Label layoutX="24.0" layoutY="93.0" text="Backgroud" />
+        <Label layoutX="25.0" layoutY="223.0" text="Backgroud" />
+        <Label layoutX="27.0" layoutY="118.0" text="Font:" />
+        <Label layoutX="27.0" layoutY="256.0" text="Font:" />
+        <Button layoutX="235.0" layoutY="51.0" mnemonicParsing="false" onAction="#resetBoard" text="Reset" />
+        <Button layoutX="235.0" layoutY="179.0" mnemonicParsing="false" onAction="#resetLists" text="Reset" />
+        <ColorPicker fx:id="colorBoardBackground" layoutX="235.0" layoutY="89.0" />
+        <ColorPicker fx:id="colorBoardFont" layoutX="235.0" layoutY="123.0" />
+        <ColorPicker fx:id="colorListsBackground" layoutX="235.0" layoutY="219.0" />
+        <ColorPicker fx:id="colorListsFont" layoutX="235.0" layoutY="252.0" />
+        <Button layoutX="796.0" layoutY="495.0" mnemonicParsing="false" onAction="#save" text="Save" />
+      <Button layoutX="652.0" layoutY="495.0" mnemonicParsing="false" onAction="#showAddPreset" text="Add new Task Color" />
+    </children>
 </AnchorPane>

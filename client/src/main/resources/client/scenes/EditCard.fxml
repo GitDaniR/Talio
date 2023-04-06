@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextArea?>
@@ -20,8 +21,10 @@
       <Button fx:id="addSubtask" layoutX="533.0" layoutY="431.0" mnemonicParsing="false" onAction="#addSubtask" text="Add" />
       <Label layoutX="29.0" layoutY="227.0" text="The subtasks of your card:" />
       <Label fx:id="errorLabel" layoutX="29.0" layoutY="72.0" textFill="RED" />
-      <Label layoutX="712.0" layoutY="64.0" text="Tags for this card" />
-      <FlowPane fx:id="tags" layoutX="646.0" layoutY="80.0" prefHeight="351.0" prefWidth="160.0" style="-fx-border-color: grey;" />
-      <Button layoutX="726.0" layoutY="431.0" mnemonicParsing="false" onAction="#addRemoveTags" text="Choose tags" />
+      <Label layoutX="714.0" layoutY="102.0" text="Tags for this card" />
+      <FlowPane fx:id="tags" layoutX="646.0" layoutY="120.0" prefHeight="351.0" prefWidth="160.0" style="-fx-border-color: grey;" />
+      <Button layoutX="726.0" layoutY="471.0" mnemonicParsing="false" onAction="#addRemoveTags" text="Choose tags" />
+      <ComboBox fx:id="presetMenu" layoutX="657.0" layoutY="68.0" prefWidth="150.0" />
+      <Label fx:id="currentPreset" layoutX="746.0" layoutY="44.0" text="Task Color:" />
    </children>
 </AnchorPane>
