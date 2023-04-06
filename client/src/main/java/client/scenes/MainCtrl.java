@@ -442,6 +442,7 @@ public class MainCtrl {
         boardOverviewCtrl.subscribeToSocketsBoardOverview();
         tagOverviewCtrl.subscribeForSocketsTagOverview();
         customizationCtrl.subscribeToWebsocketsCustomization();
+        boardOverviewCtrl.subscribeToSocketsBoardOverview();
     }
 
     public void showAddPreset(Board board) {

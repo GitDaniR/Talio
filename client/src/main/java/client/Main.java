@@ -64,7 +64,7 @@ public class Main extends Application {
         mainCtrl.initialize(primaryStage, addList,
                 currentBoard, welcomePage, editList, workspace, workspaceAdmin, editCard,
                 editBoard, editTag, addTag, tagOverview, addRemoveTags, help, customization,
-        addPreset);
+                addPreset);
 
 
     }

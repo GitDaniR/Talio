@@ -21,7 +21,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.paint.Paint;
 import java.io.IOException;
 import java.net.URL;
@@ -29,9 +28,6 @@ import java.util.ResourceBundle;
 import java.util.stream.Stream;
 
 public class CardCtrl extends AnchorPane implements Initializable {
-
-    @FXML
-    private HBox container;
     @FXML
     private Label cardTitle;
     @FXML
@@ -58,6 +54,7 @@ public class CardCtrl extends AnchorPane implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         handleEditableTitle();
         handleQuickTags();
+        handleQuickPreset();
     }
 
     private void handleEditableTitle(){
@@ -111,6 +108,35 @@ public class CardCtrl extends AnchorPane implements Initializable {
         });
     }
 
+    private void handleQuickPreset(){
+        // Cell factory
+        quickSelectPreset.setCellFactory(lv -> new ListCell<Preset>() {
+            @Override
+            public void updateItem(Preset item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    setText(item.toString());
+                    setDisable(item.id == card.presetId);
+                }
+            }
+        });
+
+        // Add listener to detect when a preset is selected.
+        quickSelectPreset.valueProperty().addListener((obs, oldval, newval) -> {
+            if(newval != null) {
+                Preset p = (Preset) newval;
+                card.setPreset(p);
+                server.editCard(card.id, card);
+                quickSelectPreset.setVisible(false);
+            }
+        });
+
+        quickSelectPreset.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) quickSelectPreset.setVisible(false);
+        });
+    }
 
     /**
      * Sets the card to be represented (if it changed)
@@ -122,6 +148,7 @@ public class CardCtrl extends AnchorPane implements Initializable {
         hideNotNeeded();
         setSmallIcons();
         setQuickTags();
+        setQuickPresets();
         setFontAndBackgroundColor();
     }
 
@@ -172,6 +199,11 @@ public class CardCtrl extends AnchorPane implements Initializable {
         quickSelectTags.requestFocus();
     }
 
+    public void quickAddPreset(){
+        quickSelectPreset.setVisible(true);
+        quickSelectPreset.requestFocus();
+    }
+
     private void hideNotNeeded(){
         editableTitle.setVisible(false);
         quickSelectTags.setVisible(false);
@@ -183,6 +215,13 @@ public class CardCtrl extends AnchorPane implements Initializable {
         int boardId = server.getBoardListById(card.listId).boardId;
         tags.addAll(server.getTags(boardId));
         quickSelectTags.setItems(tags);
+    }
+
+    private void setQuickPresets(){
+        ObservableList<Preset> presets = FXCollections.observableArrayList();
+        int boardId = server.getBoardListById(card.listId).boardId;
+        presets.addAll(server.getAllBoardPresets(boardId));
+        quickSelectPreset.setItems(presets);
     }
 
     private void setSmallIcons() {
@@ -223,6 +262,6 @@ public class CardCtrl extends AnchorPane implements Initializable {
         String style = "-fx-border-color: black; -fx-border-width: 4; -fx-border-radius: 5 5 5 5;" +
                 "-fx-background-radius: 5 5 5 5; -fx-background-color:" +
                 backgroundColor.replace("0x", "#");
-        container.setStyle(style);
+        anchorPane.setStyle(style);
     }
 }

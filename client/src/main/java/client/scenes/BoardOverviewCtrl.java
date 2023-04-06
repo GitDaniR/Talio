@@ -41,35 +41,27 @@ public class BoardOverviewCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    @FXML
     public ScrollPane scene;
     @FXML
     public AnchorPane everything;
-
-    private ObservableList<BoardList> data;
-
-    private Board board;
-
-    private boolean isDragging = false;
-
     @FXML
     private FlowPane mainBoard;
-
     @FXML
     private Label title;
     @FXML
     private Label copiedToClipboardMessage;
-    private CardCtrl hoveredCardCtrl;
 
+    private ObservableList<BoardList> data;
+    private Board board;
+    private boolean isDragging = false;
+    private CardCtrl hoveredCardCtrl;
     private int cardHighlightX = -1;
     private int cardHighlightY = -1;
-
     private Timeline scrolltimeline = new Timeline();
     private double scrollVelocity = 0;
-
     private List<List<AnchorPane>> cardBoxes;
-
     private int speed = 50;
-
     private boolean isShiftPressed = false;
 
     private final KeyCombination shiftDownComb = new KeyCodeCombination(KeyCode.DOWN,
@@ -112,7 +104,7 @@ public class BoardOverviewCtrl implements Initializable {
                     if(hoveredCardCtrl != null) hoveredCardCtrl.quickAddTag();
                     break;
                 case C:
-                    //mainCtrl.showCustomization();
+                    if(hoveredCardCtrl != null) hoveredCardCtrl.quickAddPreset();
                     break;
                 case E:
                     if(hoveredCardCtrl != null)
@@ -147,24 +139,30 @@ public class BoardOverviewCtrl implements Initializable {
             else if(keyEvent.getCode()==KeyCode.SHIFT)
                 isShiftPressed=false;
         });
-        server.registerForMessages("/topic/boards/colors", Double.class, dummy ->{
-            Platform.runLater(this::refresh);
-        });
     }
 
     public void setBoard(Board board) {
         this.board = board;
     }
-
     public void saveBoardInDatabase(){
         this.board = server.addBoard(this.board);
         Preset resp = server.addPreset(new Preset("0xFFA500", "0x000000",
                 new ArrayList<>(), "Drukas Original", this.board, this.board.id));
         server.setDefaultPreset(resp.id);
     }
-
     public void assignToUser(User user){
         server.assignBoardToUser(user.id, this.board.id);
+    }
+    public void underlineText(){
+        title.setUnderline(true);
+    }
+    public void undoUnderline(){
+        title.setUnderline(false);
+    }
+    private void setColors(){
+        title.setTextFill(Paint.valueOf(board.colorBoardFont));
+        mainBoard.setStyle("-fx-background-color: " +
+                board.colorBoardBackground.replace("0x", "#"));
     }
 
     //region HIGHLIGHT METHODS
@@ -272,18 +270,6 @@ public class BoardOverviewCtrl implements Initializable {
 
     //endregion
 
-    public void underlineText(){
-        title.setUnderline(true);
-    }
-    public void undoUnderline(){
-        title.setUnderline(false);
-    }
-    private void setColors(){
-        title.setTextFill(Paint.valueOf(board.colorBoardFont));
-        mainBoard.setStyle("-fx-background-color: " +
-                board.colorBoardBackground.replace("0x", "#"));
-    }
-
     //region METHODS FOR BUTTONS
 
     public void addList() {
@@ -366,6 +352,9 @@ public class BoardOverviewCtrl implements Initializable {
         //Basically I just need to update the card
         server.registerForMessages("/topic/subtasks", Integer.class, id -> {
             Platform.runLater(() -> renameCardById(id, ""));
+        });
+        server.registerForMessages("/topic/boards/colors", Double.class, dummy ->{
+            Platform.runLater(this::refresh);
         });
     }
 
@@ -504,8 +493,8 @@ public class BoardOverviewCtrl implements Initializable {
                     " -fx-border-radius: 5 5 5 5; -fx-background-radius: 5 5 5 5;");
         else
             card.setStyle("-fx-border-color: black; -fx-border-width: 4; " +
-                    "-fx-background-color: pink; " +
-                    "-fx-border-radius: 5 5 5 5; -fx-background-radius: 5 5 5 5;");
+                    "-fx-background-color: " + " pink" +
+                    "; -fx-border-radius: 5 5 5 5; -fx-background-radius: 5 5 5 5;");
     }
 
     /**
