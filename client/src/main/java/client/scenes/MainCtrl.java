@@ -270,9 +270,10 @@ public class MainCtrl {
     public void showNewBoard(User user){
         primaryStage.setTitle("Board Overview");
         primaryStage.setScene(board);
-        Board newBoard = new Board("Board",generatePassword());
+        Board newBoard = new Board("Board","");
         boardOverviewCtrl.setBoard(newBoard);
         boardOverviewCtrl.saveBoardInDatabase();
+        boardOverviewCtrl.setUserViewing(user);
         boardOverviewCtrl.assignToUser(user);
         boardOverviewCtrl.refresh();
     }
@@ -286,6 +287,7 @@ public class MainCtrl {
     public void joinBoard(User user, Board chosenBoard) {
         primaryStage.setTitle("Board Overview");
         boardOverviewCtrl.setBoard(chosenBoard);
+        boardOverviewCtrl.setUserViewing(user);
         boardOverviewCtrl.assignToUser(user);
         boardOverviewCtrl.refresh();
     }

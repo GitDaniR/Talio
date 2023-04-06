@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
@@ -20,9 +21,11 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
+import javafx.scene.control.*;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
@@ -51,9 +54,29 @@ public class BoardOverviewCtrl implements Initializable {
     private Label title;
     @FXML
     private Label copiedToClipboardMessage;
+    @FXML
+    private ImageView lockedLockView;
+    @FXML
+    private ImageView unlockedLockView;
+    @FXML
+    private ImageView crossedLockView;
+    @FXML
+    private SplitPane crossedControl;
+    @FXML
+    private Button lockedButton;
+    @FXML
+    private Button unlockedButton;
+    @FXML
+    private Tooltip lockedTooltip;
+    @FXML
+    private Tooltip unlockedTooltip;
+    @FXML
+    private Tooltip crossedTooltip;
 
     private ObservableList<BoardList> data;
     private Board board;
+
+    private User userViewing;
     private boolean isDragging = false;
     private CardCtrl hoveredCardCtrl;
     private int cardHighlightX = -1;
@@ -75,19 +98,11 @@ public class BoardOverviewCtrl implements Initializable {
         this.mainCtrl = mainCtrl;
     }
 
-    /** This method is used for web sockets - we are registering for messages
-     * In a way, subscribing to that location, every time the server sends something
-     * which matches our patter, we get it
-     *
-     * @param location  The location used to resolve relative paths for the root object, or
-     *                  {@code null} if the location is not known.
-     * @param resources The resources used to localize the root object, or {@code null} if
-     *                  the root object was not localized.
-     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setupScrolling();
         addKeyboardShortcuts();
+        setupImagesAndTooltips();
     }
 
     private void addKeyboardShortcuts(){
@@ -141,9 +156,27 @@ public class BoardOverviewCtrl implements Initializable {
         });
     }
 
+    private void setupImagesAndTooltips(){
+        Duration preferredDelay = new Duration(300L);
+        Image lockedLock = new Image("/client.images/lockedLock.png");
+        Image unlockedLock = new Image("/client.images/unlockedLock.png");
+        Image crossedLock = new Image("/client.images/crossedLock.png");
+        lockedLockView.setImage(lockedLock);
+        lockedTooltip.setShowDelay(preferredDelay);
+        unlockedLockView.setImage(unlockedLock);
+        unlockedTooltip.setShowDelay(preferredDelay);
+        crossedLockView.setImage(crossedLock);
+        crossedTooltip.setShowDelay(preferredDelay);
+    }
+
     public void setBoard(Board board) {
         this.board = board;
     }
+
+    public void setUserViewing(User userViewing){
+        this.userViewing = userViewing;
+    }
+
     public void saveBoardInDatabase(){
         this.board = server.addBoard(this.board);
         Preset resp = server.addPreset(new Preset("0xFFA500", "0x000000",
@@ -152,12 +185,6 @@ public class BoardOverviewCtrl implements Initializable {
     }
     public void assignToUser(User user){
         server.assignBoardToUser(user.id, this.board.id);
-    }
-    public void underlineText(){
-        title.setUnderline(true);
-    }
-    public void undoUnderline(){
-        title.setUnderline(false);
     }
     private void setColors(){
         title.setTextFill(Paint.valueOf(board.colorBoardFont));
@@ -293,6 +320,13 @@ public class BoardOverviewCtrl implements Initializable {
         mainCtrl.showWorkspace(mainCtrl.getUsername());
     }
 
+    public void underlineText(){
+        title.setUnderline(true);
+    }
+    public void undoUnderline(){
+        title.setUnderline(false);
+    }
+
     /**
      * Method that copies invite code to the clipboard
      */
@@ -318,6 +352,38 @@ public class BoardOverviewCtrl implements Initializable {
     private String getInviteCode(){
         String selection = board.title+"#"+board.id;
         return selection;
+    }
+
+    //endregion
+
+    //region PASSWORD METHODS
+
+    private void setPasswordRights(){
+        //if there is no password we don't care
+        if(board.password.equals("")) {
+            crossedControl.setVisible(true);
+            crossedTooltip.setText("The board doesn't have any password");
+            unlockedButton.setDisable(true);
+            unlockedTooltip.setText("The board is already unlocked");
+            lockedButton.setDisable(false);
+            lockedTooltip.setText("Set the password of the board");
+        } else {
+            //if there is a password, we need to check if we have access
+            crossedLockView.setVisible(false);
+            //if write access
+            if(board.usersWrite.contains(userViewing)){
+                unlockedButton.setDisable(true);
+                unlockedTooltip.setText("You already inputted the password!");
+                lockedButton.setDisable(false);
+                lockedTooltip.setText("Change the password of the board");
+            } else {
+                unlockedButton.setDisable(false);
+                unlockedTooltip.setText("Press to input the password of the board" +
+                        " and gain write access");
+                lockedButton.setDisable(false);
+                lockedTooltip.setText("You don't have access to change the password!");
+            }
+        }
     }
 
     //endregion
@@ -516,6 +582,7 @@ public class BoardOverviewCtrl implements Initializable {
         cardBoxes = new ArrayList<>();
         board = server.getBoardByID(board.id);
         title.setText(board.title);
+        setPasswordRights();
         setColors();
         setHandlerTitle();
         try {
