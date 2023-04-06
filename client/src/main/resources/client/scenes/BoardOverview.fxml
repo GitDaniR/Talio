@@ -55,7 +55,7 @@
       </SplitPane>
       <SplitPane layoutX="731.0" layoutY="6.0" prefHeight="35.0" prefWidth="35.0">
          <items>
-            <Button fx:id="lockedButton" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0">
+            <Button fx:id="lockedButton" mnemonicParsing="false" onAction="#setPassword" prefHeight="35.0" prefWidth="35.0">
                <graphic>
                   <ImageView fx:id="lockedLockView" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>

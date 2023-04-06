@@ -303,6 +303,10 @@ public class BoardOverviewCtrl implements Initializable {
         mainCtrl.showAddList(board);
     }
 
+    public void setPassword(){
+        mainCtrl.showSetPassword(board);
+    }
+
     public void showTags(){
         mainCtrl.showTagOverview(this.board);
     }

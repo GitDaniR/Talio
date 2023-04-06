@@ -82,6 +82,10 @@ public class MainCtrl {
     private AddPresetCtrl addPresetCtrl;
     private Scene addPreset;
 
+    private PasswordSetCtrl passwordSetCtrl;
+
+    private Scene passwordSet;
+
     private String username;
     private boolean isAdmin = false;
 
@@ -103,7 +107,8 @@ public class MainCtrl {
                            Pair<AddRemoveTagsCtrl, Parent> addRemoveTags,
                            Pair<HelpCtrl,Parent> help,
                            Pair<CustomizationCtrl, Parent> customization,
-                           Pair<AddPresetCtrl, Parent> addPreset) {
+                           Pair<AddPresetCtrl, Parent> addPreset,
+                           Pair<PasswordSetCtrl, Parent> passwordSet) {
 
         this.primaryStage = primaryStage;
         primaryStage.getIcons().add(new Image(
@@ -113,7 +118,7 @@ public class MainCtrl {
         setControllersAndScenes(addList, board, welcomePage, editList,
                 workspace, workspaceAdmin, editCard, changeBoardTitle,
                 editTag, addTag, tagOverview, addRemoveTags, help, customization,
-                addPreset);
+                addPreset,passwordSet);
 
         showWelcomePage();
         primaryStage.setResizable(false);
@@ -136,14 +141,12 @@ public class MainCtrl {
             Pair<AddRemoveTagsCtrl, Parent> addRemoveTags,
             Pair<HelpCtrl,Parent> help,
             Pair<CustomizationCtrl, Parent> customization,
-            Pair<AddPresetCtrl, Parent> addPreset){
-
+            Pair<AddPresetCtrl, Parent> addPreset,
+            Pair<PasswordSetCtrl, Parent> passwordSet){
         this.boardOverviewCtrl = board.getKey();
         this.board = new Scene(board.getValue());
-
         this.addListCtrl = addList.getKey();
         this.addList = new Scene(addList.getValue());
-
         this.welcomePageCtrl = welcomePage.getKey();
         this.welcomePage = new Scene(welcomePage.getValue());
 
@@ -185,6 +188,9 @@ public class MainCtrl {
 
         this.helpCtrl = help.getKey();
         this.help = new Scene(help.getValue());
+
+        this.passwordSetCtrl = passwordSet.getKey();
+        this.passwordSet = new Scene(passwordSet.getValue());
     }
 
     final KeyCombination keyComb1 = new KeyCodeCombination(KeyCode.SLASH,
@@ -194,7 +200,8 @@ public class MainCtrl {
 
         sceneArray = Arrays.asList(addList, board, welcomePage,
                 editList, workspace, workspaceAdmin, editCard, changeBoardTitle,
-                editTag, addTag, tagOverview, addRemoveTags, help, customization, addPreset);
+                editTag, addTag, tagOverview, addRemoveTags, help, customization, addPreset,
+                passwordSet);
 
         for (Scene s : sceneArray) {
             s.getStylesheets().add(this.getClass().getResource(stylePath).toExternalForm());
@@ -439,6 +446,18 @@ public class MainCtrl {
 
     }
 
+    public void showAddPreset(Board board) {
+        primaryStage.setTitle("New Task Color");
+        primaryStage.setScene(addPreset);
+        addPresetCtrl.setBoard(board);
+    }
+
+    public void showSetPassword(Board board){
+        primaryStage.setTitle("Change/Set password");
+        primaryStage.setScene(passwordSet);
+        passwordSetCtrl.setBoard(board);
+    }
+
     public void registerForAllSockets() {
         editCardCtrl.subscribeToSocketsEditCardCtrl();
         workspaceCtrl.subscribeForSocketsWorkspace();
@@ -449,10 +468,5 @@ public class MainCtrl {
         boardOverviewCtrl.subscribeToSocketsBoardOverview();
     }
 
-    public void showAddPreset(Board board) {
-        primaryStage.setTitle("New Task Color");
-        primaryStage.setScene(addPreset);
-        addPresetCtrl.setBoard(board);
-    }
 }
 
