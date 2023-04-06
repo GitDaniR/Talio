@@ -234,7 +234,21 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(userID, APPLICATION_JSON), User.class);
+    }
 
+    /**
+     * Method that adds the user to the list of users that have write
+     * access to a specific board (works both ways)
+     * @param userID - id of the user in the database
+     * @param boardID - id of the board in the database
+     * @return
+     */
+    public User assignBoardToUserWrite(Integer userID, Integer boardID){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/users/"+userID+"/boards/"+boardID+"/write") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(userID, APPLICATION_JSON), User.class);
     }
 
     /**

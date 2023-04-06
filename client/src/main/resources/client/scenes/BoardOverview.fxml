@@ -25,7 +25,7 @@
       <Button layoutX="652.0" layoutY="495.0" mnemonicParsing="false" onAction="#deleteBoard" text="Remove Board" />
       <Button layoutX="26.0" layoutY="17.0" mnemonicParsing="false" onAction="#showTags" text="View tags" />
       <Button layoutX="105.0" layoutY="17.0" mnemonicParsing="false" onAction="#showCustomization" text="Customize" />
-      <SplitPane fx:id="crossedControl" layoutX="636.0" layoutY="6.0" prefHeight="35.0" prefWidth="35.0">
+      <SplitPane fx:id="crossedControl" layoutX="636.0" layoutY="6.0" prefHeight="35.0" prefWidth="35.0" style="-fx-background-color: transparent;">
          <items>
             <ImageView fx:id="crossedLockView" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                <image>

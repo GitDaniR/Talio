@@ -104,6 +104,24 @@ public class UserService {
     }
 
     /**
+     * Adds user to the list of users who have write access within a board
+     * and also the other way around
+     * @param userId
+     * @param boardId
+     * @return
+     * @throws Exception
+     */
+    public ResponseEntity<User> joinBoardWriteAccess(Integer userId,
+                                                     Integer boardId) throws Exception{
+        Board board = boardCtrl.getById(boardId).getBody();
+        User user = getById(userId).getBody();
+        board.usersWrite.add(user);
+        boardRepository.save(board); //might cause problems
+        user = getById(userId).getBody();
+        return ResponseEntity.ok(user);
+    }
+
+    /**
      * Method which deletes the board from joined boards by the user
      * @param userId - id of the user
      * @param boardId - id of the board

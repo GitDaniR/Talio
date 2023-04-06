@@ -304,7 +304,7 @@ public class BoardOverviewCtrl implements Initializable {
     }
 
     public void setPassword(){
-        mainCtrl.showSetPassword(board);
+        mainCtrl.showSetPassword(userViewing,board);
     }
 
     public void showTags(){
@@ -375,7 +375,7 @@ public class BoardOverviewCtrl implements Initializable {
             //if there is a password, we need to check if we have access
             crossedLockView.setVisible(false);
             //if write access
-            if(board.usersWrite.contains(userViewing)){
+            if(userViewing.unlockedBoards.contains(board)){
                 unlockedButton.setDisable(true);
                 unlockedTooltip.setText("You already inputted the password!");
                 lockedButton.setDisable(false);
