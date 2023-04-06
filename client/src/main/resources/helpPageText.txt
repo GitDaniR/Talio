@@ -1,0 +1,22 @@
+To get started, you need to input the following:
+
+- ip address (which is usually localhost:8080) of the server you wish to connect to (the server you choose will dictate what information is already available - if any and whereyour data will be saved)
+
+- username - this will represent who you are within the system - all the boards you have joined will be associated with your username
+
+- admin password - this is optional and is only required when you want to connect as a privileged user - you will be able to see all boards and have access to their password; contact the system administrator to request it.
+
+After connecting, you can create a new board to get started. Within boards, you can create lists, tasks and tags to assign to tasks. Once a task is made, it can be double-clicked to be opened.  From there, the title can be changed, a description and subtasks can be added and tags managed. Additional color customization is also available in the same menu.
+
+Tip: double-click on the board title while in the overview to change it! /endShortcut guide:
+
+? - open help menu
+Arrow keys / Mouse hover - select task
+Shit + Up/Down - move tasks up/down
+E - edit selected task title
+Del/Backspace - delete selected task
+Enter - open selected task
+Esc - go back to board overview from task details
+T - open tag selection for selected task
+C - open color selection for selected task
+

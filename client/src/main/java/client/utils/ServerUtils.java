@@ -15,27 +15,28 @@
  */
 package client.utils;
 
-import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
-import static jakarta.ws.rs.core.MediaType.TEXT_PLAIN;
-
+import commons.*;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.core.GenericType;
+import org.glassfish.jersey.client.ClientConfig;
+import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.simp.stomp.StompFrameHandler;
+import org.springframework.messaging.simp.stomp.StompHeaders;
+import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
+import org.springframework.web.socket.client.standard.StandardWebSocketClient;
+import org.springframework.web.socket.messaging.WebSocketStompClient;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
-
-import commons.*;
+import java.util.stream.Collectors;
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+import static jakarta.ws.rs.core.MediaType.TEXT_PLAIN;
 import jakarta.ws.rs.core.Response;
-import org.glassfish.jersey.client.ClientConfig;
-
-import jakarta.ws.rs.client.ClientBuilder;
-import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.core.GenericType;
-import org.springframework.messaging.converter.MappingJackson2MessageConverter;
-import org.springframework.messaging.simp.stomp.*;
-import org.springframework.web.socket.client.standard.StandardWebSocketClient;
-import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 public class ServerUtils {
 
@@ -302,6 +303,14 @@ public class ServerUtils {
                 .put(Entity.entity(newColor, APPLICATION_JSON), Tag.class);
     }
 
+    public void editTagFont(Integer tagId, String newColor) {
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/tags/font/"+tagId) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(newColor, APPLICATION_JSON), Tag.class);
+    }
+
     public Tag getTagById(Integer tagId) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(server).path("api/tags/"+tagId) //
@@ -399,7 +408,7 @@ public class ServerUtils {
 
     public List<Tag> getTags(int boardId) {
         return ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("api/tags/")
+                .target(server).path("api/tags/board/"+boardId)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get(new GenericType<List<Tag>>() {});
@@ -420,6 +429,98 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON)
                 .get(new GenericType<List<Card>>() {});
     }
+
+    public void editColorBoardBackground(Integer boardId, String newColor) {
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/boards/"+boardId+"/colors/boardBackground") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(newColor, APPLICATION_JSON), Board.class);
+    }
+
+    public void editColorBoardFont(Integer boardId, String newColor) {
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/boards/"+boardId+"/colors/boardFont") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(newColor, APPLICATION_JSON), Board.class);
+    }
+
+    public void editColorListsBackground(Integer boardId, String newColor) {
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/boards/"+boardId+"/colors/listsBackground") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(newColor, APPLICATION_JSON), Board.class);
+    }
+
+    public void editColorListsFont(Integer boardId, String newColor) {
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/boards/"+boardId+"/colors/listsFont") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(newColor, APPLICATION_JSON), Board.class);
+    }
+    public List<Preset> getAllBoardPresets(int boardId) {
+        return ClientBuilder.newClient(new ClientConfig())
+            .target(server).path("api/presets/")
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .get(new GenericType<List<Preset>>() {}).stream().
+            filter(preset->preset.boardId == boardId).
+            collect(Collectors.toList());
+    }
+    public void editPresetBackground(Integer presetId, String newColor) {
+        ClientBuilder.newClient(new ClientConfig()) //
+            .target(server).path("api/presets/"+presetId+"/background/" + newColor) //
+            .request(APPLICATION_JSON) //
+            .accept(APPLICATION_JSON) //
+            .put(Entity.entity(newColor, APPLICATION_JSON), String.class);
+    }
+
+    public void editPresetFont(Integer presetId, String newColor) {
+        ClientBuilder.newClient(new ClientConfig()) //
+            .target(server).path("api/presets/"+presetId+"/font/" + newColor) //
+            .request(APPLICATION_JSON) //
+            .accept(APPLICATION_JSON) //
+            .put(Entity.entity(newColor, APPLICATION_JSON), String.class);
+    }
+
+    public void deletePreset(Integer presetId) {
+        ClientBuilder.newClient(new ClientConfig()) //
+            .target(server).path("api/presets/" + presetId) //
+            .request(APPLICATION_JSON) //
+            .accept(APPLICATION_JSON) //
+            .delete();
+    }
+
+    public void setDefaultPreset(Integer presetId) {
+        ClientBuilder.newClient(new ClientConfig()) //
+            .target(server).path("api/presets/"+presetId+"/default/") //
+            .request(APPLICATION_JSON) //
+            .accept(APPLICATION_JSON) //
+            .put(Entity.entity("", APPLICATION_JSON), String.class);
+    }
+
+    public Preset getPresetById(Integer presetId) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/presets/"+presetId) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<Preset>() {});
+    }
+
+    public Preset addPreset(Preset preset) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/presets/") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(preset, APPLICATION_JSON), Preset.class);
+    }
+
+//    public void send(String dest, Object o){
+//        session.send(dest,o);
+//    }
 
     private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
 

@@ -38,5 +38,7 @@ public class MyModule implements Module {
         binder.bind(AddTagCtrl.class).in(Scopes.SINGLETON);
         binder.bind(TagOverviewCtrl.class).in(Scopes.SINGLETON);
         binder.bind(AddRemoveTagsCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(HelpCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(AddPresetCtrl.class).in(Scopes.SINGLETON);
     }
 }

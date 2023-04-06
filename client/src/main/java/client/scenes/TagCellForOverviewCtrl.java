@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Paint;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -54,8 +55,10 @@ public class TagCellForOverviewCtrl implements Initializable {
     public void setTag(Tag tagToBeSet){
         this.tag = tagToBeSet;
         lblTagName.setText(tag.title);
-        box.setStyle("-fx-background-color: " + tag.color.replace("0x", "#")
-                +";" + " -fx-border-color: black");
+        lblTagName.setTextFill(Paint.valueOf(tagToBeSet.colorFont));
+        box.setStyle("-fx-border-color: black; -fx-background-color: " +
+                        tag.colorBackground.replace("0x", "#") +
+                        "; -fx-text-fill: " + tag.colorFont.replace("0x", "#"));
 
         // change the style of the tag depending on use case
         setButtonVisibility();

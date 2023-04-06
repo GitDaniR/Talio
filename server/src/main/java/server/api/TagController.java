@@ -52,6 +52,13 @@ public class TagController {
         return found;
     }
 
+    @GetMapping("/board/{id}")
+    public List<Tag> getByBoardId(@PathVariable("id") Integer id) {
+        List<Tag> found = getAll();
+        found.removeIf(t -> t.boardId != id);
+        return found;
+    }
+
 
     /**
      * Method which adds a new tag to repo.
@@ -103,6 +110,27 @@ public class TagController {
                                                        @RequestBody String newColor){
         try {
             Tag res = tagService.updateColorById(id, newColor);
+            if(msgs!=null)
+                msgs.convertAndSend("/topic/tags",res.boardId);
+            return ResponseEntity.ok(res);
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    /**
+     * Method which updates a tag's font's color.
+     *
+     * @param id The id of the tag
+     * @param newColor The new color of the tag's font
+     * @return response
+     */
+    @PutMapping("/font/{id}")
+    public ResponseEntity<Tag> updateFontById(@PathVariable("id") Integer id,
+                                               @RequestBody String newColor){
+        try {
+            Tag res = tagService.updateFontById(id, newColor);
             if(msgs!=null)
                 msgs.convertAndSend("/topic/tags",res.boardId);
             return ResponseEntity.ok(res);
