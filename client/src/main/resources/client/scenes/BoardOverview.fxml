@@ -3,6 +3,8 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
 
@@ -20,5 +22,12 @@
       <Label fx:id="copiedToClipboardMessage" layoutX="625.0" layoutY="6.0" prefHeight="34.0" prefWidth="160.0" wrapText="true" />
       <Button layoutX="652.0" layoutY="495.0" mnemonicParsing="false" onAction="#deleteBoard" text="Remove Board" />
       <Button layoutX="26.0" layoutY="10.0" mnemonicParsing="false" onAction="#showTags" text="View tags" />
+      <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="600.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../client.images/crossed%20lock.png" />
+         </image>
+      </ImageView>
+      <Button layoutX="702.0" layoutY="10.0" mnemonicParsing="false" text="Lock" />
+      <Button layoutX="643.0" layoutY="11.0" mnemonicParsing="false" text="Unlock" />
    </children>
 </AnchorPane>
