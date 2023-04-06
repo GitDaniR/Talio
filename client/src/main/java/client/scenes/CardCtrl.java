@@ -63,11 +63,11 @@ public class CardCtrl extends AnchorPane implements Initializable {
     private void handleEditableTitle(){
         editableTitle.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue) {
-                Card newCard = card;
-                if(editableTitle.getText()=="") newCard.title = "You left this blank";
-                else newCard.title = editableTitle.getText();
-
-                this.card = server.editCard(card.id, newCard);
+                if(!editableTitle.getText().equals("")) {
+                    Card newCard = card;
+                    newCard.title = editableTitle.getText();
+                    this.card = server.editCard(card.id, newCard);
+                }
                 editableTitle.setVisible(false);
                 cardTitle.setVisible(true);
             }
@@ -77,7 +77,7 @@ public class CardCtrl extends AnchorPane implements Initializable {
         editableTitle.addEventHandler(KeyEvent.KEY_PRESSED, (EventHandler<KeyEvent>) keyEvent -> {
             if(keyEvent.getCode()== KeyCode.ENTER){
                 System.out.println("Pressed in text");
-                anchorPane.getParent().getParent().requestFocus();
+                anchorPane.requestFocus();
                 keyEvent.consume();
             }
         });
