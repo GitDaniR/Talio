@@ -39,7 +39,7 @@
       </SplitPane>
       <SplitPane layoutX="686.0" layoutY="6.0" prefHeight="35.0" prefWidth="35.0">
          <items>
-            <Button fx:id="unlockedButton" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0">
+            <Button fx:id="unlockedButton" mnemonicParsing="false" onAction="#enterPassword" prefHeight="35.0" prefWidth="35.0">
                <graphic>
                   <ImageView fx:id="unlockedLockView" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
