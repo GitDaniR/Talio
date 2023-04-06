@@ -248,6 +248,10 @@ public class MainCtrl {
         isAdmin = admin;
     }
 
+    public boolean getIsAdmin() {
+        return isAdmin;
+    }
+
     public void showHelp(){
         primaryStage.setTitle("Help");
         primaryStage.setScene(help);
@@ -457,6 +461,5 @@ public class MainCtrl {
         customizationCtrl.subscribeToWebsocketsCustomization();
         boardOverviewCtrl.subscribeToSocketsBoardOverview();
     }
-
 }
 

@@ -33,6 +33,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
+import javafx.stage.Modality;
 import javafx.util.Duration;
 import java.net.URL;
 import java.util.List;
@@ -300,24 +301,41 @@ public class BoardOverviewCtrl implements Initializable {
     //region METHODS FOR BUTTONS
 
     public void addList() {
-        mainCtrl.showAddList(board);
+        if(!verifyWriteAccess())
+            showWriteAccessAlert();
+        else
+            mainCtrl.showAddList(board);
     }
 
     public void setPassword(){
         mainCtrl.showSetPassword(userViewing,board);
     }
 
+    public void enterPassword(){
+        mainCtrl.showEnterPassword(userViewing,board);
+    }
+
     public void showTags(){
-        mainCtrl.showTagOverview(this.board);
+        if(!verifyWriteAccess())
+            showWriteAccessAlert();
+        else
+            mainCtrl.showTagOverview(this.board);
     }
 
     public void showCustomization(){
-        mainCtrl.showCustomization(this.board);
+        if(!verifyWriteAccess())
+            showWriteAccessAlert();
+        else
+            mainCtrl.showCustomization(this.board);
     }
 
     public void deleteBoard() {
-        server.deleteBoard(board.id);
-        mainCtrl.deleteBoard();
+        if(!verifyWriteAccess())
+            showWriteAccessAlert();
+        else{
+            server.deleteBoard(board.id);
+            mainCtrl.deleteBoard();
+        }
     }
 
     public void back() {
@@ -362,10 +380,25 @@ public class BoardOverviewCtrl implements Initializable {
 
     //region PASSWORD METHODS
 
+    /**
+     * @return true if user has write access
+     */
+    private boolean verifyWriteAccess(){
+        return board.password.equals("") || board.password.equals("NO_PASSWORD") ||
+                userViewing.unlockedBoards.contains(board);
+    }
+
+    private void showWriteAccessAlert(){
+        var alert = new Alert(Alert.AlertType.ERROR);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.setContentText("You don't have write access!");
+        alert.showAndWait();
+    }
+
     private void setPasswordRights(){
         //if there is no password we don't care
         if(board.password.equals("") || board.password.equals("NO_PASSWORD")) {
-            crossedControl.setVisible(true);
+            crossedLockView.setVisible(true);
             crossedTooltip.setText("The board doesn't have any password");
             unlockedButton.setDisable(true);
             unlockedTooltip.setText("The board is already unlocked");
@@ -375,7 +408,7 @@ public class BoardOverviewCtrl implements Initializable {
             //if there is a password, we need to check if we have access
             crossedLockView.setVisible(false);
             //if write access
-            if(userViewing.unlockedBoards.contains(board)){
+            if(userViewing.unlockedBoards.contains(board) || mainCtrl.getIsAdmin()){
                 unlockedButton.setDisable(true);
                 unlockedTooltip.setText("You already inputted the password!");
                 lockedButton.setDisable(false);
@@ -577,7 +610,10 @@ public class BoardOverviewCtrl implements Initializable {
     public void setHandlerTitle(){
         title.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
-                mainCtrl.showChangeTitle(this.board);
+                if(!verifyWriteAccess())
+                    showWriteAccessAlert();
+                else
+                    mainCtrl.showChangeTitle(this.board);
             }
         });
     }
@@ -585,6 +621,7 @@ public class BoardOverviewCtrl implements Initializable {
     public void refresh() {
         cardBoxes = new ArrayList<>();
         board = server.getBoardByID(board.id);
+        userViewing = server.getUserById(userViewing.id);
         title.setText(board.title);
         setPasswordRights();
         setColors();
@@ -605,7 +642,6 @@ public class BoardOverviewCtrl implements Initializable {
 
                 listObjectController.setServerAndCtrl(server, mainCtrl);
                 listObjectController.setFontColor();
-
                 // customization of lists
                 listObject.setStyle("-fx-background-color:"+
                         board.colorListsBackground.replace("0x", "#") +
