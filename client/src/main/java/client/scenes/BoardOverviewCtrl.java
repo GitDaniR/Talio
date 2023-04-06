@@ -6,10 +6,7 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.io.IOException;
 import com.google.inject.Inject;
-import commons.Board;
-import commons.BoardList;
-import commons.Card;
-import commons.User;
+import commons.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
@@ -32,11 +29,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Paint;
 import javafx.util.Duration;
 import java.net.URL;
-import java.util.*;
 import java.util.List;
-
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.ResourceBundle;
 
 public class BoardOverviewCtrl implements Initializable {
 
@@ -148,6 +147,9 @@ public class BoardOverviewCtrl implements Initializable {
             else if(keyEvent.getCode()==KeyCode.SHIFT)
                 isShiftPressed=false;
         });
+        server.registerForMessages("/topic/boards/colors", Double.class, dummy ->{
+            Platform.runLater(this::refresh);
+        });
     }
 
     public void setBoard(Board board) {
@@ -156,6 +158,9 @@ public class BoardOverviewCtrl implements Initializable {
 
     public void saveBoardInDatabase(){
         this.board = server.addBoard(this.board);
+        Preset resp = server.addPreset(new Preset("0xFFA500", "0x000000",
+                new ArrayList<>(), "Drukas Original", this.board, this.board.id));
+        server.setDefaultPreset(resp.id);
     }
 
     public void assignToUser(User user){
@@ -267,16 +272,30 @@ public class BoardOverviewCtrl implements Initializable {
 
     //endregion
 
-    //region METHODS FOR BUTTONS
-
     public void underlineText(){
         title.setUnderline(true);
     }
     public void undoUnderline(){
         title.setUnderline(false);
     }
+    private void setColors(){
+        title.setTextFill(Paint.valueOf(board.colorBoardFont));
+        mainBoard.setStyle("-fx-background-color: " +
+                board.colorBoardBackground.replace("0x", "#"));
+    }
+
+    //region METHODS FOR BUTTONS
+
     public void addList() {
         mainCtrl.showAddList(board);
+    }
+
+    public void showTags(){
+        mainCtrl.showTagOverview(this.board);
+    }
+
+    public void showCustomization(){
+        mainCtrl.showCustomization(this.board);
     }
 
     public void deleteBoard() {
@@ -313,10 +332,6 @@ public class BoardOverviewCtrl implements Initializable {
     private String getInviteCode(){
         String selection = board.title+"#"+board.id;
         return selection;
-    }
-
-    public void showTags(){
-        mainCtrl.showTagOverview(this.board);
     }
 
     //endregion
@@ -508,6 +523,7 @@ public class BoardOverviewCtrl implements Initializable {
         cardBoxes = new ArrayList<>();
         board = server.getBoardByID(board.id);
         title.setText(board.title);
+        setColors();
         setHandlerTitle();
         try {
             if(mainBoard.getChildren().size()>0)
@@ -520,7 +536,16 @@ public class BoardOverviewCtrl implements Initializable {
                 ListCtrl listObjectController = listLoader.getController();
                 listObject.setUserData(listLoader.getController());
                 assignListToController(listObjectController,currentList);
+
                 cardBoxes.add(new ArrayList<>());
+
+                listObjectController.setServerAndCtrl(server, mainCtrl);
+                listObjectController.setFontColor();
+
+                // customization of lists
+                listObject.setStyle("-fx-background-color:"+
+                        board.colorListsBackground.replace("0x", "#") +
+                        "; -fx-border-color: black; -fx-border-width: 1");
 
                 //Adding the cards to the list
                 ObservableList<Card> cardsInList = FXCollections.observableList(currentList.cards);

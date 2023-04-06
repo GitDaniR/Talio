@@ -15,17 +15,15 @@
  */
 package server.api;
 
+import commons.Board;
+import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
-
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.web.bind.annotation.*;
-
-import commons.Board;
 import org.springframework.web.context.request.async.DeferredResult;
 import server.services.BoardService;
 
@@ -142,4 +140,64 @@ public class BoardController {
 
         return ResponseEntity.ok(response);
     }
+
+    @PutMapping("/{id}/colors/boardBackground")
+    public ResponseEntity<Board> updateColorBoardBackground(@PathVariable("id") Integer id,
+                                                 @RequestBody String color) {
+        Board response;
+        try {
+            response = boardService.updateColorBoardBackground(id, color);
+            if(msgs!=null){
+                msgs.convertAndSend("/topic/boards/colors",1.0);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(response);
+    }
+    @PutMapping("/{id}/colors/boardFont")
+    public ResponseEntity<Board> updateColorBoardFont(@PathVariable("id") Integer id,
+                                                            @RequestBody String color) {
+        Board response;
+        try {
+            response = boardService.updateColorBoardFont(id, color);
+            if(msgs!=null){
+                msgs.convertAndSend("/topic/boards/colors",1.0);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{id}/colors/listsBackground")
+    public ResponseEntity<Board> updateColorListsBackground(@PathVariable("id") Integer id,
+                                                            @RequestBody String color) {
+        Board response;
+        try {
+            response = boardService.updateColorListsBackground(id, color);
+            if(msgs!=null){
+                msgs.convertAndSend("/topic/boards/colors",1.0);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{id}/colors/listsFont")
+    public ResponseEntity<Board> updateColorListsFont(@PathVariable("id") Integer id,
+                                                            @RequestBody String color) {
+        Board response;
+        try {
+            response = boardService.updateColorListsFont(id, color);
+            if(msgs!=null){
+                msgs.convertAndSend("/topic/boards/colors",1.0);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(response);
+    }
+
 }

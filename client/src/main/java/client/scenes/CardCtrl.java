@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Card;
+import commons.Preset;
 import commons.Subtask;
 import commons.Tag;
 import javafx.collections.FXCollections;
@@ -9,10 +10,10 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.fxml.Initializable;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -20,19 +21,23 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.paint.Paint;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.stream.Stream;
 
-public class CardCtrl extends AnchorPane implements Initializable{
+public class CardCtrl extends AnchorPane implements Initializable {
 
+    @FXML
+    private HBox container;
+    @FXML
+    private Label cardTitle;
     @FXML
     private AnchorPane anchorPane;
     @FXML
     private TextField editableTitle;
-    @FXML
-    private Label cardTitle;
     @FXML
     private ImageView imgDescription;
     @FXML
@@ -117,6 +122,7 @@ public class CardCtrl extends AnchorPane implements Initializable{
         hideNotNeeded();
         setSmallIcons();
         setQuickTags();
+        setFontAndBackgroundColor();
     }
 
     /** This method associates a card to the controller for easy access
@@ -179,29 +185,44 @@ public class CardCtrl extends AnchorPane implements Initializable{
         quickSelectTags.setItems(tags);
     }
 
-    private void setSmallIcons(){
+    private void setSmallIcons() {
         // description
-        if(card.description == null || card.description.isEmpty()) {
+        if (card.description == null || card.description.isEmpty()) {
             imgDescription.setVisible(false);
-        } else{
+        } else {
             imgDescription.setVisible(true);
         }
         // subtasks
-        if(card.subtasks == null || card.subtasks.isEmpty()){
+        if (card.subtasks == null || card.subtasks.isEmpty()) {
             lblSubtasks.setVisible(false);
-        }else{
+        } else {
             long total = card.subtasks.size();
             long done = Stream.of(card.subtasks.toArray()).
-                    filter(subtask->((Subtask)subtask).done).count();
+                    filter(subtask -> ((Subtask) subtask).done).count();
             lblSubtasks.setText("(" + done + "/" + total + "Done)");
             lblSubtasks.setVisible(true);
         }
         // tags
         paneTags.getChildren().clear();
-        if(card.tags != null){
-            for(Tag tag: card.tags){
+        if (card.tags != null) {
+            for (Tag tag : card.tags) {
                 addTag(tag);
             }
         }
+    }
+    /**
+     * Method which sets the fond and backgrounds colors of
+     * the CardCtrl based on the Preset the current Card
+     * is pointing to.
+     */
+    public void setFontAndBackgroundColor(){
+        Preset preset = server.getPresetById(card.presetId);
+        String fontColor = preset.font;
+        String backgroundColor = preset.backgroundColor;
+        cardTitle.setTextFill(Paint.valueOf(fontColor));
+        String style = "-fx-border-color: black; -fx-border-width: 4; -fx-border-radius: 5 5 5 5;" +
+                "-fx-background-radius: 5 5 5 5; -fx-background-color:" +
+                backgroundColor.replace("0x", "#");
+        container.setStyle(style);
     }
 }

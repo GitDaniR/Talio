@@ -13,7 +13,9 @@
       <Label layoutX="31.0" layoutY="140.0" text="Choose the color of your tag" />
       <Button layoutX="758.0" layoutY="495.0" mnemonicParsing="false" onAction="#ok" text="Save the tag" />
       <Button layoutX="22.0" layoutY="495.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
-      <ColorPicker fx:id="colorPicker" layoutX="31.0" layoutY="166.0" />
+      <ColorPicker fx:id="colorPickerBackground" layoutX="31.0" layoutY="166.0" />
       <Label fx:id="errorLabel" layoutX="34.0" layoutY="101.0" textFill="RED" />
+      <Label layoutX="31.0" layoutY="221.0" text="Choose the color of the font" />
+      <ColorPicker fx:id="colorPickerFont" layoutX="31.0" layoutY="245.0" />
    </children>
 </AnchorPane>

@@ -1,21 +1,20 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import commons.Board;
 import commons.BoardList;
 import commons.Card;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
-
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.fxml.Initializable;
-
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Paint;
 import javafx.stage.Modality;
-
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -47,9 +46,11 @@ public class ListCtrl extends AnchorPane implements Initializable{
 
     public void addDefaultCard(){
         try {
-            server.addCard(new Card("Task", "", boardList.cards.size(), boardList, boardList.id));
+            Card newCard = new Card("Task", "", boardList.cards.size(), boardList, boardList.id);
+            Board board = server.getBoardByID(boardList.boardId);
+            newCard.setPreset(board.defaultCardPreset);
+            server.addCard(newCard);
         } catch (WebApplicationException e) {
-
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText(e.getMessage());
@@ -72,6 +73,11 @@ public class ListCtrl extends AnchorPane implements Initializable{
      */
     public void setListTitleText(String text) {
         listTitle.setText(text);
+    }
+
+    public void setFontColor(){
+        String color = server.getBoardByID(boardList.boardId).colorListsFont;
+        listTitle.setTextFill(Paint.valueOf(color));
     }
 
     public void setServerAndCtrl(ServerUtils server,MainCtrl mainCtrl){

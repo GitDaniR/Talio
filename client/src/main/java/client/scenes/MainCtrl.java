@@ -76,6 +76,12 @@ public class MainCtrl {
     private HelpCtrl helpCtrl;
     private Scene help;
 
+    private CustomizationCtrl customizationCtrl;
+    private Scene customization;
+
+    private AddPresetCtrl addPresetCtrl;
+    private Scene addPreset;
+
     private String username;
     private boolean isAdmin = false;
 
@@ -95,7 +101,9 @@ public class MainCtrl {
                            Pair<AddTagCtrl, Parent> addTag,
                            Pair<TagOverviewCtrl, Parent> tagOverview,
                            Pair<AddRemoveTagsCtrl, Parent> addRemoveTags,
-                           Pair<HelpCtrl,Parent> help) {
+                           Pair<HelpCtrl,Parent> help,
+                           Pair<CustomizationCtrl, Parent> customization,
+                           Pair<AddPresetCtrl, Parent> addPreset) {
 
         this.primaryStage = primaryStage;
         primaryStage.getIcons().add(new Image(
@@ -104,8 +112,8 @@ public class MainCtrl {
 
         setControllersAndScenes(addList, board, welcomePage, editList,
                 workspace, workspaceAdmin, editCard, changeBoardTitle,
-                editTag, addTag, tagOverview, addRemoveTags,help);
-        setStylesheetsAndShortcuts();
+                editTag, addTag, tagOverview, addRemoveTags, help, customization,
+                addPreset);
 
         showWelcomePage();
         primaryStage.show();
@@ -124,7 +132,9 @@ public class MainCtrl {
             Pair<AddTagCtrl, Parent> addTag,
             Pair<TagOverviewCtrl, Parent> tagOverview,
             Pair<AddRemoveTagsCtrl, Parent> addRemoveTags,
-            Pair<HelpCtrl,Parent> help){
+            Pair<HelpCtrl,Parent> help,
+            Pair<CustomizationCtrl, Parent> customization,
+            Pair<AddPresetCtrl, Parent> addPreset){
 
         this.boardOverviewCtrl = board.getKey();
         this.board = new Scene(board.getValue());
@@ -162,6 +172,12 @@ public class MainCtrl {
         this.addRemoveTagsCtrl = addRemoveTags.getKey();
         this.addRemoveTags = new Scene(addRemoveTags.getValue());
 
+        this.customizationCtrl = customization.getKey();
+        this.customization = new Scene(customization.getValue());
+
+        this.addPresetCtrl = addPreset.getKey();
+        this.addPreset = new Scene(addPreset.getValue());
+
         primaryStage.setOnCloseRequest(e -> workspace.getKey().stop());
         primaryStage.setOnCloseRequest(e -> workspaceAdmin.getKey().stop());
 
@@ -176,8 +192,7 @@ public class MainCtrl {
 
         sceneArray = Arrays.asList(addList, board, welcomePage,
                 editList, workspace, workspaceAdmin, editCard, changeBoardTitle,
-                editTag, addTag, tagOverview, addRemoveTags, help);
-
+                editTag, addTag, tagOverview, addRemoveTags, help, customization, addPreset);
 
         for (Scene s : sceneArray) {
             s.getStylesheets().add(this.getClass().getResource(stylePath).toExternalForm());
@@ -412,12 +427,27 @@ public class MainCtrl {
         addRemoveTagsCtrl.setTags();
     }
 
+    public void showCustomization(Board board) {
+        primaryStage.setTitle("Customizing Board");
+        primaryStage.setScene(customization);
+        customizationCtrl.setBoard(board);
+        customizationCtrl.setValues();
+
+    }
+
     public void registerForAllSockets() {
         editCardCtrl.subscribeToSocketsEditCardCtrl();
         workspaceCtrl.subscribeForSocketsWorkspace();
         workspaceAdminCtrl.subscribeForSocketsWorkspaceAdmin();
         boardOverviewCtrl.subscribeToSocketsBoardOverview();
         tagOverviewCtrl.subscribeForSocketsTagOverview();
+        customizationCtrl.subscribeToWebsocketsCustomization();
+    }
+
+    public void showAddPreset(Board board) {
+        primaryStage.setTitle("New Task Color");
+        primaryStage.setScene(addPreset);
+        addPresetCtrl.setBoard(board);
     }
 }
 
