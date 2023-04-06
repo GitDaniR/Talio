@@ -450,7 +450,8 @@ public class BoardOverviewCtrl implements Initializable {
             Platform.runLater(() -> { if(board==null || id==board.id) back(); });
         });
         server.registerForMessages("/topic/boards/rename", Board.class, newBoard -> {
-            Platform.runLater(() -> { if(board.id == newBoard.id) title.setText(newBoard.title); });
+            Platform.runLater(() -> { if(board !=null && board.id == newBoard.id)
+                    title.setText(newBoard.title); });
         });
         //Basically I just need to update the card
         server.registerForMessages("/topic/subtasks", Integer.class, id -> {
@@ -619,6 +620,7 @@ public class BoardOverviewCtrl implements Initializable {
     }
 
     public void refresh() {
+        if(board == null) return;
         cardBoxes = new ArrayList<>();
         board = server.getBoardByID(board.id);
         userViewing = server.getUserById(userViewing.id);
@@ -646,7 +648,6 @@ public class BoardOverviewCtrl implements Initializable {
                 listObject.setStyle("-fx-background-color:"+
                         board.colorListsBackground.replace("0x", "#") +
                         "; -fx-border-color: black; -fx-border-width: 1");
-
                 //Adding the cards to the list
                 ObservableList<Card> cardsInList = FXCollections.observableList(currentList.cards);
                 Collections.sort(cardsInList, (s1, s2) -> { return s1.index-s2.index; });
