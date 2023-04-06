@@ -107,8 +107,7 @@ public class BoardOverviewCtrl implements Initializable {
                     if(hoveredCardCtrl != null) hoveredCardCtrl.quickAddPreset();
                     break;
                 case E:
-                    if(hoveredCardCtrl != null)
-                        hoveredCardCtrl.editTitle();
+                    if(hoveredCardCtrl != null) hoveredCardCtrl.editTitle();
                     break;
                 case SHIFT:
                     isShiftPressed = true;
@@ -250,13 +249,17 @@ public class BoardOverviewCtrl implements Initializable {
      */
     private void addHighlight(Node cardObject){
         cardObject.setOnMouseEntered(e->{
-            cardObject.requestFocus();
-            if(cardHighlightX!=-1 && cardHighlightY!=-1)
-                setCardHighlight(cardBoxes.get(cardHighlightX).get(cardHighlightY),false);
-            //disabling previous highlight
-            setCardHighlight(cardObject,true);
-            hoveredCardCtrl = (CardCtrl) cardObject.getUserData();
-            setCoordsOfCard(cardObject);
+
+            if(hoveredCardCtrl == null || !cardBoxes.get(cardHighlightX)
+                    .get(cardHighlightY).equals(cardObject)) {
+                cardObject.requestFocus();
+                if (cardHighlightX != -1 && cardHighlightY != -1)
+                    setCardHighlight(cardBoxes.get(cardHighlightX).get(cardHighlightY), false);
+                //disabling previous highlight
+                setCardHighlight(cardObject, true);
+                hoveredCardCtrl = (CardCtrl) cardObject.getUserData();
+                setCoordsOfCard(cardObject);
+            }
         });
         cardObject.setOnMouseExited(e->{
             setCardHighlight(cardObject,false);
