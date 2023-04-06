@@ -486,15 +486,19 @@ public class BoardOverviewCtrl implements Initializable {
         return cardObjectController;
     }
 
-    private void setCardHighlight(Node card,boolean value){
-        if(value)
+    private void setCardHighlight(Node card,boolean value) {
+        if (value)
             card.setStyle("-fx-border-color: black; -fx-border-width: 4; " +
                     "-fx-background-color: rgba(217, 192, 31, 0.49);" +
                     " -fx-border-radius: 5 5 5 5; -fx-background-radius: 5 5 5 5;");
-        else
+        else {
+            CardCtrl cardCtrl = (CardCtrl) card.getUserData();
+            Preset preset = server.getPresetById(cardCtrl.getCard().presetId);
+
             card.setStyle("-fx-border-color: black; -fx-border-width: 4; " +
-                    "-fx-background-color: " + " pink" +
+                    "-fx-background-color: " + preset.backgroundColor.replace("0x", "#") +
                     "; -fx-border-radius: 5 5 5 5; -fx-background-radius: 5 5 5 5;");
+        }
     }
 
     /**

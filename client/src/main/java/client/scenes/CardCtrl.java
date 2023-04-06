@@ -264,4 +264,6 @@ public class CardCtrl extends AnchorPane implements Initializable {
                 backgroundColor.replace("0x", "#");
         anchorPane.setStyle(style);
     }
+
+
 }
