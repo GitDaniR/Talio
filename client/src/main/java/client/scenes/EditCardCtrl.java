@@ -70,6 +70,10 @@ public class EditCardCtrl implements Initializable {
         server.registerForMessages("/topic/tags", Integer.class, boardId -> {
             Platform.runLater(() -> overwriteTags(server.getBoardByID(boardId).tags));
         });
+        server.registerForMessages("/topic/cards", Integer.class, cardId ->{
+            if(cardToEdit.id==cardId)
+                Platform.runLater(mainCtrl::showBoard);
+        });
     }
 
 
