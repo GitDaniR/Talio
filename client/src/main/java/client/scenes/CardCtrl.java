@@ -196,11 +196,10 @@ public class CardCtrl extends AnchorPane implements Initializable {
     public void editTitle(){
         cardTitle.setVisible(false);
         editableTitle.setVisible(true);
-        editableTitle.setText(card.title);
         editableTitle.requestFocus();
         PauseTransition delay = new PauseTransition(Duration.seconds(0.01));
         delay.setOnFinished(event -> {
-            editableTitle.setText("");
+            editableTitle.setText(card.title);
         });
         delay.play();
     }
