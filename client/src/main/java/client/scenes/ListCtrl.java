@@ -51,7 +51,6 @@ public class ListCtrl extends AnchorPane implements Initializable{
             newCard.setPreset(board.defaultCardPreset);
             server.addCard(newCard);
         } catch (WebApplicationException e) {
-
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText(e.getMessage());

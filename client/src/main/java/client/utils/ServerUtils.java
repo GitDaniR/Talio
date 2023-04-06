@@ -27,15 +27,16 @@ import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
-
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
-
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 import static jakarta.ws.rs.core.MediaType.TEXT_PLAIN;
+import jakarta.ws.rs.core.Response;
 
 public class ServerUtils {
 
@@ -364,9 +365,10 @@ public class ServerUtils {
     public void updateSubtaskIndex(Integer id, Integer index){
         ClientBuilder.newClient(new ClientConfig()) //
                 .target(server).path("api/subtasks/index/" + id) //
+                .queryParam("index", index) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .put(Entity.entity(String.valueOf(index), APPLICATION_JSON), String.class);
+                .put(Entity.entity("", APPLICATION_JSON), String.class);
     }
 
     private StompSession session;
@@ -519,4 +521,27 @@ public class ServerUtils {
 //    public void send(String dest, Object o){
 //        session.send(dest,o);
 //    }
+
+    private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
+
+    public void registerForUpdates(Consumer<Board> consumer) {
+        EXEC.submit(() -> {
+            while(!Thread.interrupted()) {
+                var res = ClientBuilder.newClient(new ClientConfig())
+                        .target(server).path("api/boards/updates")
+                        .request(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
+                        .get(Response.class);
+
+                if(res.getStatus() == 204) continue;
+                var b = res.readEntity(Board.class);
+                consumer.accept(b); /**watch video at 27:00 for multiple consumers**/
+            }
+        });
+    }
+
+    public void stop() {
+        EXEC.shutdownNow();
+    }
+
 }

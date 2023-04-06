@@ -35,7 +35,6 @@ public class WorkspaceAdminCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
     }
 
     public void subscribeForSocketsWorkspaceAdmin(){
@@ -44,6 +43,10 @@ public class WorkspaceAdminCtrl implements Initializable {
         });
         server.registerForMessages("/topic/boards/rename", Board.class, newBoard -> {
             Platform.runLater(() -> { renameBoard(newBoard.id,newBoard.title); });
+        });
+        server.registerForUpdates(b->{
+            System.out.println("New board!");
+            Platform.runLater(() -> refresh());
         });
     }
 
@@ -69,11 +72,12 @@ public class WorkspaceAdminCtrl implements Initializable {
     }
 
     private void removeBoard(int boardId){
-        //This throws nullpointer exception cause user is null
+        //We need to check if user is null because we might have
+        //never accessed this scene
         if(user!=null && user.hasBoardAlready(boardId))
             boardsDisplay.getChildren().
                     removeIf(e ->
-                            ((BoardWorkspaceCtrl)e.getUserData()).getBoard().id==boardId);
+                            ((BoardWorkspaceAdminCtrl)e.getUserData()).getBoard().id==boardId);
     }
 
     //endregion
@@ -168,4 +172,12 @@ public class WorkspaceAdminCtrl implements Initializable {
     }
 
     //endregion
+
+    /**
+     * This method is used to stop the longpolling thread
+     */
+    public void stop(){
+        server.stop();
+    }
+
 }

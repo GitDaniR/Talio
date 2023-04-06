@@ -42,18 +42,25 @@ public class WorkspaceCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+    }
 
+    public void stop() {
+        server.stop();
     }
 
     public void subscribeForSocketsWorkspace(){
         server.registerForMessages("/topic/boards/joinLeave",User.class, user->{
-            Platform.runLater(this::refresh);
+            if(this.user!=null)
+                Platform.runLater(this::refresh);
         });
         server.registerForMessages("/topic/boards/removed", Integer.class, boardId -> {
             Platform.runLater(() -> removeBoard(boardId));
         });
         server.registerForMessages("/topic/boards/rename", Board.class, newBoard -> {
             Platform.runLater(() -> { renameBoard(newBoard.id,newBoard.title); });
+        });
+        server.registerForUpdates(b -> {
+            refresh();
         });
     }
 
@@ -76,8 +83,9 @@ public class WorkspaceCtrl implements Initializable {
                         .getLblBoardName().setText(title));
     }
 
-    public void removeBoard(int boardId){
-        if(user.hasBoardAlready(boardId))
+    private void removeBoard(int boardId){
+        if(user != null && user.hasBoardAlready(boardId))
+
             boardsDisplay.getChildren().
                     removeIf(e ->
                     ((BoardWorkspaceCtrl)e.getUserData()).getBoard().id==boardId);

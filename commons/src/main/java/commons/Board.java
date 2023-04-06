@@ -51,7 +51,7 @@ public class Board {
     @JsonIgnore
     public List<User> users = new ArrayList<>();
 
-    private Board(){}
+    public Board(){}
 
     public Board(String title, String password) {
         this.title = title;

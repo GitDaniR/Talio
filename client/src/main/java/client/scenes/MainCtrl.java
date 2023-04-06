@@ -196,6 +196,10 @@ public class MainCtrl {
 
         this.addPresetCtrl = addPreset.getKey();
         this.addPreset = new Scene(addPreset.getValue());
+
+        primaryStage.setOnCloseRequest(e -> workspace.getKey().stop());
+        primaryStage.setOnCloseRequest(e -> workspaceAdmin.getKey().stop());
+
     }
 
     public void setAdmin(boolean admin) {

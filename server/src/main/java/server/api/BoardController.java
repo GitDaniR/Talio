@@ -19,9 +19,13 @@ import commons.Board;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
-import server.services.BoardService;
-
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.context.request.async.DeferredResult;
+import server.services.BoardService;
 
 @RestController
 @RequestMapping("/api/boards")
@@ -64,6 +68,8 @@ public class BoardController {
         return ResponseEntity.ok(found);
     }
 
+    private Map<Object, Consumer<Board>> listeners = new HashMap<>();
+
     /**
      * Method which adds a new board.
      * Method which adds a new board to repo.
@@ -75,10 +81,28 @@ public class BoardController {
         Board saved;
         try {
             saved = this.boardService.add(board);
+            listeners.forEach((k, l) -> l.accept(board));
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
+
         return ResponseEntity.ok(saved);
+    }
+
+    @GetMapping("/updates")
+    public DeferredResult<ResponseEntity<Board>> getUpdates() {
+        var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        var res = new DeferredResult<ResponseEntity<Board>>(5000L, noContent);
+
+        var key = new Object();
+        listeners.put(key, b -> {
+            res.setResult(ResponseEntity.ok(b));
+        });
+        res.onCompletion(() -> {
+            listeners.remove(key);
+        });
+
+        return res;
     }
 
     /**

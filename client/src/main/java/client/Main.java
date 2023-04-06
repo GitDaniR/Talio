@@ -65,5 +65,6 @@ public class Main extends Application {
                 editBoard, editTag, addTag, tagOverview, addRemoveTags, customization,
                 addPreset);
 
+
     }
 }
