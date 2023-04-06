@@ -39,7 +39,11 @@ public class PasswordSetCtrl implements Initializable {
 
     public void save() {
         try{
-            server.updateBoardPassword(boardToEdit.id, newPassword.getText());
+            if(newPassword.getText().equals(""))
+                server.updateBoardPassword(boardToEdit.id,"NO_PASSWORD");
+            else{
+                server.updateBoardPassword(boardToEdit.id, newPassword.getText());
+            }
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);

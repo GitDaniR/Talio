@@ -364,7 +364,7 @@ public class BoardOverviewCtrl implements Initializable {
 
     private void setPasswordRights(){
         //if there is no password we don't care
-        if(board.password.equals("")) {
+        if(board.password.equals("") || board.password.equals("NO_PASSWORD")) {
             crossedControl.setVisible(true);
             crossedTooltip.setText("The board doesn't have any password");
             unlockedButton.setDisable(true);
@@ -384,7 +384,7 @@ public class BoardOverviewCtrl implements Initializable {
                 unlockedButton.setDisable(false);
                 unlockedTooltip.setText("Press to input the password of the board" +
                         " and gain write access");
-                lockedButton.setDisable(false);
+                lockedButton.setDisable(true);
                 lockedTooltip.setText("You don't have access to change the password!");
             }
         }
