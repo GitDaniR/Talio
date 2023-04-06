@@ -21,7 +21,7 @@ public class TagTest {
         var board = new Board(1, "title", "password", new ArrayList<BoardList>());
         var tag = new Tag("tag", "color", board, 1);
         assertEquals(tag.title, "tag");
-        assertEquals(tag.color, "color");
+        assertEquals(tag.colorBackground, "color");
         assertEquals(tag.board, board);
         assertEquals(tag.boardId, 1);
     }
