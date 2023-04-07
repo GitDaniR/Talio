@@ -65,9 +65,11 @@ public class CardCtrl extends AnchorPane implements Initializable {
     private void handleEditableTitle(){
         editableTitle.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue) {
-                Card newCard = card;
-                newCard.title = editableTitle.getText();
-                this.card = server.editCard(card.id, newCard);
+                if(!editableTitle.getText().equals("")) {
+                    Card newCard = card;
+                    newCard.title = editableTitle.getText();
+                    this.card = server.editCard(card.id, newCard);
+                }
                 editableTitle.setVisible(false);
                 cardTitle.setVisible(true);
             }
@@ -218,7 +220,7 @@ public class CardCtrl extends AnchorPane implements Initializable {
         editableTitle.requestFocus();
         PauseTransition delay = new PauseTransition(Duration.seconds(0.01));
         delay.setOnFinished(event -> {
-            editableTitle.setText("");
+            editableTitle.setText(card.title);
         });
         delay.play();
     }

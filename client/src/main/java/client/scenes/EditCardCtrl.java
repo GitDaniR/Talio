@@ -74,28 +74,29 @@ public class EditCardCtrl implements Initializable {
                     keyEvent.consume();
                     break;
             }
-            // Cell factory
-            presetMenu.setCellFactory(lv -> new ListCell<Preset>() {
-                @Override
-                public void updateItem(Preset item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty) {
-                        setText(null);
-                    } else {
-                        setText(item.toString());
-                        setDisable(item.getId() == cardToEdit.presetId);
-                    }
-                }
-            });
+        });
 
-            // Add listener to presetMenu to detect when a Preset is selected.
-            presetMenu.valueProperty().addListener((obs, oldval, newval) -> {
-                if (newval != null) {
-                    Preset p = (Preset) newval;
-                    cardToEdit.setPreset(p);
-                    server.editCard(cardToEdit.id, cardToEdit);
+        // Cell factory
+        presetMenu.setCellFactory(lv -> new ListCell<Preset>() {
+            @Override
+            public void updateItem(Preset item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    setText(item.toString());
+                    setDisable(item.getId() == cardToEdit.presetId);
                 }
-            });
+            }
+        });
+
+        // Add listener to presetMenu to detect when a Preset is selected.
+        presetMenu.valueProperty().addListener((obs, oldval, newval) -> {
+            if (newval != null) {
+                Preset p = (Preset) newval;
+                cardToEdit.setPreset(p);
+                server.editCard(cardToEdit.id, cardToEdit);
+            }
         });
     }
 
@@ -109,6 +110,10 @@ public class EditCardCtrl implements Initializable {
         });
         server.registerForMessages("/topic/tags", Integer.class, boardId -> {
             Platform.runLater(() -> overwriteTags(server.getBoardByID(boardId).tags));
+        });
+        server.registerForMessages("/topic/cards", Integer.class, cardId ->{
+            if(cardToEdit.id==cardId)
+                Platform.runLater(mainCtrl::showBoard);
         });
     }
 

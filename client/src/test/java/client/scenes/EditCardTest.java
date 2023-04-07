@@ -41,7 +41,7 @@ class EditCardTest {
     @Test
     void testStartWebSockets() {
         editCardCtrl.subscribeToSocketsEditCardCtrl();
-        verify(serverUtils,times(3))
+        verify(serverUtils,times(4))
                 .registerForMessages(Mockito.anyString(),Mockito.any(),Mockito.any());
     }
 }

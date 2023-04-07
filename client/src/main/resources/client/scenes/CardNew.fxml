@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
 
-<AnchorPane fx:id="anchorPane" prefHeight="59.0" prefWidth="191.0" style="-fx-border-color: black; -fx-border-radius: 5 5 5 5; -fx-border-width: 3; -fx-background-radius: 5 5 5 5; -fx-background-color: pink;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CardCtrl">
+<AnchorPane fx:id="anchorPane" prefHeight="59.0" prefWidth="191.0" style="-fx-border-color: black; -fx-border-radius: 5 5 5 5; -fx-border-width: 3; -fx-background-radius: 5 5 5 5; -fx-background-color: pink;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CardCtrl">
    <children>
       <Label fx:id="cardTitle" alignment="CENTER" layoutY="4.0" prefHeight="42.0" prefWidth="185.0" text="Default Card Name" />
       <Button layoutX="183.0" layoutY="5.0" mnemonicParsing="false" onAction="#deleteCard" prefHeight="17.0" prefWidth="22.0" text="x" />

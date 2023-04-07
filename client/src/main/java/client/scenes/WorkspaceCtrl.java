@@ -60,9 +60,6 @@ public class WorkspaceCtrl implements Initializable {
             Platform.runLater(() -> { renameBoard(newBoard.id,newBoard.title); });
         });
         mainCtrl.consumeShortcutsTextField(inputBoardToJoin);
-        server.registerForUpdates(b -> {
-            refresh();
-        });
     }
 
     /**
