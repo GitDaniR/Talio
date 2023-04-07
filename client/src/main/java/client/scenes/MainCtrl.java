@@ -238,8 +238,16 @@ public class MainCtrl {
     }
 
     public void showHelp(){
+        if (primaryStage.getScene() == help) return;
+        helpCtrl.setPreviousTitle(primaryStage.getTitle());
+        helpCtrl.setPreviousScene(primaryStage.getScene());
         primaryStage.setTitle("Help");
         primaryStage.setScene(help);
+    }
+
+    public void backFromHelp() {
+        primaryStage.setTitle(helpCtrl.getPreviousTitle());
+        primaryStage.setScene(helpCtrl.getPreviousScene());
     }
 
 
