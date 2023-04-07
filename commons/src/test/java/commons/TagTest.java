@@ -12,7 +12,7 @@ public class TagTest {
     public void checkConstructor(){
         var tag = new Tag("Tag", "color");
         assertEquals(tag.title, "Tag");
-        assertEquals(tag.color, "color");
+        assertEquals(tag.colorBackground, "color");
         assertEquals(tag.cards, new ArrayList<Card>());
     }
 
@@ -21,7 +21,7 @@ public class TagTest {
         var board = new Board(1, "title", "password", new ArrayList<BoardList>());
         var tag = new Tag("tag", "color", board, 1);
         assertEquals(tag.title, "tag");
-        assertEquals(tag.color, "color");
+        assertEquals(tag.colorBackground, "color");
         assertEquals(tag.board, board);
         assertEquals(tag.boardId, 1);
     }
@@ -79,7 +79,6 @@ public class TagTest {
     public void hasToString(){
         var tag1 = new Tag("Tag1", "color");
         assertTrue(tag1.toString().contains("Tag1"));
-        assertTrue(tag1.toString().contains("color"));
 
     }
 

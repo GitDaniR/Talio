@@ -7,14 +7,16 @@ import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.util.Duration;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
@@ -24,29 +26,26 @@ public class EditCardCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     @FXML
+    public AnchorPane everything;
+    @FXML
     private TextField title;
     @FXML
     private TextArea description;
     @FXML
     private Label errorLabel;
-
-    @FXML
-    private Button save;
-    @FXML
-    private Button cancel;
     private Card cardToEdit;
-
     @FXML
     private ListView<Subtask> subtasks;
     @FXML
     private TextField subtaskTitle;
-    @FXML
-    private Button addSubtask;
     private ObservableList<Subtask> subtasksArray;
-
     @FXML
     private FlowPane tags;
     private ObservableList<Tag> tagsArray;
+    @FXML
+    private Label currentPreset;
+    @FXML
+    private ComboBox presetMenu;
 
     @Inject
     public EditCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -57,6 +56,45 @@ public class EditCardCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         title.setOnKeyTyped(e -> server.editCard(cardToEdit.id, getUpdatedCard()));
         description.setOnKeyTyped(e -> server.editCard(cardToEdit.id, getUpdatedCard()));
+        mainCtrl.consumeShortcutsTextField(title);
+        mainCtrl.consumeShortcutsTextField(description);
+        mainCtrl.consumeShortcutsTextField(subtaskTitle);
+
+        // add keyboard shortcuts
+        everything.addEventFilter(KeyEvent.KEY_PRESSED, (EventHandler<KeyEvent>) keyEvent -> {
+            switch (keyEvent.getCode()) {
+                case ESCAPE:
+                    cancel();
+                    keyEvent.consume();
+                    break;
+                default:
+                    keyEvent.consume();
+                    break;
+            }
+        });
+
+        // Cell factory
+        presetMenu.setCellFactory(lv -> new ListCell<Preset>() {
+            @Override
+            public void updateItem(Preset item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    setText(item.toString());
+                    setDisable(item.getId() == cardToEdit.presetId);
+                }
+            }
+        });
+
+        // Add listener to presetMenu to detect when a Preset is selected.
+        presetMenu.valueProperty().addListener((obs, oldval, newval) -> {
+            if (newval != null) {
+                Preset p = (Preset) newval;
+                cardToEdit.setPreset(p);
+                server.editCard(cardToEdit.id, cardToEdit);
+            }
+        });
     }
 
     public void subscribeToSocketsEditCardCtrl(){
@@ -88,6 +126,7 @@ public class EditCardCtrl implements Initializable {
             title.setText(card.title);
         if(!description.isFocused())
             description.setText(card.description);
+        updatePresetMenu();
     }
 
     private void overwriteTags(List<Tag> tags) {
@@ -136,6 +175,7 @@ public class EditCardCtrl implements Initializable {
                 cardToEdit.list,
                 cardToEdit.listId);
         newCard.tags=cardToEdit.tags;
+        newCard.presetId = cardToEdit.presetId;
 
         return newCard;
     }
@@ -173,12 +213,12 @@ public class EditCardCtrl implements Initializable {
         setOldValues();
         setSubtasks();
         setTags();
+        updatePresetMenu();
     }
 
     public void setOldValues(){
         title.setText(cardToEdit.title);
         description.setText((cardToEdit.description));
-
     }
 
     public void setSubtasks(){
@@ -238,5 +278,15 @@ public class EditCardCtrl implements Initializable {
      */
     public void addRemoveTags(){
         mainCtrl.showAddRemoveTags(cardToEdit);
+    }
+
+    public void updatePresetMenu() {
+        // TO-DO: find easier way of retrieving presets for a board.
+        BoardList list = server.getBoardListById(cardToEdit.listId);
+        // Make ObservableList for presets
+        ObservableList<Preset> presets = FXCollections.observableArrayList();
+        // Fetch presets from DB and add to OL
+        presets.addAll(server.getAllBoardPresets(list.boardId));
+        presetMenu.setItems(presets);
     }
 }

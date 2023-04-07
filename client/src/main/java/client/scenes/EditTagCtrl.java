@@ -22,17 +22,13 @@ public class EditTagCtrl implements Initializable {
     @FXML
     private TextField title;
     @FXML
-    private ColorPicker colorPicker;
+    private ColorPicker colorPickerBackground;
+    @FXML
+    private ColorPicker colorPickerFont;
     @FXML
     private Label oldTitle;
     @FXML
-    private Label oldColor;
-    @FXML
     private Label errorLabel;
-    @FXML
-    private Button save;
-    @FXML
-    private Button cancel;
     private Tag tagToEdit;
 
     @Inject
@@ -42,7 +38,9 @@ public class EditTagCtrl implements Initializable {
     }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {}
+    public void initialize(URL location, ResourceBundle resources) {
+        mainCtrl.consumeShortcutsTextField(title);
+    }
 
     public void cancel(){
         clearFields();
@@ -51,9 +49,9 @@ public class EditTagCtrl implements Initializable {
 
     private void clearFields() {
         title.clear();
-        colorPicker.setValue(Color.valueOf("0xffffff"));
+        colorPickerBackground.setValue(Color.valueOf("0xffffff"));
+        colorPickerFont.setValue(Color.valueOf("0xffffff"));
         oldTitle.setText("");
-        oldColor.setText("");
     }
 
     private PauseTransition delay;
@@ -76,7 +74,8 @@ public class EditTagCtrl implements Initializable {
         }
         try {
             server.editTagTitle(tagToEdit.id, title.getText());
-            server.editTagColor(tagToEdit.id, colorPicker.getValue().toString());
+            server.editTagColor(tagToEdit.id, colorPickerBackground.getValue().toString());
+            server.editTagFont(tagToEdit.id, colorPickerFont.getValue().toString());
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -100,7 +99,8 @@ public class EditTagCtrl implements Initializable {
             //fetch the tag from the server
             tagToEdit = server.getTagById(id);
             oldTitle.setText(tagToEdit.title);
-            oldColor.setText(tagToEdit.color);
+            colorPickerBackground.setValue(Color.valueOf(tagToEdit.colorBackground));
+            colorPickerFont.setValue(Color.valueOf(tagToEdit.colorFont));
         }catch(Exception e){
             //if it doesn't exist someone probably deleted it while we were editing the tag
             //so we are returned to the board overview

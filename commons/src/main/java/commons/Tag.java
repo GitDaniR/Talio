@@ -4,13 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
@@ -19,7 +16,8 @@ public class Tag {
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Integer id;
     public String title;
-    public String color;
+    public String colorBackground;
+    public String colorFont;
 
     @ManyToMany(mappedBy = "tags")
     @JsonIgnore
@@ -35,16 +33,32 @@ public class Tag {
     public Tag() {
     }
 
-    public Tag(String title, String color, Board board, int boardId) {
+    public Tag(String title, String colorBackground, Board board, int boardId) {
         this.title = title;
-        this.color = color;
+        this.colorBackground = colorBackground;
         this.board = board;
         this.boardId = boardId;
     }
 
-    public Tag(String title, String color) {
+    public Tag(String title, String colorBackground) {
         this.title = title;
-        this.color = color;
+        this.colorBackground = colorBackground;
+    }
+
+    /**
+     * Copy of old constructors so that we don't break tag tests
+     */
+    public Tag(String title, String colorBackground, String colorFont, Board board, int boardId) {
+        this.title = title;
+        this.colorBackground = colorBackground;
+        this.colorFont = colorFont;
+        this.board = board;
+        this.boardId = boardId;
+    }
+    public Tag(String title, String colorBackground, String colorFont) {
+        this.title = title;
+        this.colorBackground = colorBackground;
+        this.colorFont = colorFont;
     }
 
     public void addToCard(Card card){
@@ -66,6 +80,6 @@ public class Tag {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
+        return this.title;
     }
 }
