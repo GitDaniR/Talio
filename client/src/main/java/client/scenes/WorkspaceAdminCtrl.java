@@ -45,8 +45,7 @@ public class WorkspaceAdminCtrl implements Initializable {
             Platform.runLater(() -> { renameBoard(newBoard.id,newBoard.title); });
         });
         server.registerForUpdates(b->{
-            System.out.println("New board!");
-            Platform.runLater(() -> refresh());
+            Platform.runLater(this::refresh);
         });
     }
 
