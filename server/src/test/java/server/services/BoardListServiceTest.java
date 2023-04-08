@@ -57,6 +57,16 @@ class BoardListServiceTest {
     }
 
     @Test
+    void testFindById() {
+        BoardList result = sut.findById(1);
+        BoardList expected = new BoardList(1, "First", b1, 0);
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestBoardListRepository.FIND_BY_ID);
+        assertEquals(expected, result);
+        assertEquals(expectedCalls, listRepo.getCalls());
+    }
+
+    @Test
     void testAddSuccessful() throws Exception {
         BoardList l4 = new BoardList(4, "Fourth", b1, 0);
         BoardList expected = sut.add(l4);
