@@ -44,7 +44,7 @@ public class PresetTest {
 
     @Test
     public void constructorTest3() {
-        Preset preset = new Preset(3, "red", "font", cards,"name", board, board.id);
+        Preset preset = new Preset(3, "red", "font", cards, "name", board, board.id);
         assertNotNull(preset);
         assertEquals(preset.id, 3);
         assertEquals(preset.backgroundColor, "red");
@@ -75,33 +75,33 @@ public class PresetTest {
 
     @Test
     public void getIdTest() {
-        Preset preset = new Preset(3, "red", "font", cards,"name", board, board.id);
+        Preset preset = new Preset(3, "red", "font", cards, "name", board, board.id);
         assertEquals(preset.getId(), 3);
     }
 
     @Test
     public void getNameTest() {
-        Preset preset = new Preset(3, "red", "font", cards,"name", board, board.id);
+        Preset preset = new Preset(3, "red", "font", cards, "name", board, board.id);
         assertEquals(preset.getName(), "name");
     }
 
     @Test
     public void setBackgroundColorTest() {
-        Preset preset = new Preset(3, "red", "font", cards,"name", board, board.id);
+        Preset preset = new Preset(3, "red", "font", cards, "name", board, board.id);
         preset.setBackgroundColor("blue");
         assertEquals(preset.backgroundColor, "blue");
     }
 
     @Test
     public void setFontTest() {
-        Preset preset = new Preset(3, "red", "font", cards,"name", board, board.id);
+        Preset preset = new Preset(3, "red", "font", cards, "name", board, board.id);
         preset.setFont("another font");
         assertEquals(preset.font, "another font");
     }
 
     @Test
     public void setBoardTest() {
-        Preset preset = new Preset(3, "red", "font", cards,"name", board, board.id);
+        Preset preset = new Preset(3, "red", "font", cards, "name", board, board.id);
         Board newBoard = new Board(5, "new board", "password", new ArrayList<>());
         preset.setBoard(newBoard);
         assertEquals(preset.board, newBoard);
@@ -110,7 +110,7 @@ public class PresetTest {
 
     @Test
     public void addCardAlreadyContainedTest() {
-        Preset preset = new Preset(3, "red", "font", cards,"name", board, board.id);
+        Preset preset = new Preset(3, "red", "font", cards, "name", board, board.id);
         Card newCard = new Card("title", "description", 1, new BoardList(), 1);
         cards.add(newCard);
         preset.addCard(newCard);
@@ -120,7 +120,7 @@ public class PresetTest {
 
     @Test
     public void addCardNotContainedTest() {
-        Preset preset = new Preset(3, "red", "font", cards,"name", board, board.id);
+        Preset preset = new Preset(3, "red", "font", cards, "name", board, board.id);
         Card newCard = new Card("title", "description", 1, new BoardList(), 1);
         assertFalse(preset.cards.contains(newCard));
         assertTrue(preset.cards.size() == 0);
@@ -131,7 +131,7 @@ public class PresetTest {
 
     @Test
     public void removeCardTest() {
-        Preset preset = new Preset(3, "red", "font", cards,"name", board, board.id);
+        Preset preset = new Preset(3, "red", "font", cards, "name", board, board.id);
         Card newCard = new Card("title", "description", 1, new BoardList(), 1);
         preset.addCard(newCard);
         assertTrue(preset.cards.contains(newCard));
@@ -143,8 +143,8 @@ public class PresetTest {
 
     @Test
     public void equalsHashCodeTest() {
-        Preset preset1 = new Preset(3, "red", "font", cards,"name", board, board.id);
-        Preset preset2 = new Preset(3, "red", "font", cards,"name", board, board.id);
+        Preset preset1 = new Preset(3, "red", "font", cards, "name", board, board.id);
+        Preset preset2 = new Preset(3, "red", "font", cards, "name", board, board.id);
 
         assertEquals(preset1, preset2);
         assertEquals(preset1.hashCode(), preset2.hashCode());
@@ -153,7 +153,7 @@ public class PresetTest {
 
     @Test
     public void toStringTest() {
-        Preset preset = new Preset(3, "red", "font", cards,"name", board, board.id);
+        Preset preset = new Preset(3, "red", "font", cards, "name", board, board.id);
         String result = preset.toString();
 
         assertTrue(result.equals("name"));
