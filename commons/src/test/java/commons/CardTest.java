@@ -56,7 +56,7 @@ public class CardTest {
     @Test
     public void setPresetTest() {
         var card = new Card(1, "card", "description", 0, list, list.getId());
-        var preset = ne w Preset(3, "red", "font", new ArrayList<>(),"name", board, board.id);
+        var preset = new Preset(3, "red", "font", new ArrayList<>(),"name", board, board.id);
         card.setPreset(preset);
         assertEquals(card.preset, preset);
         assertEquals(card.presetId, 3);
