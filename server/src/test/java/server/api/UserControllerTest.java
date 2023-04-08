@@ -132,6 +132,7 @@ class UserControllerTest {
         assertEquals(HttpStatus.OK, userResponse.getStatusCode());
         assertEquals(new User(0, "First User"), userResponse.getBody());
         List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add("/topic/boards/joinLeave");
         assertEquals(expectedCalls, simp.getDestinations());
     }
 
@@ -150,6 +151,7 @@ class UserControllerTest {
         assertEquals(HttpStatus.OK, userResponse.getStatusCode());
         assertEquals(new User(0, "First User"), userResponse.getBody());
         List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add("/topic/boards/joinLeave");
         assertEquals(expectedCalls, simp.getDestinations());
     }
 
