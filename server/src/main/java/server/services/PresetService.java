@@ -4,7 +4,6 @@ import commons.Board;
 import commons.Preset;
 import org.springframework.stereotype.Service;
 import server.database.BoardRepository;
-import server.database.CardRepository;
 import server.database.PresetRepository;
 
 import javax.transaction.TransactionScoped;
@@ -15,14 +14,10 @@ public class PresetService {
     private PresetRepository presetRepo;
     private BoardRepository boardRepo;
 
-    private CardRepository cardRepo;
-
     public PresetService(PresetRepository presetRepository,
-                         BoardRepository boardRepo,
-                         CardRepository cardRepo){
+                         BoardRepository boardRepo){
         this.presetRepo = presetRepository;
         this.boardRepo = boardRepo;
-        this.cardRepo = cardRepo;
     }
 
     public List<Preset> getAllPresets(){
@@ -83,24 +78,18 @@ public class PresetService {
     }
     @TransactionScoped
     public Preset setAsDefault(int id) throws Exception{
+
         Preset preset = presetRepo.findById(id)
                 .orElseThrow(
                         ()->new Exception("Preset with id: " + id +" not found")
                 );
 
-        Board board = boardRepo.findById(preset.boardId)
-                .orElseThrow(
-                        ()->new Exception("Board with id: " + preset.boardId +" not found")
-                );
-
+        Board board = boardRepo.findById(preset.boardId).get();
         board.defaultCardPreset = preset;
         boardRepo.save(board);
-
         return presetRepo.save(preset);
 
     }
-
-
 
 
 }
