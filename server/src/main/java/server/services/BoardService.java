@@ -76,7 +76,7 @@ public class BoardService {
             throw new Exception("Invalid title");
         }
         repo.updateBoardById(id, title);
-        return getById(id);
+        return repo.getById(id);
     }
 
     public Board updateColorBoardBackground(Integer id, String color) throws Exception {

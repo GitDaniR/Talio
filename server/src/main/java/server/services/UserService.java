@@ -5,7 +5,6 @@ import commons.Board;
 import commons.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import server.api.BoardController;
 import server.database.BoardRepository;
 import server.database.UserRepository;
 
@@ -15,15 +14,11 @@ public class UserService {
 
     private final UserRepository repo;
 
-    private final BoardController boardCtrl;
-
     private final BoardRepository boardRepository;
 
 
-    public UserService(UserRepository repo, BoardController boardCtrl,
-                       BoardRepository boardRepository) {
+    public UserService(UserRepository repo, BoardRepository boardRepository) {
         this.repo = repo;
-        this.boardCtrl = boardCtrl;
         this.boardRepository = boardRepository;
     }
 
@@ -77,7 +72,7 @@ public class UserService {
      */
     public ResponseEntity<User> getByUsername(String username)throws Exception{
         if(username.equals("")){
-            throw new Exception("Invalid id");
+            throw new Exception("Invalid username");
         }
         return ResponseEntity.ok(repo.findByUsername(username));
     }
@@ -90,12 +85,15 @@ public class UserService {
      * @return
      * @throws Exception
      */
-    public ResponseEntity<User> joinBoard(Integer userId, Integer boardId) throws Exception{
-        Board board = boardCtrl.getById(boardId).getBody();
-        User user = getById(userId).getBody();
+    public ResponseEntity<User> joinBoard(Integer userId, Integer boardId) throws Exception {
+        if (userId < 0 || boardId < 0) {
+            throw new Exception("Invalid user or board id");
+        }
+        Board board = boardRepository.getById(boardId);
+        User user = repo.getById(userId);
         board.users.add(user);
         boardRepository.save(board);
-        user = getById(userId).getBody();
+        user = repo.getById(userId);
         return ResponseEntity.ok(user);
     }
 
@@ -107,18 +105,19 @@ public class UserService {
      * @throws Exception
      */
     public ResponseEntity<User> removeBoard(Integer userId, Integer boardId) throws Exception {
-        Board board = boardCtrl.getById(boardId).getBody();
-        User user = getById(userId).getBody();
+        if (userId < 0 || boardId < 0) {
+            throw new Exception("Invalid user or board id");
+        }
+        Board board = boardRepository.getById(boardId);
+        User user = repo.getById(userId);
 
         board.users.remove(user);
         boardRepository.save(board);
-        user = getById(userId).getBody();
+        user = repo.getById(userId);
         return ResponseEntity.ok(user);
     }
 
     public UserRepository getRepo(){
         return this.repo;
-
     }
-
 }

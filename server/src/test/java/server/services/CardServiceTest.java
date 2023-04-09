@@ -3,10 +3,13 @@ package server.services;
 import commons.Board;
 import commons.BoardList;
 import commons.Card;
+import commons.Tag;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import server.api.CardController;
-import server.database.*;
+import server.database.TestBoardListRepository;
+import server.database.TestBoardRepository;
+import server.database.TestCardRepository;
+import server.database.TestPresetRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +24,7 @@ public class CardServiceTest {
     private TestPresetRepository presetRepo;
     private CardService sut;
     private Board b1;
-    private BoardList l1;
-    private BoardList l2;
+    private BoardList l1, l2;
     private Card c1, c2, c3;
     private List<Card> cards;
 
@@ -32,6 +34,7 @@ public class CardServiceTest {
         listRepo = new TestBoardListRepository();
         boardRepo = new TestBoardRepository();
         presetRepo = new TestPresetRepository();
+
         b1 = new Board(0, "Main Board", "123", new ArrayList<>());
         boardRepo.save(b1);
         l1 = new BoardList(0, "First", b1, 0);
@@ -158,6 +161,45 @@ public class CardServiceTest {
     }
 
     @Test
+    public void testEditCardByIdList() throws Exception {
+        Card res = sut.editCardByIdList(0, 1, 1);
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestCardRepository.FIND_BY_ID);
+        expectedCalls.add(TestCardRepository.SHIFT_CARDS_LEFT);
+        expectedCalls.add(TestCardRepository.SHIFT_CARDS_RIGHT);
+        expectedCalls.add(TestCardRepository.SAVE);
+        assertEquals(new Card(0, "a", "a", 1, l2, 1), res);
+        assertEquals(expectedCalls, cardRepo.getCalls());
+    }
+
+    @Test
+    public void testEditCardByIdListNotFoundCard() throws Exception {
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestCardRepository.FIND_BY_ID);
+        assertThrows(Exception.class, () -> sut.editCardByIdList(100, 1, 1));
+        assertEquals(expectedCalls, cardRepo.getCalls());
+    }
+
+    @Test
+    public void testEditCardByIdListNotFoundList() throws Exception {
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestCardRepository.FIND_BY_ID);
+        assertThrows(Exception.class, () -> sut.editCardByIdList(1, 100, 1));
+        assertEquals(expectedCalls, cardRepo.getCalls());
+    }
+
+    @Test
+    public void testRemoveTag() throws Exception {
+        Tag tag = new Tag("title", null, b1, 0);
+        c1.addTag(tag);
+        Card res = sut.removeTag(0, tag);
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestCardRepository.FIND_BY_ID);
+        expectedCalls.add(TestCardRepository.SAVE);
+        assertEquals(new Card(0, "a", "a", 0, l1, 0), res);
+    }
+
+    @Test
     public void testEditCardByIdListInsideUp() throws Exception{
         List<String> expectedCalls = new ArrayList<>();
         expectedCalls.add(TestCardRepository.FIND_BY_ID);
@@ -191,6 +233,16 @@ public class CardServiceTest {
     }
 
     @Test
+    public void testRemoveTagNotFoundCard() throws Exception {
+        Tag tag = new Tag("title", null, b1, 0);
+        c1.addTag(tag);
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestCardRepository.FIND_BY_ID);
+        assertThrows(Exception.class, () -> sut.removeTag(100, tag));
+        assertEquals(expectedCalls, cardRepo.getCalls());
+    }
+
+    @Test
     public void testEditCardByIdListListNotFound() throws Exception{
         List<String> expectedCalls = new ArrayList<>();
         expectedCalls.add(TestCardRepository.FIND_BY_ID);
@@ -205,6 +257,4 @@ public class CardServiceTest {
         assertThrows(Exception.class,()->sut.editCardByIdList(0,4, 0));
         assertEquals(expectedCalls, cardRepo.getCalls());
     }
-
-
 }

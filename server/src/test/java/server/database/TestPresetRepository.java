@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
 
+import javax.persistence.PersistenceException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -18,20 +20,58 @@ public class TestPresetRepository implements PresetRepository{
     public static final String EXISTS_BY_ID = "Exists By Id";
     public static final String SAVE = "Save";
     public static final String DELETE_BY_ID = "Delete By Id";
+    public static final String UPDATE_BACKGROUND_BY_ID = "Update Background By Id";
+    public static final String UPDATE_FONT_BY_ID = "Update Font By Id";
+
+    public List<String> calls;
+
+    public void call(String method){
+        calls.add(method);
+    }
+
+    public List<String> getCalls(){
+        return calls;
+    }
+
+    public List<Preset> presets;
+
+    public List<Preset> getPresets() {
+        return presets;
+    }
+    public void setPresets(List<Preset> presets) {
+        this.presets = presets;
+    }
+
+    public TestPresetRepository(){
+        this.presets = new ArrayList<>();
+        this.calls = new ArrayList<>();
+    }
+
 
     @Override
     public void updatePresetBackgroundById(Integer id, String color) {
+        call(UPDATE_BACKGROUND_BY_ID);
+        for(Preset p:presets){
+            if(p.id == id)
+                p.backgroundColor = color;
+        }
 
     }
 
     @Override
     public void updatePresetFontById(Integer id, String font) {
+        call(UPDATE_FONT_BY_ID);
+        for(Preset p: presets){
+            if(p.id == id)
+                p.font = font;
+        }
 
     }
 
     @Override
     public List<Preset> findAll() {
-        return null;
+        call(FIND_ALL);
+        return presets;
     }
 
     @Override
@@ -56,6 +96,16 @@ public class TestPresetRepository implements PresetRepository{
 
     @Override
     public void deleteById(Integer integer) {
+        call(DELETE_BY_ID);
+        for(Preset p:presets){
+            if (p.id == integer){
+                if (!(p.cards.size()!=0)){
+                    this.presets.remove(p);
+                    return;
+                }
+                throw new PersistenceException();
+            }
+        }
 
     }
 
@@ -81,7 +131,10 @@ public class TestPresetRepository implements PresetRepository{
 
     @Override
     public <S extends Preset> S save(S entity) {
-        return null;
+        call(SAVE);
+        entity.id = this.presets.size();
+        this.presets.add(entity);
+        return entity;
     }
 
     @Override
@@ -91,11 +144,20 @@ public class TestPresetRepository implements PresetRepository{
 
     @Override
     public Optional<Preset> findById(Integer integer) {
+        call(FIND_BY_ID);
+        for(Preset p:presets){
+            if(p.id == integer)
+                return Optional.of(p);
+        }
         return Optional.empty();
     }
 
     @Override
     public boolean existsById(Integer integer) {
+        call(EXISTS_BY_ID);
+        for(Preset p:presets){
+            if(p.id == integer)return true;
+        }
         return false;
     }
 
@@ -116,7 +178,6 @@ public class TestPresetRepository implements PresetRepository{
 
     @Override
     public void deleteAllInBatch(Iterable<Preset> entities) {
-
     }
 
     @Override

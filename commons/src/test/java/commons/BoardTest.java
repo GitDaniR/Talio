@@ -37,6 +37,18 @@ public class BoardTest {
     }
 
     @Test
+    public void addCardPresetTest() {
+        List<BoardList> lists = new ArrayList<>();
+        var board = new Board(1, "Board", "password", lists);
+        Preset preset = new Preset(3, "red", "font", new ArrayList<>(),"name", board, board.id);
+        assertTrue(board.cardPresets.size() == 0);
+        assertFalse(board.cardPresets.contains(preset));
+        board.addCardPreset(preset);
+        assertTrue(board.cardPresets.size() == 1);
+        assertTrue(board.cardPresets.contains(preset));
+    }
+
+    @Test
     public void checkEmptyConstructor() {
         var board = new Board();
         assertNotNull(board);
