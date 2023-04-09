@@ -5,7 +5,6 @@ import commons.Board;
 import commons.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import server.api.BoardController;
 import server.database.BoardRepository;
 import server.database.UserRepository;
 
@@ -15,15 +14,13 @@ public class UserService {
 
     private final UserRepository repo;
 
-    private final BoardController boardCtrl;
 
     private final BoardRepository boardRepository;
 
 
-    public UserService(UserRepository repo, BoardController boardCtrl,
+    public UserService(UserRepository repo,
                        BoardRepository boardRepository) {
         this.repo = repo;
-        this.boardCtrl = boardCtrl;
         this.boardRepository = boardRepository;
     }
 
@@ -91,7 +88,7 @@ public class UserService {
      * @throws Exception
      */
     public ResponseEntity<User> joinBoard(Integer userId, Integer boardId) throws Exception{
-        Board board = boardCtrl.getById(boardId).getBody();
+        Board board = boardRepository.getById(boardId);
         User user = getById(userId).getBody();
         board.users.add(user);
         boardRepository.save(board);
@@ -107,7 +104,7 @@ public class UserService {
      * @throws Exception
      */
     public ResponseEntity<User> removeBoard(Integer userId, Integer boardId) throws Exception {
-        Board board = boardCtrl.getById(boardId).getBody();
+        Board board = boardRepository.getById(boardId);
         User user = getById(userId).getBody();
 
         board.users.remove(user);
