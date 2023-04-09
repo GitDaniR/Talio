@@ -5,7 +5,6 @@ import commons.Board;
 import commons.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import server.api.BoardController;
 import server.database.BoardRepository;
 import server.database.UserRepository;
 
