@@ -31,7 +31,6 @@ import javafx.util.Pair;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 public class MainCtrl {
 
@@ -82,6 +81,13 @@ public class MainCtrl {
     private AddPresetCtrl addPresetCtrl;
     private Scene addPreset;
 
+    private PasswordSetCtrl passwordSetCtrl;
+    private Scene passwordSet;
+
+    private PasswordEnterCtrl passwordEnterCtrl;
+    private Scene passwordEnter;
+
+
     private String username;
     private boolean isAdmin = false;
 
@@ -103,7 +109,9 @@ public class MainCtrl {
                            Pair<AddRemoveTagsCtrl, Parent> addRemoveTags,
                            Pair<HelpCtrl,Parent> help,
                            Pair<CustomizationCtrl, Parent> customization,
-                           Pair<AddPresetCtrl, Parent> addPreset) {
+                           Pair<AddPresetCtrl, Parent> addPreset,
+                           Pair<PasswordSetCtrl, Parent> passwordSet,
+                           Pair<PasswordEnterCtrl, Parent> passwordEnter) {
 
         this.primaryStage = primaryStage;
         primaryStage.getIcons().add(new Image(
@@ -113,7 +121,7 @@ public class MainCtrl {
         setControllersAndScenes(addList, board, welcomePage, editList,
                 workspace, workspaceAdmin, editCard, changeBoardTitle,
                 editTag, addTag, tagOverview, addRemoveTags, help, customization,
-                addPreset);
+                addPreset,passwordSet,passwordEnter);
 
         showWelcomePage();
         primaryStage.setResizable(false);
@@ -136,23 +144,19 @@ public class MainCtrl {
             Pair<AddRemoveTagsCtrl, Parent> addRemoveTags,
             Pair<HelpCtrl,Parent> help,
             Pair<CustomizationCtrl, Parent> customization,
-            Pair<AddPresetCtrl, Parent> addPreset){
-
+            Pair<AddPresetCtrl, Parent> addPreset,
+            Pair<PasswordSetCtrl, Parent> passwordSet,
+            Pair<PasswordEnterCtrl, Parent> passwordEnter){
         this.boardOverviewCtrl = board.getKey();
         this.board = new Scene(board.getValue());
-
         this.addListCtrl = addList.getKey();
         this.addList = new Scene(addList.getValue());
-
         this.welcomePageCtrl = welcomePage.getKey();
         this.welcomePage = new Scene(welcomePage.getValue());
-
         this.workspaceCtrl = workspace.getKey();
         this.workspace = new Scene(workspace.getValue());
-
         this.workspaceAdminCtrl = workspaceAdmin.getKey();
         this.workspaceAdmin = new Scene(workspaceAdmin.getValue());
-
         this.editListCtrl=editList.getKey();
         this.editList = new Scene(editList.getValue());
 
@@ -185,6 +189,12 @@ public class MainCtrl {
 
         this.helpCtrl = help.getKey();
         this.help = new Scene(help.getValue());
+
+        this.passwordSetCtrl = passwordSet.getKey();
+        this.passwordSet = new Scene(passwordSet.getValue());
+
+        this.passwordEnterCtrl = passwordEnter.getKey();
+        this.passwordEnter = new Scene(passwordEnter.getValue());
     }
 
     final KeyCombination keyComb1 = new KeyCodeCombination(KeyCode.SLASH,
@@ -194,7 +204,8 @@ public class MainCtrl {
 
         sceneArray = Arrays.asList(addList, board, welcomePage,
                 editList, workspace, workspaceAdmin, editCard, changeBoardTitle,
-                editTag, addTag, tagOverview, addRemoveTags, help, customization, addPreset);
+                editTag, addTag, tagOverview, addRemoveTags, help, customization, addPreset,
+                passwordSet,passwordEnter);
 
         for (Scene s : sceneArray) {
             s.getStylesheets().add(this.getClass().getResource(stylePath).toExternalForm());
@@ -221,20 +232,16 @@ public class MainCtrl {
                 if(keyComb1.match(event)){
                     event.consume();
                 }
-                switch(event.getCode()) {
-                    case DELETE:
-                    case T:
-                    case ENTER:
-                    case BACK_SPACE:
-                        event.consume();
-                        break;
-                }
             }
         });
     }
 
     public void setAdmin(boolean admin) {
         isAdmin = admin;
+    }
+
+    public boolean getIsAdmin() {
+        return isAdmin;
     }
 
     public void showHelp(){
@@ -250,27 +257,6 @@ public class MainCtrl {
         primaryStage.setScene(helpCtrl.getPreviousScene());
     }
 
-
-    /**
-     * @return String: random String that will server as a Board password, it
-     * can contain letters, numbers and special characters, and it is
-     * of length 8-12 (randomly chosen)
-     */
-    private String generatePassword(){
-        Random random = new Random();
-        int length = random.nextInt(8,12);
-
-        String characters = "abcdefghijklmnopqrstuvwxyz*!#@$ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-        StringBuilder sb = new StringBuilder();
-
-        for(int i =0;i<length;i++){
-            int index = random.nextInt(characters.length());
-            sb.append(characters.charAt(index));
-        }
-
-        return sb.toString();
-    }
-
     /**
      * Method that opens new(empty) board for the user
      * @param user - user creating the board
@@ -278,9 +264,10 @@ public class MainCtrl {
     public void showNewBoard(User user){
         primaryStage.setTitle("Board Overview");
         primaryStage.setScene(board);
-        Board newBoard = new Board("Board",generatePassword());
+        Board newBoard = new Board("Board","");
         boardOverviewCtrl.setBoard(newBoard);
         boardOverviewCtrl.saveBoardInDatabase();
+        boardOverviewCtrl.setUserViewing(user);
         boardOverviewCtrl.assignToUser(user);
         boardOverviewCtrl.refresh();
     }
@@ -294,6 +281,7 @@ public class MainCtrl {
     public void joinBoard(User user, Board chosenBoard) {
         primaryStage.setTitle("Board Overview");
         boardOverviewCtrl.setBoard(chosenBoard);
+        boardOverviewCtrl.setUserViewing(user);
         boardOverviewCtrl.assignToUser(user);
         boardOverviewCtrl.refresh();
     }
@@ -319,10 +307,11 @@ public class MainCtrl {
     /**
      * Method that starts the scene showing the board
      */
-    public void showBoard(Board showBoard) {
+    public void showBoard(Board showBoard, User userViewing) {
         primaryStage.setTitle("Board Overview");
         primaryStage.setScene(board);
         boardOverviewCtrl.setBoard(showBoard);
+        boardOverviewCtrl.setUserViewing(userViewing);
         boardOverviewCtrl.refresh();
 
     }
@@ -445,6 +434,24 @@ public class MainCtrl {
 
     }
 
+    public void showAddPreset(Board board) {
+        primaryStage.setTitle("New Task Color");
+        primaryStage.setScene(addPreset);
+        addPresetCtrl.setBoard(board);
+    }
+
+    public void showSetPassword(User viewingUser, Board board){
+        primaryStage.setTitle("Change/Set password");
+        primaryStage.setScene(passwordSet);
+        passwordSetCtrl.setBoardAndUser(viewingUser,board);
+    }
+
+    public void showEnterPassword(User viewingUser, Board board) {
+        primaryStage.setTitle("Inputting password");
+        primaryStage.setScene(passwordEnter);
+        passwordEnterCtrl.setBoardAndUser(viewingUser,board);
+    }
+
     public void registerForAllSockets() {
         editCardCtrl.subscribeToSocketsEditCardCtrl();
         workspaceCtrl.subscribeForSocketsWorkspace();
@@ -453,12 +460,6 @@ public class MainCtrl {
         tagOverviewCtrl.subscribeForSocketsTagOverview();
         customizationCtrl.subscribeToWebsocketsCustomization();
         boardOverviewCtrl.subscribeToSocketsBoardOverview();
-    }
-
-    public void showAddPreset(Board board) {
-        primaryStage.setTitle("New Task Color");
-        primaryStage.setScene(addPreset);
-        addPresetCtrl.setBoard(board);
     }
 }
 

@@ -78,6 +78,14 @@ public class BoardService {
         repo.updateBoardById(id, title);
         return repo.getById(id);
     }
+    @Transactional
+    public Board updatePasswordById(Integer id, String password) throws Exception{
+        if (id < 0 || !repo.existsById(id)) {
+            throw new Exception("Invalid id");
+        }
+        repo.updatePasswordById(id, password);
+        return getById(id);
+    }
 
     public Board updateColorBoardBackground(Integer id, String color) throws Exception {
         Board res = repo.findById(id).orElseThrow(
