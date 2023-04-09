@@ -36,10 +36,8 @@ import javafx.scene.paint.Paint;
 import javafx.stage.Modality;
 import javafx.util.Duration;
 import java.net.URL;
+import java.util.*;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.ResourceBundle;
 
 public class BoardOverviewCtrl implements Initializable {
 
@@ -147,9 +145,9 @@ public class BoardOverviewCtrl implements Initializable {
             }
         });
         everything.addEventFilter(KeyEvent.KEY_RELEASED,(EventHandler<KeyEvent>) keyEvent -> {
-            if(shiftDownComb.match(keyEvent))
+            if(shiftDownComb.match(keyEvent) && verifyWriteAccess())
                 shiftHighlighted(1);
-            else if(shiftUpComb.match(keyEvent))
+            else if(shiftUpComb.match(keyEvent) && verifyWriteAccess())
                 shiftHighlighted(-1);
             else if(keyEvent.getCode()==KeyCode.SHIFT)
                 isShiftPressed=false;
@@ -388,7 +386,7 @@ public class BoardOverviewCtrl implements Initializable {
      */
     private boolean verifyWriteAccess(){
         return board.password.equals("") || board.password.equals("NO_PASSWORD") ||
-                userViewing.unlockedBoards.contains(board);
+                userViewing.unlockedBoards.stream().map(e -> e.id).anyMatch(e-> e== board.id);
     }
 
     private void showWriteAccessAlert(){
@@ -580,8 +578,8 @@ public class BoardOverviewCtrl implements Initializable {
             }
         });
 
-        addDragAndDrop(listObjectController.getAmountOfCardsInList(),
-                (AnchorPane) cardObject);
+        if(verifyWriteAccess())
+            addDragAndDrop(listObjectController.getAmountOfCardsInList(), (AnchorPane) cardObject);
         //Setting drag and drop property
 
         addHighlight(cardObject);
