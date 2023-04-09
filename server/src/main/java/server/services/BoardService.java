@@ -76,7 +76,7 @@ public class BoardService {
             throw new Exception("Invalid title");
         }
         repo.updateBoardById(id, title);
-        return getById(id);
+        return repo.getById(id);
     }
     @Transactional
     public Board updatePasswordById(Integer id, String password) throws Exception{

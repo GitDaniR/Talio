@@ -27,6 +27,27 @@ public class TagTest {
     }
 
     @Test
+    public void checkConstructor3() {
+        var board = new Board(1, "title", "password", new ArrayList<BoardList>());
+        var tag = new Tag("tag", "background", "font", board, board.id);
+        assertNotNull(tag);
+        assertEquals(tag.title, "tag");
+        assertEquals(tag.colorBackground, "background");
+        assertEquals(tag.colorFont, "font");
+        assertEquals(tag.board, board);
+        assertEquals(tag.boardId, 1);
+    }
+
+    @Test
+    public void checkConstructor4() {
+        var tag = new Tag("tag", "background", "font");
+        assertNotNull(tag);
+        assertEquals(tag.title, "tag");
+        assertEquals(tag.colorBackground, "background");
+        assertEquals(tag.colorFont, "font");
+    }
+
+    @Test
     public void emptyConstructorTest() {
         var tag = new Tag();
         assertNotNull(tag);
@@ -67,7 +88,6 @@ public class TagTest {
 
     @Test
     public void notEqualsHashCode(){
-
         var tag1 = new Tag("Tag1", "color");
         var tag2 = new Tag("Tag2", "color");
         assertNotEquals(tag1, tag2);

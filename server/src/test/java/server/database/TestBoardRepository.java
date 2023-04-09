@@ -21,6 +21,10 @@ public class TestBoardRepository implements BoardRepository{
     public static final String DELETE_BY_ID = "Delete By Id";
     public static final String UPDATE_PASSWORD_BY_ID = "Update password by Id";
 
+    public static final String UPDATE_BY_ID = "Update By Id";
+    public static final String GET_BY_ID = "Get By Id";
+
+
     private List<String> calls;
     private List<Board> boards;
 
@@ -171,6 +175,11 @@ public class TestBoardRepository implements BoardRepository{
 
     @Override
     public Board getById(Integer integer) {
+        calls.add(GET_BY_ID);
+        for(Board b: this.boards){
+            if(b.id == integer)
+                return b;
+        }
         return null;
     }
 
@@ -213,7 +222,13 @@ public class TestBoardRepository implements BoardRepository{
 
     @Override
     public void updateBoardById(Integer id, String title) {
-
+        call(UPDATE_BY_ID);
+        for (Board b : this.boards) {
+            if (b.id == id) {
+                b.title = title;
+                return;
+            }
+        }
     }
 
     @Override

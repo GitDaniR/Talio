@@ -27,17 +27,26 @@ public class Preset {
     @JoinColumn(name = "boardId", insertable = false, updatable = false)
     @JsonIgnore
     public Board board;
-    public int boardId;
+    public Integer boardId;
 
     public Preset(){}
 
     public Preset(String backgroundColor, String font,
-                  List<Card> cards, Board board, int boardId) {
+                  List<Card> cards, Board board, Integer boardId) {
         this.backgroundColor = backgroundColor;
         this.font = font;
         this.cards = cards;
         this.board = board;
         this.boardId = boardId;
+    }
+
+    public Preset(Integer id, String backgroundColor, String font, Board board) {
+        this.id = id;
+        this.backgroundColor = backgroundColor;
+        this.font = font;
+        this.board = board;
+        if(!(board == null))
+            this.boardId = board.id;
     }
 
     public Preset(Integer id, String backgroundColor,

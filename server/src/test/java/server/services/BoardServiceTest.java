@@ -3,13 +3,13 @@ package server.services;
 import commons.Board;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 import server.database.TestBoardRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class BoardServiceTest {
 
@@ -119,15 +119,51 @@ class BoardServiceTest {
         assertThrows(Exception.class, () -> sut.deleteById(100));
         assertEquals(expectedCalls, repo.getCalls());
     }
+
     @Test
-    public void testUpdatePasswordById() throws Exception{
+    public void testUpdatePasswordById() throws Exception {
         List<String> expectedCalls = new ArrayList<>();
         expectedCalls.add(TestBoardRepository.EXISTS_BY_ID);
         expectedCalls.add(TestBoardRepository.UPDATE_PASSWORD_BY_ID);
-        sut.updatePasswordById(3,"DRUKAS");
+        sut.updatePasswordById(3, "DRUKAS");
         expectedCalls.add(TestBoardRepository.EXISTS_BY_ID);
         expectedCalls.add(TestBoardRepository.FIND_BY_ID);
-        assertEquals(expectedCalls,repo.getCalls());
-        assertEquals(sut.getById(3).password,"DRUKAS");
+        assertEquals(expectedCalls, repo.getCalls());
+        assertEquals(sut.getById(3).password, "DRUKAS");
+    }
+
+    @Test
+    public void testUpdateTitleById() throws Exception {
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestBoardRepository.EXISTS_BY_ID);
+        expectedCalls.add(TestBoardRepository.UPDATE_BY_ID);
+        expectedCalls.add(TestBoardRepository.GET_BY_ID);
+        Board result = sut.updateTitleById(1, "New First Title");
+        assertEquals(new Board(1, "New First Title", "123", new ArrayList<>()), result);
+        assertEquals(expectedCalls, repo.getCalls());
+    }
+
+    @Test
+    public void testUpdateTitleInvalidId() throws Exception {
+        List<String> expectedCalls = new ArrayList<>();
+        assertThrows(Exception.class, () -> sut.updateTitleById(-1, "New"));
+        assertEquals(expectedCalls, repo.getCalls());
+    }
+
+    @Test
+    public void testUpdateTitleNonExistent() throws Exception {
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestBoardRepository.EXISTS_BY_ID);
+        assertThrows(Exception.class, () -> sut.updateTitleById(100, "New"));
+        assertEquals(expectedCalls, repo.getCalls());
+    }
+
+    @Test
+    public void testUpdateTitleInvalidText() throws Exception {
+        List<String> expectedCalls = new ArrayList<>();
+        expectedCalls.add(TestBoardRepository.EXISTS_BY_ID);
+        assertThrows(Exception.class, () -> sut.updateTitleById(1, "#"));
+        assertEquals(expectedCalls, repo.getCalls());
+
     }
 }
