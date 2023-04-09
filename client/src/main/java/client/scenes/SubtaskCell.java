@@ -77,10 +77,6 @@ public class SubtaskCell extends ListCell<Subtask> {
         TextField editableTitle = subtaskCtrl.getEditableTitle();
         title.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
-                if(!subtaskCtrl.hasWriteAccess()){
-                    subtaskCtrl.throwWriteAlert();
-                    return;
-                }
                 editableTitle.setText(title.getText());
                 editableTitle.setVisible(true);
             }

@@ -19,8 +19,7 @@ public class Preset {
 
     @OneToMany(
             mappedBy = "preset",
-            cascade = CascadeType.PERSIST,
-            orphanRemoval = true
+            cascade = CascadeType.PERSIST
     )
     public List<Card> cards = new ArrayList<>();
     @ManyToOne

@@ -25,18 +25,6 @@ public class User {
     )
     public List<Board> boards = new ArrayList<>();
 
-    @ManyToMany(
-            mappedBy = "usersWrite",
-            cascade = CascadeType.PERSIST
-    )
-    public List<Board> unlockedBoards = new ArrayList<>();
-
-    @ManyToMany(
-            mappedBy = "usersRead",
-            cascade = CascadeType.PERSIST
-    )
-    public List<Board> lockedBoards = new ArrayList<>();
-
 
     public User() {}
 

@@ -1,19 +1,16 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-import commons.Board;
 import commons.Card;
 import commons.Subtask;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
 
 import java.net.URL;
 import java.util.Collections;
@@ -32,7 +29,7 @@ public class SubtaskCtrl implements Initializable {
     private CheckBox check;
 
     @FXML
-    private Button remove;
+    Button remove;
 
     @FXML
     private TextField editableTitle;
@@ -65,20 +62,6 @@ public class SubtaskCtrl implements Initializable {
         });
     }
 
-    public boolean hasWriteAccess() {
-        Board b = server.getBoardByID(server.getBoardListById(
-                server.getCardById(subtask.cardId).listId).boardId);
-        return mainCtrl.getIsAdmin() || b.password.equals("") || b.password.equals("NO_PASSWORD") ||
-                server.getUserByUsername(mainCtrl.getUsername()).unlockedBoards.contains(b);
-    }
-
-    public void throwWriteAlert() {
-        var alert = new Alert(Alert.AlertType.ERROR);
-        alert.initModality(Modality.APPLICATION_MODAL);
-        alert.setContentText("You don't have write access!");
-        alert.showAndWait();
-    }
-
     public void finishTask(){
         server.updateSubtaskStatus(subtask.id, true);
     }
@@ -92,14 +75,6 @@ public class SubtaskCtrl implements Initializable {
     }
     public void setSubtask(Subtask subtask){
         this.subtask = subtask;
-        setButtonsDisabled(!hasWriteAccess());
-    }
-
-    private void setButtonsDisabled(boolean value){
-        check.setDisable(value);
-        remove.setDisable(value);
-        moveUp.setDisable(value);
-        moveDown.setDisable(value);
     }
 
     public Text getTitle() {

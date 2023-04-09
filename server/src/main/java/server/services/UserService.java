@@ -92,30 +92,8 @@ public class UserService {
         Board board = boardRepository.getById(boardId);
         User user = repo.getById(userId);
         board.users.add(user);
-        if(board.password.equals(""))
-            board.usersWrite.add(user);
-        else
-            board.usersRead.add(user);
         boardRepository.save(board);
         user = repo.getById(userId);
-        return ResponseEntity.ok(user);
-    }
-
-    /**
-     * Adds user to the list of users who have write access within a board
-     * and also the other way around
-     * @param userId
-     * @param boardId
-     * @return
-     * @throws Exception
-     */
-    public ResponseEntity<User> joinBoardWriteAccess(Integer userId,
-                                                     Integer boardId) throws Exception{
-        Board board = boardRepository.getById(boardId);
-        User user = getById(userId).getBody();
-        board.usersWrite.add(user);
-        boardRepository.save(board); //might cause problems
-        user = getById(userId).getBody();
         return ResponseEntity.ok(user);
     }
 

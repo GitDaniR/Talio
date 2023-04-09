@@ -63,7 +63,7 @@ public class TagOverviewCtrl implements Initializable {
     }
 
     public void back() {
-        mainCtrl.showBoard();
+        mainCtrl.showBoard(this.board);
     }
 
     private TagCellForOverviewCtrl setCtrl(FXMLLoader tagLoader, Tag tag){

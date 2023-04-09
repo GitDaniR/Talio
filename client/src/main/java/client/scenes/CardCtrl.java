@@ -1,7 +1,10 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-import commons.*;
+import commons.Card;
+import commons.Preset;
+import commons.Subtask;
+import commons.Tag;
 import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,14 +13,16 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Paint;
-import javafx.stage.Modality;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -53,13 +58,6 @@ public class CardCtrl extends AnchorPane implements Initializable {
         handleEditableTitle();
         handleQuickTags();
         handleQuickPreset();
-    }
-
-    private boolean hasWriteAccess() {
-        Board b = server.getBoardByID(server.getBoardListById(card.listId).boardId);
-        return mainCtrl.getIsAdmin() || b.password.equals("") || b.password.equals("NO_PASSWORD") ||
-                server.getUserByUsername(mainCtrl.getUsername()).unlockedBoards.
-                contains(server.getBoardByID(server.getBoardListById(card.listId).boardId));
     }
 
     private void handleEditableTitle(){
@@ -166,18 +164,7 @@ public class CardCtrl extends AnchorPane implements Initializable {
         this.card = card;
     }
 
-    private static void throwWriteAlert() {
-        var alert = new Alert(Alert.AlertType.ERROR);
-        alert.initModality(Modality.APPLICATION_MODAL);
-        alert.setContentText("You don't have write access!");
-        alert.showAndWait();
-    }
-
     public void deleteCard(){
-        if(!hasWriteAccess()){
-            throwWriteAlert();
-            return;
-        }
         server.deleteCard(card.id);
     }
 
@@ -189,29 +176,12 @@ public class CardCtrl extends AnchorPane implements Initializable {
         this.server = server;
         this.mainCtrl = mainCtrl;
         mainCtrl.consumeShortcutsTextField(editableTitle);
-        editableTitle.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                switch(event.getCode()) {
-                    case DELETE:
-                    case T:
-                    case ENTER:
-                    case BACK_SPACE:
-                        event.consume();
-                        break;
-                }
-            }
-        });
     }
 
     public Card getCard() {
         return card;
     }
     public void addTag(Tag tag){
-        if(!hasWriteAccess()){
-            throwWriteAlert();
-            return;
-        }
         FXMLLoader tagLoader = new FXMLLoader(getClass().getResource("TagIcon.fxml"));
         try {
             Node tagObject = tagLoader.load();
@@ -224,10 +194,6 @@ public class CardCtrl extends AnchorPane implements Initializable {
     }
 
     public void editTitle(){
-        if(!hasWriteAccess()){
-            throwWriteAlert();
-            return;
-        }
         cardTitle.setVisible(false);
         editableTitle.setVisible(true);
         editableTitle.requestFocus();
@@ -239,19 +205,11 @@ public class CardCtrl extends AnchorPane implements Initializable {
     }
 
     public void quickAddTag(){
-        if(!hasWriteAccess()){
-            throwWriteAlert();
-            return;
-        }
         quickSelectTags.setVisible(true);
         quickSelectTags.requestFocus();
     }
 
     public void quickAddPreset(){
-        if(!hasWriteAccess()){
-            throwWriteAlert();
-            return;
-        }
         quickSelectPreset.setVisible(true);
         quickSelectPreset.requestFocus();
     }

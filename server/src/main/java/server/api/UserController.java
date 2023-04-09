@@ -119,23 +119,6 @@ public class UserController {
         return res;
     }
 
-    @PutMapping(path = "{userId}/boards/{boardId}/write")
-    public ResponseEntity<User> joinBoardWriteAccess(@PathVariable("userId") Integer userId,
-                                          @PathVariable("boardId") Integer boardId){
-        ResponseEntity<User> res;
-        try{
-            res =  this.userService.joinBoardWriteAccess(userId, boardId);
-        }
-        catch (Exception e){
-            return ResponseEntity.badRequest().build();
-        }
-
-        if(msgs!=null) //needs to be changed
-            msgs.convertAndSend("/topic/boards/joinLeave",res);
-
-        return res;
-    }
-
     @DeleteMapping(path = "{userId}/boards/{boardId}")
     public ResponseEntity<User> removeBoard(@PathVariable("userId") Integer userId,
                                             @PathVariable("boardId") Integer boardId){

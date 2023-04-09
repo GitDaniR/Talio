@@ -10,8 +10,4 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
     @Modifying
     @Query("UPDATE Board b SET b.title = :title WHERE b.id = :id")
     public void updateBoardById(@Param("id") Integer id, @Param("title") String title);
-
-    @Modifying
-    @Query("UPDATE Board b SET b.password = :password WHERE b.id = :id")
-    public void updatePasswordById(@Param("id") Integer id, @Param("password") String password);
 }

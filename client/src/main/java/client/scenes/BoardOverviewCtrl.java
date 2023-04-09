@@ -1,7 +1,6 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
@@ -21,11 +20,9 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
-import javafx.scene.control.*;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
@@ -33,11 +30,12 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
-import javafx.stage.Modality;
 import javafx.util.Duration;
 import java.net.URL;
-import java.util.*;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.ResourceBundle;
 
 public class BoardOverviewCtrl implements Initializable {
 
@@ -53,29 +51,9 @@ public class BoardOverviewCtrl implements Initializable {
     private Label title;
     @FXML
     private Label copiedToClipboardMessage;
-    @FXML
-    private ImageView lockedLockView;
-    @FXML
-    private ImageView unlockedLockView;
-    @FXML
-    private ImageView crossedLockView;
-    @FXML
-    private SplitPane crossedControl;
-    @FXML
-    private Button lockedButton;
-    @FXML
-    private Button unlockedButton;
-    @FXML
-    private Tooltip lockedTooltip;
-    @FXML
-    private Tooltip unlockedTooltip;
-    @FXML
-    private Tooltip crossedTooltip;
 
     private ObservableList<BoardList> data;
     private Board board;
-
-    private User userViewing;
     private boolean isDragging = false;
     private CardCtrl hoveredCardCtrl;
     private int cardHighlightX = -1;
@@ -97,11 +75,19 @@ public class BoardOverviewCtrl implements Initializable {
         this.mainCtrl = mainCtrl;
     }
 
+    /** This method is used for web sockets - we are registering for messages
+     * In a way, subscribing to that location, every time the server sends something
+     * which matches our patter, we get it
+     *
+     * @param location  The location used to resolve relative paths for the root object, or
+     *                  {@code null} if the location is not known.
+     * @param resources The resources used to localize the root object, or {@code null} if
+     *                  the root object was not localized.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setupScrolling();
         addKeyboardShortcuts();
-        setupImagesAndTooltips();
     }
 
     private void addKeyboardShortcuts(){
@@ -145,36 +131,18 @@ public class BoardOverviewCtrl implements Initializable {
             }
         });
         everything.addEventFilter(KeyEvent.KEY_RELEASED,(EventHandler<KeyEvent>) keyEvent -> {
-            if(shiftDownComb.match(keyEvent) && verifyWriteAccess())
+            if(shiftDownComb.match(keyEvent))
                 shiftHighlighted(1);
-            else if(shiftUpComb.match(keyEvent) && verifyWriteAccess())
+            else if(shiftUpComb.match(keyEvent))
                 shiftHighlighted(-1);
             else if(keyEvent.getCode()==KeyCode.SHIFT)
                 isShiftPressed=false;
         });
     }
 
-    private void setupImagesAndTooltips(){
-        Duration preferredDelay = new Duration(300L);
-        Image lockedLock = new Image("/client.images/lockedLock.png");
-        Image unlockedLock = new Image("/client.images/unlockedLock.png");
-        Image crossedLock = new Image("/client.images/crossedLock.png");
-        lockedLockView.setImage(lockedLock);
-        lockedTooltip.setShowDelay(preferredDelay);
-        unlockedLockView.setImage(unlockedLock);
-        unlockedTooltip.setShowDelay(preferredDelay);
-        crossedLockView.setImage(crossedLock);
-        crossedTooltip.setShowDelay(preferredDelay);
-    }
-
     public void setBoard(Board board) {
         this.board = board;
     }
-
-    public void setUserViewing(User userViewing){
-        this.userViewing = userViewing;
-    }
-
     public void saveBoardInDatabase(){
         this.board = server.addBoard(this.board);
         Preset resp = server.addPreset(new Preset("0xFFA500", "0x000000",
@@ -183,6 +151,12 @@ public class BoardOverviewCtrl implements Initializable {
     }
     public void assignToUser(User user){
         server.assignBoardToUser(user.id, this.board.id);
+    }
+    public void underlineText(){
+        title.setUnderline(true);
+    }
+    public void undoUnderline(){
+        title.setUnderline(false);
     }
     private void setColors(){
         title.setTextFill(Paint.valueOf(board.colorBoardFont));
@@ -302,52 +276,24 @@ public class BoardOverviewCtrl implements Initializable {
     //region METHODS FOR BUTTONS
 
     public void addList() {
-        if(!verifyWriteAccess())
-            showWriteAccessAlert();
-        else
-            mainCtrl.showAddList(board);
-    }
-
-    public void setPassword(){
-        mainCtrl.showSetPassword(userViewing,board);
-    }
-
-    public void enterPassword(){
-        mainCtrl.showEnterPassword(userViewing,board);
+        mainCtrl.showAddList(board);
     }
 
     public void showTags(){
-        if(!verifyWriteAccess())
-            showWriteAccessAlert();
-        else
-            mainCtrl.showTagOverview(this.board);
+        mainCtrl.showTagOverview(this.board);
     }
 
     public void showCustomization(){
-        if(!verifyWriteAccess())
-            showWriteAccessAlert();
-        else
-            mainCtrl.showCustomization(this.board);
+        mainCtrl.showCustomization(this.board);
     }
 
     public void deleteBoard() {
-        if(!verifyWriteAccess())
-            showWriteAccessAlert();
-        else{
-            server.deleteBoard(board.id);
-            mainCtrl.deleteBoard();
-        }
+        server.deleteBoard(board.id);
+        mainCtrl.deleteBoard();
     }
 
     public void back() {
         mainCtrl.showWorkspace(mainCtrl.getUsername());
-    }
-
-    public void underlineText(){
-        title.setUnderline(true);
-    }
-    public void undoUnderline(){
-        title.setUnderline(false);
     }
 
     /**
@@ -379,53 +325,6 @@ public class BoardOverviewCtrl implements Initializable {
 
     //endregion
 
-    //region PASSWORD METHODS
-
-    /**
-     * @return true if user has write access
-     */
-    private boolean verifyWriteAccess(){
-        return board.password.equals("") || board.password.equals("NO_PASSWORD") ||
-                userViewing.unlockedBoards.stream().map(e -> e.id).anyMatch(e-> e== board.id);
-    }
-
-    private void showWriteAccessAlert(){
-        var alert = new Alert(Alert.AlertType.ERROR);
-        alert.initModality(Modality.APPLICATION_MODAL);
-        alert.setContentText("You don't have write access!");
-        alert.showAndWait();
-    }
-
-    private void setPasswordRights(){
-        //if there is no password we don't care
-        if(board.password.equals("") || board.password.equals("NO_PASSWORD")) {
-            crossedLockView.setVisible(true);
-            crossedTooltip.setText("The board doesn't have any password");
-            unlockedButton.setDisable(true);
-            unlockedTooltip.setText("The board is already unlocked");
-            lockedButton.setDisable(false);
-            lockedTooltip.setText("Set the password of the board");
-        } else {
-            //if there is a password, we need to check if we have access
-            crossedLockView.setVisible(false);
-            //if write access
-            if(userViewing.unlockedBoards.contains(board) || mainCtrl.getIsAdmin()){
-                unlockedButton.setDisable(true);
-                unlockedTooltip.setText("You already inputted the password!");
-                lockedButton.setDisable(false);
-                lockedTooltip.setText("Change the password of the board");
-            } else {
-                unlockedButton.setDisable(false);
-                unlockedTooltip.setText("Press to input the password of the board" +
-                        " and gain write access");
-                lockedButton.setDisable(true);
-                lockedTooltip.setText("You don't have access to change the password!");
-            }
-        }
-    }
-
-    //endregion
-
     //region METHODS FOR SOCKETS
 
     public void subscribeToSocketsBoardOverview(){
@@ -451,8 +350,7 @@ public class BoardOverviewCtrl implements Initializable {
             Platform.runLater(() -> { if(board==null || id==board.id) back(); });
         });
         server.registerForMessages("/topic/boards/rename", Board.class, newBoard -> {
-            Platform.runLater(() -> { if(board !=null && board.id == newBoard.id)
-                    title.setText(newBoard.title); });
+            Platform.runLater(() -> { if(board.id == newBoard.id) title.setText(newBoard.title); });
         });
         //Basically I just need to update the card
         server.registerForMessages("/topic/subtasks", Integer.class, id -> {
@@ -578,8 +476,8 @@ public class BoardOverviewCtrl implements Initializable {
             }
         });
 
-        if(verifyWriteAccess())
-            addDragAndDrop(listObjectController.getAmountOfCardsInList(), (AnchorPane) cardObject);
+        addDragAndDrop(listObjectController.getAmountOfCardsInList(),
+                (AnchorPane) cardObject);
         //Setting drag and drop property
 
         addHighlight(cardObject);
@@ -612,21 +510,15 @@ public class BoardOverviewCtrl implements Initializable {
     public void setHandlerTitle(){
         title.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
-                if(!verifyWriteAccess())
-                    showWriteAccessAlert();
-                else
-                    mainCtrl.showChangeTitle(this.board);
+                mainCtrl.showChangeTitle(this.board);
             }
         });
     }
 
     public void refresh() {
-        if(board == null) return;
         cardBoxes = new ArrayList<>();
         board = server.getBoardByID(board.id);
-        userViewing = server.getUserById(userViewing.id);
         title.setText(board.title);
-        setPasswordRights();
         setColors();
         setHandlerTitle();
         try {
@@ -645,10 +537,12 @@ public class BoardOverviewCtrl implements Initializable {
 
                 listObjectController.setServerAndCtrl(server, mainCtrl);
                 listObjectController.setFontColor();
+
                 // customization of lists
                 listObject.setStyle("-fx-background-color:"+
                         board.colorListsBackground.replace("0x", "#") +
                         "; -fx-border-color: black; -fx-border-width: 1");
+
                 //Adding the cards to the list
                 ObservableList<Card> cardsInList = FXCollections.observableList(currentList.cards);
                 Collections.sort(cardsInList, (s1, s2) -> { return s1.index-s2.index; });

@@ -16,7 +16,6 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
-import javafx.stage.Modality;
 import javafx.util.Duration;
 import java.io.IOException;
 import java.net.URL;
@@ -47,8 +46,6 @@ public class EditCardCtrl implements Initializable {
     private Label currentPreset;
     @FXML
     private ComboBox presetMenu;
-    @FXML
-    private Label readOnlyLabel;
 
     @Inject
     public EditCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -117,18 +114,6 @@ public class EditCardCtrl implements Initializable {
         });
     }
 
-    private boolean hasWriteAccess() {
-        Board b = server.getBoardByID(server.getBoardListById(cardToEdit.listId).boardId);
-        return mainCtrl.getIsAdmin() || b.password.equals("") || b.password.equals("NO_PASSWORD") ||
-                server.getUserByUsername(mainCtrl.getUsername()).unlockedBoards.contains(b);
-    }
-
-    private static void throwWriteAlert() {
-        var alert = new Alert(Alert.AlertType.ERROR);
-        alert.initModality(Modality.APPLICATION_MODAL);
-        alert.setContentText("You don't have write access!");
-        alert.showAndWait();
-    }
 
 
     private void updateCard(Card card){
@@ -211,10 +196,6 @@ public class EditCardCtrl implements Initializable {
      * for subtask is clicked
      */
     public void addSubtask(){
-        if(!hasWriteAccess()){
-            throwWriteAlert();
-            return;
-        }
         if(!subtaskTitle.textProperty().get().isEmpty()){
             saveNewSubtask();
             subtaskTitle.textProperty().set("");
@@ -238,12 +219,6 @@ public class EditCardCtrl implements Initializable {
     public void setOldValues(){
         title.setText(cardToEdit.title);
         description.setText((cardToEdit.description));
-        title.setDisable(false);
-        description.setDisable(false);
-        if(!hasWriteAccess()){
-            title.setDisable(true);
-            description.setDisable(true);
-        }
     }
 
     public void setSubtasks(){
@@ -294,7 +269,6 @@ public class EditCardCtrl implements Initializable {
      */
     public void setCardToEdit(Card cardToEdit) {
         this.cardToEdit = cardToEdit;
-        readOnlyLabel.setVisible(!hasWriteAccess());
         setValues();
     }
 
@@ -303,10 +277,6 @@ public class EditCardCtrl implements Initializable {
      * called when a button is pressed
      */
     public void addRemoveTags(){
-        if(!hasWriteAccess()){
-            throwWriteAlert();
-            return;
-        }
         mainCtrl.showAddRemoveTags(cardToEdit);
     }
 
@@ -318,6 +288,5 @@ public class EditCardCtrl implements Initializable {
         // Fetch presets from DB and add to OL
         presets.addAll(server.getAllBoardPresets(list.boardId));
         presetMenu.setItems(presets);
-        presetMenu.setDisable(!hasWriteAccess());
     }
 }

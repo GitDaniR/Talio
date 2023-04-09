@@ -141,22 +141,6 @@ public class BoardController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/password/{id}")
-    public ResponseEntity<Board> updatePasswordById(@PathVariable("id") Integer id,
-                                                    @RequestBody String password){
-        Board response;
-        try {
-            response = boardService.updatePasswordById(id, password);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        if(msgs!=null)
-            msgs.convertAndSend("/topic/boards/rename",response);
-
-        return ResponseEntity.ok(response);
-    }
-
     @PutMapping("/{id}/colors/boardBackground")
     public ResponseEntity<Board> updateColorBoardBackground(@PathVariable("id") Integer id,
                                                  @RequestBody String color) {

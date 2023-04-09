@@ -46,10 +46,6 @@ public class ListCtrl extends AnchorPane implements Initializable{
 
     public void addDefaultCard(){
         try {
-            if(!hasWriteAccess()){
-                throwWriteAlert();
-                return;
-            }
             Card newCard = new Card("Task", "", boardList.cards.size(), boardList, boardList.id);
             Board board = server.getBoardByID(boardList.boardId);
             newCard.setPreset(board.defaultCardPreset);
@@ -64,33 +60,11 @@ public class ListCtrl extends AnchorPane implements Initializable{
         mainCtrl.showBoard();
     }
 
-    private boolean hasWriteAccess() {
-        Board b = server.getBoardByID(boardList.boardId);
-        return b.password.equals("") || b.password.equals("NO_PASSWORD") ||
-                server.getUserByUsername(mainCtrl.getUsername()).unlockedBoards.
-                contains(server.getBoardByID(boardList.boardId));
-    }
-
-    private static void throwWriteAlert() {
-        var alert = new Alert(Alert.AlertType.ERROR);
-        alert.initModality(Modality.APPLICATION_MODAL);
-        alert.setContentText("You don't have write access!");
-        alert.showAndWait();
-    }
-
     public void deleteList(){
-        if(!hasWriteAccess()){
-            throwWriteAlert();
-            return;
-        }
         server.deleteBoardList(boardList.id);
     }
 
     public void editList(){
-        if(!hasWriteAccess()){
-            throwWriteAlert();
-            return;
-        }
         mainCtrl.showEditList(boardList);
     }
 
