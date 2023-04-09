@@ -189,6 +189,19 @@ public class CardCtrl extends AnchorPane implements Initializable {
         this.server = server;
         this.mainCtrl = mainCtrl;
         mainCtrl.consumeShortcutsTextField(editableTitle);
+        editableTitle.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                switch(event.getCode()) {
+                    case DELETE:
+                    case T:
+                    case ENTER:
+                    case BACK_SPACE:
+                        event.consume();
+                        break;
+                }
+            }
+        });
     }
 
     public Card getCard() {

@@ -232,14 +232,6 @@ public class MainCtrl {
                 if(keyComb1.match(event)){
                     event.consume();
                 }
-                switch(event.getCode()) {
-                    case DELETE:
-                    case T:
-                    case ENTER:
-                    case BACK_SPACE:
-                        event.consume();
-                        break;
-                }
             }
         });
     }
