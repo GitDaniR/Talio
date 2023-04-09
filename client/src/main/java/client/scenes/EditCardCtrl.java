@@ -318,5 +318,6 @@ public class EditCardCtrl implements Initializable {
         // Fetch presets from DB and add to OL
         presets.addAll(server.getAllBoardPresets(list.boardId));
         presetMenu.setItems(presets);
+        presetMenu.setDisable(!hasWriteAccess());
     }
 }
