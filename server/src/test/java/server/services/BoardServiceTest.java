@@ -137,7 +137,8 @@ class BoardServiceTest {
         List<String> expectedCalls = new ArrayList<>();
         expectedCalls.add(TestBoardRepository.EXISTS_BY_ID);
         expectedCalls.add(TestBoardRepository.UPDATE_BY_ID);
-        expectedCalls.add(TestBoardRepository.GET_BY_ID);
+        expectedCalls.add(TestBoardRepository.EXISTS_BY_ID);
+        expectedCalls.add(TestBoardRepository.FIND_BY_ID);
         Board result = sut.updateTitleById(1, "New First Title");
         assertEquals(new Board(1, "New First Title", "123", new ArrayList<>()), result);
         assertEquals(expectedCalls, repo.getCalls());
