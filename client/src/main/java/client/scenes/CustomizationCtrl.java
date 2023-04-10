@@ -125,7 +125,7 @@ public class CustomizationCtrl implements Initializable {
     }
 
     public void back(){
-        mainCtrl.showBoard(board);
+        mainCtrl.showBoard();
     }
 
     public void save() {
@@ -134,7 +134,7 @@ public class CustomizationCtrl implements Initializable {
         server.editColorListsBackground(board.id, colorListsBackground.getValue().toString());
         server.editColorListsFont(board.id, colorListsFont.getValue().toString());
 
-        mainCtrl.showBoard(board);
+        mainCtrl.showBoard();
     }
 
     public void showAddPreset() {

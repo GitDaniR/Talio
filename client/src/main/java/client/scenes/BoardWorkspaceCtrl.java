@@ -38,7 +38,7 @@ public class BoardWorkspaceCtrl implements Initializable {
     //region Button methods
 
     public void openBoard(){
-        mainCtrl.showBoard(board);
+        mainCtrl.showBoard(board,workspaceCtrl.getUser());
     }
 
     public void leaveBoard(){
