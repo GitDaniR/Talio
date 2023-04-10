@@ -8,6 +8,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="everything" prefHeight="540.0" prefWidth="860.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditCardCtrl">
    <children>
@@ -26,5 +27,10 @@
       <Button layoutX="726.0" layoutY="471.0" mnemonicParsing="false" onAction="#addRemoveTags" text="Choose tags" />
       <ComboBox fx:id="presetMenu" layoutX="657.0" layoutY="68.0" prefWidth="150.0" />
       <Label fx:id="currentPreset" layoutX="746.0" layoutY="44.0" text="Task Color:" />
+      <Label fx:id="readOnlyLabel" layoutX="689.0" layoutY="8.0" prefHeight="31.0" prefWidth="115.0" text="READ-ONLY">
+         <font>
+            <Font size="21.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

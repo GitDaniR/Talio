@@ -10,7 +10,8 @@ import server.database.TestBoardRepository;
 import server.database.TestMessageChannel;
 import server.database.TestSimpMessagingTemplate;
 import server.database.TestUserRepository;
-import server.services.UserService;
+import server.services.BoardService;
+import server.services.UserService;/**/
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,8 @@ class UserControllerTest {
 
     private TestSimpMessagingTemplate simp;
     private TestUserRepository userRepo;
+
+    private BoardController boardCtrl;
     private TestBoardRepository boardRepo;
     private UserController sut;
     private Board b1;
@@ -32,6 +35,7 @@ class UserControllerTest {
         simp = new TestSimpMessagingTemplate(new TestMessageChannel());
         userRepo = new TestUserRepository();
         boardRepo = new TestBoardRepository();
+        boardCtrl = new BoardController(new BoardService(boardRepo),simp);
         b1 = new Board(0, "First Board", "123", new ArrayList<>());
         boardRepo.save(b1);
         u1 = new User(0, "First User");
@@ -42,7 +46,7 @@ class UserControllerTest {
         users.add(u2);
         users.add(u3);
         userRepo.setUsers(users);
-        sut = new UserController(new UserService(userRepo, boardRepo), simp);
+        sut = new UserController(new UserService(userRepo,boardCtrl, boardRepo), simp);
     }
 
     @Test

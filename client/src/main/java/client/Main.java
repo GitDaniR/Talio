@@ -58,13 +58,16 @@ public class Main extends Application {
                 "Customization.fxml");
         var addPreset = FXML.load(AddPresetCtrl.class, "client", "scenes",
                 "AddPreset.fxml");
+        var passwordSet = FXML.load(PasswordSetCtrl.class,"client","scenes","PasswordSet.fxml");
+        var passwordEnter = FXML.load(PasswordEnterCtrl.class,"client","scenes"
+                ,"PasswordEnter.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
 
         mainCtrl.initialize(primaryStage, addList,
                 currentBoard, welcomePage, editList, workspace, workspaceAdmin, editCard,
                 editBoard, editTag, addTag, tagOverview, addRemoveTags, help, customization,
-                addPreset);
+                addPreset,passwordSet,passwordEnter);
 
 
     }

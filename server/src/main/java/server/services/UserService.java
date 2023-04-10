@@ -5,6 +5,7 @@ import commons.Board;
 import commons.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import server.api.BoardController;
 import server.database.BoardRepository;
 import server.database.UserRepository;
 
@@ -13,14 +14,17 @@ public class UserService {
 
 
     private final UserRepository repo;
-
+    private final BoardController boardCtrl;
 
     private final BoardRepository boardRepository;
 
 
+
     public UserService(UserRepository repo,
+                       BoardController boardController,
                        BoardRepository boardRepository) {
         this.repo = repo;
+        this.boardCtrl = boardController;
         this.boardRepository = boardRepository;
     }
 
@@ -88,10 +92,32 @@ public class UserService {
      * @throws Exception
      */
     public ResponseEntity<User> joinBoard(Integer userId, Integer boardId) throws Exception{
-        Board board = boardRepository.getById(boardId);
+        Board board = boardCtrl.getById(boardId).getBody();
         User user = getById(userId).getBody();
         board.users.add(user);
+        if(board.password.equals(""))
+            board.usersWrite.add(user);
+        else
+            board.usersRead.add(user);
         boardRepository.save(board);
+        user = getById(userId).getBody();
+        return ResponseEntity.ok(user);
+    }
+
+    /**
+     * Adds user to the list of users who have write access within a board
+     * and also the other way around
+     * @param userId
+     * @param boardId
+     * @return
+     * @throws Exception
+     */
+    public ResponseEntity<User> joinBoardWriteAccess(Integer userId,
+                                                     Integer boardId) throws Exception{
+        Board board = boardCtrl.getById(boardId).getBody();
+        User user = getById(userId).getBody();
+        board.usersWrite.add(user);
+        boardRepository.save(board); //might cause problems
         user = getById(userId).getBody();
         return ResponseEntity.ok(user);
     }

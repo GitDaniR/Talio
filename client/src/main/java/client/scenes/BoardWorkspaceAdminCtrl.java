@@ -39,7 +39,7 @@ public class BoardWorkspaceAdminCtrl implements Initializable {
     //region Button methods
 
     public void openBoard(){
-        mainCtrl.showBoard(board);
+        mainCtrl.showBoard(board,workspaceAdminCtrl.getUser());
     }
     public void deleteBoard(){
         server.deleteBoard(board.id);
