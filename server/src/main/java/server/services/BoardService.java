@@ -3,6 +3,7 @@ package server.services;
 import org.springframework.stereotype.Service;
 import commons.Board;
 import org.springframework.transaction.annotation.Transactional;
+import server.api.BoardController;
 import server.database.BoardRepository;
 import java.util.List;
 
@@ -12,6 +13,7 @@ public class BoardService {
 
     /**
      * Constructor for BoardService which uses BoardRepository.
+     *
      * @param repo
      */
     public BoardService(BoardRepository repo) {
@@ -76,7 +78,8 @@ public class BoardService {
             throw new Exception("Invalid title");
         }
         repo.updateBoardById(id, title);
-        return repo.getById(id);
+        Board board = getById(id);
+        return board;
     }
     @Transactional
     public Board updatePasswordById(Integer id, String password) throws Exception{
