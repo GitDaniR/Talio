@@ -68,10 +68,10 @@ public class EditCardCtrl implements Initializable {
             switch (keyEvent.getCode()) {
                 case ESCAPE:
                     cancel();
-                    keyEvent.consume();
+                    //keyEvent.consume();
                     break;
                 default:
-                    keyEvent.consume();
+                    //keyEvent.consume();
                     break;
             }
         });
