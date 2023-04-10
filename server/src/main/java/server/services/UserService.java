@@ -5,6 +5,7 @@ import commons.Board;
 import commons.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import server.api.BoardController;
 import server.database.BoardRepository;
 import server.database.UserRepository;
 
@@ -17,11 +18,15 @@ public class UserService {
 
     private final BoardRepository boardRepository;
 
+    private final BoardController boardCtrl;
+
 
     public UserService(UserRepository repo,
-                       BoardRepository boardRepository) {
+                       BoardRepository boardRepository,
+                       BoardController boardCtrl) {
         this.repo = repo;
         this.boardRepository = boardRepository;
+        this.boardCtrl = boardCtrl;
     }
 
 
@@ -88,7 +93,7 @@ public class UserService {
      * @throws Exception
      */
     public ResponseEntity<User> joinBoard(Integer userId, Integer boardId) throws Exception{
-        Board board = boardRepository.getById(boardId);
+        Board board = boardCtrl.getById(boardId).getBody();
         User user = getById(userId).getBody();
         board.users.add(user);
         if(board.password.equals(""))
@@ -110,7 +115,7 @@ public class UserService {
      */
     public ResponseEntity<User> joinBoardWriteAccess(Integer userId,
                                                      Integer boardId) throws Exception{
-        Board board = boardRepository.getById(boardId);
+        Board board = boardCtrl.getById(boardId).getBody();
         User user = getById(userId).getBody();
         board.usersWrite.add(user);
         boardRepository.save(board); //might cause problems
@@ -126,7 +131,7 @@ public class UserService {
      * @throws Exception
      */
     public ResponseEntity<User> removeBoard(Integer userId, Integer boardId) throws Exception {
-        Board board = boardRepository.getById(boardId);
+        Board board = boardCtrl.getById(boardId).getBody();
         User user = getById(userId).getBody();
 
         board.users.remove(user);
