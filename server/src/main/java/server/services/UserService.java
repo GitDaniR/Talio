@@ -130,7 +130,7 @@ public class UserService {
      * @throws Exception
      */
     public ResponseEntity<User> removeBoard(Integer userId, Integer boardId) throws Exception {
-        Board board = boardRepository.getById(boardId);
+        Board board = boardCtrl.getById(boardId).getBody();
         User user = getById(userId).getBody();
 
         board.users.remove(user);
