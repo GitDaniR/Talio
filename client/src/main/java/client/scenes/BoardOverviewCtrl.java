@@ -385,7 +385,7 @@ public class BoardOverviewCtrl implements Initializable {
      * @return true if user has write access
      */
     private boolean verifyWriteAccess(){
-        return board.password.equals("") || board.password.equals("NO_PASSWORD") ||
+        return mainCtrl.getIsAdmin() || board.password.equals("") || board.password.equals("NO_PASSWORD") ||
                 userViewing.unlockedBoards.stream().map(e -> e.id).anyMatch(e-> e== board.id);
     }
 
