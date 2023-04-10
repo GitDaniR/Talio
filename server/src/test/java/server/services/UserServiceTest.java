@@ -5,7 +5,10 @@ import commons.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
+import server.api.BoardController;
 import server.database.TestBoardRepository;
+import server.database.TestMessageChannel;
+import server.database.TestSimpMessagingTemplate;
 import server.database.TestUserRepository;
 
 import java.util.ArrayList;
@@ -21,11 +24,15 @@ class UserServiceTest {
     private User u1, u2, u3;
     private List<User> users;
     private UserService sut;
+    private BoardController boardCtrl;
+    private TestSimpMessagingTemplate simp;
 
     @BeforeEach
     void setUp() {
+        simp = new TestSimpMessagingTemplate(new TestMessageChannel());
         userRepo = new TestUserRepository();
         boardRepo = new TestBoardRepository();
+        boardCtrl = new BoardController(new BoardService(boardRepo),simp );
         b1 = new Board(0, "First Board", "123", new ArrayList<>());
         boardRepo.save(b1);
         u1 = new User(0, "First User");
@@ -36,7 +43,7 @@ class UserServiceTest {
         users.add(u2);
         users.add(u3);
         userRepo.setUsers(users);
-        sut = new UserService(userRepo, boardRepo);
+        sut = new UserService(userRepo,boardCtrl, boardRepo);
     }
 
     @Test
