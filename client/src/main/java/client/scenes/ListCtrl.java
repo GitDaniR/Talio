@@ -66,7 +66,7 @@ public class ListCtrl extends AnchorPane implements Initializable{
 
     private boolean hasWriteAccess() {
         Board b = server.getBoardByID(boardList.boardId);
-        return b.password.equals("") || b.password.equals("NO_PASSWORD") ||
+        return mainCtrl.getIsAdmin() || b.password.equals("") || b.password.equals("NO_PASSWORD") ||
                 server.getUserByUsername(mainCtrl.getUsername()).unlockedBoards.
                 contains(server.getBoardByID(boardList.boardId));
     }
