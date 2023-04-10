@@ -230,7 +230,7 @@ public class MainCtrl {
             @Override
             public void handle(KeyEvent event) {
                 if(keyComb1.match(event)){
-                    //event.consume();
+                    event.consume();
                 }
             }
         });
