@@ -521,14 +521,26 @@ public class BoardOverviewCtrl implements Initializable {
         refresh();
     }
 
+    private PauseTransition inputDelay;
+    private boolean isPlaying = false;
+
+
     private void renameCardById(int id, String title){
-        for(Node n : mainBoard.getChildren())
-            for(Node c : ((ListCtrl) n.getUserData()).getCardBox().getChildren())
-                if(((CardCtrl)c.getUserData()).getCard().id==id)
-                    ((CardCtrl)c.getUserData()).setCardAndAttributes(server.getCardById(id));
-        refresh();
-        if(cardHighlightX!=-1 && cardHighlightY!=-1)
-            setCardHighlight(cardBoxes.get(cardHighlightX).get(cardHighlightY),true);
+        if(inputDelay==null){
+            inputDelay = new PauseTransition(Duration.seconds(0.2));
+            inputDelay.setOnFinished(event -> {
+                isPlaying = false;
+                refresh();
+                if(cardHighlightX!=-1 && cardHighlightY!=-1)
+                    setCardHighlight(cardBoxes.get(cardHighlightX).get(cardHighlightY),true);
+                System.out.println("Stopped");
+            });
+            isPlaying=false;
+        }
+        if(!isPlaying){
+            isPlaying = true;
+            inputDelay.play();
+        }
     }
     //endregion
 
