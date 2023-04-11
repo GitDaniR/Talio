@@ -448,6 +448,13 @@ public class BoardOverviewCtrl implements Initializable {
         server.registerForMessages("/topic/cards/rename", Card.class, card -> {
             Platform.runLater(() -> renameCardById(card.id,card.title));
         });
+        server.registerForMessages("/topic/cards/edit", Card.class, card -> {
+            Platform.runLater(()->{
+                refresh();
+                if(cardHighlightX!=-1 && cardHighlightY!=-1)
+                    setCardHighlight(cardBoxes.get(cardHighlightX).get(cardHighlightY),true);
+            });
+        });
         server.registerForMessages("/topic/boards/removed", Integer.class, id -> {
             Platform.runLater(() -> { if(board==null || id==board.id) back(); });
         });
