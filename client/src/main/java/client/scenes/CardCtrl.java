@@ -50,6 +50,8 @@ public class CardCtrl extends AnchorPane implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        quickSelectTags.setFocusTraversable(false);
+        quickSelectPreset.setFocusTraversable(false);
         handleEditableTitle();
         handleQuickTags();
         handleQuickPreset();
@@ -110,9 +112,9 @@ public class CardCtrl extends AnchorPane implements Initializable {
             }
         });
 
-        quickSelectTags.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue) quickSelectTags.setVisible(false);
-        });
+//        quickSelectTags.focusedProperty().addListener((observable, oldValue, newValue) -> {
+//            if (!newValue) quickSelectTags.setVisible(false);
+//        });
     }
 
     private void handleQuickPreset(){
@@ -140,9 +142,9 @@ public class CardCtrl extends AnchorPane implements Initializable {
             }
         });
 
-        quickSelectPreset.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue) quickSelectPreset.setVisible(false);
-        });
+//        quickSelectPreset.focusedProperty().addListener((observable, oldValue, newValue) -> {
+//            if (!newValue) quickSelectPreset.setVisible(false);
+//        });
     }
 
     /**
@@ -244,7 +246,6 @@ public class CardCtrl extends AnchorPane implements Initializable {
             return;
         }
         quickSelectTags.setVisible(true);
-        quickSelectTags.requestFocus();
     }
 
     public void quickAddPreset(){
@@ -253,7 +254,6 @@ public class CardCtrl extends AnchorPane implements Initializable {
             return;
         }
         quickSelectPreset.setVisible(true);
-        quickSelectPreset.requestFocus();
     }
 
     private void hideNotNeeded(){
@@ -274,6 +274,7 @@ public class CardCtrl extends AnchorPane implements Initializable {
         int boardId = server.getBoardListById(card.listId).boardId;
         presets.addAll(server.getAllBoardPresets(boardId));
         quickSelectPreset.setItems(presets);
+        quickSelectPreset.setFocusTraversable(false);
     }
 
     private void setSmallIcons() {

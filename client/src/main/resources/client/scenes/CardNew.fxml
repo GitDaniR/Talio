@@ -21,7 +21,7 @@
       <Label fx:id="lblSubtasks" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="16.0" layoutY="42.0" prefHeight="17.0" prefWidth="185.0" text="(2/3 Done)" textAlignment="RIGHT" />
       <FlowPane fx:id="paneTags" layoutY="59.0" prefHeight="0.0" prefWidth="200.0" />
       <TextField fx:id="editableTitle" layoutX="14.0" layoutY="18.0" prefHeight="25.0" prefWidth="166.0" style="-fx-background-color: transparent;" />
-      <ComboBox fx:id="quickSelectTags" layoutX="8.0" layoutY="5.0" prefHeight="0.0" prefWidth="40.0" />
-      <ComboBox fx:id="quickSelectPreset" layoutX="8.0" layoutY="5.0" prefHeight="25.0" prefWidth="22.0" />
+      <ComboBox fx:id="quickSelectTags"  focusTraversable="false" layoutX="8.0" layoutY="5.0" prefHeight="0.0" prefWidth="40.0" />
+      <ComboBox fx:id="quickSelectPreset" focusTraversable="false" layoutX="8.0" layoutY="5.0" prefHeight="25.0" prefWidth="22.0" />
    </children>
 </AnchorPane>
